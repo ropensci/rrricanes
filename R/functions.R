@@ -47,3 +47,18 @@ get_nhc_link <- function(withTrailingSlash = TRUE) {
     return('http://www.nhc.noaa.gov/')
   return('http://www.nhc.noaa.gov')
 }
+
+#' @title month_str_to_num
+#' @description Convert three-character month abbreviation to integer
+#' @param m Month abbreviated (SEP, OCT, etc.)
+#' @return numeric 1-12
+month_str_to_num <- function(m) {
+  
+  if(is.character(m) & length(m) != 3) {
+    m <- which(month.abb == to_proper(m))
+    return(m)
+  } else {
+    stop('Expected three-character string.')
+  }
+  
+}
