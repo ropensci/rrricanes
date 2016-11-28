@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [v0.0.0.9002] - yyyy-mm-dd
 
 ### Added
-  - NA
+  - Added filters to filter out specific product links from storm archive page.
 
 ### Changed
   - NA
