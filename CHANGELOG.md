@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - `toproper()`
   - `.validate_year()`
   - `.extract_year_archive_link()`
+  - `convert_lat_lon()`
 
 ### Changed
   - NA
