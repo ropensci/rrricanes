@@ -15,6 +15,7 @@ convert_lat_lon(x, y)
 integer positive or negative
 }
 \description{
-Converts lat, lon to negative if in southern, western hemisphere, respectively
+Converts lat, lon to negative if in southern, western 
+  hemisphere, respectively
 }
 
