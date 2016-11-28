@@ -68,7 +68,7 @@ get_nhc_link <- function(withTrailingSlash = TRUE) {
 month_str_to_num <- function(m) {
   
   if(is.character(m) & length(m) != 3) {
-    m <- which(month.abb == to_proper(m))
+    m <- which(month.abb == toproper(m))
     return(m)
   } else {
     stop('Expected three-character string.')
