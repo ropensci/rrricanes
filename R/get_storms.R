@@ -132,7 +132,6 @@ get_storms <- function(year = lubridate::year(Sys.Date()),
 #' @title .year_archives_link
 #' @description Returns link to a year's archive page
 #' @param year 4-digit numeric
-#' @export
 .year_archives_link <- function(year) {
   nhc_link <- get_nhc_link()
   link <- sprintf(paste0(nhc_link, 'archive/%i/'), year)
