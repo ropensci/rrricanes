@@ -20,3 +20,12 @@ convert_lat_lon <- function(x, y) {
 knots_to_mph <- function(x) {
   return(x * 1.15077945)
 }
+
+#' @title mb_to_in
+#' @description convert millibars (mb) to inches of mercury (in)
+#' @param x barometric pressure in mb
+#' @return x in in
+#' @export
+mb_to_in <- function(x) {
+  return(x * 0.029529983071)
+}
