@@ -1,0 +1,66 @@
+---
+title: "Getting Started"
+author: "Tim Trice"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+library(Hurricanes)
+```
+
+## General Introduction
+
+`Hurricanes` is intended to give easy access to hurricane archives. In short, it is a web-scraping tool that parses the National Hurricane Center's (NHC) archives to get storm data. 
+
+At this point, data is only available back to 1998. 
+
+There are two basins which data is available: north Atlantic ("AL") and northeastern Pacific ("EP"). The northeastern Pacific basin typically covers from the west coast of North America to -140&deg; longitude (140&deg;W). The Central Pacific Hurricane Center (CPHC) covers the north Pacific from -140&deg; to -180&deg;. 
+
+The NHC will stop issuing advisories once a storm crosses -140&deg; where the CPHC takes over. However, I cannot rule out that some storms that have crossed this "boundary" or even developed in CPHC waters will not exist in records retrieved.
+
+On a semi-related note. In some instances (such as Hurricane Otto, 2016) a storm may cross from the Atlantic to Pacific ocean (and even vice versa, though rare). When this happens the storm is given a new name once it emerges into the Pacific ocean. However, if a storm crosses -140&deg; longitude it retains it's name.
+
+Lastly, it is possible a storm will develop at the end of the year and continue to exist into the next year. I am not aware if those storms will exist in this package as of this time. However, generally the storm should be listed in the archives of the year it developed. 
+
+## Get Storms
+
+By default, `get_storms` will return all storms that have developed for the current year in both basins.
+
+```{r}
+head(get_storms(), n = 5L)
+```
+
+It returns a dataframe with four variables:
+
+  * `Year` Year the storm developed
+  * `Name` Name of the storm and highest classification. If the greatest strength a storm became was tropical storm then `Name` will be "Tropical Storm..."; hurricane as "Hurricane...", etc.
+  * `Basin` "AL" for north Atlantic, "EP" for northeastern Pacific.
+  * `Link` URL to the storm's archive pages.
+
+There are two parameters that can be passed to `get_storms`:
+
+  * `year` Any 4-digit year including and after 1998
+  * `basin` "AL" or "EP"
+
+```{r}
+get_storms(year = 2015, basin = "AL")
+```
+
+You can also gather multiple years.
+
+```{r}
+get_storms(year = 2014:2015, basin = "EP")
+```
+
+Notice `Name` is inconsistent in regards to casing. For example, "Hurricane ODILE". In earlier years `Name` will be all uppercase characters, e.g., "HURRICANE ODILE". You can correct this with `toproper()`.
+
+```{r}
+toproper("Hurricane ODILE")
+toproper("HURRICANE ODILE")
+```
+
