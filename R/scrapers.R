@@ -57,9 +57,12 @@ scrape_header <- function(contents, ret = NULL) {
 #' @seealso \code{\link{scrape_header}}
 #' @export
 scrape_status <- function(header) {
-  options <- c("TROPICAL DEPRESSION", 
+  options <- c("TROPICAL DISTURBANCE", 
+               "TROPICAL DEPRESSION", 
                "TROPICAL STORM", 
                "HURRICANE")
+  if(!any(stringr::str_count(header, paste(options, sep = "|"))))
+    stop("Options not in header.")
   ptn <- paste(options, collapse = "|")
   status <- trimws(stringr::str_extract(header, ptn))
   return(status)
