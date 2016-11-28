@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Removed
   - NA
 
-## [v0.0.0.9001] - yyyy-mm-dd
+## [v0.0.0.9001] - 2016-11-28
 
 ### Added
   - Package description.
