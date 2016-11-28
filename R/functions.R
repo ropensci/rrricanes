@@ -62,3 +62,17 @@ month_str_to_num <- function(m) {
   }
   
 }
+
+#' @title .status
+#' @description Test URL status
+#' @param u URL
+#' @return TRUE if 'OK', else FALSE
+.status <- function(u) {
+  stat = httr::http_status(httr::GET(u))
+  if(stat$reason == 'OK') {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}
+
