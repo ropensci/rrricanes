@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - `month_str_to_num()`
   - `.status()`
   - `toproper()`
+  - `.validate_year()`
 
 ### Changed
   - NA

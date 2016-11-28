@@ -94,3 +94,23 @@ toproper <- function(s, strict = TRUE) {
                            sep = "", collapse = " " )
   sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
 }
+
+#' @title .validate_year
+#' @description Test if year is 4-digit numeric. 
+#' @return numeric year(s)
+#' @examples 
+#' validate_year(1990)
+#' validate_year(1991:1995)
+#' validate_year(c(1996, 1997, 1998))
+#' validate_year(c('1999', '2000'))
+#' validate_year(list(2001, '2002', '2003'))
+#' \dontrun{
+#' validate_year(199) # Generates error}
+.validate_year <- function(y) {
+  y <- as.numeric(y)
+  if(all(is.na(y)))
+    stop('Year must be numeric.')
+  if(any(nchar(y) != 4))
+    stop('Year must be 4 digits.')
+  return(y)
+}
