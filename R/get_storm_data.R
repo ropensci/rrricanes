@@ -27,10 +27,11 @@
   return(page)
 }
 
-#' @title .get_products
+#' @title get_products
 #' @description Get list of all products from a storm's archive page
 #' @param link URL to storm's archive page.
-.get_products <- function(link) {
+#' @export
+get_products <- function(link) {
   
   # Get year
   year <- .extract_year_archive_link(link)
