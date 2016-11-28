@@ -36,3 +36,14 @@
 #' @docType package
 #' @name Hurricanes
 NULL
+
+#' @title get_nhc_link
+#' @description Return root link of NHC archive pages.
+#' @param withTrailingSlash True, by default. False returns URL without 
+#' trailing slash.
+#' @export
+get_nhc_link <- function(withTrailingSlash = TRUE) {
+  if(withTrailingSlash)
+    return('http://www.nhc.noaa.gov/')
+  return('http://www.nhc.noaa.gov')
+}
