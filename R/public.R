@@ -3,6 +3,7 @@
 #' @details Given a direct link to a public advisory product, parse and return 
 #' dataframe of values.
 #' @param l Link to a storm's specific public advisory product.
+#' @param display_link Display each link as being worked; default is TRUE.
 #' @return Dataframe
 #' @seealso \code{\link{get_public_advisories}}
 #' @export
