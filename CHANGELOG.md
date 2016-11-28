@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [issues_1] - yyyy-mm-dd
+## [issues_1] - 2016-11-28
 
 ### Added
   - `get_storms()` Access NHC annual archives and extract names of storms, year of development, basin and link to the storm's archive pages. Gather data into dataframe (skeleton created in `.create_df_archives()`.)
