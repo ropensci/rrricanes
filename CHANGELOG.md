@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - `get_nhc_link()`
   - `month_str_to_num()`
   - `.status()`
+  - `toproper()`
 
 ### Changed
   - NA
