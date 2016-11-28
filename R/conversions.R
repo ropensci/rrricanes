@@ -11,3 +11,12 @@ convert_lat_lon <- function(x, y) {
   ifelse(y == 'S' | y == 'W', return(x * -1), return(x))
   
 }
+
+#' @title knots_to_mph
+#' @description convert knots (kt) to miles per hour (mph)
+#' @param x wind speed in knots
+#' @return x in mph
+#' @export
+knots_to_mph <- function(x) {
+  return(x * 1.15077945)
+}

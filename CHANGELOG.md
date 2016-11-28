@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - `.validate_year()`
   - `.extract_year_archive_link()`
   - `convert_lat_lon()`
+  - `knots_to_mph()`
 
 ### Changed
   - NA
