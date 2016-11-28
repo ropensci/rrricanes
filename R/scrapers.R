@@ -150,7 +150,7 @@ scrape_date <- function(header) {
   datetime.extracted <- stringr::str_match(header, ptn)
   
   # Capture period (AM|PM), if exists 
-  period <- stringr::str_match(datetime, "[:blank:](AM|PM)[:blank:]")
+  period <- stringr::str_match(header, "[:blank:](AM|PM)[:blank:]")
   
   # Convert time values to 24-hour format, UTC
   t <- maketime(datetime.extracted[,2], # Hour

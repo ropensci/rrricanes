@@ -15,6 +15,20 @@
   return(df)
 }
 
+#' @title .create_df_public_advisories
+#' @description Template for public advisory dataframe
+#' @return empty dataframe
+#' @seealso \code{\link{get_public_advisories}}
+.create_df_public_advisories <- function() {
+  df <- data.frame("Status" = character(), 
+                   "Name" = character(), 
+                   "Adv" = numeric(), 
+                   "Date" = character(), 
+                   "Contents" = character())
+  
+  return(df)
+}
+
 #' @title .drop_dataframes
 #' @description Drop existing dataframes.
 .drop_dataframes <- function() {
