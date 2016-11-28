@@ -37,6 +37,19 @@
 #' @name Hurricanes
 NULL
 
+#' @title .extract_year_archive_link
+#' @description Extracts the year from the archive link. 
+#' @param link URL of archive page
+#' @return year 4-digit numeric
+.extract_year_archive_link <- function(link) {
+  
+  # Year is listed in link towards the end surrounded by slashes. 
+  year <- as.numeric(stringr::str_match(link, '/([:digit:]{4})/')[,2])
+  
+  return(year)  
+  
+}
+
 #' @title get_nhc_link
 #' @description Return root link of NHC archive pages.
 #' @param withTrailingSlash True, by default. False returns URL without 

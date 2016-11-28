@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - `.status()`
   - `toproper()`
   - `.validate_year()`
+  - `.extract_year_archive_link()`
 
 ### Changed
   - NA
