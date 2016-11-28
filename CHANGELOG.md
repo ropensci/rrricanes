@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [v0.0.0.9001] - yyyy-mm-dd
 
 ### Added
-  - NA
+  - Package description.
 
 ### Changed
   - NA
