@@ -30,7 +30,7 @@ scrape_header <- function(contents, ret = NULL) {
   }
   
   # Extract header
-  ptn_header <- "^[[:alnum:][:blank:][:punct:]\n]*?\n[:blank:]\n"
+  ptn_header <- "^[[:alnum:][:blank:][:punct:]\n]*?\n[:blank:]*?\n"
   header <- stringr::str_extract(contents, ptn_header)
   
   if(ret == "status") {
