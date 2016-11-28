@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - `convert_lat_lon()`
   - `knots_to_mph()`
   - `mb_to_in()`
+  - Tests for base functions listed above.
 
 ### Changed
   - NA
