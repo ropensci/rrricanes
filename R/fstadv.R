@@ -56,18 +56,20 @@ fstadv <- function(link, display_link = TRUE) {
   if(!any(stringr::str_count(contents, c("MIATCMAT", "MIATCMEP"))))
     stop(sprint("Invalid Forecast/Advisory link. %s", l))
   
-  df <- .create_df_public_advisories()
+  df <- .create_df_fstadv()
 
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")
   adv <- scrape_header(contents, ret = "adv")
   date <- scrape_header(contents, ret = "date")
+  key <- scrape_header(contents, ret = "key")
   
   df <- df %>% 
     tibble::add_row("Status" = status, 
                     "Name" = name, 
                     "Adv" = adv, 
                     "Date" = date, 
+                    "Key" = key, 
                     "Contents" = contents)
   
   return(df)

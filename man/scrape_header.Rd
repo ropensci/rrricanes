@@ -16,6 +16,8 @@ scrape_header(contents, ret = NULL)
   \item{name}{return name of storm}
   \item{adv}{return advisory number}
   \item{date}{Date/Time of product issuance.}
+  \item{key}{Key, unique identifier for each storm. May not be available in 
+    some packages}
 }}
 }
 \value{

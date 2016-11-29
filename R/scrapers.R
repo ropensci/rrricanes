@@ -19,14 +19,16 @@
 #'   \item{name}{return name of storm}
 #'   \item{adv}{return advisory number}
 #'   \item{date}{Date/Time of product issuance.}
+#'   \item{key}{Key, unique identifier for each storm. May not be available in 
+#'     some packages}
 #' }
 #' @return Returns integer advisory number, character status or name, or date 
 #'   in \%F \%R (yyyy-mm-dd hh:mm) format, UTC time zone.
 #' @export
 scrape_header <- function(contents, ret = NULL) {
   
-  if(!(ret %in% c("status", "name", "adv", "date"))) {
-    stop('\"ret\" must be one of status, name, adv or date.')
+  if(!(ret %in% c("status", "name", "adv", "date", "key"))) {
+    stop('\"ret\" must be one of status, name, adv, date or key.')
   }
   
   # Extract header
@@ -45,6 +47,9 @@ scrape_header <- function(contents, ret = NULL) {
   } else if (ret == "date") {
     date <- scrape_date(header)
     return(date)
+  } else if (ret == "key") {
+    key <- scrape_key(header)
+    return(key)
   } else {
     stop('NA values in name header.')
     return(FALSE)
@@ -187,4 +192,36 @@ scrape_date <- function(header) {
   dt <- lubridate::ymd_hm(x, tz = tz)
   
   return(dt)
+}
+
+#' @title scrape_key
+#' @description Extract Key from header
+#' @param header Header text of product.
+#' @seealso \code{\link{scrape_header}}
+#' @export
+scrape_key <- function(header) {
+  # Get year
+  y <- lubridate::year(scrape_header(header, ret = "date"))
+  
+  # For <= 2003 Identifier is 6-digits with a 2-digit year. 
+  ptn <- list(paste0('(?:NATIONAL[:blank:]HURRICANE[:blank:]CENTER|', 
+                     'NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?', 
+                     '[:blank:]+MIAMI[:blank:]FL[:blank:]+'))
+  if(y <= 2003) {
+    ptn <- c(ptn, '([:alnum:]{6})')
+  } else {
+    ptn <- c(ptn, '([:alnum:]{8})')
+  }
+  ptn <- paste0(ptn, collapse = '')
+  x <- stringr::str_match(header, ptn)[,2]
+  
+  # In some instances x is NA. Stop and research. 
+  if(nchar(x) != 6 & nchar(x) != 8) {
+    stop('Identifier is improperly formatted.')
+  } else {
+    # Reformat Identifer to 8 digits, if necessary
+    if(nchar(x) == 6)
+      x <- paste0(substr(x, 0, 4), y)
+    return(x)
+  }
 }
