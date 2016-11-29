@@ -8,6 +8,8 @@ public(l, display_link = TRUE)
 }
 \arguments{
 \item{l}{Link to a storm's specific public advisory product.}
+
+\item{display_link}{Display each link as being worked; default is TRUE.}
 }
 \value{
 Dataframe
@@ -20,6 +22,6 @@ Given a direct link to a public advisory product, parse and return
 dataframe of values.
 }
 \seealso{
-\code{\link{get_public_advisories}}
+\code{\link{get_public}}
 }
 
