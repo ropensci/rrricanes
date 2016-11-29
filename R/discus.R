@@ -56,7 +56,7 @@ discus <- function(link, display_link = TRUE) {
   if(!any(stringr::str_count(contents, c("MIATCDAT", "MIATCDEP"))))
     stop(sprint("Invalid Discussion link. %s", l))
   
-  df <- .create_df_public_advisories()
+  df <- .create_df_discus()
   
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")
