@@ -76,6 +76,21 @@
   return(df)
 }
 
+#' @title .create_df_prblty
+#' @description Template for strike probabilities dataframe
+#' @return empty dataframe
+#' @seealso \code{\link{get_public_advisories}}
+.create_df_prblty <- function() {
+  df <- data.frame("Status" = character(), 
+                   "Name" = character(),
+                   # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                   "Adv" = character(), 
+                   "Date" = character(), 
+                   "Contents" = character())
+  
+  return(df)
+}
+
 #' @title .drop_dataframes
 #' @description Drop existing dataframes.
 .drop_dataframes <- function() {
