@@ -12,10 +12,14 @@
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
 get_public <- function(link) {
-  if(!.status(link))
-    stop(sprintf("Link unavailable. %d", l))
+
+  # Check status of link(s)
+  valid.link <- sapply(link, .status)
+  valid.link <- na.omit(valid.link)
+  if(length(valid.link) == 0)
+    stop("No valid links.")
   
-  products <- get_products(link)
+  products <- unlist(sapply(valid.link, get_products))
   
   products.public <- lapply(filter_public_advisories(products), public)
   
@@ -28,20 +32,22 @@ get_public <- function(link) {
 #' @description Parse Public Advisory products
 #' @details Given a direct link to a public advisory product, parse and return 
 #' dataframe of values.
-#' @param l Link to a storm's specific public advisory product.
+#' @param link Link to a storm's specific public advisory product.
 #' @param display_link Display each link as being worked; default is TRUE.
 #' @return Dataframe
 #' @seealso \code{\link{get_public}}
 #' @export
-public <- function(l, display_link = TRUE) {
+public <- function(link, display_link = TRUE) {
 
-  if(!.status(l))
-    stop(sprintf("Link unavailable. %d", l))
+  valid.link <- sapply(link, .status)
+  valid.link <- na.omit(valid.link)
+  if(length(valid.link) == 0)
+    stop("No valid links.")
   
   if(display_link)
-    message(sprintf("Working %s", l))
+    message(sprintf("Working %s", valid.link))
   
-  contents <- l %>% 
+  contents <- valid.link %>% 
     xml2::read_html() %>% 
     rvest::html_text()
   

@@ -20,10 +20,11 @@
   }
   
   # Test link
-  if(!.status(archive_link)) {
+  valid.link <- .status(archive_link)
+  valid.link <- na.omit(valid.link)
+  if(length(valid.link) == 0)
     stop(sprintf("Invalid URL. %d", archive_link))
-  }
-
+  
   l <- lapply(basin, .extract_storms, link = archive_link)
   
   df <- data.table::rbindlist(l)

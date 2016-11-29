@@ -77,15 +77,18 @@ month_str_to_num <- function(m) {
 }
 
 #' @title .status
-#' @description Test URL status
-#' @param u URL
-#' @return TRUE if 'OK', else FALSE
+#' @description Test URL status. 
+#' @details Return URL if status is 'OK'. Otherwise, return NA and print 
+#' failed URL.
+#' @param u URL to test
+#' @return URL if result is 'OK', otherwise, NA. 
 .status <- function(u) {
   stat = httr::http_status(httr::GET(u))
   if(stat$reason == 'OK') {
-    return(TRUE)
+    return(u)
   } else {
-    return(FALSE)
+    warning(sprintf("URL unavailable. %s", u))
+    return(NA)
   }
 }
 

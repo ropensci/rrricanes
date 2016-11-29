@@ -4,10 +4,10 @@
 \alias{public}
 \title{public}
 \usage{
-public(l, display_link = TRUE)
+public(link, display_link = TRUE)
 }
 \arguments{
-\item{l}{Link to a storm's specific public advisory product.}
+\item{link}{Link to a storm's specific public advisory product.}
 
 \item{display_link}{Display each link as being worked; default is TRUE.}
 }
