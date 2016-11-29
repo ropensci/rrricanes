@@ -25,7 +25,7 @@ test_that("1998, Tropical Storm Alex, Advisory 1", {
   # Advisory number
   expect_equal(public(al.1998.alex.products.public[1]) %>% 
                  dplyr::select(Adv) %>% 
-                 dplyr::first(), 1)
+                 dplyr::first(), "1")
   # Date
   expect_equal(public(al.1998.alex.products.public[1]) %>% 
                  dplyr::select(Date) %>% 
@@ -45,7 +45,7 @@ test_that("1998, Tropical Storm Alex, Advisory 26", {
   # Advisory number
   expect_equal(public(al.1998.alex.products.public[25]) %>% 
                  dplyr::select(Adv) %>% 
-                 dplyr::first(), 26)
+                 dplyr::first(), "26")
   # Date
   expect_equal(public(al.1998.alex.products.public[25]) %>% 
                  dplyr::select(Date) %>% 
