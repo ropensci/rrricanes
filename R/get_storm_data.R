@@ -51,3 +51,78 @@ get_products <- function(link) {
   
   return(page)
 }
+
+#' @title get_storm_data
+#' @description Retrieve data from products.
+#' @details \code{get_storm_data} is a wrapper function to make it more 
+#' convenient to access the various storm products. 
+#' 
+#' Types of products:
+#' \describe{
+#'   \item{discus}{Storm Discussions. This is technical information on the 
+#'     cyclone such as satellite presentation, forecast model evaluation, etc.}
+#'   \item{fstadv}{Forecast/Advisory. These products contain the meat of an 
+#'     advisory package. Current storm information is available as well as 
+#'     structural design and forecast data.}
+#'   \item{posest}{Position Estimate. Issued generally when a storm is 
+#'     threatening; provides a brief update on location and winds.}
+#'   \item{public}{Public Advisory. Issued for public knowledge; more often for 
+#'     Atlantic than East Pacific storms. Contains general information.}
+#'   \item{prblty}{Strike Probability. Discontinued after the 2005 hurricane 
+#'     season, strike probabilities list the chances of x-force winds in a 
+#'     particular city.}
+#'   \item{update}{Cyclone Update. Generally issued when a significant change 
+#'     occurs in the cyclone.}
+#'   \item{windprb}{Wind Probability. Replace strike probabilities beginning in 
+#'     the 2006 season. Nearly identical.}
+#' }
+#' @param ... Products to retrieve. c("discus", "fstadv", "posest", "public", 
+#' "prblty", "update", "windprb")
+#' @param names By default product dataframes will be returned as shown in 
+#' \code{...}. The names parameter gives a way to provide alternative names for 
+#' the returned dataframes. Pass a named list where the name of each element 
+#' is that of the product. See examples for more information.
+#' @param link to storm's archive page.
+#' @return Dataframes for each of the products.
+#' @examples
+#' ## Get public advisories for Tropical Storm Charley, 1998
+#' get_storm_data("public", 
+#'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
+#' 
+#' ## Same as above but give alternate name.
+#' get_storm_data("public", 
+#'                names = list("public" = "al.1998.charley.public"), 
+#'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
+#' ## Get forecast/advisory and storm discussion
+#' get_storm_data("fstadv", "discus", 
+#'                names = list("fstadv" = "al.1998.charley.fstadv", 
+#'                             "discus" = "al.1998.charley.discus"), 
+#'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
+#' @export
+get_storm_data <- function(..., names = list(), link) {
+  
+  x <- list(...)
+  if(!(all(x %in% c("discus", "fstadv", "posest", "public", "prblty", "update", 
+                    "windprb"))))
+    stop(paste0("Invalid products included. Only discus, fstadv, posest, ", 
+                "public, prblty, update, windprb are valid options.", 
+                "See ?get_storm_data for more info."))
+  
+  if(is.null(link))
+    stop("No link provided.")
+  
+  x <- unlist(x)
+  
+  s <- sapply(x, function(z, n = names, l = link){
+    f <- paste("get", z, sep = "_")
+    res <- do.call(f, args = list("link" = l))
+    if(!is.null(n[[z]])) {
+      assign(n[z][[1]], res, envir = .GlobalEnv)
+    } else {
+      assign(z, res, envir = .GlobalEnv)
+    }
+  })
+  
+  return(TRUE)
+  
+}
