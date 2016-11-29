@@ -47,7 +47,7 @@ posest <- function(l, display_link = TRUE) {
     rvest::html_text()
   
   # Make sure this is a public advisory product
-  if(!any(stringr::str_count(contents, c("MIATCEAL", "MIATCEEP"))))
+  if(!any(stringr::str_count(contents, c("MIATCEAT", "MIATCEEP"))))
     stop(sprint("Invalid Position Estimate link. %s", l))
   
   df <- .create_df_public_advisories()
