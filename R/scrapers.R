@@ -89,9 +89,9 @@ scrape_adv_num <- function(header) {
                 "[:blank:]", 
                 "NUMBER", 
                 "[:blank:]+", 
-                "([:digit:]+)", # Advisory number
+                "([:digit:]+[:alpha:]*?)", # Advisory number
                 "\n")
-  adv <- as.numeric(trimws(stringr::str_match(header, ptn)[,2]))
+  adv <- trimws(stringr::str_match(header, ptn)[,2])
   return(adv)
 }
 

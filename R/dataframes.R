@@ -21,8 +21,9 @@
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_public_advisories <- function() {
   df <- data.frame("Status" = character(), 
-                   "Name" = character(), 
-                   "Adv" = numeric(), 
+                   "Name" = character(),
+                   # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                   "Adv" = character(), 
                    "Date" = character(), 
                    "Contents" = character())
   
