@@ -55,15 +55,6 @@ test_that('Column Names', {
   expect_named(get_storms(2016, basin = "AL"), c("Year", "Name", "Basin", "Link")) 
 })
 
-#' If this test fails it is most likely due to a format change in the HTML. 
-test_that("Equal Dataframes", {
-  load("data/ep1998.rda")
-  expect_equal(get_storms(1998, basin = "EP"), ep1998)
-
-  load("data/al2015.rda")
-  expect_equal(get_storms(2015, basin = "AL"), al2015)
-})
-
 test_that("Errors", {
   expect_error(get_storms(1997), 'Archives currently only available for 1998 to current year.')
 })
