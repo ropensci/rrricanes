@@ -47,7 +47,7 @@ updates <- function(l, display_link = TRUE) {
   
   # Make sure this is a updates advisory product
   if(!any(stringr::str_count(contents, c("MIATCUAT", "MIATCUEP"))))
-    stop(sprint("Invalid Public Advisory link. %s", l))
+    stop(sprint("Invalid Cyclone Update link. %s", l))
   
   df <- .create_df_public_advisories()
   
