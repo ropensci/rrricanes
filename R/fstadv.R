@@ -1,3 +1,30 @@
+#' @title get_fstadv
+#' @description Return dataframe of forecast/advisory data.
+#' \describe{
+#'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane, 
+#'     etc.}
+#'   \item{Name}{Name of storm}
+#'   \item{Adv}{Advisory Number}
+#'   \item{Date}{Date of advisory issuance}
+#'   \item{Contents}{Text content of product}
+#' }
+#' @param link URL to storm's archive page.
+#' @seealso \code{\link{get_storms}}, \code{\link{public}}
+#' @export
+get_fstadv <- function(link) {
+  if(!.status(link))
+    stop(sprintf("Link unavailable. %d", l))
+  
+  products <- get_products(link)
+  
+  products.fstadv <- lapply(filter_forecast_advisories(products), fstadv)
+  
+  fstadv <- data.table::rbindlist(products.fstadv)
+  
+  return(fstadv)
+  
+}
+
 #' @title fstadv
 #' @description Extrapolate data from FORECAST/ADVISORY products. 
 #' @details Given a direct link to a forecast/advisory product, parse and 
