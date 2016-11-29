@@ -24,7 +24,7 @@ get_products <- function(link) {
   return(products)
 }
 
-#' @title get_public_advisories
+#' @title get_public
 #' @description Return dataframe of public advisory data.
 #' \describe{
 #'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane, 
@@ -37,10 +37,10 @@ get_products <- function(link) {
 #' @param link URL to storm's archive page.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
-get_public_advisories <- function(link) {
+get_public <- function(link) {
   if(!.status(link))
     stop(sprintf("Link unavailable. %d", l))
-
+  
   products <- get_products(link)
   
   products.public <- lapply(filter_public_advisories(products), public)
