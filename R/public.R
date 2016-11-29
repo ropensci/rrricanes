@@ -55,7 +55,7 @@ public <- function(link, display_link = TRUE) {
   if(!any(stringr::str_count(contents, c("MIATCPAT", "MIATCPEP"))))
     stop(sprint("Invalid Public Advisory link. %s", l))
 
-  df <- .create_df_public_advisories()
+  df <- .create_df_public()
   
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")

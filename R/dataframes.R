@@ -15,11 +15,11 @@
   return(df)
 }
 
-#' @title .create_df_public_advisories
+#' @title .create_df_public
 #' @description Template for public advisory dataframe
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
-.create_df_public_advisories <- function() {
+.create_df_public <- function() {
   df <- data.frame("Status" = character(), 
                    "Name" = character(),
                    # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
