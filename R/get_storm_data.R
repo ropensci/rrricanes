@@ -52,6 +52,33 @@ get_fstadv <- function(link) {
   
 }
 
+#' @title get_posest
+#' @description Return dataframe of position estimate data.
+#' \describe{
+#'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane, 
+#'     etc.}
+#'   \item{Name}{Name of storm}
+#'   \item{Adv}{Advisory Number}
+#'   \item{Date}{Date of advisory issuance}
+#'   \item{Contents}{Text content of product}
+#' }
+#' @param link URL to storm's archive page.
+#' @seealso \code{\link{get_storms}}, \code{\link{posest}}
+#' @export
+get_posest <- function(link) {
+  if(!.status(link))
+    stop(sprintf("Link unavailable. %d", l))
+  
+  products <- get_products(link)
+  
+  products.posest <- lapply(filter_discussions(products), posest)
+  
+  posest <- data.table::rbindlist(products.posest)
+  
+  return(posest)
+  
+}
+
 #' @title get_products
 #' @description Get list of all products from a storm's archive page
 #' @param link URL to storm's archive page.
