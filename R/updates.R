@@ -55,7 +55,7 @@ updates <- function(link, display_link = TRUE) {
   if(!any(stringr::str_count(contents, c("MIATCUAT", "MIATCUEP"))))
     stop(sprint("Invalid Cyclone Update link. %s", l))
   
-  df <- .create_df_public_advisories()
+  df <- .create_df_updates()
   
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")
