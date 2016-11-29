@@ -55,7 +55,7 @@ wndprb <- function(link, display_link = TRUE) {
   if(!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP"))))
     stop(sprint("Invalid Wind Probability link. %s", l))
   
-  df <- .create_df_public_advisories()
+  df <- .create_df_wndprb()
   
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")
