@@ -4,10 +4,10 @@
 \alias{updates}
 \title{updates}
 \usage{
-updates(l, display_link = TRUE)
+updates(link, display_link = TRUE)
 }
 \arguments{
-\item{l}{Link to a storm's specific updates advisory product.}
+\item{link}{Link to a storm's specific updates advisory product.}
 
 \item{display_link}{Display each link as being worked; default is TRUE.}
 }

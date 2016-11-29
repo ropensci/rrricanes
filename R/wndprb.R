@@ -32,12 +32,12 @@ get_wndprb <- function(link) {
 #' @description Parse wind probability products
 #' @details Given a direct link to a wind probability product, parse and return 
 #' dataframe of values.
-#' @param l Link to a storm's specific wind probability product.
+#' @param link Link to a storm's specific wind probability product.
 #' @param display_link Display each link as being worked; default is TRUE.
 #' @return Dataframe
 #' @seealso \code{\link{get_wndprb}}
 #' @export
-wndprb <- function(l, display_link = TRUE) {
+wndprb <- function(link, display_link = TRUE) {
   
   valid.link <- sapply(link, .status)
   valid.link <- na.omit(valid.link)

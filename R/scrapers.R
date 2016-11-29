@@ -54,6 +54,7 @@ scrape_header <- function(contents, ret = NULL) {
 
 #' @title scrape_status
 #' @description Scrape status from product header.
+#' @param header Header text of product.
 #' @seealso \code{\link{scrape_header}}
 #' @export
 scrape_status <- function(header) {
@@ -70,6 +71,7 @@ scrape_status <- function(header) {
 
 #' @title scrape_name
 #' @description Scrape name from product header.
+#' @param header Header text of product.
 #' @seealso \code{\link{scrape_header}}
 #' @export
 scrape_name <- function(header) {
@@ -82,6 +84,7 @@ scrape_name <- function(header) {
 
 #' @title scrape_adv_num
 #' @description Scrape advisory number from header.
+#' @param header Header text of product.
 #' @seealso \code{\link{scrape_header}}
 #' @export
 scrape_adv_num <- function(header) {
@@ -97,6 +100,7 @@ scrape_adv_num <- function(header) {
 
 #' @title scrape_date
 #' @description Scrape date/time of product issuance from header.
+#' @param header Header text of product.
 #' @seealso \code{\link{scrape_header}}
 #' @export
 scrape_date <- function(header) {

@@ -6,6 +6,9 @@
 \usage{
 filter_forecast_advisories(links)
 }
+\arguments{
+\item{links}{Vector of URLs retrieved from storm's archive page.}
+}
 \description{
 Filter out forecast/advisory links
 }

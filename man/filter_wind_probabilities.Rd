@@ -6,6 +6,9 @@
 \usage{
 filter_wind_probabilities(links)
 }
+\arguments{
+\item{links}{Vector of URLs retrieved from storm's archive page.}
+}
 \description{
 Get wind probabilities
 }

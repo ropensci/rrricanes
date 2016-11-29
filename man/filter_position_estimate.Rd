@@ -6,6 +6,9 @@
 \usage{
 filter_position_estimate(links)
 }
+\arguments{
+\item{links}{Vector of URLs retrieved from storm's archive page.}
+}
 \description{
 Get position estimates
 }

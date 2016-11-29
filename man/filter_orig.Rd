@@ -6,6 +6,9 @@
 \usage{
 filter_orig(links)
 }
+\arguments{
+\item{links}{Vector of URLs retrieved from storm's archive page.}
+}
 \description{
 For Katrina, 2005, there are two identical discussions; one of which has 
   'orig' in the URL. Because this link is not captured above it will throw an 

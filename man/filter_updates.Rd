@@ -6,6 +6,9 @@
 \usage{
 filter_updates(links)
 }
+\arguments{
+\item{links}{Vector of URLs retrieved from storm's archive page.}
+}
 \description{
 Get updates
 }

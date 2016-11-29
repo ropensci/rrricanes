@@ -6,6 +6,9 @@
 \usage{
 scrape_name(header)
 }
+\arguments{
+\item{header}{Header text of product.}
+}
 \description{
 Scrape name from product header.
 }

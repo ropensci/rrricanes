@@ -32,12 +32,12 @@ get_prblty <- function(link) {
 #' @description Parse strike probability products
 #' @details Given a direct link to a strike probability advisory product, parse 
 #' and return dataframe of values.
-#' @param l Link to a storm's specific strike probability advisory product.
+#' @param link Link to a storm's specific strike probability advisory product.
 #' @param display_link Display each link as being worked; default is TRUE.
 #' @return Dataframe
 #' @seealso \code{\link{get_prblty}}
 #' @export
-prblty <- function(l, display_link = TRUE) {
+prblty <- function(link, display_link = TRUE) {
   
   valid.link <- sapply(link, .status)
   valid.link <- na.omit(valid.link)

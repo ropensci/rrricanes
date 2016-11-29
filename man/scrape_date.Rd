@@ -6,6 +6,9 @@
 \usage{
 scrape_date(header)
 }
+\arguments{
+\item{header}{Header text of product.}
+}
 \description{
 Scrape date/time of product issuance from header.
 }

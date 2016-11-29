@@ -6,6 +6,9 @@
 \usage{
 scrape_status(header)
 }
+\arguments{
+\item{header}{Header text of product.}
+}
 \description{
 Scrape status from product header.
 }

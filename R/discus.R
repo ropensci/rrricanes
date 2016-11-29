@@ -33,12 +33,12 @@ get_discus <- function(link) {
 #' @description Parse storm Discussion products
 #' @details Given a direct link to a discussion product, parse and return 
 #' dataframe of values.
-#' @param l Link to a storm's specific discussion product.
+#' @param link Link to a storm's specific discussion product.
 #' @param display_link Display each link as being worked; default is TRUE.
 #' @return Dataframe
 #' @seealso \code{\link{get_discus}}
 #' @export
-discus <- function(l, display_link = TRUE) {
+discus <- function(link, display_link = TRUE) {
   
   valid.link <- sapply(link, .status)
   valid.link <- na.omit(valid.link)

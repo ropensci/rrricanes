@@ -6,6 +6,9 @@
 \usage{
 scrape_adv_num(header)
 }
+\arguments{
+\item{header}{Header text of product.}
+}
 \description{
 Scrape advisory number from header.
 }

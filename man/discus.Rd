@@ -4,10 +4,10 @@
 \alias{discus}
 \title{discus}
 \usage{
-discus(l, display_link = TRUE)
+discus(link, display_link = TRUE)
 }
 \arguments{
-\item{l}{Link to a storm's specific discussion product.}
+\item{link}{Link to a storm's specific discussion product.}
 
 \item{display_link}{Display each link as being worked; default is TRUE.}
 }

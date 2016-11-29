@@ -33,12 +33,12 @@ get_posest <- function(link) {
 #' @description Extrapolate data from Position Estimate products. 
 #' @details Given a direct link to a position estimate product, parse and return 
 #' dataframe of values.
-#' @param l URL of a specific position estimate product
+#' @param link URL of a specific position estimate product
 #' @param display_link Display each link as being worked; default is TRUE.
 #' @return Dataframe
 #' @seealso \code{\link{get_posest}}
 #' @export
-posest <- function(l, display_link = TRUE) {
+posest <- function(link, display_link = TRUE) {
   
   valid.link <- sapply(link, .status)
   valid.link <- na.omit(valid.link)

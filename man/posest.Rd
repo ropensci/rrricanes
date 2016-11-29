@@ -4,10 +4,10 @@
 \alias{posest}
 \title{posest}
 \usage{
-posest(l, display_link = TRUE)
+posest(link, display_link = TRUE)
 }
 \arguments{
-\item{l}{URL of a specific position estimate product}
+\item{link}{URL of a specific position estimate product}
 
 \item{display_link}{Display each link as being worked; default is TRUE.}
 }

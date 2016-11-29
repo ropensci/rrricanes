@@ -4,10 +4,10 @@
 \alias{fstadv}
 \title{fstadv}
 \usage{
-fstadv(l, display_link = TRUE)
+fstadv(link, display_link = TRUE)
 }
 \arguments{
-\item{l}{URL of a specific FORECAST/ADVISORY product}
+\item{link}{URL of a specific FORECAST/ADVISORY product}
 
 \item{display_link}{Display each link as being worked; default is TRUE.}
 }

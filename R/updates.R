@@ -32,12 +32,12 @@ get_updates <- function(link) {
 #' @description Parse cyclone update products
 #' @details Given a direct link to a cyclone update product, parse and return 
 #' dataframe of values.
-#' @param l Link to a storm's specific updates advisory product.
+#' @param link Link to a storm's specific updates advisory product.
 #' @param display_link Display each link as being worked; default is TRUE.
 #' @return Dataframe
 #' @seealso \code{\link{get_updates}}
 #' @export
-updates <- function(l, display_link = TRUE) {
+updates <- function(link, display_link = TRUE) {
   
   valid.link <- sapply(link, .status)
   valid.link <- na.omit(valid.link)

@@ -33,12 +33,12 @@ get_fstadv <- function(link) {
 #' @description Extrapolate data from FORECAST/ADVISORY products. 
 #' @details Given a direct link to a forecast/advisory product, parse and 
 #' return dataframe of values.
-#' @param l URL of a specific FORECAST/ADVISORY product
+#' @param link URL of a specific FORECAST/ADVISORY product
 #' @param display_link Display each link as being worked; default is TRUE.
 #' @return Dataframe
 #' @seealso \code{\link{get_fstadv}}
 #' @export
-fstadv <- function(l, display_link = TRUE) {
+fstadv <- function(link, display_link = TRUE) {
   
   valid.link <- sapply(link, .status)
   valid.link <- na.omit(valid.link)

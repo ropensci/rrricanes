@@ -6,6 +6,9 @@
 \usage{
 filter_discussions(links)
 }
+\arguments{
+\item{links}{Vector of URLs retrieved from storm's archive page.}
+}
 \description{
 Filter out storm discussion links.
 }

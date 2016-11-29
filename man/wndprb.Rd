@@ -4,10 +4,10 @@
 \alias{wndprb}
 \title{wndprb}
 \usage{
-wndprb(l, display_link = TRUE)
+wndprb(link, display_link = TRUE)
 }
 \arguments{
-\item{l}{Link to a storm's specific wind probability product.}
+\item{link}{Link to a storm's specific wind probability product.}
 
 \item{display_link}{Display each link as being worked; default is TRUE.}
 }
