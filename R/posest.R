@@ -56,7 +56,7 @@ posest <- function(link, display_link = TRUE) {
   if(!any(stringr::str_count(contents, c("MIATCEAT", "MIATCEEP"))))
     stop(sprint("Invalid Position Estimate link. %s", l))
   
-  df <- .create_df_public_advisories()
+  df <- .create_df_posest()
   
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")
