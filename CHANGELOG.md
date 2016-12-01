@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v0.0.0.9002] - yyyy-mm-dd
+## [v0.0.0.9002] - 2016-12-01
 
 ### Added
   - [8a687a2] Add filters to filter out specific product links from storm archive page.
@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - [6805d64] Extract position accuracy from forecast/advisory products.
   - [05674f8] Extract barometric pressure from forecast/advisory products.
   - [e88c988] Extract and reformat latitude, longitude values from forecast/advisory products.
+  - [b891f8a, 0ea2637] Add function for scraping text content of products; depends on year of product.
 
 ### Changed
   - [56c1e92] Allow for intermediate advisory numbers (See GH issue #3)
