@@ -64,6 +64,15 @@ fstadv <- function(link, display_link = TRUE) {
   adv <- scrape_header(contents, ret = "adv")
   date <- scrape_header(contents, ret = "date")
   key <- scrape_header(contents, ret = "key")
+  lat <- fstadv_lat(contents)
+  lon <- fstadv_lon(contents)
+  posacc <- fstadv_pos_accuracy(contents)
+  fwd_dir <- fstadv_fwd_dir(contents)
+  fwd_speed <- fstadv_fwd_speed(contents)
+  pressure <- fstadv_pressure(contents)
+  eye <- fstadv_eye(contents)
+  wind <- fstadv_winds(contents)
+  gust <- fstadv_gusts(contents)
   
   df <- df %>% 
     tibble::add_row("Status" = status, 
