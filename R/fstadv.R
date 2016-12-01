@@ -80,7 +80,29 @@ fstadv <- function(link, display_link = TRUE) {
                     "Adv" = adv, 
                     "Date" = date, 
                     "Key" = key, 
-                    "Contents" = contents)
+                    'Lat' = lat,
+                    'Lon' = lon,
+                    'Wind' = wind,
+                    'Gust' = gust, 
+                    'Pressure' = pressure,
+                    'PosAcc' = posacc,
+                    'FwdDir' = fwd_dir,
+                    'FwdSpeed' = fwd_speed,
+                    'Eye' = eye)
   
   return(df)
 }
+
+#' @title fstadv_eye
+#' @description Get eye diameter, if available
+#' @param contents text contents of FORECAST/ADVISORY
+#' @return numeric
+fstadv_eye <- function(contents) {
+  
+  ptn <- paste0('EYE DIAMETER[ ]+', 
+                '([0-9]{2,3})', # Eye diameter, integer
+                '[ ]+NM')
+  eye <- stringr::str_match(contents, ptn)[,2]
+  return(as.numeric(eye))
+}
+
