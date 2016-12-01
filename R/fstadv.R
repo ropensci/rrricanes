@@ -108,7 +108,7 @@ fstadv_eye <- function(contents) {
 
 #' @title fstadv_fwd_dir
 #' @description Extract forward direction from forecast/advisory product
-#' @param Contents of forecast/advisory product.
+#' @param contents Contents of forecast/advisory product.
 #' @return integer or NA
 fstadv_fwd_dir <- function(contents) {
   fwd_dir <- fstadv_fwd_mvmt(contents, what = 'fwd_dir')
