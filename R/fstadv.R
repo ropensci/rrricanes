@@ -6,7 +6,7 @@
 #'   \item{Name}{Name of storm}
 #'   \item{Adv}{Advisory Number}
 #'   \item{Date}{Date of advisory issuance}
-#'   \item{Contents}{Text content of product}
+#'   \item{Contents}{Text contents of product}
 #' }
 #' @param link URL to storm's archive page.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
