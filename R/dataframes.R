@@ -41,7 +41,15 @@
                    "Adv" = character(), 
                    "Date" = character(), 
                    "Key" = character(), 
-                   "Contents" = character())
+                   'Lat' = numeric(), 
+                   'Lon' = numeric(), 
+                   'Wind' = numeric(), 
+                   'Gust' = numeric(), 
+                   'Pressure' = numeric(), 
+                   'PosAcc' = numeric(), 
+                   'FwdDir' = numeric(), 
+                   'FwdSpeed' = numeric(), 
+                   'Eye' = numeric())
   
   return(df)
 }
