@@ -7,10 +7,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [v0.0.0.9002] - yyyy-mm-dd
 
 ### Added
-  - Added filters to filter out specific product links from storm archive page.
+  - [8a687a2] Add filters to filter out specific product links from storm archive page.
+  - [090ecff, c593e20] Add scraping functions, documentation.
+  - [500aa41, 33db9df, d5d7aae, 63f0905, 51e316c, d48a153, 302d422] Add base functionality to parse public advisory data.
+  - [d9a8e1d, 84e4d76, db910ae] Add base functionality to parse storm discussion data.
+  - [cd0985a, e66c246, 290ff1a] Add base functionality to parse forecast/advisory products.
+  - [5c06d98, 24a6ee2, be21d46, c54851d] Add base functionality for position estimate products.
+  - [e217ee0] Add base functionality for strike probability products.
+  - [8856799] Add base functionality for cyclone update products.
+  - [8920800] Add base functionality for wind probability products.
+  - [21930b6] Add wrapper function for products.
+  - [409d00c] Add initial tests for `get_storm_data()`.
 
 ### Changed
-  - NA
+  - [56c1e92] Allow for intermediate advisory numbers (See GH issue #3)
+  - [c6840b5] Allow vector of links in product functions to work multiple storms. Addresses GH issue #4
+  - [a0009a0] Add xml2 as package import; addresses GH issue #5
+  - [2d9ede0] Removed documentation on obtaining storm data (resolves GH issue #6). Planned GH issue #9.
+  - [30ee4fa] Correct parameter typos, add documentation for function parameters (GH issue #8).
+  - [8f9da45] Address issue #11.
 
 ### Removed
   - NA
