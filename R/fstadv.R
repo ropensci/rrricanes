@@ -50,6 +50,7 @@ fstadv <- function(link, display_link = TRUE) {
   
   contents <- valid.link %>% 
     xml2::read_html() %>% 
+    rvest::html_nodes("pre") %>% 
     rvest::html_text()
   
   # Make sure this is a public advisory product
