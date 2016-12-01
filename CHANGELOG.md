@@ -35,6 +35,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - [8f9da45] Address issue #11.
   - [12d70c2] Modify ptn_header in `scrape_header()`. Addresses issue #12.
   - [ef1b320] Modified documentation for `get_fstadv()` and `fstadv()`; put documentation of fstadv dataframe structure in `fstadv()` documentation.
+  - [ec0a870] Updated vignetted for v0.0.0.9002.
 
 ### Removed
   - NA
