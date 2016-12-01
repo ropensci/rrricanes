@@ -138,8 +138,19 @@ scrape_header <- function(contents, ret = NULL) {
     stop('\"ret\" must be one of status, name, adv, date or key.')
   }
   
-  # Extract header
-  ptn_header <- "^[[:alnum:][:blank:][:punct:]\n]*?\n[:blank:]*?\n"
+  # Extract header. Use the format of the date/time line to close out header.
+  # There may be additional line breaks inside the header. Must account for.
+  # Use day, month, date and year which seems to be consistent across all 
+  # products.
+  ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]\n]*?", # most of header
+                       "[:alpha:]{3}", # Day of week
+                       "[:blank:]*", 
+                       "[:alpha:]{3}", # Month, abbreviated
+                       "[:blank:]*", 
+                       "[:digit:]{2}", # Date
+                       "[:blank:]*", 
+                       "[:digit:]{4}", # Year
+                       "\n") # Close off date/time line
   header <- stringr::str_extract(contents, ptn_header)
   
   if(ret == "status") {
