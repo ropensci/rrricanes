@@ -7,7 +7,7 @@
 fstadv_fwd_speed(contents)
 }
 \arguments{
-\item{Contents}{of forecast/advisory product.}
+\item{contents}{Contents of forecast/advisory product.}
 }
 \value{
 integer or NA

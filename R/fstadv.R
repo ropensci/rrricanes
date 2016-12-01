@@ -147,7 +147,7 @@ fstadv_fwd_mvmt <- function(contents, what = NULL) {
 
 #' @title fstadv_fwd_speed
 #' @description Extract forward speed from forecast/advisory product
-#' @param Contents of forecast/advisory product.
+#' @param contents Contents of forecast/advisory product.
 #' @return integer or NA
 fstadv_fwd_speed <- function(contents) {
   fwd_speed <- fstadv_fwd_mvmt(contents, what = 'fwd_speed')
