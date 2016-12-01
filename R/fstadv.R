@@ -175,6 +175,20 @@ fstadv_pos_accuracy <- function(contents) {
   
 }
 
+#' @title fstadv_pressure
+#' @description Return current minimum central pressure of storm in millibars (mb)
+#' @param contents text contents of FORECAST/ADVISORY product
+#' @return numeric
+fstadv_pressure <- function(contents) {
+  
+  ptn <- paste0('MINIMUM CENTRAL PRESSURE[ ]+', 
+                '([0-9]{3,4})', # Pressure
+                '[ ]+MB')
+  pressure <- stringr::str_match(contents, ptn)[,2]
+  return(as.numeric(pressure))
+  
+}
+
 #' @title fstadv_winds
 #' @description Extract current maximum sustained winds from contents
 #' @param contents text contents of FORECAST/ADVISORY product
