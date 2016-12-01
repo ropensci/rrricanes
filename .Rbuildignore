@@ -1,2 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^NEWS\.md$
+^CHANGELOG\.md$
+^\.travis\.yml$
