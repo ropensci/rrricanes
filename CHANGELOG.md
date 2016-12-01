@@ -18,6 +18,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - [8920800] Add base functionality for wind probability products.
   - [21930b6] Add wrapper function for products.
   - [409d00c] Add initial tests for `get_storm_data()`.
+  - [fdf10df] Extract eye diameter from forecast/advisory product
+  - [330aa92] Extract forward speed/direction data from forecast/advisory products.
+  - [cdb779f] Extract wind, gust data from forecast/advisory products.
+  - [6805d64] Extract position accuracy from forecast/advisory products.
+  - [05674f8] Extract barometric pressure from forecast/advisory products.
+  - [e88c988] Extract and reformat latitude, longitude values from forecast/advisory products.
 
 ### Changed
   - [56c1e92] Allow for intermediate advisory numbers (See GH issue #3)
