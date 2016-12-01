@@ -153,3 +153,45 @@ fstadv_fwd_speed <- function(contents) {
   fwd_speed <- fstadv_fwd_mvmt(contents, what = 'fwd_speed')
   return(fwd_speed)
 }
+
+#' @title fstadv_gusts
+#' @param Contents of forecast/advisory product.
+#' @return integer or NA
+fstadv_gusts <- function(contents) {
+  gust <- fstadv_winds_gusts(contents, what = 'gust')
+  return(gust)
+}
+
+#' @title fstadv_winds
+#' @description Extract current maximum sustained winds from contents
+#' @param contents text contents of FORECAST/ADVISORY product
+#' @return numeric
+fstadv_winds <- function(contents) {
+  wind <- fstadv_winds_gusts(contents, what = 'wind')
+  return(wind)
+}
+
+#' @title fstadv_winds_gusts
+#' @description Get winds or gusts in knots (KT)
+#' @param contents text contents of FORECAST/ADVISORY product
+#' @param what return wind or gust?
+#' @return numeric
+fstadv_winds_gusts <- function(contents, what = NULL) {
+  
+  if(!is.character(what)) {stop('\'what\' must contain \'wind\' or \'gust\'')}
+  
+  ptn <- paste0('MAX SUSTAINED WINDS[ ]+', 
+                '([0-9]{2,3})', # Winds
+                '[ ]+KT WITH GUSTS TO[ ]+', 
+                '([0-9]{2,3})', # Gusts
+                '[ ]+KT')
+  
+  if(what == 'wind') {
+    return(as.numeric(stringr::str_match(contents, ptn)[,2]))
+  } else if (what == 'gust') { 
+    return(as.numeric(stringr::str_match(contents, ptn)[,3]))
+  } else {
+    return(NA)
+  }
+  
+}
