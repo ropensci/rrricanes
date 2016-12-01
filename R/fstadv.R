@@ -155,6 +155,7 @@ fstadv_fwd_speed <- function(contents) {
 }
 
 #' @title fstadv_gusts
+#' @description Extract wind gusts from a forecast/advisory product.
 #' @param Contents of forecast/advisory product.
 #' @return integer or NA
 fstadv_gusts <- function(contents) {
