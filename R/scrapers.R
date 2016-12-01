@@ -14,6 +14,48 @@ scrape_adv_num <- function(header) {
   return(adv)
 }
 
+#' @title scrape_contents
+#' @description Extract text product from HTML
+#' @param link URL to product page
+#' @param display_link Show link currently being worked. TRUE by default.
+#' @return Contents of product
+#' @export
+scrape_contents <- function(link, display_link = TRUE) {
+
+  pre.1999 <- function(l) {
+    contents <- l %>% 
+      xml2::read_html() %>% 
+      rvest::html_text()
+    
+    return(contents)
+  }
+  
+  general <- function(l) {
+    contents <- l %>% 
+      xml2::read_html() %>% 
+      rvest::html_nodes("pre") %>% 
+      rvest::html_text()
+    
+    return(contents)
+  }
+  
+  year <- .extract_year_archive_link(link)
+  
+  link <- na.omit(sapply(link, .status))
+
+  if(length(link) == 0)
+    stop("No valid links.")
+  
+  if(display_link)
+    message(sprintf("Working %s", link))
+  
+  if(year == 1998) {
+    return(pre.1999(link))
+  } else {
+    return(general(link))
+  }
+}
+
 #' @title scrape_date
 #' @description Scrape date/time of product issuance from header.
 #' @param header Header text of product.
