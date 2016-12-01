@@ -39,17 +39,7 @@ get_updates <- function(link) {
 #' @export
 updates <- function(link, display_link = TRUE) {
   
-  valid.link <- sapply(link, .status)
-  valid.link <- na.omit(valid.link)
-  if(length(valid.link) == 0)
-    stop("No valid links.")
-  
-  if(display_link)
-    message(sprintf("Working %s", valid.link))
-  
-  contents <- valid.link %>% 
-    xml2::read_html() %>% 
-    rvest::html_text()
+  contents <- scrape_contents(link, display_link = display_link)
   
   # Make sure this is a updates advisory product
   if(!any(stringr::str_count(contents, c("MIATCUAT", "MIATCUEP"))))

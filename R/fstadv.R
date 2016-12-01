@@ -40,22 +40,11 @@ get_fstadv <- function(link) {
 #' @export
 fstadv <- function(link, display_link = TRUE) {
   
-  valid.link <- sapply(link, .status)
-  valid.link <- na.omit(valid.link)
-  if(length(valid.link) == 0)
-    stop("No valid links.")
-  
-  if(display_link)
-    message(sprintf("Working %s", valid.link))
-  
-  contents <- valid.link %>% 
-    xml2::read_html() %>% 
-    rvest::html_nodes("pre") %>% 
-    rvest::html_text()
+  contents <- scrape_contents(link, display_link = display_link)
   
   # Make sure this is a public advisory product
   if(!any(stringr::str_count(contents, c("MIATCMAT", "MIATCMEP"))))
-    stop(sprint("Invalid Forecast/Advisory link. %s", l))
+    stop(sprintf("Invalid Forecast/Advisory link. %s", valid.link))
   
   df <- .create_df_fstadv()
 
