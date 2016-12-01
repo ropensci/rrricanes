@@ -189,6 +189,57 @@ fstadv_pressure <- function(contents) {
   
 }
 
+#' @title fstadv_lat
+#' @description Extract latitude from forecast/advisory product
+#' @param contents Content of forecast/advisory product
+#' @return numeric, positive if in northern hemisphere, negative for southern.
+fstadv_lat <- function(contents) {
+  lat <- fstadv_lat_lon(contents, what = 'lat')
+  return(lat)
+}
+
+#' @title fstadv_lat_lon
+#' @description Returns numeric for latitude or longitude; negative if in southern or eastern hemisphere
+#' @details Helper function to take character latitude or longitude and, 
+#' depending on the value of hemisphere return a positive or negative numeric, 
+#' or NA if not found.
+#' @param contents text contents of FORECAST/ADVISORY
+#' @param what What are we returning? c("lat", "lon")
+#' @return numeric
+fstadv_lat_lon <- function(contents, what = NULL) {
+  
+  if(!is.character(what)) {stop('\'what\' must contain \'lat\' or \'lon\'')}
+  
+  ptn <- paste0('[CENTER LOCATED | DISSIPATING] NEAR[ ]+', 
+                '([0-9\\.]{3,4})', # Latitude can be 9.9N or 99.9N
+                '([N | S]{1})', # Norhtern meisphere
+                '[ ]+([0-9\\.]{4,5})', #Longitude can be 0 to 180
+                '([E | W]){1}', # Hemisphere
+                '[ ]+')
+  
+  x <- stringr::str_match(contents, ptn)
+  
+  if(!is.na(x[,2]) & !is.na(x[,3])) {
+    if(what == 'lat') {
+      lat <- convert_lat_lon(as.numeric(x[,2]), x[,3])
+    } else if (what == 'lon') {
+      lon <- convert_lat_lon(as.numeric(x[,4]), x[,5])
+    }
+  } else {
+    return(NA)
+  }
+  
+}
+
+#' @title fstadv_lon
+#' @description Extract longitude from forecast/advisory product
+#' @param contents Content of forecast/advisory product
+#' @return numeric, positive if in eastern hemisphere, negative for western.
+fstadv_lon <- function(contents) {
+  lon <- fstadv_lat_lon(contents, what = 'lon')
+  return(lon)
+}
+
 #' @title fstadv_winds
 #' @description Extract current maximum sustained winds from contents
 #' @param contents text contents of FORECAST/ADVISORY product
