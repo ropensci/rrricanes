@@ -17,7 +17,7 @@ Return dataframe of forecast/advisory data.
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}
-  \item{Contents}{Text content of product}
+  \item{Contents}{Text contents of product}
 }
 }
 \seealso{
