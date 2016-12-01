@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - [2d9ede0] Removed documentation on obtaining storm data (resolves GH issue #6). Planned GH issue #9.
   - [30ee4fa] Correct parameter typos, add documentation for function parameters (GH issue #8).
   - [8f9da45] Address issue #11.
+  - [12d70c2] Modify ptn_header in `scrape_header()`. Addresses issue #12.
 
 ### Removed
   - NA
