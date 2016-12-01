@@ -162,6 +162,19 @@ fstadv_gusts <- function(contents) {
   return(gust)
 }
 
+#' @title fstadv_pos_accuracy()
+#' @description Get position accuracy
+#' @param contents text contents of FORECAST/ADVISORY
+#' @return numeric
+fstadv_pos_accuracy <- function(contents) {
+  ptn <- paste0('POSITION ACCURATE WITHIN[ ]+', 
+                '([0-9]{2,3})', 
+                '[ ]+NM')
+  pos_acc <- stringr::str_match(contents, ptn)[,2]
+  return(as.numeric(pos_acc))
+  
+}
+
 #' @title fstadv_winds
 #' @description Extract current maximum sustained winds from contents
 #' @param contents text contents of FORECAST/ADVISORY product
