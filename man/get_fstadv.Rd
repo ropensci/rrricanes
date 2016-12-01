@@ -11,14 +11,6 @@ get_fstadv(link)
 }
 \description{
 Return dataframe of forecast/advisory data.
-\describe{
-  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane, 
-    etc.}
-  \item{Name}{Name of storm}
-  \item{Adv}{Advisory Number}
-  \item{Date}{Date of advisory issuance}
-  \item{Contents}{Text contents of product}
-}
 }
 \seealso{
 \code{\link{get_storms}}, \code{\link{public}}
