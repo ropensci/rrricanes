@@ -12,4 +12,3 @@ filter_position_estimate(links)
 \description{
 Get position estimates
 }
-

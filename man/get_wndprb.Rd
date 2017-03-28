@@ -23,4 +23,3 @@ Return dataframe of wind probability data.
 \seealso{
 \code{\link{get_storms}}, \code{\link{wndprb}}
 }
-

@@ -41,4 +41,3 @@ storms.2010 <- get_storms(c(2010, 2015))
 # Get storms for two consecutive years, Atlantic basin only
 storms.al.2005 <- get_storms(2005:2007, basin = "AL")
 }
-

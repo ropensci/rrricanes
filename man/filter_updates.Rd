@@ -12,4 +12,3 @@ filter_updates(links)
 \description{
 Get updates
 }
-

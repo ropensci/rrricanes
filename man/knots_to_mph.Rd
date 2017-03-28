@@ -15,4 +15,3 @@ x in mph
 \description{
 convert knots (kt) to miles per hour (mph)
 }
-

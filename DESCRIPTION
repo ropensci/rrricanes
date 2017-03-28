@@ -1,7 +1,7 @@
 Package: Hurricanes
 Type: Package
 Title: Hurricanes
-Version: 0.0.0.9002
+Version: 0.0.0.9001
 Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
 Depends:
@@ -30,5 +30,5 @@ Suggests:
   knitr, 
   rmarkdown,
   testthat,
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 VignetteBuilder: knitr

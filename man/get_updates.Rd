@@ -23,4 +23,3 @@ Return dataframe of cyclone update data.
 \seealso{
 \code{\link{get_storms}}, \code{\link{updates}}
 }
-

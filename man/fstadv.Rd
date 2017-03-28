@@ -43,4 +43,3 @@ return dataframe of values.
 \seealso{
 \code{\link{get_fstadv}}
 }
-

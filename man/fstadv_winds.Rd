@@ -15,4 +15,3 @@ numeric
 \description{
 Extract current maximum sustained winds from contents
 }
-

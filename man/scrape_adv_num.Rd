@@ -15,4 +15,3 @@ Scrape advisory number from header.
 \seealso{
 \code{\link{scrape_header}}
 }
-

@@ -17,4 +17,3 @@ For Katrina, 2005, there are two identical discussions; one of which has
   necessary. That being said, if there is output for any other storms it should 
   be reviewed as it is common for the NHC to issue UPDATED statements.
 }
-

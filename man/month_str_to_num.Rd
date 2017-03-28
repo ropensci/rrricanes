@@ -15,4 +15,3 @@ numeric 1-12
 \description{
 Convert three-character month abbreviation to integer
 }
-

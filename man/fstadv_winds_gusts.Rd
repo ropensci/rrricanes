@@ -17,4 +17,3 @@ numeric
 \description{
 Get winds or gusts in knots (KT)
 }
-

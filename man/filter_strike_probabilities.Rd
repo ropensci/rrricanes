@@ -19,4 +19,3 @@ season, replaced by wind probabilities.
 \seealso{
 \code{\link{filter_wind_probabilities}}
 }
-

@@ -23,4 +23,3 @@ Return dataframe of strike probability data.
 \seealso{
 \code{\link{get_storms}}, \code{\link{prblty}}
 }
-

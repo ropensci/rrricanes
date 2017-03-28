@@ -19,4 +19,3 @@ at the beginning of the 2006 season.
 \seealso{
 \code{\link{filter_strike_probabilities}}
 }
-

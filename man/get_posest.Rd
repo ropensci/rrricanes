@@ -23,4 +23,3 @@ Return dataframe of position estimate data.
 \seealso{
 \code{\link{get_storms}}, \code{\link{posest}}
 }
-

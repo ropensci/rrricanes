@@ -15,4 +15,3 @@ Return dataframe of forecast/advisory data.
 \seealso{
 \code{\link{get_storms}}, \code{\link{public}}
 }
-

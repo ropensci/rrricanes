@@ -15,4 +15,3 @@ numeric
 \description{
 Get eye diameter, if available
 }
-

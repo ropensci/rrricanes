@@ -15,4 +15,3 @@ numeric
 \description{
 Get position accuracy
 }
-

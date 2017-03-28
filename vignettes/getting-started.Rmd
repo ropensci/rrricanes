@@ -30,10 +30,10 @@ Lastly, it is possible a storm will develop at the end of the year and continue 
 
 ## Get Storms
 
-By default, `get_storms` will return all storms that have developed for the current year in both basins.
+By default, `get_storms` will return all storms that have developed for the current year in both basins. If no storms have developed, an error will be generated. For this example, we'll use 2016.
 
 ```{r}
-head(get_storms(), n = 5L)
+head(get_storms(year = 2016), n = 5L)
 ```
 
 It returns a dataframe with four variables:
@@ -143,4 +143,3 @@ There is valuable information in each. However, I have not yet taken the time to
 For example, you can get issued watches and warnings from public content. You can get technical information of the storm in the discus products; satellite presentation, forecast model tendencies, etc.
 
 There is also much more information in the fstadv products that can be extracted. That is the next priority.
-

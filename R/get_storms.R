@@ -69,6 +69,9 @@ year <- .extract_year_archive_link(link)
   col.names <- col %>% 
     rvest::html_text()
   
+  if(length(col.names) == 0)
+    stop(sprintf("There are no storms for year %d", year), call. = TRUE)
+  
   df <- tibble::add_row(df, 
                         Year = year, 
                         Name = col.names, 

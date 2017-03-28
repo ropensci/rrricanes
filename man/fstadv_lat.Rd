@@ -15,4 +15,3 @@ numeric, positive if in northern hemisphere, negative for southern.
 \description{
 Extract latitude from forecast/advisory product
 }
-

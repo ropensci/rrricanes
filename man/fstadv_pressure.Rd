@@ -15,4 +15,3 @@ numeric
 \description{
 Return current minimum central pressure of storm in millibars (mb)
 }
-

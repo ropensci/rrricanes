@@ -24,4 +24,3 @@ Taken from \code{\link{chartr}} examples in base R. Will take a
 toproper("TROPICAL STORM ALEX")
 toproper("TROPICAL STORM ALEX", strict = FALSE)
 }
-

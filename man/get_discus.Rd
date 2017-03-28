@@ -23,4 +23,3 @@ Return dataframe of discussion data.
 \seealso{
 \code{\link{get_storms}}, \code{\link{public}}
 }
-

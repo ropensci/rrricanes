@@ -18,4 +18,3 @@ integer positive or negative
 Converts lat, lon to negative if in southern, western 
   hemisphere, respectively
 }
-

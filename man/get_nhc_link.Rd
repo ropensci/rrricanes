@@ -13,4 +13,3 @@ trailing slash.}
 \description{
 Return root link of NHC archive pages.
 }
-

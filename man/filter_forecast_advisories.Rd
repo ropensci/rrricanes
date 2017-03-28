@@ -12,4 +12,3 @@ filter_forecast_advisories(links)
 \description{
 Filter out forecast/advisory links
 }
-

@@ -15,4 +15,3 @@ integer or NA
 \description{
 Extract forward direction from forecast/advisory product
 }
-

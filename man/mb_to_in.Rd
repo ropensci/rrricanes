@@ -15,4 +15,3 @@ x in in
 \description{
 convert millibars (mb) to inches of mercury (in)
 }
-

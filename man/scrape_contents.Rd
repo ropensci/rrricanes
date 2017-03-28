@@ -17,4 +17,3 @@ Contents of product
 \description{
 Extract text product from HTML
 }
-

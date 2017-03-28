@@ -15,4 +15,3 @@ integer or NA
 \description{
 Extract forward speed from forecast/advisory product
 }
-
