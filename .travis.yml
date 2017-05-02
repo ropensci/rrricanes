@@ -5,6 +5,8 @@ latex: false
 r_build_args: '--no-build-vignettes'
 r_check_args: '--ignore-vignettes --no-examples'
 addons:
-   apt:
-     packages:
-       - libxml2-dev # for XML, a dependency of xml2
+  apt:
+    packages:
+      # For xml2
+      - libcurl14-openssl-dev
+      - libxml2-dev
