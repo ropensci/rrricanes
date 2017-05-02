@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/timtrice/Hurricanes.png?label=ready&title=Ready)](https://waffle.io/timtrice/Hurricanes)
 # Hurricanes
 
 Hurricanes is a project to record real-time and archived observations for past and active storms. The idea is to collect as much information as possible: advisories, reconnaissance, watches and warnings, forecasts, sea and wind data and surface observations. 
