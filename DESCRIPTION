@@ -1,11 +1,11 @@
 Package: Hurricanes
 Type: Package
 Title: Hurricanes
-Version: 0.0.0.9001
+Version: 0.1.0
 Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
 Depends:
-  R (>= 3.2.3), 
+  R (>= 3.4.0), 
   magrittr (>= 1.5)
 Description: Get archived data of past and current hurricanes for the Atlantic 
   and eastern Pacific oceans.

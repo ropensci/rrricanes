@@ -1,40 +1,69 @@
-[![Travis-CI Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=master)](https://travis-ci.org/timtrice/Hurricanes)
+[![Travis-CI Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop)](https://travis-ci.org/timtrice/Hurricanes)
 
 # Hurricanes
 
-Hurricanes is a project to record real-time and archived observations for past and active storms. The idea is to collect as much information as possible: advisories, reconnaissance, watches and warnings, forecasts, sea and wind data and surface observations. 
+`Hurricanes` is a R library that extracts information from available archives on past and current tropical cyclones. Currently, archives date back to 1998. This is considered "raw data" in the sense that information extracted is from then real-time advisories. 
 
-Data is limited to Atlantic and east Pacific only and for years since 1998. Plans to implement central Pacific will begin once this moves to beta.
+Data can be obtained for cyclones in the north Atlantic (considered the Atlantic Basin) and north-eastern Pacific (the East Pacific Basin from 140&deg;W and eastward, and Central Pacific Basin from 140&deg;W to 180&deg;W). 
 
-## Different Types of Products
+## Getting Started
 
-The top four products listed below are issued every six hours. Public Advisory's are issued every three hours when watches/warnings are in effect. They may be issued every two hours if a storm impact is imminent. 
+Please view the vignette 'Getting Started':
 
-The remaining products (except the now deprecated strike probabilities) can be issued at any time. 
+```r
+vignette("getting-started", package = "Hurricanes")
+```
 
-### Forecast/Advisory
-Forecast/Advisory products contain the meat of data this project requires. It not only contains current basic info (lat, lon, wind, pressure) but also other data such as forward movement and speed, wind field, forecasts, eye size, etc. Plus it is in a somewhat-easy-to-read format. 
+### Prerequisites
 
-## Public Advisory
-Public Advisory's are more people-friendly with some details of the FORECAST/ADVISORY but is more general information on current threats. Public Advisory's are issued more frequently when watches and warnings are in effect.
+`Hurricanes` does require an active internet connection as data is extracted from online archives. 
 
-## Discussions
-Discussions are text products from the NHC detailing the current conditions of the storm as well as forecasts. Technical information such as satellite signature can be found here
+The following R packages are also currently used for data processing:
 
-### Wind Speed Probabilities
-The chance of a certain area seeing a certain speed of wind. 
+* data.table (>= 1.9.6), 
+* dplyr (>= 0.5.0), 
+* lubridate (>= 1.6.0),
+* readr (>= 1.0.0),
+* rvest (>= 0.3.2), 
+* stringr (>= 1.1.0), 
+* tibble (>= 1.2), 
+* tidyr (>= 0.4.1), 
+* xml2 (>= 1.0.0)
 
-### Strike Probabilities
-This was older-school wind speed probabilities that listed the chances of a location actually seeing a landfall. Deprecated.
+Packages `dplyr`, `lubridate`, `readr`, `stringr`, `tibble`, and `tidyr` are also included in the `tidyverse` package which can be used instead.
 
-### Updates
-Updates are generally issued as brief statements at any time when a storm is making landfall OR if the storm is undergoing a change that requires immediate attention.
+On future revisions I will work on minimizing package dependencies if it helps increase processing speed.
 
-### Position Estimates
-Generally issued as storms are making landfall. These are issued more frequently than Public Advisory's when a storm is threatening but are generally not found in the archives.
+### Installing
 
-## FAQ
+`Hurricanes` is currently only available in GitHub. It can be installed using the `devtools` package:
 
-1. Why is Adv and Date listed in every dataframe?
+```r
+devtools::install_github("timtrice/Hurricanes")
+```
 
-There are *potentially* cases where Adv may be the same but ObDate is different. For example, if an advisory was recently issued (within the hour) and a surface observation pushes the NHC to upgrade a storm or reissue the advisory. There is an assumption the advisory number could remain the same but the ObDate would be different. It is more a precaution than anything else.
+## Built With
+
+* [R 3.4.0](https://www.r-project.org/) - The R Project for Statistical Computing
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://gist.github.com/timtrice/f2a4c2a020c87669178dad27e73bfce1) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+
+## Authors
+
+* **Tim Trice** - *Initial work* - [timtrice](https://github.com/timtrice)
+
+See also the list of [contributors](https://github.com/timtrice/Hurricanes/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* None yet :)
