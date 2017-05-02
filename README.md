@@ -1,4 +1,4 @@
-[![Travis-CI Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop)](https://travis-ci.org/timtrice/Hurricanes)
+[![Travis-CI Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop-0.1.0)](https://travis-ci.org/timtrice/Hurricanes)
 
 # Hurricanes
 
