@@ -4,3 +4,5 @@ warnings_are_errors: false
 
 r_packages:
   - rmarkdown
+
+cache: packages
