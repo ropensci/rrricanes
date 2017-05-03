@@ -33,11 +33,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Deprecated
   - NA
 
-### Removed
-  - NA
-
 ### Fixed
-  - NA
+  - `get_storms`; Removed error if no storms for current year. Displays message after each basin check.
 
 ### Security
   - NA
