@@ -108,7 +108,7 @@ year <- .extract_year_archive_link(link)
 #' storms.al.2005 <- get_storms(2005:2007, basin = "AL")
 #' @source \url{http://www.nhc.noaa.gov/archive/2016/}
 #' @export
-get_storms <- function(year = lubridate::year(Sys.Date()), 
+get_storms <- function(year = format(Sys.Date(), "%Y"), 
                        basin = c("AL", "EP")) {
   
   year <- .validate_year(year)  
