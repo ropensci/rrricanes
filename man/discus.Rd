@@ -4,12 +4,12 @@
 \alias{discus}
 \title{discus}
 \usage{
-discus(link, display_link = TRUE)
+discus(link, msg = FALSE)
 }
 \arguments{
 \item{link}{Link to a storm's specific discussion product.}
 
-\item{display_link}{Display each link as being worked; default is TRUE.}
+\item{msg}{Display each link as being worked; default is FALSE}
 }
 \value{
 Dataframe

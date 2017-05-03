@@ -4,12 +4,12 @@
 \alias{wndprb}
 \title{wndprb}
 \usage{
-wndprb(link, display_link = TRUE)
+wndprb(link, msg = FALSE)
 }
 \arguments{
 \item{link}{Link to a storm's specific wind probability product.}
 
-\item{display_link}{Display each link as being worked; default is TRUE.}
+\item{msg}{Display each link as being worked; default is FALSE}
 }
 \value{
 Dataframe

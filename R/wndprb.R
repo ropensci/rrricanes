@@ -9,9 +9,10 @@
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
+#' @param msg Show link being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{wndprb}}
 #' @export
-get_wndprb <- function(link) {
+get_wndprb <- function(link, msg = FALSE) {
 
   # Check status of link(s)
   valid.link <- sapply(link, .status)
@@ -21,7 +22,7 @@ get_wndprb <- function(link) {
   
   products <- unlist(sapply(valid.link, get_products))
   
-  products.wndprb <- lapply(filter_wind_probabilities(products), wndprb)
+  products.wndprb <- lapply(filter_wind_probabilities(products), wndprb, msg = msg)
   
   wndprb <- data.table::rbindlist(products.wndprb)
   
@@ -33,13 +34,13 @@ get_wndprb <- function(link) {
 #' @details Given a direct link to a wind probability product, parse and return 
 #' dataframe of values.
 #' @param link Link to a storm's specific wind probability product.
-#' @param display_link Display each link as being worked; default is TRUE.
+#' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_wndprb}}
 #' @export
-wndprb <- function(link, display_link = TRUE) {
+wndprb <- function(link, msg = FALSE) {
   
-  contents <- scrape_contents(link, display_link = display_link)
+  contents <- scrape_contents(link, msg = msg)
   
   # Make sure this is a wndprb advisory product
   if(!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP"))))

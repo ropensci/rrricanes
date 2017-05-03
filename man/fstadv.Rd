@@ -4,12 +4,12 @@
 \alias{fstadv}
 \title{fstadv}
 \usage{
-fstadv(link, display_link = TRUE)
+fstadv(link, msg = FALSE)
 }
 \arguments{
 \item{link}{URL of a specific FORECAST/ADVISORY product}
 
-\item{display_link}{Display each link as being worked; default is TRUE.}
+\item{msg}{Display each link as being worked; default is FALSE}
 }
 \value{
 Dataframe

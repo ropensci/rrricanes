@@ -9,9 +9,10 @@
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
+#' @param msg Show link being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{updates}}
 #' @export
-get_updates <- function(link) {
+get_updates <- function(link, msg = FALSE) {
 
   # Check status of link(s)
   valid.link <- sapply(link, .status)
@@ -21,7 +22,7 @@ get_updates <- function(link) {
   
   products <- unlist(sapply(valid.link, get_products))
   
-  products.updates <- lapply(filter_updates(products), updates)
+  products.updates <- lapply(filter_updates(products), updates, msg = msg)
   
   updates <- data.table::rbindlist(products.updates)
   
@@ -33,13 +34,13 @@ get_updates <- function(link) {
 #' @details Given a direct link to a cyclone update product, parse and return 
 #' dataframe of values.
 #' @param link Link to a storm's specific updates advisory product.
-#' @param display_link Display each link as being worked; default is TRUE.
+#' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_updates}}
 #' @export
-updates <- function(link, display_link = TRUE) {
+updates <- function(link, msg = FALSE) {
   
-  contents <- scrape_contents(link, display_link = display_link)
+  contents <- scrape_contents(link, msg = msg)
   
   # Make sure this is a updates advisory product
   if(!any(stringr::str_count(contents, c("MIATCUAT", "MIATCUEP"))))

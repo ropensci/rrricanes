@@ -65,9 +65,10 @@ fstadv_adv_num <- function(content) {
 }
 
 #' @title fstadv_data
-fstadv_data <- function(link) {
+fstadv_data <- function(link, msg = FALSE) {
   
-  message(paste0('Working: ', link))
+  if(msg)
+    message(paste0('Working: ', link))
   
   # Get contents of link
   contents <- get_product_contents(link)

@@ -9,9 +9,10 @@
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
+#' @param msg Show link being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{posest}}
 #' @export
-get_posest <- function(link) {
+get_posest <- function(link, msg = FALSE) {
 
   # Check status of link(s)
   valid.link <- sapply(link, .status)
@@ -21,7 +22,7 @@ get_posest <- function(link) {
   
   products <- unlist(sapply(valid.link, get_products))
   
-  products.posest <- lapply(filter_discussions(products), posest)
+  products.posest <- lapply(filter_discussions(products), posest, msg = msg)
   
   posest <- data.table::rbindlist(products.posest)
   
@@ -34,13 +35,13 @@ get_posest <- function(link) {
 #' @details Given a direct link to a position estimate product, parse and return 
 #' dataframe of values.
 #' @param link URL of a specific position estimate product
-#' @param display_link Display each link as being worked; default is TRUE.
+#' @param msg Display each link as being worked; default is FALSE.
 #' @return Dataframe
 #' @seealso \code{\link{get_posest}}
 #' @export
-posest <- function(link, display_link = TRUE) {
+posest <- function(link, msg = FALSE) {
   
-  contents <- scrape_contents(link, display_link = display_link)
+  contents <- scrape_contents(link, msg = msg)
   
   # Make sure this is a public advisory product
   if(!any(stringr::str_count(contents, c("MIATCEAT", "MIATCEEP"))))
