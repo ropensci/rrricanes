@@ -90,7 +90,7 @@ The `link` parameter can be one link or a vector of links.
 
 Now, in our global environment we have a dataframe named `fstadv`.
 
-```{r}
+```{r, eval = FALSE}
 head(fstadv)
 ```
 
@@ -116,7 +116,7 @@ You may not want the `fstadv` dataframe returned named as `fstadv`. For example,
 
 So let's say I want the forecast/advisory data for Charley but I want the dataframe to be named `al.1998.charley.fstadv`.
 
-```{r}
+```{r, eval = FALSE}
 get_storm_data("fstadv", 
                names = list("fstadv" = "al.1998.charley.fstadv"), 
                link = al.1998.charley %>% .$Link)
