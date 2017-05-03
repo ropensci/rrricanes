@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
+```{r libraries}
 library(dplyr)
 library(Hurricanes)
 ```
@@ -32,7 +32,7 @@ Lastly, it is possible a storm will develop at the end of the year and continue 
 
 By default, `get_storms` will return all storms that have developed for the current year in both basins. If no storms have developed, an error will be generated. For this example, we'll use 2016.
 
-```{r}
+```{r chunk-1}
 head(get_storms(year = 2016), n = 5L)
 ```
 
@@ -48,19 +48,19 @@ There are two parameters that can be passed to `get_storms`:
   * `year` Any 4-digit year including and after 1998
   * `basin` "AL" or "EP"
 
-```{r}
+```{r chunk-2}
 get_storms(year = 2015, basin = "AL")
 ```
 
 You can also gather multiple years.
 
-```{r}
+```{r chunk-3}
 get_storms(year = 2014:2015, basin = "EP")
 ```
 
 Notice `Name` is inconsistent in regards to casing. For example, "Hurricane ODILE". In earlier years `Name` will be all uppercase characters, e.g., "HURRICANE ODILE". You can correct this with `toproper()`.
 
-```{r}
+```{r chunk-4}
 toproper("Hurricane ODILE")
 toproper("HURRICANE ODILE")
 ```
@@ -69,7 +69,7 @@ toproper("HURRICANE ODILE")
 
 Once you have a list of storms we use that dataframe to help collect the storm data. For the following examples I'll use Tropical Storm Charley from 1998 since it was short-lived.
 
-```{r}
+```{r chunk-5}
 al.1998.charley <- get_storms(year = 1998, basin = "AL") %>% 
   filter(Name == "TROPICAL STORM CHARLEY")
 ```
@@ -78,11 +78,11 @@ al.1998.charley <- get_storms(year = 1998, basin = "AL") %>%
 
 Forecast/Advisory products contain the meat of data for a particular storm at a particular time. Other text products contain general information, some of which can be parsed. But if you want accurate details of a storm, use these products.
 
-`fstadv` is the term used in functions and names of dataframes for these products. 
+`fstadv` is the term used in functions and names of dataframes for these products.
 
 The function `get_storm_data` is what we will use to get only Forecast/Advisory data for Charley. 
 
-```{r, eval = FALSE}
+```{r chunk-6}
 get_storm_data("fstadv", link = al.1998.charley %>% .$Link)
 ```
 
@@ -90,7 +90,7 @@ The `link` parameter can be one link or a vector of links.
 
 Now, in our global environment we have a dataframe named `fstadv`.
 
-```{r, eval = FALSE}
+```{r chunk-7}
 head(fstadv)
 ```
 
@@ -116,7 +116,7 @@ You may not want the `fstadv` dataframe returned named as `fstadv`. For example,
 
 So let's say I want the forecast/advisory data for Charley but I want the dataframe to be named `al.1998.charley.fstadv`.
 
-```{r, eval = FALSE}
+```{r chunk-8, eval = FALSE}
 get_storm_data("fstadv", 
                names = list("fstadv" = "al.1998.charley.fstadv"), 
                link = al.1998.charley %>% .$Link)
