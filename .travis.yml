@@ -1,8 +1,6 @@
 language: r
 
-sudo: required
+warnings_are_errors: false
 
-r_check_args: --as-cran 
-
-after_success:
-  - Rscript -e 'library("covr");codecov(type="test")'
+r_packages:
+  - rmarkdown
