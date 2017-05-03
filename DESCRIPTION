@@ -23,7 +23,8 @@ Imports:
   rvest (>= 0.3.2), 
   stringr (>= 1.1.0), 
   tibble (>= 1.2), 
-  tidyr (>= 0.4.1)
+  tidyr (>= 0.4.1), 
+  xml2 (>= 1.0.0)
 Suggests:
   httr, 
   knitr, 
