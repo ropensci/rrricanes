@@ -83,11 +83,7 @@ Forecast/Advisory products contain the meat of data for a particular storm at a 
 The function `get_storm_data` is what we will use to get only Forecast/Advisory data for Charley. 
 
 ```{r chunk-6}
-# Extract link from dataframe
-l <- al.1998.charley %>% .$Link
-
-# Extract data from link
-get_storm_data("fstadv", link = l)
+get_storm_data("fstadv", link = al.1998.charley %>% `[[`('Link'))
 ```
 
 The `link` parameter can be one link or a vector of links. 
