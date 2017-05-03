@@ -1,6 +1,6 @@
 [![Stories in Ready](https://badge.waffle.io/timtrice/Hurricanes.png?label=ready&title=Ready)](https://waffle.io/timtrice/Hurricanes)
 
-[![Travis-CI Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop-0.1.0)](https://travis-ci.org/timtrice/Hurricanes)
+[![Travis-CI Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=vignettes-0.1.0)](https://travis-ci.org/timtrice/Hurricanes)
 
 # Hurricanes
 
