@@ -34,3 +34,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Removed
   - NA
 
+### Deprecated
+  - NA
+
+### Removed
+  - NA
+
+### Fixed
+  - NA
+
+### Security
+  - NA
