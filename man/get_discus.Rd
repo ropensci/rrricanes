@@ -4,10 +4,12 @@
 \alias{get_discus}
 \title{get_discus}
 \usage{
-get_discus(link)
+get_discus(link, msg = FALSE)
 }
 \arguments{
 \item{link}{URL to storm's archive page.}
+
+\item{msg}{Show link being worked. Default, FALSE.}
 }
 \description{
 Return dataframe of discussion data.

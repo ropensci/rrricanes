@@ -14,7 +14,7 @@
 \url{http://www.nhc.noaa.gov/archive/2016/}
 }
 \usage{
-get_storms(year = lubridate::year(Sys.Date()), basin = c("AL", "EP"))
+get_storms(year = format(Sys.Date(), "\%Y"), basin = c("AL", "EP"))
 }
 \arguments{
 \item{year}{numeric or vector, four digits (\%Y format)}

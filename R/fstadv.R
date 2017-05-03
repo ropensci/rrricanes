@@ -1,9 +1,10 @@
 #' @title get_fstadv
 #' @description Return dataframe of forecast/advisory data.
 #' @param link URL to storm's archive page.
+#' @param msg Show link currently being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
-get_fstadv <- function(link) {
+get_fstadv <- function(link, msg = FALSE) {
 
   # Check status of link(s)
   valid.link <- sapply(link, .status)
@@ -13,7 +14,7 @@ get_fstadv <- function(link) {
   
   products <- unlist(sapply(valid.link, get_products))
 
-  products.fstadv <- lapply(filter_forecast_advisories(products), fstadv)
+  products.fstadv <- lapply(filter_forecast_advisories(products), fstadv, msg = msg)
   
   fstadv <- data.table::rbindlist(products.fstadv)
   
@@ -45,13 +46,13 @@ get_fstadv <- function(link) {
 #'   \item{Eye}{Size of the eye in nautical miles, if available, or NA.}
 #' }
 #' @param link URL of a specific FORECAST/ADVISORY product
-#' @param display_link Display each link as being worked; default is TRUE.
+#' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_fstadv}}
 #' @export
-fstadv <- function(link, display_link = TRUE) {
+fstadv <- function(link, msg = FALSE) {
   
-  contents <- scrape_contents(link, display_link = display_link)
+  contents <- scrape_contents(link, msg = msg)
   
   # Make sure this is a public advisory product
   if(!any(stringr::str_count(contents, c("MIATCMAT", "MIATCMEP"))))

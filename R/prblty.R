@@ -9,9 +9,10 @@
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
+#' @param msg Show link being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{prblty}}
 #' @export
-get_prblty <- function(link) {
+get_prblty <- function(link, msg = FALSE) {
 
   # Check status of link(s)
   valid.link <- sapply(link, .status)
@@ -21,7 +22,7 @@ get_prblty <- function(link) {
   
   products <- unlist(sapply(valid.link, get_products))
   
-  products.prblty <- lapply(filter_strike_probabilities(products), prblty)
+  products.prblty <- lapply(filter_strike_probabilities(products), prblty, msg = msg)
   
   prblty <- data.table::rbindlist(products.prblty)
   
@@ -33,13 +34,13 @@ get_prblty <- function(link) {
 #' @details Given a direct link to a strike probability advisory product, parse 
 #' and return dataframe of values.
 #' @param link Link to a storm's specific strike probability advisory product.
-#' @param display_link Display each link as being worked; default is TRUE.
+#' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_prblty}}
 #' @export
-prblty <- function(link, display_link = TRUE) {
+prblty <- function(link, msg = FALSE) {
   
-  contents <- scrape_contents(link, display_link = display_link)
+  contents <- scrape_contents(link, msg = msg)
   
   # Make sure this is a strike probability product
   if(!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP"))))

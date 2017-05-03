@@ -9,9 +9,10 @@
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
+#' @param msg Show link being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
-get_public <- function(link) {
+get_public <- function(link, msg = FALSE) {
 
   # Check status of link(s)
   valid.link <- sapply(link, .status)
@@ -21,7 +22,7 @@ get_public <- function(link) {
   
   products <- unlist(sapply(valid.link, get_products))
   
-  products.public <- lapply(filter_public_advisories(products), public)
+  products.public <- lapply(filter_public_advisories(products), public, msg = msg)
   
   public <- data.table::rbindlist(products.public)
   
@@ -33,13 +34,13 @@ get_public <- function(link) {
 #' @details Given a direct link to a public advisory product, parse and return 
 #' dataframe of values.
 #' @param link Link to a storm's specific public advisory product.
-#' @param display_link Display each link as being worked; default is TRUE.
+#' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_public}}
 #' @export
-public <- function(link, display_link = TRUE) {
+public <- function(link, msg = FALSE) {
 
-  contents <- scrape_contents(link, display_link = display_link)
+  contents <- scrape_contents(link, msg = msg)
   
   # Make sure this is a public advisory product
   if(!any(stringr::str_count(contents, c("MIATCPAT", "MIATCPEP"))))

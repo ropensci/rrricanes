@@ -4,10 +4,12 @@
 \alias{get_updates}
 \title{get_updates}
 \usage{
-get_updates(link)
+get_updates(link, msg = FALSE)
 }
 \arguments{
 \item{link}{URL to storm's archive page.}
+
+\item{msg}{Show link being worked. Default, FALSE.}
 }
 \description{
 Return dataframe of cyclone update data.

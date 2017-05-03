@@ -4,12 +4,12 @@
 \alias{prblty}
 \title{prblty}
 \usage{
-prblty(link, display_link = TRUE)
+prblty(link, msg = FALSE)
 }
 \arguments{
 \item{link}{Link to a storm's specific strike probability advisory product.}
 
-\item{display_link}{Display each link as being worked; default is TRUE.}
+\item{msg}{Display each link as being worked; default is FALSE}
 }
 \value{
 Dataframe
