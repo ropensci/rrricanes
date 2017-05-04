@@ -21,14 +21,14 @@ identical(b, c)
 ## ----chunk-5-------------------------------------------------------------
 identical(c, d)
 
-## ----chunk-6, eval = FALSE-----------------------------------------------
-#  get_storm_data("fstadv", link = a, msg = TRUE)
+## ----chunk-6-------------------------------------------------------------
+get_storm_data("fstadv", link = a, msg = TRUE)
 
-## ----chunk-7, eval = FALSE-----------------------------------------------
-#  get_storm_data("fstadv", link = b, msg = TRUE)
+## ----chunk-7-------------------------------------------------------------
+get_storm_data("fstadv", link = b, msg = TRUE)
 
-## ----chunk-8, eval = FALSE-----------------------------------------------
-#  get_storm_data("fstadv", link = c, msg = TRUE)
+## ----chunk-8-------------------------------------------------------------
+get_storm_data("fstadv", link = c, msg = TRUE)
 
 ## ----chunk-9-------------------------------------------------------------
 get_storm_data("fstadv", link = d, msg = TRUE)

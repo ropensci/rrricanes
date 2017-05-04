@@ -38,15 +38,15 @@ identical(b, c)
 identical(c, d)
 ```
 
-```{r chunk-6, eval = FALSE}
+```{r chunk-6}
 get_storm_data("fstadv", link = a, msg = TRUE)
 ```
 
-```{r chunk-7, eval = FALSE}
+```{r chunk-7}
 get_storm_data("fstadv", link = b, msg = TRUE)
 ```
 
-```{r chunk-8, eval = FALSE}
+```{r chunk-8}
 get_storm_data("fstadv", link = c, msg = TRUE)
 ```
 
