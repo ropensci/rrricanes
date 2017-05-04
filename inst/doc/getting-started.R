@@ -20,7 +20,8 @@ al.1998.charley <- get_storms(year = 1998, basin = "AL") %>%
   filter(Name == "TROPICAL STORM CHARLEY")
 
 ## ----chunk-6-------------------------------------------------------------
-get_storm_data("fstadv", link = al.1998.charley %>% select(Link) %>% first())
+# Extract Link from al.1998.charley
+get_storm_data("fstadv", link = al.1998.charley[1,4])
 
 ## ----chunk-7-------------------------------------------------------------
 head(fstadv)

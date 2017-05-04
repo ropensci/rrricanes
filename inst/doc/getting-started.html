@@ -248,7 +248,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Forecast/Advisory products contain the meat of data for a particular storm at a particular time. Other text products contain general information, some of which can be parsed. But if you want accurate details of a storm, use these products.</p>
 <p><code>fstadv</code> is the term used in functions and names of dataframes for these products.</p>
 <p>The function <code>get_storm_data</code> is what we will use to get only Forecast/Advisory data for Charley.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_storm_data</span>(<span class="st">&quot;fstadv&quot;</span>, <span class="dt">link =</span> al<span class="fl">.1998</span>.charley %&gt;%<span class="st"> </span><span class="kw">select</span>(Link) %&gt;%<span class="st"> </span><span class="kw">first</span>())</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extract Link from al.1998.charley</span>
+<span class="kw">get_storm_data</span>(<span class="st">&quot;fstadv&quot;</span>, <span class="dt">link =</span> al<span class="fl">.1998</span>.charley[<span class="dv">1</span>,<span class="dv">4</span>])</code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>The <code>link</code> parameter can be one link or a vector of links.</p>
 <p>Now, in our global environment we have a dataframe named <code>fstadv</code>.</p>
