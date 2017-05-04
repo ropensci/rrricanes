@@ -8,10 +8,10 @@
 #' }
 #' @return dataframe
 .create_df_archives <- function() {
-  df <- data.frame("Year" = integer(), 
-                   "Name" = character(), 
-                   "Basin" = character(), 
-                   "Link" = character())
+  df <- tibble::data_frame("Year" = integer(), 
+                           "Name" = character(), 
+                           "Basin" = character(), 
+                           "Link" = character())
   return(df)
 }
 
@@ -20,12 +20,12 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_discus <- function() {
-  df <- data.frame("Status" = character(), 
-                   "Name" = character(),
-                   # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                   "Adv" = character(), 
-                   "Date" = character(), 
-                   "Contents" = character())
+  df <- tibble::data_frame("Status" = character(), 
+                           "Name" = character(),
+                           # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                           "Adv" = character(), 
+                           "Date" = character(), 
+                           "Contents" = character())
   
   return(df)
 }
@@ -35,21 +35,21 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_fstadv <- function() {
-  df <- data.frame("Status" = character(), 
-                   "Name" = character(),
-                   # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                   "Adv" = character(), 
-                   "Date" = character(), 
-                   "Key" = character(), 
-                   'Lat' = numeric(), 
-                   'Lon' = numeric(), 
-                   'Wind' = numeric(), 
-                   'Gust' = numeric(), 
-                   'Pressure' = numeric(), 
-                   'PosAcc' = numeric(), 
-                   'FwdDir' = numeric(), 
-                   'FwdSpeed' = numeric(), 
-                   'Eye' = numeric())
+  df <- tibble::data_frame("Status" = character(), 
+                           "Name" = character(),
+                           # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                           "Adv" = character(), 
+                           "Date" = character(), 
+                           "Key" = character(), 
+                           'Lat' = numeric(), 
+                           'Lon' = numeric(), 
+                           'Wind' = numeric(), 
+                           'Gust' = numeric(), 
+                           'Pressure' = numeric(), 
+                           'PosAcc' = numeric(), 
+                           'FwdDir' = numeric(), 
+                           'FwdSpeed' = numeric(), 
+                           'Eye' = numeric())
   
   return(df)
 }
@@ -59,12 +59,12 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_posest <- function() {
-  df <- data.frame("Status" = character(), 
-                   "Name" = character(),
-                   # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                   "Adv" = character(), 
-                   "Date" = character(), 
-                   "Contents" = character())
+  df <- tibble::data_frame("Status" = character(), 
+                           "Name" = character(),
+                           # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                           "Adv" = character(), 
+                           "Date" = character(), 
+                           "Contents" = character())
   
   return(df)
 }
@@ -74,12 +74,12 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_prblty <- function() {
-  df <- data.frame("Status" = character(), 
-                   "Name" = character(),
-                   # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                   "Adv" = character(), 
-                   "Date" = character(), 
-                   "Contents" = character())
+  df <- tibble::data_frame("Status" = character(), 
+                           "Name" = character(),
+                           # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                           "Adv" = character(), 
+                           "Date" = character(), 
+                           "Contents" = character())
   
   return(df)
 }
@@ -89,12 +89,12 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_public <- function() {
-  df <- data.frame("Status" = character(), 
-                   "Name" = character(),
-                   # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                   "Adv" = character(), 
-                   "Date" = character(), 
-                   "Contents" = character())
+  df <- tibble::data_frame("Status" = character(), 
+                           "Name" = character(),
+                           # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                           "Adv" = character(), 
+                           "Date" = character(), 
+                           "Contents" = character())
   
   return(df)
 }
@@ -104,12 +104,12 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_updates <- function() {
-  df <- data.frame("Status" = character(), 
-                   "Name" = character(),
-                   # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                   "Adv" = character(), 
-                   "Date" = character(), 
-                   "Contents" = character())
+  df <- tibble::data_frame("Status" = character(), 
+                           "Name" = character(),
+                           # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                           "Adv" = character(), 
+                           "Date" = character(), 
+                           "Contents" = character())
   
   return(df)
 }
@@ -119,12 +119,12 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_wndprb <- function() {
-  df <- data.frame("Status" = character(), 
-                   "Name" = character(),
-                   # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                   "Adv" = character(), 
-                   "Date" = character(), 
-                   "Contents" = character())
+  df <- tibble::data_frame("Status" = character(), 
+                           "Name" = character(),
+                           # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                           "Adv" = character(), 
+                           "Date" = character(), 
+                           "Contents" = character())
   
   return(df)
 }

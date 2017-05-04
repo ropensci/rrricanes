@@ -43,21 +43,21 @@
 #' @return Returns an empty dataframe.
 create_df_advisories <- function() {
   
-  df <- data.frame('Key' = character(), 
-                   'Name' = character(), 
-                   'Adv' = numeric(), 
-                   'ObDate' = as.Date(character()), 
-                   'Status' = character(), 
-                   'Lat' = numeric(), 
-                   'Lon' = numeric(), 
-                   'Wind' = numeric(), 
-                   'Gust' = numeric(), 
-                   'Pressure' = numeric(), 
-                   'PosAcc' = numeric(), 
-                   'FwdDir' = numeric(), 
-                   'FwdSpeed' = numeric(), 
-                   'Eye' = numeric(), 
-                   stringsAsFactors = FALSE)
+  df <- tibble::data_frame('Key' = character(), 
+                           'Name' = character(), 
+                           'Adv' = numeric(), 
+                           'ObDate' = as.Date(character()), 
+                           'Status' = character(), 
+                           'Lat' = numeric(), 
+                           'Lon' = numeric(), 
+                           'Wind' = numeric(), 
+                           'Gust' = numeric(), 
+                           'Pressure' = numeric(), 
+                           'PosAcc' = numeric(), 
+                           'FwdDir' = numeric(), 
+                           'FwdSpeed' = numeric(), 
+                           'Eye' = numeric(), 
+                           stringsAsFactors = FALSE)
   
   return(df)  
   
@@ -67,13 +67,13 @@ create_df_advisories <- function() {
 #' @description Create dataframe to hold errors generated during parsing
 create_df_errors <- function() {
   
-  df <- data.frame('Key' = character(), 
-                   'Adv' = numeric(), 
-                   'ObDate' = as.Date(character()), 
-                   'CurrTime' = as.Date(character()), 
-                   'url' = character(), 
-                   'error' = character(), 
-                   stringsAsFactors = FALSE)
+  df <- tibble::data_frame('Key' = character(), 
+                           'Adv' = numeric(), 
+                           'ObDate' = as.Date(character()), 
+                           'CurrTime' = as.Date(character()), 
+                           'url' = character(), 
+                           'error' = character(), 
+                           stringsAsFactors = FALSE)
   
   return(df)
   
@@ -135,15 +135,15 @@ create_df_warnings <- function() {
 #' @return dataframe
 create_df_winds <- function() {
   
-  df <- data.frame('Key' = character(), 
-                   'Adv' = numeric(), 
-                   'ObDate' = as.Date(character()), 
-                   'WindField' = numeric(), 
-                   'NE' = numeric(), 
-                   'SE' = numeric(), 
-                   'SW' = numeric(), 
-                   'NW' = numeric(), 
-                   stringsAsFactors = FALSE)
+  df <- tibble::data_frame('Key' = character(), 
+                           'Adv' = numeric(), 
+                           'ObDate' = as.Date(character()), 
+                           'WindField' = numeric(), 
+                           'NE' = numeric(), 
+                           'SE' = numeric(), 
+                           'SW' = numeric(), 
+                           'NW' = numeric(), 
+                           stringsAsFactors = FALSE)
   
   return(df)  
 }
