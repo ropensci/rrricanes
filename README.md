@@ -23,14 +23,7 @@ vignette("getting-started", package = "Hurricanes")
 The following R packages are also currently used for data processing:
 
 * data.table (>= 1.9.6), 
-* dplyr (>= 0.5.0), 
-* lubridate (>= 1.6.0),
-* readr (>= 1.0.0),
-* rvest (>= 0.3.2), 
-* stringr (>= 1.1.0), 
-* tibble (>= 1.2), 
-* tidyr (>= 0.4.1), 
-* xml2 (>= 1.0.0)
+* tidyverse (>= 1.0.0)
 
 Packages `dplyr`, `lubridate`, `readr`, `stringr`, `tibble`, and `tidyr` are also included in the `tidyverse` package which can be used instead.
 
