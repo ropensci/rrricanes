@@ -5,8 +5,8 @@ Version: 0.1.0
 Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
 Depends:
-  R (>= 3.4.0), 
-  magrittr (>= 1.5)
+  R (>= 3.2.3), 
+  tidyverse (>= 1.0.0)
 Description: Get archived data of past and current hurricanes for the Atlantic 
   and eastern Pacific oceans.
   This package will also combine HURDAT which was another R library I wrote to 
@@ -16,8 +16,7 @@ BugReports: https://github.com/timtrice/Hurricanes/issues
 License: MIT + file LICENSE
 LazyData: TRUE
 Imports:
-  data.table (>= 1.9.6), 
-  tidyverse (>= 1.0.0)
+  data.table (>= 1.9.6)
 Suggests:
   httr, 
   knitr, 
