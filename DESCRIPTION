@@ -6,11 +6,7 @@ Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
 Depends:
   R (>= 3.2.3), 
-<<<<<<< HEAD
-  magrittr (>= 1.5)
-=======
-  tidyverse (>= 0.1.0)
->>>>>>> 00005c416c778f398f1c7b916a9d5ee6f134a1c7
+  magrittr (>= 1.5) 
 Description: Get archived data of past and current hurricanes for the Atlantic 
   and eastern Pacific oceans.
   This package will also combine HURDAT which was another R library I wrote to 
