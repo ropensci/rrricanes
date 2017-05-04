@@ -3,31 +3,33 @@ library(dplyr)
 library(Hurricanes)
 
 ## ----chunk-1-------------------------------------------------------------
-head(get_storms(year = 2016), n = 5L)
+(al.1998.charley <- get_storms(year = 1998, basin = "AL") %>% 
+  filter(Name == "TROPICAL STORM CHARLEY"))
 
 ## ----chunk-2-------------------------------------------------------------
-get_storms(year = 2015, basin = "AL")
+(a <- al.1998.charley %>% .$Link)
+(b <- al.1998.charley %>% select(Link) %>% first())
+(c <- al.1998.charley[1,4])
+(d <- "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
 
 ## ----chunk-3-------------------------------------------------------------
-get_storms(year = 2014:2015, basin = "EP")
+identical(a, b)
 
 ## ----chunk-4-------------------------------------------------------------
-toproper("Hurricane ODILE")
-toproper("HURRICANE ODILE")
+identical(b, c)
 
 ## ----chunk-5-------------------------------------------------------------
-al.1998.charley <- get_storms(year = 1998, basin = "AL") %>% 
-  filter(Name == "TROPICAL STORM CHARLEY")
+identical(c, d)
 
 ## ----chunk-6-------------------------------------------------------------
-# Extract Link from al.1998.charley
-get_storm_data("fstadv", link = al.1998.charley[1,4])
+get_storm_data("fstadv", link = a, msg = TRUE)
 
 ## ----chunk-7-------------------------------------------------------------
-head(fstadv)
+get_storm_data("fstadv", link = b, msg = TRUE)
 
-## ----chunk-8, eval = FALSE-----------------------------------------------
-#  get_storm_data("fstadv",
-#                 names = list("fstadv" = "al.1998.charley.fstadv"),
-#                 link = al.1998.charley %>% .$Link)
+## ----chunk-8-------------------------------------------------------------
+get_storm_data("fstadv", link = c, msg = TRUE)
+
+## ----chunk-9-------------------------------------------------------------
+get_storm_data("fstadv", link = d, msg = TRUE)
 
