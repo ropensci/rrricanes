@@ -25,8 +25,6 @@ The following R packages are also currently used for data processing:
 * data.table (>= 1.9.6), 
 * tidyverse (>= 1.0.0)
 
-Packages `dplyr`, `lubridate`, `readr`, `stringr`, `tibble`, and `tidyr` are also included in the `tidyverse` package which can be used instead.
-
 On future revisions I will work on minimizing package dependencies if it helps increase processing speed.
 
 ### Installing
@@ -34,12 +32,12 @@ On future revisions I will work on minimizing package dependencies if it helps i
 `Hurricanes` is currently only available in GitHub. It can be installed using the `devtools` package:
 
 ```r
-devtools::install_github("timtrice/Hurricanes")
+devtools::install_github("timtrice/Hurricanes", ref = "develop-0.1.0")
 ```
 
 ## Built With
 
-* [R 3.4.0](https://www.r-project.org/) - The R Project for Statistical Computing
+* [R 3.2.3](https://www.r-project.org/) - The R Project for Statistical Computing
 
 ## Contributing
 
