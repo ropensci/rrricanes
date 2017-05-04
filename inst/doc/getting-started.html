@@ -76,54 +76,237 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(Hurricanes)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(al<span class="fl">.1998</span>.charley &lt;-<span class="st"> </span><span class="kw">get_storms</span>(<span class="dt">year =</span> <span class="dv">1998</span>, <span class="dt">basin =</span> <span class="st">&quot;AL&quot;</span>) %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(Name ==<span class="st"> &quot;TROPICAL STORM CHARLEY&quot;</span>))</code></pre></div>
-<pre><code>##   Year                   Name Basin
-## 1 1998 TROPICAL STORM CHARLEY    AL
-##                                                       Link
-## 1 http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(a &lt;-<span class="st"> </span>al<span class="fl">.1998</span>.charley %&gt;%<span class="st"> </span>.$Link)</code></pre></div>
-<pre><code>## [1] &quot;http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(b &lt;-<span class="st"> </span>al<span class="fl">.1998</span>.charley %&gt;%<span class="st"> </span><span class="kw">select</span>(Link) %&gt;%<span class="st"> </span><span class="kw">first</span>())</code></pre></div>
-<pre><code>## [1] &quot;http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(c &lt;-<span class="st"> </span>al<span class="fl">.1998</span>.charley[<span class="dv">1</span>,<span class="dv">4</span>])</code></pre></div>
-<pre><code>## [1] &quot;http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(d &lt;-<span class="st"> &quot;http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html&quot;</span>)</code></pre></div>
-<pre><code>## [1] &quot;http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">identical</span>(a, b)</code></pre></div>
+<div id="general-introduction" class="section level2">
+<h2>General Introduction</h2>
+<p><code>Hurricanes</code> is intended to give easy access to hurricane archives. In short, it is a web-scraping tool that parses the National Hurricane Center’s (NHC) archives to get storm data.</p>
+<p>At this point, data is only available back to 1998.</p>
+<p>There are two basins which data is available: north Atlantic (“AL”) and northeastern Pacific (“EP”). The northeastern Pacific basin typically covers from the west coast of North America to -140° longitude (140°W). The Central Pacific Hurricane Center (CPHC) covers the north Pacific from -140° to -180°.</p>
+<p>The NHC will stop issuing advisories once a storm crosses -140° where the CPHC takes over. However, I cannot rule out that some storms that have crossed this “boundary” or even developed in CPHC waters will not exist in records retrieved.</p>
+<p>On a semi-related note. In some instances (such as Hurricane Otto, 2016) a storm may cross from the Atlantic to Pacific ocean (and even vice versa, though rare). When this happens the storm is given a new name once it emerges into the Pacific ocean. However, if a storm crosses -140° longitude it retains it’s name.</p>
+<p>Lastly, it is possible a storm will develop at the end of the year and continue to exist into the next year. I am not aware if those storms will exist in this package as of this time. However, generally the storm should be listed in the archives of the year it developed.</p>
+</div>
+<div id="get-storms" class="section level2">
+<h2>Get Storms</h2>
+<p>By default, <code>get_storms</code> will return all storms that have developed for the current year in both basins. If no storms have developed, an error will be generated. For this example, we’ll use 2016.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">get_storms</span>(<span class="dt">year =</span> <span class="dv">2016</span>), <span class="dt">n =</span> 5L)</code></pre></div>
+<pre><code>##    Year                    Name Basin
+## 1: 2016          Hurricane ALEX    AL
+## 2: 2016   Tropical Storm BONNIE    AL
+## 3: 2016    Tropical Storm COLIN    AL
+## 4: 2016 Tropical Storm DANIELLE    AL
+## 5: 2016          Hurricane EARL    AL
+##                                                    Link
+## 1:     http://www.nhc.noaa.gov/archive/2016/ALEX.shtml?
+## 2:   http://www.nhc.noaa.gov/archive/2016/BONNIE.shtml?
+## 3:    http://www.nhc.noaa.gov/archive/2016/COLIN.shtml?
+## 4: http://www.nhc.noaa.gov/archive/2016/DANIELLE.shtml?
+## 5:     http://www.nhc.noaa.gov/archive/2016/EARL.shtml?</code></pre>
+<p>It returns a dataframe with four variables:</p>
+<ul>
+<li><code>Year</code> Year the storm developed</li>
+<li><code>Name</code> Name of the storm and highest classification. If the greatest strength a storm became was tropical storm then <code>Name</code> will be “Tropical Storm…”; hurricane as “Hurricane…”, etc.</li>
+<li><code>Basin</code> “AL” for north Atlantic, “EP” for northeastern Pacific.</li>
+<li><code>Link</code> URL to the storm’s archive pages.</li>
+</ul>
+<p>There are two parameters that can be passed to <code>get_storms</code>:</p>
+<ul>
+<li><code>year</code> Any 4-digit year including and after 1998</li>
+<li><code>basin</code> “AL” or “EP”</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_storms</span>(<span class="dt">year =</span> <span class="dv">2015</span>, <span class="dt">basin =</span> <span class="st">&quot;AL&quot;</span>)</code></pre></div>
+<pre><code>##     Year                     Name Basin
+##  1: 2015       Tropical Storm ANA    AL
+##  2: 2015      Tropical Storm BILL    AL
+##  3: 2015 Tropical Storm CLAUDETTE    AL
+##  4: 2015          Hurricane DANNY    AL
+##  5: 2015     Tropical Storm ERIKA    AL
+##  6: 2015           Hurricane FRED    AL
+##  7: 2015     Tropical Storm GRACE    AL
+##  8: 2015     Tropical Storm HENRI    AL
+##  9: 2015 Tropical Depression NINE    AL
+## 10: 2015       Tropical Storm IDA    AL
+## 11: 2015        Hurricane JOAQUIN    AL
+## 12: 2015           Hurricane KATE    AL
+##                                                      Link
+##  1:       http://www.nhc.noaa.gov/archive/2015/ANA.shtml?
+##  2:      http://www.nhc.noaa.gov/archive/2015/BILL.shtml?
+##  3: http://www.nhc.noaa.gov/archive/2015/CLAUDETTE.shtml?
+##  4:     http://www.nhc.noaa.gov/archive/2015/DANNY.shtml?
+##  5:     http://www.nhc.noaa.gov/archive/2015/ERIKA.shtml?
+##  6:      http://www.nhc.noaa.gov/archive/2015/FRED.shtml?
+##  7:     http://www.nhc.noaa.gov/archive/2015/GRACE.shtml?
+##  8:     http://www.nhc.noaa.gov/archive/2015/HENRI.shtml?
+##  9:      http://www.nhc.noaa.gov/archive/2015/NINE.shtml?
+## 10:       http://www.nhc.noaa.gov/archive/2015/IDA.shtml?
+## 11:   http://www.nhc.noaa.gov/archive/2015/JOAQUIN.shtml?
+## 12:      http://www.nhc.noaa.gov/archive/2015/KATE.shtml?</code></pre>
+<p>You can also gather multiple years.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_storms</span>(<span class="dt">year =</span> <span class="dv">2014</span>:<span class="dv">2015</span>, <span class="dt">basin =</span> <span class="st">&quot;EP&quot;</span>)</code></pre></div>
+<pre><code>##     Year                          Name Basin
+##  1: 2014              Hurricane AMANDA    EP
+##  2: 2014          Tropical Storm BORIS    EP
+##  3: 2014            Hurricane CRISTINA    EP
+##  4: 2014        Tropical Storm DOUGLAS    EP
+##  5: 2014          Tropical Storm ELIDA    EP
+##  6: 2014         Tropical Storm FAUSTO    EP
+##  7: 2014      Tropical Storm GENEVIEVE    EP
+##  8: 2014              Hurricane HERNAN    EP
+##  9: 2014              Hurricane ISELLE    EP
+## 10: 2014               Hurricane JULIO    EP
+## 11: 2014              Hurricane KARINA    EP
+## 12: 2014              Hurricane LOWELL    EP
+## 13: 2014               Hurricane MARIE    EP
+## 14: 2014             Hurricane NORBERT    EP
+## 15: 2014               Hurricane ODILE    EP
+## 16: 2014 Tropical Depression SIXTEEN-E    EP
+## 17: 2014                Hurricane POLO    EP
+## 18: 2014              Hurricane RACHEL    EP
+## 19: 2014               Hurricane SIMON    EP
+## 20: 2014          Tropical Storm TRUDY    EP
+## 21: 2014               Hurricane VANCE    EP
+## 22: 2015              Hurricane ANDRES    EP
+## 23: 2015              Hurricane BLANCA    EP
+## 24: 2015              Hurricane CARLOS    EP
+## 25: 2015    Tropical Depression FOUR-E    EP
+## 26: 2015             Hurricane DOLORES    EP
+## 27: 2015        Tropical Storm ENRIQUE    EP
+## 28: 2015        Tropical Storm FELICIA    EP
+## 29: 2015   Tropical Depression EIGHT-E    EP
+## 30: 2015           Hurricane GUILLERMO    EP
+## 31: 2015               Hurricane HILDA    EP
+## 32: 2015  Tropical Depression ELEVEN-E    EP
+## 33: 2015             Hurricane IGNACIO    EP
+## 34: 2015              Hurricane JIMENA    EP
+## 35: 2015          Tropical Storm KEVIN    EP
+## 36: 2015               Hurricane LINDA    EP
+## 37: 2015 Tropical Depression SIXTEEN-E    EP
+## 38: 2015               Hurricane MARTY    EP
+## 39: 2015           Tropical Storm NORA    EP
+## 40: 2015                Hurricane OLAF    EP
+## 41: 2015            Hurricane PATRICIA    EP
+## 42: 2015           Tropical Storm RICK    EP
+## 43: 2015              Hurricane SANDRA    EP
+##     Year                          Name Basin
+##                                                      Link
+##  1:    http://www.nhc.noaa.gov/archive/2014/AMANDA.shtml?
+##  2:     http://www.nhc.noaa.gov/archive/2014/BORIS.shtml?
+##  3:  http://www.nhc.noaa.gov/archive/2014/CRISTINA.shtml?
+##  4:   http://www.nhc.noaa.gov/archive/2014/DOUGLAS.shtml?
+##  5:     http://www.nhc.noaa.gov/archive/2014/ELIDA.shtml?
+##  6:    http://www.nhc.noaa.gov/archive/2014/FAUSTO.shtml?
+##  7: http://www.nhc.noaa.gov/archive/2014/GENEVIEVE.shtml?
+##  8:    http://www.nhc.noaa.gov/archive/2014/HERNAN.shtml?
+##  9:    http://www.nhc.noaa.gov/archive/2014/ISELLE.shtml?
+## 10:     http://www.nhc.noaa.gov/archive/2014/JULIO.shtml?
+## 11:    http://www.nhc.noaa.gov/archive/2014/KARINA.shtml?
+## 12:    http://www.nhc.noaa.gov/archive/2014/LOWELL.shtml?
+## 13:     http://www.nhc.noaa.gov/archive/2014/MARIE.shtml?
+## 14:   http://www.nhc.noaa.gov/archive/2014/NORBERT.shtml?
+## 15:     http://www.nhc.noaa.gov/archive/2014/ODILE.shtml?
+## 16: http://www.nhc.noaa.gov/archive/2014/SIXTEEN-E.shtml?
+## 17:      http://www.nhc.noaa.gov/archive/2014/POLO.shtml?
+## 18:    http://www.nhc.noaa.gov/archive/2014/RACHEL.shtml?
+## 19:     http://www.nhc.noaa.gov/archive/2014/SIMON.shtml?
+## 20:     http://www.nhc.noaa.gov/archive/2014/TRUDY.shtml?
+## 21:     http://www.nhc.noaa.gov/archive/2014/VANCE.shtml?
+## 22:    http://www.nhc.noaa.gov/archive/2015/ANDRES.shtml?
+## 23:    http://www.nhc.noaa.gov/archive/2015/BLANCA.shtml?
+## 24:    http://www.nhc.noaa.gov/archive/2015/CARLOS.shtml?
+## 25:    http://www.nhc.noaa.gov/archive/2015/FOUR-E.shtml?
+## 26:   http://www.nhc.noaa.gov/archive/2015/DOLORES.shtml?
+## 27:   http://www.nhc.noaa.gov/archive/2015/ENRIQUE.shtml?
+## 28:   http://www.nhc.noaa.gov/archive/2015/FELICIA.shtml?
+## 29:   http://www.nhc.noaa.gov/archive/2015/EIGHT-E.shtml?
+## 30: http://www.nhc.noaa.gov/archive/2015/GUILLERMO.shtml?
+## 31:     http://www.nhc.noaa.gov/archive/2015/HILDA.shtml?
+## 32:  http://www.nhc.noaa.gov/archive/2015/ELEVEN-E.shtml?
+## 33:   http://www.nhc.noaa.gov/archive/2015/IGNACIO.shtml?
+## 34:    http://www.nhc.noaa.gov/archive/2015/JIMENA.shtml?
+## 35:     http://www.nhc.noaa.gov/archive/2015/KEVIN.shtml?
+## 36:     http://www.nhc.noaa.gov/archive/2015/LINDA.shtml?
+## 37: http://www.nhc.noaa.gov/archive/2015/SIXTEEN-E.shtml?
+## 38:     http://www.nhc.noaa.gov/archive/2015/MARTY.shtml?
+## 39:      http://www.nhc.noaa.gov/archive/2015/NORA.shtml?
+## 40:      http://www.nhc.noaa.gov/archive/2015/OLAF.shtml?
+## 41:  http://www.nhc.noaa.gov/archive/2015/PATRICIA.shtml?
+## 42:      http://www.nhc.noaa.gov/archive/2015/RICK.shtml?
+## 43:    http://www.nhc.noaa.gov/archive/2015/SANDRA.shtml?
+##                                                      Link</code></pre>
+<p>Notice <code>Name</code> is inconsistent in regards to casing. For example, “Hurricane ODILE”. In earlier years <code>Name</code> will be all uppercase characters, e.g., “HURRICANE ODILE”. You can correct this with <code>toproper()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">toproper</span>(<span class="st">&quot;Hurricane ODILE&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;Hurricane Odile&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">toproper</span>(<span class="st">&quot;HURRICANE ODILE&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;Hurricane Odile&quot;</code></pre>
+</div>
+<div id="getting-storm-data" class="section level2">
+<h2>Getting Storm Data</h2>
+<p>Once you have a list of storms we use that dataframe to help collect the storm data. For the following examples I’ll use Tropical Storm Charley from 1998 since it was short-lived.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">al<span class="fl">.1998</span>.charley &lt;-<span class="st"> </span><span class="kw">get_storms</span>(<span class="dt">year =</span> <span class="dv">1998</span>, <span class="dt">basin =</span> <span class="st">&quot;AL&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(Name ==<span class="st"> &quot;TROPICAL STORM CHARLEY&quot;</span>)</code></pre></div>
+<div id="forecastadvisory-products-fstadv" class="section level3">
+<h3>Forecast/Advisory Products (<code>fstadv</code>)</h3>
+<p>Forecast/Advisory products contain the meat of data for a particular storm at a particular time. Other text products contain general information, some of which can be parsed. But if you want accurate details of a storm, use these products.</p>
+<p><code>fstadv</code> is the term used in functions and names of dataframes for these products.</p>
+<p>The function <code>get_storm_data</code> is what we will use to get only Forecast/Advisory data for Charley.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_storm_data</span>(<span class="st">&quot;fstadv&quot;</span>, <span class="dt">link =</span> al<span class="fl">.1998</span>.charley %&gt;%<span class="st"> </span>.$Link)</code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">identical</span>(b, c)</code></pre></div>
+<p>The <code>link</code> parameter can be one link or a vector of links.</p>
+<p>Now, in our global environment we have a dataframe named <code>fstadv</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(fstadv)</code></pre></div>
+<pre><code>##                 Status    Name Adv                Date      Key  Lat   Lon
+## 1: TROPICAL DEPRESSION   THREE   1 1998-08-21 15:00:00 AL031998 25.6 -94.4
+## 2:      TROPICAL STORM CHARLEY   2 1998-08-21 21:00:00 AL031998 26.2 -95.0
+## 3:      TROPICAL STORM CHARLEY   3 1998-08-22 03:00:00 AL031998 27.1 -95.7
+## 4:      TROPICAL STORM CHARLEY   4 1998-08-22 09:00:00 AL031998 27.8 -96.8
+## 5: TROPICAL DEPRESSION CHARLEY   5 1998-08-22 15:00:00 AL031998 28.4 -97.9
+##    Wind Gust Pressure PosAcc FwdDir FwdSpeed Eye
+## 1:   30   40     1007     60    290       11  NA
+## 2:   35   45     1008     75    295       10  NA
+## 3:   40   50     1006     75    305       11  NA
+## 4:   50   60     1003     30    310        9  NA
+## 5:   30   40     1005     50    310       12  NA</code></pre>
+<p>You can view the definitions for each of the variables in <code>?fstadv</code>.</p>
+<div id="using-name-and-key" class="section level4">
+<h4>Using Name and Key</h4>
+<p>The <code>Name</code> of a storm can change. Generally speaking when a storm develops it is a tropical depression and is given as a cardinal number; for example, Tropical Depression One. For eastern Pacific storms the cardinal number would be appended with a dash followed by the letter ‘E’ capitalized. So Tropical Depression One-E would be the first storm that developed in the eastern Pacific.</p>
+<p>Only when a storm reaches tropical storm strength is it given a name and retains that name for the duration of it’s lifetime.</p>
+<p>As you may have guessed, <code>Name</code> is not reliable to use as a foreign key tying in the various dataframe this project will produce. For that you will use <code>Key</code>.</p>
+<p><code>Key</code> is formatted slightly differently depending on the year. For our current example, Charley, the <code>Key</code> is ‘AL0398’. In later years <code>Key</code> will be eight digits long, like ‘AL032008’.</p>
+<ul>
+<li><strong>AL|EP</strong> Basin the storm is located in.</li>
+<li><strong>[:digit:]{2}</strong> Number of the storm for the year, left-padded, if necessary, with a 0</li>
+<li><strong>[:digit:]{2}[:digit:]{4}</strong> Year the storm developed in either %y or %Y format.</li>
+</ul>
+</div>
+<div id="custom-name-for-the-returned-dataframe" class="section level4">
+<h4>Custom name for the returned dataframe</h4>
+<p>You may not want the <code>fstadv</code> dataframe returned named as <code>fstadv</code>. For example, if you are working multiple storms there may be a reason you want to keep them separated. You can pass a list to the <code>names</code> parameter.</p>
+<p>So let’s say I want the forecast/advisory data for Charley but I want the dataframe to be named <code>al.1998.charley.fstadv</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_storm_data</span>(<span class="st">&quot;fstadv&quot;</span>, 
+               <span class="dt">names =</span> <span class="kw">list</span>(<span class="st">&quot;fstadv&quot;</span> =<span class="st"> &quot;al.1998.charley.fstadv&quot;</span>), 
+               <span class="dt">link =</span> al<span class="fl">.1998</span>.charley %&gt;%<span class="st"> </span>.$Link)</code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">identical</span>(c, d)</code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_storm_data</span>(<span class="st">&quot;fstadv&quot;</span>, <span class="dt">link =</span> a, <span class="dt">msg =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.001</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.002</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.003</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.004</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.005</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_storm_data</span>(<span class="st">&quot;fstadv&quot;</span>, <span class="dt">link =</span> b, <span class="dt">msg =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.001</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.002</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.003</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.004</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.005</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_storm_data</span>(<span class="st">&quot;fstadv&quot;</span>, <span class="dt">link =</span> c, <span class="dt">msg =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.001</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.002</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.003</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.004</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.005</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_storm_data</span>(<span class="st">&quot;fstadv&quot;</span>, <span class="dt">link =</span> d, <span class="dt">msg =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.001</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.002</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.003</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.004</code></pre>
-<pre><code>## Working http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0398.005</code></pre>
-<pre><code>## [1] TRUE</code></pre>
+</div>
+</div>
+<div id="other-available-products" class="section level3">
+<h3>Other Available Products</h3>
+<p>There are several products you can retrieve for a specific storm. See <code>get_storm_data</code> for a more detailed description.</p>
+<ul>
+<li>discus Storm discussions</li>
+<li>fstadv Forecast/Advisory</li>
+<li>posest Position Estimates</li>
+<li>public Public Advisory</li>
+<li>prblty Strike Probabilities</li>
+<li>update Cyclone updates</li>
+<li>wndprb Wind probabilities</li>
+</ul>
+<p>Some notes about these products. Not every storm will have every product. There are only three products that should exist for every storm: discus, fstadv and one or the other of prblty and wndprb. The probability products were changed between the 2005 and 2006 hurricane seasons; prblty prior to the former and wndprb after the latter.</p>
+<p>At this time the products (other than fstadv) are not parsed beyond the header (which contains the Name, Key, Datetime info); only the content of the product is returned.</p>
+<p>There is valuable information in each. However, I have not yet taken the time to extract the data. That will come in later revisions.</p>
+<p>For example, you can get issued watches and warnings from public content. You can get technical information of the storm in the discus products; satellite presentation, forecast model tendencies, etc.</p>
+<p>There is also much more information in the fstadv products that can be extracted. That is the next priority.</p>
+</div>
+</div>
 
 
 
