@@ -46,3 +46,10 @@ test_that("Millibars to Inches", {
     expect_equal(mb_to_in(1010), 29.82528290171)
     expect_equal(mb_to_in(888), 26.222624967048)
 })
+
+# status
+y <- lubridate::year(Sys.Date()) + 1
+test_that("URL Status", {
+    expect_warning(.status(u = sprintf("http://www.nhc.noaa.gov/archive/%d/", y)),
+                   sprintf("URL unavailable. http://www.nhc.noaa.gov/archive/%d/", y))
+})
