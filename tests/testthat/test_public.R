@@ -31,7 +31,7 @@ test_that("1998, Tropical Storm Alex, Advisory 1", {
                    dplyr::select(Date) %>%
                    dplyr::first() %>%
                    as.character(),
-               "1998-07-27 11:00:00")
+               "901537200")
 })
 
 test_that("1998, Tropical Storm Alex, Advisory 26", {
