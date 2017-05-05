@@ -29,8 +29,9 @@ test_that("1998, Tropical Storm Alex, Advisory 1", {
   # Date
   expect_equal(public(al.1998.alex.products.public[1]) %>%
                    dplyr::select(Date) %>%
-                   dplyr::first(),
-               as.POSIXct("1998-07-27 11:00:00"))
+                   dplyr::first() %>%
+                   lubridate::as_date(),
+               lubridate::as_date("1998-07-27 11:00:00"))
 })
 
 test_that("1998, Tropical Storm Alex, Advisory 26", {
