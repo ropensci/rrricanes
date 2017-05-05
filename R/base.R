@@ -25,6 +25,10 @@ NULL
 
 #' @importFrom magrittr %>%
 
+#' @importFrom stats na.omit
+#' @export
+stats::na.omit
+
 #' @title convert_lat_lon
 #' @description Converts lat, lon to negative if in southern, western
 #'   hemisphere, respectively
