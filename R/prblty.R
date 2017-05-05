@@ -14,19 +14,19 @@
 #' @export
 get_prblty <- function(link, msg = FALSE) {
 
-  # Check status of link(s)
-  valid.link <- sapply(link, status)
-  valid.link <- na.omit(valid.link)
-  if(length(valid.link) == 0)
-    stop("No valid links.")
+    # Check status of link(s)
+    valid.link <- sapply(link, status)
+    valid.link <- na.omit(valid.link)
+    if (length(valid.link) == 0)
+        stop("No valid links.")
 
-  products <- unlist(sapply(valid.link, get_products))
+    products <- unlist(sapply(valid.link, get_products))
 
-  products.prblty <- lapply(filter_strike_probabilities(products), prblty, msg = msg)
+    products.prblty <- lapply(filter_strike_probabilities(products), prblty, msg = msg)
 
-  prblty <- data.table::rbindlist(products.prblty)
+    prblty <- data.table::rbindlist(products.prblty)
 
-  return(prblty)
+    return(prblty)
 }
 
 #' @title prblty
@@ -37,28 +37,28 @@ get_prblty <- function(link, msg = FALSE) {
 #' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_prblty}}
-#' @export
+#' @keywords internal
 prblty <- function(link, msg = FALSE) {
 
-  contents <- scrape_contents(link, msg = msg)
+    contents <- scrape_contents(link, msg = msg)
 
-  # Make sure this is a strike probability product
-  if(!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP"))))
-    stop(sprint("Invalid Strike Probability link. %s", l))
+    # Make sure this is a strike probability product
+    if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP"))))
+        stop(sprint("Invalid Strike Probability link. %s", l))
 
-  df <- .create_df_prblty()
+    df <- create_df_prblty()
 
-  status <- scrape_header(contents, ret = "status")
-  name <- scrape_header(contents, ret = "name")
-  adv <- scrape_header(contents, ret = "adv")
-  date <- scrape_header(contents, ret = "date")
+    status <- scrape_header(contents, ret = "status")
+    name <- scrape_header(contents, ret = "name")
+    adv <- scrape_header(contents, ret = "adv")
+    date <- scrape_header(contents, ret = "date")
 
-  df <- df %>%
-    tibble::add_row("Status" = status,
-                    "Name" = name,
-                    "Adv" = adv,
-                    "Date" = date,
-                    "Contents" = contents)
+    df <- df %>%
+        tibble::add_row("Status" = status,
+                        "Name" = name,
+                        "Adv" = adv,
+                        "Date" = date,
+                        "Contents" = contents)
 
-  return(df)
+    return(df)
 }

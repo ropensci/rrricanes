@@ -12,13 +12,4 @@ numeric year(s)
 \description{
 Test if year is 4-digit numeric.
 }
-\examples{
-validate_year(1990)
-validate_year(1991:1995)
-validate_year(c(1996, 1997, 1998))
-validate_year(c('1999', '2000'))
-validate_year(list(2001, '2002', '2003'))
-\dontrun{
-validate_year(199) # Generates error}
-}
 \keyword{internal}

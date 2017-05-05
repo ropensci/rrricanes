@@ -80,7 +80,7 @@ mb_to_in <- function(x) {
 #' @description Convert three-character month abbreviation to integer
 #' @param m Month abbreviated (SEP, OCT, etc.)
 #' @return numeric 1-12
-#' @export
+#' @keywords internal
 month_str_to_num <- function(m) {
     abbr <- which(month.abb == toproper(m))
     if (purrr::is_empty(abbr))
@@ -114,9 +114,11 @@ status <- function(u) {
 #' @param strict TRUE by default. Will convert all upper case characters to
 #'   lower case. If FALSE, no conversion will be done.
 #' @examples
-#' toproper("TROPICAL STORM ALEX")
-#' toproper("TROPICAL STORM ALEX", strict = FALSE)
-#' @export
+#' \dontrun{
+#'     toproper("TROPICAL STORM ALEX")
+#'     toproper("TROPICAL STORM ALEX", strict = FALSE)
+#' }
+#' @keywords internal
 toproper <- function(s, strict = TRUE) {
     cap <- function(s) paste(toupper(substring(s, 1, 1)),
                              {s <- substring(s, 2); if (strict) tolower(s) else s},
@@ -127,14 +129,6 @@ toproper <- function(s, strict = TRUE) {
 #' @title validate_year
 #' @description Test if year is 4-digit numeric.
 #' @return numeric year(s)
-#' @examples
-#' validate_year(1990)
-#' validate_year(1991:1995)
-#' validate_year(c(1996, 1997, 1998))
-#' validate_year(c('1999', '2000'))
-#' validate_year(list(2001, '2002', '2003'))
-#' \dontrun{
-#' validate_year(199) # Generates error}
 #' @keywords internal
 validate_year <- function(y) {
     y <- as.numeric(y)

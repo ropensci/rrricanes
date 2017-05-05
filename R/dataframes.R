@@ -1,4 +1,4 @@
-#' @title .create_df_archives
+#' @title create_df_archives
 #' @description Template for archives dataframe
 #' \describe{
 #'   \item{Year}{integer, year of storm}
@@ -7,19 +7,21 @@
 #'   \item{Link}{character, link to storm's archive page}
 #' }
 #' @return dataframe
-.create_df_archives <- function() {
-  df <- tibble::data_frame("Year" = integer(), 
-                           "Name" = character(), 
-                           "Basin" = character(), 
+#' @keywords internal
+create_df_archives <- function() {
+  df <- tibble::data_frame("Year" = integer(),
+                           "Name" = character(),
+                           "Basin" = character(),
                            "Link" = character())
   return(df)
 }
 
-#' @title .create_df_discus
+#' @title create_df_discus
 #' @description Template for storm discussions dataframe
 #' @return empty dataframe
-#' @seealso \code{\link{get_public_advisories}}
-.create_df_discus <- function() {
+#' @seealso \code{\link{get_discus}}
+#' @keywords internal
+create_df_discus <- function() {
   df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
@@ -30,11 +32,12 @@
   return(df)
 }
 
-#' @title .create_df_fstadv
+#' @title create_df_fstadv
 #' @description Template for public advisory dataframe
 #' @return empty dataframe
-#' @seealso \code{\link{get_public_advisories}}
-.create_df_fstadv <- function() {
+#' @seealso \code{\link{get_fstadv}}
+#' @keywords internal
+create_df_fstadv <- function() {
   df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
@@ -54,11 +57,12 @@
   return(df)
 }
 
-#' @title .create_df_posest
+#' @title create_df_posest
 #' @description Template for position estimates dataframe
 #' @return empty dataframe
-#' @seealso \code{\link{get_public_advisories}}
-.create_df_posest <- function() {
+#' @seealso \code{\link{get_posest}}
+#' @keywords internal
+create_df_posest <- function() {
   df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
@@ -69,11 +73,12 @@
   return(df)
 }
 
-#' @title .create_df_prblty
+#' @title create_df_prblty
 #' @description Template for strike probabilities dataframe
 #' @return empty dataframe
-#' @seealso \code{\link{get_public_advisories}}
-.create_df_prblty <- function() {
+#' @seealso \code{\link{get_prblty}}
+#' @keywords internal
+create_df_prblty <- function() {
   df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
@@ -84,11 +89,12 @@
   return(df)
 }
 
-#' @title .create_df_public
+#' @title create_df_public
 #' @description Template for public advisory dataframe
 #' @return empty dataframe
-#' @seealso \code{\link{get_public_advisories}}
-.create_df_public <- function() {
+#' @seealso \code{\link{get_public}}
+#' @keywords internal
+create_df_public <- function() {
   df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
@@ -99,11 +105,12 @@
   return(df)
 }
 
-#' @title .create_df_updates
+#' @title create_df_updates
 #' @description Template for cyclone updates dataframe
 #' @return empty dataframe
-#' @seealso \code{\link{get_public_advisories}}
-.create_df_updates <- function() {
+#' @seealso \code{\link{get_updates}}
+#' @keywords internal
+create_df_updates <- function() {
   df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
@@ -114,38 +121,40 @@
   return(df)
 }
 
-#' @title .create_df_wndprb
+#' @title create_df_wndprb
 #' @description Template for wind probabilities dataframe
 #' @return empty dataframe
-#' @seealso \code{\link{get_public_advisories}}
-.create_df_wndprb <- function() {
-  df <- tibble::data_frame("Status" = character(), 
+#' @seealso \code{\link{get_wndprb}}
+#' @keywords internal
+create_df_wndprb <- function() {
+  df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
                            "Adv" = character(),
                            "Date" = as.POSIXct(character(), tz = "UTC"),
                            "Contents" = character())
-  
+
   return(df)
 }
 
-#' @title .drop_dataframes
+#' @title drop_dataframes
 #' @description Drop existing dataframes.
-.drop_dataframes <- function() {
-  
-  if(exists('df_advisories'))
+#' @keywords internal
+drop_dataframes <- function() {
+
+  if (exists('df_advisories'))
     rm(df_advisories, envir = .GlobalEnv)
-  
-  if(exists('df_forecasts'))
+
+  if (exists('df_forecasts'))
     rm(df_forecasts, envir = .GlobalEnv)
-  
-  if(exists('df_forecast_winds'))
+
+  if (exists('df_forecast_winds'))
     rm(df_forecast_winds, envir = .GlobalEnv)
-  
-  if(exists('df_winds'))
+
+  if (exists('df_winds'))
     rm(df_winds, envir = .GlobalEnv)
-  
-  if(exists('df_seas'))
+
+  if (exists('df_seas'))
     rm(df_seas, envir = .GlobalEnv)
 }
 

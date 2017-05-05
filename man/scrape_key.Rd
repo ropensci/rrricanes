@@ -15,3 +15,4 @@ Extract Key from header
 \seealso{
 \code{\link{scrape_header}}
 }
+\keyword{internal}

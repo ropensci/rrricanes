@@ -15,3 +15,4 @@ Scrape name from product header.
 \seealso{
 \code{\link{scrape_header}}
 }
+\keyword{internal}

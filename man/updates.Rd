@@ -24,3 +24,4 @@ dataframe of values.
 \seealso{
 \code{\link{get_updates}}
 }
+\keyword{internal}

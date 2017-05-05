@@ -14,19 +14,19 @@
 #' @export
 get_updates <- function(link, msg = FALSE) {
 
-  # Check status of link(s)
-  valid.link <- sapply(link, status)
-  valid.link <- na.omit(valid.link)
-  if(length(valid.link) == 0)
-    stop("No valid links.")
+    # Check status of link(s)
+    valid.link <- sapply(link, status)
+    valid.link <- na.omit(valid.link)
+    if (length(valid.link) == 0)
+        stop("No valid links.")
 
-  products <- unlist(sapply(valid.link, get_products))
+    products <- unlist(sapply(valid.link, get_products))
 
-  products.updates <- lapply(filter_updates(products), updates, msg = msg)
+    products.updates <- lapply(filter_updates(products), updates, msg = msg)
 
-  updates <- data.table::rbindlist(products.updates)
+    updates <- data.table::rbindlist(products.updates)
 
-  return(updates)
+    return(updates)
 }
 
 #' @title updates
@@ -37,28 +37,28 @@ get_updates <- function(link, msg = FALSE) {
 #' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_updates}}
-#' @export
+#' @keywords internal
 updates <- function(link, msg = FALSE) {
 
-  contents <- scrape_contents(link, msg = msg)
+    contents <- scrape_contents(link, msg = msg)
 
-  # Make sure this is a updates advisory product
-  if(!any(stringr::str_count(contents, c("MIATCUAT", "MIATCUEP"))))
-    stop(sprint("Invalid Cyclone Update link. %s", l))
+    # Make sure this is a updates advisory product
+    if (!any(stringr::str_count(contents, c("MIATCUAT", "MIATCUEP"))))
+        stop(sprint("Invalid Cyclone Update link. %s", l))
 
-  df <- .create_df_updates()
+    df <- create_df_updates()
 
-  status <- scrape_header(contents, ret = "status")
-  name <- scrape_header(contents, ret = "name")
-  adv <- scrape_header(contents, ret = "adv")
-  date <- scrape_header(contents, ret = "date")
+    status <- scrape_header(contents, ret = "status")
+    name <- scrape_header(contents, ret = "name")
+    adv <- scrape_header(contents, ret = "adv")
+    date <- scrape_header(contents, ret = "date")
 
-  df <- df %>%
-    tibble::add_row("Status" = status,
-                    "Name" = name,
-                    "Adv" = adv,
-                    "Date" = date,
-                    "Contents" = contents)
+    df <- df %>%
+        tibble::add_row("Status" = status,
+                        "Name" = name,
+                        "Adv" = adv,
+                        "Date" = date,
+                        "Contents" = contents)
 
-  return(df)
+    return(df)
 }

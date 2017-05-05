@@ -14,19 +14,19 @@
 #' @export
 get_public <- function(link, msg = FALSE) {
 
-  # Check status of link(s)
-  valid.link <- sapply(link, status)
-  valid.link <- na.omit(valid.link)
-  if(length(valid.link) == 0)
-    stop("No valid links.")
+    # Check status of link(s)
+    valid.link <- sapply(link, status)
+    valid.link <- na.omit(valid.link)
+    if (length(valid.link) == 0)
+        stop("No valid links.")
 
-  products <- unlist(sapply(valid.link, get_products))
+    products <- unlist(sapply(valid.link, get_products))
 
-  products.public <- lapply(filter_public_advisories(products), public, msg = msg)
+    products.public <- lapply(filter_public_advisories(products), public, msg = msg)
 
-  public <- data.table::rbindlist(products.public)
+    public <- data.table::rbindlist(products.public)
 
-  return(public)
+    return(public)
 }
 
 #' @title public
@@ -37,28 +37,28 @@ get_public <- function(link, msg = FALSE) {
 #' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_public}}
-#' @export
+#' @keywords internal
 public <- function(link, msg = FALSE) {
 
-  contents <- scrape_contents(link, msg = msg)
+    contents <- scrape_contents(link, msg = msg)
 
-  # Make sure this is a public advisory product
-  if(!any(stringr::str_count(contents, c("MIATCPAT", "MIATCPEP"))))
-    stop(sprint("Invalid Public Advisory link. %s", l))
+    # Make sure this is a public advisory product
+    if (!any(stringr::str_count(contents, c("MIATCPAT", "MIATCPEP"))))
+        stop(sprint("Invalid Public Advisory link. %s", l))
 
-  df <- .create_df_public()
+    df <- create_df_public()
 
-  status <- scrape_header(contents, ret = "status")
-  name <- scrape_header(contents, ret = "name")
-  adv <- scrape_header(contents, ret = "adv")
-  date <- scrape_header(contents, ret = "date")
+    status <- scrape_header(contents, ret = "status")
+    name <- scrape_header(contents, ret = "name")
+    adv <- scrape_header(contents, ret = "adv")
+    date <- scrape_header(contents, ret = "date")
 
-  df <- df %>%
-    tibble::add_row("Status" = status,
-                    "Name" = name,
-                    "Adv" = adv,
-                    "Date" = date,
-                    "Contents" = contents)
+    df <- df %>%
+        tibble::add_row("Status" = status,
+                        "Name" = name,
+                        "Adv" = adv,
+                        "Date" = date,
+                        "Contents" = contents)
 
-  return(df)
+    return(df)
 }

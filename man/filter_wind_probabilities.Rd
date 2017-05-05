@@ -13,9 +13,10 @@ filter_wind_probabilities(links)
 Get wind probabilities
 }
 \details{
-Wind probability products replaced the strike probability products 
+Wind probability products replaced the strike probability products
 at the beginning of the 2006 season.
 }
 \seealso{
 \code{\link{filter_strike_probabilities}}
 }
+\keyword{internal}

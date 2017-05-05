@@ -13,9 +13,10 @@ filter_strike_probabilities(links)
 Get strike probabilities.
 }
 \details{
-Strike probability products were terminated at the end of the 2005 
+Strike probability products were terminated at the end of the 2005
 season, replaced by wind probabilities.
 }
 \seealso{
 \code{\link{filter_wind_probabilities}}
 }
+\keyword{internal}

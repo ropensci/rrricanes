@@ -17,7 +17,7 @@ get_wndprb <- function(link, msg = FALSE) {
     # Check status of link(s)
     valid.link <- sapply(link, status)
     valid.link <- na.omit(valid.link)
-    if(length(valid.link) == 0)
+    if (length(valid.link) == 0)
         stop("No valid links.")
 
     products <- unlist(sapply(valid.link, get_products))
@@ -37,16 +37,16 @@ get_wndprb <- function(link, msg = FALSE) {
 #' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_wndprb}}
-#' @export
+#' @keywords internal
 wndprb <- function(link, msg = FALSE) {
 
     contents <- scrape_contents(link, msg = msg)
 
     # Make sure this is a wndprb advisory product
-    if(!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP"))))
+    if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP"))))
         stop(sprint("Invalid Wind Probability link. %s", l))
 
-    df <- .create_df_wndprb()
+    df <- create_df_wndprb()
 
     status <- scrape_header(contents, ret = "status")
     name <- scrape_header(contents, ret = "name")

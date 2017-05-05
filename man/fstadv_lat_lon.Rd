@@ -22,3 +22,4 @@ Helper function to take character latitude or longitude and,
 depending on the value of hemisphere return a positive or negative numeric,
 or NA if not found.
 }
+\keyword{internal}

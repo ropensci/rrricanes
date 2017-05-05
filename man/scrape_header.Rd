@@ -40,3 +40,4 @@ A typical header will look like this:
 The first three lines are irrelevant. This function is only concerned about
 returning Status, Name, Advisory Number, and Date/Time values.
 }
+\keyword{internal}

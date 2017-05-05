@@ -12,3 +12,4 @@ filter_public_advisories(links)
 \description{
 Get public advisories
 }
+\keyword{internal}

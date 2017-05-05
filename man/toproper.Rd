@@ -21,6 +21,9 @@ Taken from \code{\link{chartr}} examples in base R. Will take a
   e.g., "TROPICAL STORM ALEX" and return "Tropical Storm Alex".
 }
 \examples{
-toproper("TROPICAL STORM ALEX")
-toproper("TROPICAL STORM ALEX", strict = FALSE)
+\dontrun{
+    toproper("TROPICAL STORM ALEX")
+    toproper("TROPICAL STORM ALEX", strict = FALSE)
 }
+}
+\keyword{internal}
