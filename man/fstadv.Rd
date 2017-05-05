@@ -18,18 +18,18 @@ Dataframe
 Extrapolate data from FORECAST/ADVISORY products.
 }
 \details{
-Given a direct link to a forecast/advisory product, parse and 
+Given a direct link to a forecast/advisory product, parse and
 return dataframe of values.
 \describe{
-  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane, 
+  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
     etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}
   \item{Key}{Unique identifier for the storm}
-  \item{Lat}{Latitude, location of the storm. Positive is northern 
+  \item{Lat}{Latitude, location of the storm. Positive is northern
     hemisphere. Negative is southern hemisphere.}
-  \item{Lon}{Longitude, location of the storm. Positive is eastern 
+  \item{Lon}{Longitude, location of the storm. Positive is eastern
     hemisphere. Negative is western hemisphere.}
   \item{Wind}{Current wind speed in knots.}
   \item{Gust}{Current maximum wind gusts in knots.}

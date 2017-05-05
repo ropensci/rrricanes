@@ -5,7 +5,7 @@
 get_products <- function(link) {
   
   # Get year
-  year <- .extract_year_archive_link(link)
+  year <- extract_year_archive_link(link)
   
   products <- .get_storm_content(link) %>% 
     rvest::html_attr("href") %>% 
@@ -30,7 +30,7 @@ get_products <- function(link) {
 .get_storm_content <- function(link) {
   
   # Get year
-  year <- .extract_year_archive_link(link)
+  year <- extract_year_archive_link(link)
   
   # There are different layouts for various years. Have to work through it...
   if(year <= 2001) {

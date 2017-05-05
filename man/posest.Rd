@@ -18,7 +18,7 @@ Dataframe
 Extrapolate data from Position Estimate products.
 }
 \details{
-Given a direct link to a position estimate product, parse and return 
+Given a direct link to a position estimate product, parse and return
 dataframe of values.
 }
 \seealso{

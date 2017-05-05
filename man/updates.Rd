@@ -18,7 +18,7 @@ Dataframe
 Parse cyclone update products
 }
 \details{
-Given a direct link to a cyclone update product, parse and return 
+Given a direct link to a cyclone update product, parse and return
 dataframe of values.
 }
 \seealso{

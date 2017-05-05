@@ -18,7 +18,7 @@ numeric
 Returns numeric for latitude or longitude; negative if in southern or eastern hemisphere
 }
 \details{
-Helper function to take character latitude or longitude and, 
-depending on the value of hemisphere return a positive or negative numeric, 
+Helper function to take character latitude or longitude and,
+depending on the value of hemisphere return a positive or negative numeric,
 or NA if not found.
 }

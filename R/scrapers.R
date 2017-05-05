@@ -4,10 +4,10 @@
 #' @seealso \code{\link{scrape_header}}
 #' @export
 scrape_adv_num <- function(header) {
-  ptn <- paste0("(?:ADVISORY|DISCUSSION|PROBABILITIES)", 
-                "[:blank:]", 
-                "NUMBER", 
-                "[:blank:]+", 
+  ptn <- paste0("(?:ADVISORY|DISCUSSION|PROBABILITIES)",
+                "[:blank:]",
+                "NUMBER",
+                "[:blank:]+",
                 "([:digit:]+[:alpha:]*?)", # Advisory number
                 "\n")
   adv <- trimws(stringr::str_match(header, ptn)[,2])
@@ -23,32 +23,32 @@ scrape_adv_num <- function(header) {
 scrape_contents <- function(link, msg = TRUE) {
 
   pre.1999 <- function(l) {
-    contents <- l %>% 
-      xml2::read_html() %>% 
+    contents <- l %>%
+      xml2::read_html() %>%
       rvest::html_text()
-    
+
     return(contents)
   }
-  
+
   general <- function(l) {
-    contents <- l %>% 
-      xml2::read_html() %>% 
-      rvest::html_nodes("pre") %>% 
+    contents <- l %>%
+      xml2::read_html() %>%
+      rvest::html_nodes("pre") %>%
       rvest::html_text()
-    
+
     return(contents)
   }
-  
-  year <- .extract_year_archive_link(link)
-  
-  link <- na.omit(sapply(link, .status))
+
+  year <- extract_year_archive_link(link)
+
+  link <- na.omit(sapply(link, status))
 
   if(length(link) == 0)
     stop("No valid links.")
-  
+
   if(msg)
     message(sprintf("Working %s", link))
-  
+
   if(year == 1998) {
     return(pre.1999(link))
   } else {
@@ -62,93 +62,93 @@ scrape_contents <- function(link, msg = TRUE) {
 #' @seealso \code{\link{scrape_header}}
 #' @export
 scrape_date <- function(header) {
-  
+
   maketime <- function(h, m, p) {
-    
+
     h <- as.numeric(h)
     m <- as.numeric(m)
-    
+
     if(is.na(m))
       m <- 0
-    
+
     # If !is.na(p), convert h appropriately
     if(all(!is.na(p), p == "PM"))
       h <- h + 12
-    
+
     h <- stringr::str_pad(h, 2, side = "left", pad = "0")
     m <- stringr::str_pad(m, 2, side = "left", pad = "0")
-    
+
     x <- paste(h, m, sep = ":")
-    
+
     return(x)
   }
-  
-  # The time value in the headers can vary depending on the product. In 
-  # forecast advisories time is in \%H\%M format with a trailing Z (for Zulu 
-  # orUTC time). In other products it can be "\%I \%r" or "\%I%M %r" except 
+
+  # The time value in the headers can vary depending on the product. In
+  # forecast advisories time is in \%H\%M format with a trailing Z (for Zulu
+  # orUTC time). In other products it can be "\%I \%r" or "\%I%M %r" except
   # in the latter "%I" may not have a leading 0.
-  
-  # Timezones also vary. Forecasts use UTC while public advisories may be in 
-  # the local time zone (possibly CDT) while discussions may be in the time 
-  # zone of the issuing office (the NHC in Miami, so EDT). 
-  
-  # What is standard is that time comes first followed by time zone, day of 
+
+  # Timezones also vary. Forecasts use UTC while public advisories may be in
+  # the local time zone (possibly CDT) while discussions may be in the time
+  # zone of the issuing office (the NHC in Miami, so EDT).
+
+  # What is standard is that time comes first followed by time zone, day of
   # the week, month, date and year. So, find the pattern that matches.
-  
-  ptn <- paste0("(?<=\n)", 
+
+  ptn <- paste0("(?<=\n)",
                 "([:digit:]{1,2})", # Hour
                 "(?<=[:digit:]{1})([:digit:]{2})?", # Minute
                 "(?:Z)?", # For forecast; Z is military, no offset for UTC
-                "[:blank:]", 
-                "(?:AM|PM)?[:blank:]?", 
+                "[:blank:]",
+                "(?:AM|PM)?[:blank:]?",
                 "([:alpha:]{3})*?", # Time zone, optional
-                "[:blank:]?", 
+                "[:blank:]?",
                 "(?:[:alpha:]{3})", # Day of week, no capture
-                "[:blank:]", 
+                "[:blank:]",
                 "([:alpha:]{3})", # Month, abbreviated uppercase
-                "[:blank:]", 
+                "[:blank:]",
                 "([:digit:]{2})", # Date
-                "[:blank:]", 
+                "[:blank:]",
                 "([:digit:]{4})",  # Year
                 "\n")
-  
+
   datetime.extracted <- stringr::str_match(header, ptn)
-  
-  # Capture period (AM|PM), if exists 
+
+  # Capture period (AM|PM), if exists
   period <- stringr::str_match(header, "[:blank:](AM|PM)[:blank:]")
-  
+
   # Convert time values to 24-hour format, UTC
   t <- maketime(datetime.extracted[,2], # Hour
                 datetime.extracted[,3], # Minute
                 period[,2])
-  
+
   # Format date
   d <- as.Date(paste(datetime.extracted[,5], # Month, abbreviated
                      datetime.extracted[,6], # Date, w/wo leading 0
                      datetime.extracted[,7], # Year, four-digit format
-                     sep = "-"), 
+                     sep = "-"),
                format = "%b-%d-%Y")
-  
-  # If time zone is NA, make UTC. Is NA because in forecast products time is 
-  # immeidately followed by Z which is not captured. Z is military code for 
+
+  # If time zone is NA, make UTC. Is NA because in forecast products time is
+  # immeidately followed by Z which is not captured. Z is military code for
   # Zulu time which is equivalent of Z.
-  
+
   # That should be the reason... ¯\_(ツ)_/¯
   tz <- datetime.extracted[,4]
   if(is.na(tz))
     tz <- "UTC"
-  
+
   # Make date/time string
   x <- paste(d, t, sep = " ")
-  
+
   # Properly formatted date/time string
   dt <- lubridate::ymd_hm(x, tz = tz)
-  
+
   return(dt)
 }
 
 #' @title scrape_name_header
-#' @description Extract values from products header. 
+#' @description Extract values from products header.
 #' @details A typical header will look like this:
 #' \preformatted{
 #'   ZCZC MIATCPAT1 ALL
@@ -158,43 +158,43 @@ scrape_date <- function(header) {
 #'   NATIONAL WEATHER SERVICE MIAMI FL
 #'   11 AM AST MON JUL 27 1998
 #' }
-#' The first three lines are irrelevant. This function is only concerned about 
-#' returning Status, Name, Advisory Number, and Date/Time values. 
+#' The first three lines are irrelevant. This function is only concerned about
+#' returning Status, Name, Advisory Number, and Date/Time values.
 #' @param contents text content of product
 #' @param ret Choose either status, name, adv or date to return.
 #' \describe{
-#'   \item{status}{status of cyclone (Hurricane, Tropical Storm, Subtropical 
+#'   \item{status}{status of cyclone (Hurricane, Tropical Storm, Subtropical
 #'     Storm...)}
 #'   \item{name}{return name of storm}
 #'   \item{adv}{return advisory number}
 #'   \item{date}{Date/Time of product issuance.}
-#'   \item{key}{Key, unique identifier for each storm. May not be available in 
+#'   \item{key}{Key, unique identifier for each storm. May not be available in
 #'     some packages}
 #' }
-#' @return Returns integer advisory number, character status or name, or date 
+#' @return Returns integer advisory number, character status or name, or date
 #'   in \%F \%R (yyyy-mm-dd hh:mm) format, UTC time zone.
 #' @export
 scrape_header <- function(contents, ret = NULL) {
-  
+
   if(!(ret %in% c("status", "name", "adv", "date", "key"))) {
     stop('\"ret\" must be one of status, name, adv, date or key.')
   }
-  
+
   # Extract header. Use the format of the date/time line to close out header.
   # There may be additional line breaks inside the header. Must account for.
-  # Use day, month, date and year which seems to be consistent across all 
+  # Use day, month, date and year which seems to be consistent across all
   # products.
   ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]\n]*?", # most of header
                        "[:alpha:]{3}", # Day of week
-                       "[:blank:]*", 
+                       "[:blank:]*",
                        "[:alpha:]{3}", # Month, abbreviated
-                       "[:blank:]*", 
+                       "[:blank:]*",
                        "[:digit:]{2}", # Date
-                       "[:blank:]*", 
+                       "[:blank:]*",
                        "[:digit:]{4}", # Year
                        "\n") # Close off date/time line
   header <- stringr::str_extract(contents, ptn_header)
-  
+
   if(ret == "status") {
     status <- scrape_status(header)
     return(status)
@@ -214,7 +214,7 @@ scrape_header <- function(contents, ret = NULL) {
     stop('NA values in name header.')
     return(FALSE)
   }
-  
+
 }
 
 #' @title scrape_key
@@ -225,10 +225,10 @@ scrape_header <- function(contents, ret = NULL) {
 scrape_key <- function(header) {
   # Get year
   y <- lubridate::year(scrape_header(header, ret = "date"))
-  
-  # For <= 2003 Identifier is 6-digits with a 2-digit year. 
-  ptn <- list(paste0('(?:NATIONAL[:blank:]HURRICANE[:blank:]CENTER|', 
-                     'NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?', 
+
+  # For <= 2003 Identifier is 6-digits with a 2-digit year.
+  ptn <- list(paste0('(?:NATIONAL[:blank:]HURRICANE[:blank:]CENTER|',
+                     'NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?',
                      '[:blank:]+MIAMI[:blank:]FL[:blank:]+'))
   if(y <= 2003) {
     ptn <- c(ptn, '([:alnum:]{6})')
@@ -237,8 +237,8 @@ scrape_key <- function(header) {
   }
   ptn <- paste0(ptn, collapse = '')
   x <- stringr::str_match(header, ptn)[,2]
-  
-  # In some instances x is NA. Stop and research. 
+
+  # In some instances x is NA. Stop and research.
   if(nchar(x) != 6 & nchar(x) != 8) {
     stop('Identifier is improperly formatted.')
   } else {
@@ -268,9 +268,9 @@ scrape_name <- function(header) {
 #' @seealso \code{\link{scrape_header}}
 #' @export
 scrape_status <- function(header) {
-  options <- c("TROPICAL DISTURBANCE", 
-               "TROPICAL DEPRESSION", 
-               "TROPICAL STORM", 
+  options <- c("TROPICAL DISTURBANCE",
+               "TROPICAL DEPRESSION",
+               "TROPICAL STORM",
                "HURRICANE")
   if(!any(stringr::str_count(header, paste(options, sep = "|"))))
     stop("Options not in header.")

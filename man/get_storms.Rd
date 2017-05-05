@@ -28,7 +28,7 @@ Dataframe of storms.
 Returns storms and product link.
 }
 \details{
-By default returns all storms for the current year. If no storms 
+By default returns all storms for the current year. If no storms
 have developed will return an empty dataframe.
 }
 \examples{

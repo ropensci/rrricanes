@@ -29,27 +29,22 @@ NULL
 #' @param x integer
 #' @param y character
 #' @return integer positive or negative
-#' @export
+#' @keywords internal
 convert_lat_lon <- function(x, y) {
-
     if (!is.numeric(x)) {stop("x is not numeric!")}
     if (!(y %in% c('N', 'S', 'E', 'W'))) { stop("y must be c('N','S','E','W')") }
-
     ifelse(y == 'S' | y == 'W', return(x * -1), return(x))
-
 }
 
-#' @title .extract_year_archive_link
+#' @title extract_year_archive_link
 #' @description Extracts the year from the archive link.
 #' @param link URL of archive page
 #' @return year 4-digit numeric
-.extract_year_archive_link <- function(link) {
-
+#' @keywords internal
+extract_year_archive_link <- function(link) {
     # Year is listed in link towards the end surrounded by slashes.
     year <- as.numeric(stringr::str_match(link, '/([:digit:]{4})/')[,2])
-
     return(year)
-
 }
 
 #' @title get_nhc_link
@@ -93,13 +88,14 @@ month_str_to_num <- function(m) {
     return(abbr)
 }
 
-#' @title .status
+#' @title status
 #' @description Test URL status.
 #' @details Return URL if status is 'OK'. Otherwise, return NA and print
 #' failed URL.
 #' @param u URL to test
 #' @return URL if result is 'OK', otherwise, NA.
-.status <- function(u) {
+#' @keywords internal
+status <- function(u) {
     stat = httr::http_status(httr::GET(u))
     if (stat$reason == 'OK') {
         return(u)
@@ -128,7 +124,7 @@ toproper <- function(s, strict = TRUE) {
     sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
 }
 
-#' @title .validate_year
+#' @title validate_year
 #' @description Test if year is 4-digit numeric.
 #' @return numeric year(s)
 #' @examples
@@ -139,7 +135,8 @@ toproper <- function(s, strict = TRUE) {
 #' validate_year(list(2001, '2002', '2003'))
 #' \dontrun{
 #' validate_year(199) # Generates error}
-.validate_year <- function(y) {
+#' @keywords internal
+validate_year <- function(y) {
     y <- as.numeric(y)
     if (all(is.na(y)))
         stop('Year must be numeric.')

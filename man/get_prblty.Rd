@@ -14,7 +14,7 @@ get_prblty(link, msg = FALSE)
 \description{
 Return dataframe of strike probability data.
 \describe{
-  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane, 
+  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
     etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}

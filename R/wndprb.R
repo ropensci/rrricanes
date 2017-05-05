@@ -15,7 +15,7 @@
 get_wndprb <- function(link, msg = FALSE) {
 
     # Check status of link(s)
-    valid.link <- sapply(link, .status)
+    valid.link <- sapply(link, status)
     valid.link <- na.omit(valid.link)
     if(length(valid.link) == 0)
         stop("No valid links.")

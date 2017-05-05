@@ -18,7 +18,7 @@ Dataframe
 Parse strike probability products
 }
 \details{
-Given a direct link to a strike probability advisory product, parse 
+Given a direct link to a strike probability advisory product, parse
 and return dataframe of values.
 }
 \seealso{
