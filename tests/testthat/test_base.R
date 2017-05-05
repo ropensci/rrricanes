@@ -20,6 +20,10 @@ test_that("Month Abbreviated String to Number", {
     expect_identical(month_str_to_num("DEC"), as.integer(12))
 })
 
+test_that("Month Abbreviated String to Number Error", {
+    expect_error(month_str_to_num("JANN"), "JANN is not a valid month abbreviation")
+})
+
 test_that("To Proper Case", {
     expect_identical(toproper("TROPICAL STORM ALEX"), "Tropical Storm Alex")
     expect_identical(toproper("TROPICAL STORM ALEX", strict = FALSE),
