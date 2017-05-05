@@ -23,6 +23,8 @@
 #' @name Hurricanes
 NULL
 
+#' @importFrom magrittr %>%
+
 #' @title convert_lat_lon
 #' @description Converts lat, lon to negative if in southern, western
 #'   hemisphere, respectively

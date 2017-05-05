@@ -16,7 +16,8 @@ BugReports: https://github.com/timtrice/Hurricanes/issues
 License: MIT + file LICENSE
 LazyData: TRUE
 Imports:
-  data.table (>= 1.9.6)
+  data.table (>= 1.9.6), 
+  magrittr (>= 1.5)
 Suggests:
   httr, 
   knitr, 
