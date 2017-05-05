@@ -1,6 +1,6 @@
 [comment]: <> (Update branch in Travis badge, codecov badge)
 
-[![Travis-CI Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop-0.1.0)](https://travis-ci.org/timtrice/Hurricanes) [![codecov](https://codecov.io/github/codecov/timtrice/branch/develop-0.1.0/graphs/badge.svg)](https://codecov.io/github/codecov/timtrice) [![Stories in Ready](https://badge.waffle.io/timtrice/Hurricanes.png?label=ready&title=Ready)](https://waffle.io/timtrice/Hurricanes)
+[![Travis-CI Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop-0.1.0)](https://travis-ci.org/timtrice/Hurricanes) [![codecov](https://codecov.io/github/timtrice/Hurricanes/branch/develop-0.1.0/graphs/badge.svg)](https://codecov.io/github/timtrice/Hurricanes) [![Stories in Ready](https://badge.waffle.io/timtrice/Hurricanes.png?label=ready&title=Ready)](https://waffle.io/timtrice/Hurricanes)
 
 # Hurricanes
 
