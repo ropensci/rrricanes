@@ -122,8 +122,8 @@
   df <- tibble::data_frame("Status" = character(), 
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                           "Adv" = character(), 
-                           "Date" = character(), 
+                           "Adv" = character(),
+                           "Date" = as.POSIXct(character(), tz = "UTC"),
                            "Contents" = character())
   
   return(df)
