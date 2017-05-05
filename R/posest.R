@@ -45,7 +45,7 @@ posest <- function(link, msg = FALSE) {
 
     # Make sure this is a public advisory product
     if (!any(stringr::str_count(contents, c("MIATCEAT", "MIATCEEP"))))
-        stop(sprint("Invalid Position Estimate link. %s", l))
+        stop(sprintf("Invalid Position Estimate link. %s", link))
 
     df <- create_df_posest()
 

@@ -45,7 +45,7 @@ discus <- function(link, msg = FALSE) {
 
     # Make sure this is a discussion product
     if (!any(stringr::str_count(contents, c("MIATCDAT", "MIATCDEP"))))
-        stop(sprint("Invalid Discussion link. %s", l))
+        stop(sprintf("Invalid Discussion link. %s", link))
 
     df <- create_df_discus()
 

@@ -56,7 +56,7 @@ fstadv <- function(link, msg = FALSE) {
 
     # Make sure this is a public advisory product
     if (!any(stringr::str_count(contents, c("MIATCMAT", "MIATCMEP"))))
-        stop(sprintf("Invalid Forecast/Advisory link. %s", valid.link))
+        stop(sprintf("Invalid Forecast/Advisory link. %s", link))
 
     df <- create_df_fstadv()
 

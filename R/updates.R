@@ -44,7 +44,7 @@ updates <- function(link, msg = FALSE) {
 
     # Make sure this is a updates advisory product
     if (!any(stringr::str_count(contents, c("MIATCUAT", "MIATCUEP"))))
-        stop(sprint("Invalid Cyclone Update link. %s", l))
+        stop(sprintf("Invalid Cyclone Update link. %s", link))
 
     df <- create_df_updates()
 

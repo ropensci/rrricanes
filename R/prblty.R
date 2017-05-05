@@ -44,7 +44,7 @@ prblty <- function(link, msg = FALSE) {
 
     # Make sure this is a strike probability product
     if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP"))))
-        stop(sprint("Invalid Strike Probability link. %s", l))
+        stop(sprintf("Invalid Strike Probability link. %s", link))
 
     df <- create_df_prblty()
 

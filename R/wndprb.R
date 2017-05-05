@@ -44,7 +44,7 @@ wndprb <- function(link, msg = FALSE) {
 
     # Make sure this is a wndprb advisory product
     if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP"))))
-        stop(sprint("Invalid Wind Probability link. %s", l))
+        stop(sprintf("Invalid Wind Probability link. %s", link))
 
     df <- create_df_wndprb()
 

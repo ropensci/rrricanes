@@ -44,7 +44,7 @@ public <- function(link, msg = FALSE) {
 
     # Make sure this is a public advisory product
     if (!any(stringr::str_count(contents, c("MIATCPAT", "MIATCPEP"))))
-        stop(sprint("Invalid Public Advisory link. %s", l))
+        stop(sprintf("Invalid Public Advisory link. %s", link))
 
     df <- create_df_public()
 
