@@ -45,10 +45,10 @@ convert_lat_lon <- function(x, y) {
 #' @return year 4-digit numeric
 .extract_year_archive_link <- function(link) {
 
-  # Year is listed in link towards the end surrounded by slashes.
-  year <- as.numeric(stringr::str_match(link, '/([:digit:]{4})/')[,2])
+    # Year is listed in link towards the end surrounded by slashes.
+    year <- as.numeric(stringr::str_match(link, '/([:digit:]{4})/')[,2])
 
-  return(year)
+    return(year)
 
 }
 
@@ -58,9 +58,9 @@ convert_lat_lon <- function(x, y) {
 #' trailing slash.
 #' @export
 get_nhc_link <- function(withTrailingSlash = TRUE) {
-  if (withTrailingSlash)
-    return('http://www.nhc.noaa.gov/')
-  return('http://www.nhc.noaa.gov')
+    if (withTrailingSlash)
+        return('http://www.nhc.noaa.gov/')
+    return('http://www.nhc.noaa.gov')
 }
 
 #' @title knots_to_mph
@@ -87,12 +87,12 @@ mb_to_in <- function(x) {
 #' @return numeric 1-12
 month_str_to_num <- function(m) {
 
-  if (is.character(m) & length(m) != 3) {
-    m <- which(month.abb == toproper(m))
-    return(m)
-  } else {
-    stop('Expected three-character string.')
-  }
+    if (is.character(m) & length(m) != 3) {
+        m <- which(month.abb == toproper(m))
+        return(m)
+    } else {
+        stop('Expected three-character string.')
+    }
 
 }
 
@@ -103,13 +103,13 @@ month_str_to_num <- function(m) {
 #' @param u URL to test
 #' @return URL if result is 'OK', otherwise, NA.
 .status <- function(u) {
-  stat = httr::http_status(httr::GET(u))
-  if (stat$reason == 'OK') {
-    return(u)
-  } else {
-    warning(sprintf("URL unavailable. %s", u))
-    return(NA)
-  }
+    stat = httr::http_status(httr::GET(u))
+    if (stat$reason == 'OK') {
+        return(u)
+    } else {
+        warning(sprintf("URL unavailable. %s", u))
+        return(NA)
+    }
 }
 
 #' @title toproper
@@ -125,10 +125,10 @@ month_str_to_num <- function(m) {
 #' toproper("TROPICAL STORM ALEX", strict = FALSE)
 #' @export
 toproper <- function(s, strict = TRUE) {
-  cap <- function(s) paste(toupper(substring(s, 1, 1)),
-                           {s <- substring(s, 2); if (strict) tolower(s) else s},
-                           sep = "", collapse = " " )
-  sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
+    cap <- function(s) paste(toupper(substring(s, 1, 1)),
+                             {s <- substring(s, 2); if (strict) tolower(s) else s},
+                             sep = "", collapse = " " )
+    sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
 }
 
 #' @title .validate_year
@@ -143,10 +143,10 @@ toproper <- function(s, strict = TRUE) {
 #' \dontrun{
 #' validate_year(199) # Generates error}
 .validate_year <- function(y) {
-  y <- as.numeric(y)
-  if (all(is.na(y)))
-    stop('Year must be numeric.')
-  if (any(nchar(y) != 4))
-    stop('Year must be 4 digits.')
-  return(y)
+    y <- as.numeric(y)
+    if (all(is.na(y)))
+        stop('Year must be numeric.')
+    if (any(nchar(y) != 4))
+        stop('Year must be 4 digits.')
+    return(y)
 }
