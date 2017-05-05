@@ -22,7 +22,7 @@ test_that("Month Abbreviated String to Number", {
 
 test_that("To Proper Case", {
   expect_identical(toproper("TROPICAL STORM ALEX"), "Tropical Storm Alex")
-  expect_identical(toproper("TROPICAL STORM ALEX", strict = FALSE), 
+  expect_identical(toproper("TROPICAL STORM ALEX", strict = FALSE),
                    "TROPICAL STORM ALEX")
 })
 
