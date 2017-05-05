@@ -85,15 +85,12 @@ mb_to_in <- function(x) {
 #' @description Convert three-character month abbreviation to integer
 #' @param m Month abbreviated (SEP, OCT, etc.)
 #' @return numeric 1-12
+#' @export
 month_str_to_num <- function(m) {
-
-    if (is.character(m) & length(m) != 3) {
-        m <- which(month.abb == toproper(m))
-        return(m)
-    } else {
-        stop('Expected three-character string.')
-    }
-
+    abbr <- which(month.abb == toproper(m))
+    if (purrr::is_empty(abbr))
+        stop(sprintf("%s is not a valid month abbreviation.", m))
+    return(abbr)
 }
 
 #' @title .status
