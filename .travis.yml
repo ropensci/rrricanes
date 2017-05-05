@@ -1,9 +1,5 @@
 language: r
 
-r_packages:
-  - data.table
-  - tidyverse
-
 warnings_are_errors: false
 
 r_packages:
