@@ -47,9 +47,9 @@ test_that("1998, Tropical Storm Alex, Advisory 26", {
   expect_equal(public(al.1998.alex.products.public[25]) %>%
                  dplyr::select(Adv) %>%
                  dplyr::first(), "26")
-  # # Date
-  # expect_equal(public(al.1998.alex.products.public[25]) %>%
-  #                dplyr::select(Date) %>%
-  #                dplyr::first(),
-  #              as.POSIXct("1998-08-02 17:00:00", tz = "AST"))
+  # Date
+  expect_equal(public(al.1998.alex.products.public[25]) %>%
+                 dplyr::select(Date) %>%
+                 dplyr::first(),
+               as.POSIXct("1998-08-02 17:00:00"))
 })
