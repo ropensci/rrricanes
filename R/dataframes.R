@@ -20,13 +20,13 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_discus <- function() {
-  df <- tibble::data_frame("Status" = character(), 
+  df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                           "Adv" = character(), 
-                           "Date" = character(), 
+                           "Adv" = character(),
+                           "Date" = as.POSIXct(character(), tz = "UTC"),
                            "Contents" = character())
-  
+
   return(df)
 }
 
@@ -35,22 +35,22 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_fstadv <- function() {
-  df <- tibble::data_frame("Status" = character(), 
+  df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                           "Adv" = character(), 
-                           "Date" = character(), 
-                           "Key" = character(), 
-                           'Lat' = numeric(), 
-                           'Lon' = numeric(), 
-                           'Wind' = numeric(), 
-                           'Gust' = numeric(), 
-                           'Pressure' = numeric(), 
-                           'PosAcc' = numeric(), 
-                           'FwdDir' = numeric(), 
-                           'FwdSpeed' = numeric(), 
+                           "Adv" = character(),
+                           "Date" = as.POSIXct(character(), tz = "UTC"),
+                           "Key" = character(),
+                           'Lat' = numeric(),
+                           'Lon' = numeric(),
+                           'Wind' = numeric(),
+                           'Gust' = numeric(),
+                           'Pressure' = numeric(),
+                           'PosAcc' = numeric(),
+                           'FwdDir' = numeric(),
+                           'FwdSpeed' = numeric(),
                            'Eye' = numeric())
-  
+
   return(df)
 }
 
@@ -59,13 +59,13 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_posest <- function() {
-  df <- tibble::data_frame("Status" = character(), 
+  df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                           "Adv" = character(), 
-                           "Date" = character(), 
+                           "Adv" = character(),
+                           "Date" = as.POSIXct(character(), tz = "UTC"),
                            "Contents" = character())
-  
+
   return(df)
 }
 
@@ -74,13 +74,13 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_prblty <- function() {
-  df <- tibble::data_frame("Status" = character(), 
+  df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                           "Adv" = character(), 
-                           "Date" = character(), 
+                           "Adv" = character(),
+                           "Date" = as.POSIXct(character(), tz = "UTC"),
                            "Contents" = character())
-  
+
   return(df)
 }
 
@@ -89,13 +89,13 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_public <- function() {
-  df <- tibble::data_frame("Status" = character(), 
+  df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                           "Adv" = character(), 
-                           "Date" = character(), 
+                           "Adv" = character(),
+                           "Date" = as.POSIXct(character(), tz = "UTC"),
                            "Contents" = character())
-  
+
   return(df)
 }
 
@@ -104,13 +104,13 @@
 #' @return empty dataframe
 #' @seealso \code{\link{get_public_advisories}}
 .create_df_updates <- function() {
-  df <- tibble::data_frame("Status" = character(), 
+  df <- tibble::data_frame("Status" = character(),
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                           "Adv" = character(), 
-                           "Date" = character(), 
+                           "Adv" = character(),
+                           "Date" = as.POSIXct(character(), tz = "UTC"),
                            "Contents" = character())
-  
+
   return(df)
 }
 
@@ -122,8 +122,8 @@
   df <- tibble::data_frame("Status" = character(), 
                            "Name" = character(),
                            # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                           "Adv" = character(), 
-                           "Date" = character(), 
+                           "Adv" = character(),
+                           "Date" = as.POSIXct(character(), tz = "UTC"),
                            "Contents" = character())
   
   return(df)

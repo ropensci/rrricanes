@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
     + `updates`
     + `get_wndprb`
     + `wndprb`
+  - Reassign default values of Date variables in built dataframes to POSIXct class.
 
 ### Removed
   - NA
