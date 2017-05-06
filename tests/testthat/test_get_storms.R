@@ -54,12 +54,16 @@ test_that("HTML format", {
 test_that("Is Dataframe", {
     expect_true(is.data.frame(get_storms(1998, basin = "AL")))
     expect_true(is.data.frame(get_storms(2016, basin = "AL")))
+    expect_true(is.data.frame(get_storms(1998, basin = "EP")))
+    expect_true(is.data.frame(get_storms(2016, basin = "EP")))
 })
 
 ## ---- Column Names -----------------------------------------------------------
 test_that('Column Names', {
     expect_named(get_storms(1998, basin = "AL"), c("Year", "Name", "Basin", "Link"))
     expect_named(get_storms(2016, basin = "AL"), c("Year", "Name", "Basin", "Link"))
+    expect_named(get_storms(1998, basin = "EP"), c("Year", "Name", "Basin", "Link"))
+    expect_named(get_storms(2016, basin = "EP"), c("Year", "Name", "Basin", "Link"))
 })
 
 ## ---- Errors -----------------------------------------------------------------
