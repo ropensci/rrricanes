@@ -1,21 +1,3 @@
-#' @title create_df_archives
-#' @description Template for archives dataframe
-#' \describe{
-#'   \item{Year}{integer, year of storm}
-#'   \item{Name}{character, name of storm}
-#'   \item{Basin}{character, basin storm developed in}
-#'   \item{Link}{character, link to storm's archive page}
-#' }
-#' @return dataframe
-#' @keywords internal
-create_df_archives <- function() {
-  df <- tibble::data_frame("Year" = integer(),
-                           "Name" = character(),
-                           "Basin" = character(),
-                           "Link" = character())
-  return(df)
-}
-
 #' @title create_df_discus
 #' @description Template for storm discussions dataframe
 #' @return empty dataframe
