@@ -31,7 +31,7 @@ build_archive_df <- function(link, basin = c("AL", "EP"), p) {
 
     l <- lapply(basin, extract_storms, link = archive_link)
 
-    df <- data.table::rbindlist(l)
+    df <- purrr::map_df(l, dplyr::bind_rows)
 
     return(df)
 
@@ -156,7 +156,7 @@ get_storms <- function(year = format(Sys.Date(), "%Y"),
     # Get archive pages for each storm in year
     l <- lapply(link, build_archive_df, basin, p)
 
-    df <- data.table::rbindlist(l)
+    df <- purrr::map_df(l, dplyr::bind_rows)
 
     # At this point we have a list of links pointing to each storm, each basin.
     return(df)
