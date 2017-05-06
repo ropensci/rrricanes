@@ -258,8 +258,10 @@ fstadv_lat_lon <- function(contents, what = NULL) {
     if (!is.na(x[,2]) & !is.na(x[,3])) {
         if (what == 'lat') {
             lat <- convert_lat_lon(as.numeric(x[,2]), x[,3])
+            return(lat)
         } else if (what == 'lon') {
             lon <- convert_lat_lon(as.numeric(x[,4]), x[,5])
+            return(lon)
         }
     } else {
         return(NA)
