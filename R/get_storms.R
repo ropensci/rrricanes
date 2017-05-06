@@ -2,9 +2,12 @@
 #' @description Add storms for the given link, basin into dataframej.
 #' @param page contents of page being parsed
 #' @param basin c("AL", "EP")
+#' @param p dplyr::progress_estimate.
 #' @return dataframe
 #' @keywords internal
-build_archive_df <- function(link, basin = c("AL", "EP")) {
+build_archive_df <- function(link, basin = c("AL", "EP"), p) {
+
+    p$pause(0.5)$tick()$print()
 
     # Get year
     year <- extract_year_archive_link(link)
@@ -97,6 +100,9 @@ extract_storms <- function(basin, link) {
 #'   \item{Basin}{AL (Atlantic) or EP (East Pacific)}
 #'   \item{Link}{URL to storms' product pages}
 #' }
+#'
+#' To disable the progress bar set option dplyr.show_progress to FALSE.
+#'
 #' @param year numeric or vector, four digits (\%Y format)
 #' @param basin One or both of c("AL", "EP")
 #' @return Dataframe of storms.
@@ -124,11 +130,13 @@ get_storms <- function(year = format(Sys.Date(), "%Y"),
     if (!all(basin %in% c("AL", "EP")))
         stop("Basin must 'AL' and/or 'EP'")
 
+    p <- dplyr::progress_estimated(n = length(year))
+
     # Get archive pages for each year
     link <- lapply(year, year_archives_link)
 
     # Get archive pages for each storm in year
-    l <- lapply(link, build_archive_df, basin)
+    l <- lapply(link, build_archive_df, basin, p)
 
     df <- data.table::rbindlist(l)
 

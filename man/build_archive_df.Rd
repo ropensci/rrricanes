@@ -4,10 +4,12 @@
 \alias{build_archive_df}
 \title{build_archive_df}
 \usage{
-build_archive_df(link, basin = c("AL", "EP"))
+build_archive_df(link, basin = c("AL", "EP"), p)
 }
 \arguments{
 \item{basin}{c("AL", "EP")}
+
+\item{p}{dplyr::progress_estimate.}
 
 \item{page}{contents of page being parsed}
 }

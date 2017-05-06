@@ -9,7 +9,9 @@
   \item{Name}{Character, name of storm mixed-case}
   \item{Basin}{AL (Atlantic) or EP (East Pacific)}
   \item{Link}{URL to storms' product pages}
-}}
+}
+
+To disable the progress bar set option dplyr.show_progress to FALSE.}
 \source{
 \url{http://www.nhc.noaa.gov/archive/2016/}
 }
