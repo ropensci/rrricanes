@@ -141,8 +141,31 @@ scrape_date <- function(header) {
     # Make date/time string
     x <- paste(d, t, sep = " ")
 
-    # Properly formatted date/time string
-    dt <- lubridate::ymd_hm(x, tz = tz)
+    # To ensure we get the proper timezone I'm going to use OlsonNames()
+    # instead of the abbreviation. The timezones will need to be converted to
+    # UTC/GMT for some products. But using EDT for example will not convert
+    # properly whereas "America/New_York" will.
+
+    if (tz %in% c("GMT", "UTC")) {
+        dt <- as.POSIXct(x, tz = "UTC")
+    } else if (tz %in% c("ADT")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+3")
+    } else if (tz %in% c("AST")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+4")
+    } else if (tz %in% c("CDT")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+5")
+    } else if (tz %in% c("CST")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+6")
+    } else if (tz %in% c("EDT")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+4")
+    } else if (tz %in% c("EST")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+5")
+    } else {
+        stop(sprintf("Timezone %s not available.", tz), call. = TRUE)
+    }
+    # Now convert to UTC
+    # dt <- format(dt, tz = "UTC", usetz = TRUE)
+    dt <- lubridate::with_tz(dt, tzone = "UTC")
 
     return(dt)
 }
