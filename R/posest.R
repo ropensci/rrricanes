@@ -1,3 +1,19 @@
+#' @title create_df_posest
+#' @description Template for position estimates dataframe
+#' @return empty dataframe
+#' @seealso \code{\link{get_posest}}
+#' @keywords internal
+create_df_posest <- function() {
+    df <- tibble::data_frame("Status" = character(),
+                             "Name" = character(),
+                             # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                             "Adv" = character(),
+                             "Date" = as.POSIXct(character(), tz = "UTC"),
+                             "Contents" = character())
+
+    return(df)
+}
+
 #' @title get_posest
 #' @description Return dataframe of position estimate data.
 #' \describe{
