@@ -25,7 +25,7 @@ build_archive_df <- function(link, basin = c("AL", "EP"), p) {
 
     # Test link
     valid.link <- status(archive_link)
-    valid.link <- na.omit(valid.link)
+    valid.link <- stats::na.omit(valid.link)
     if (length(valid.link) == 0)
         stop(sprintf("Invalid URL. %d", archive_link))
 
