@@ -37,11 +37,11 @@ get_fstadv <- function(link, msg = FALSE) {
     if (length(valid.link) == 0)
         stop("No valid links.")
 
-    products <- unlist(sapply(valid.link, get_products))
+    products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.fstadv <- lapply(filter_forecast_advisories(products), fstadv, msg = msg)
+    products.fstadv <- purrr::map(filter_forecast_advisories(products), fstadv)
 
-    fstadv <- data.table::rbindlist(products.fstadv)
+    fstadv <- purrr::map_df(products.fstadv, dplyr::bind_rows)
 
     return(fstadv)
 
