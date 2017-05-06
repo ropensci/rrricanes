@@ -29,7 +29,7 @@ build_archive_df <- function(link, basin = c("AL", "EP"), p) {
     if (length(valid.link) == 0)
         stop(sprintf("Invalid URL. %d", archive_link))
 
-    l <- lapply(basin, extract_storms, link = archive_link)
+    l <- purrr::map(basin, extract_storms, link = archive_link)
 
     df <- purrr::map_df(l, dplyr::bind_rows)
 
@@ -154,10 +154,10 @@ get_storms <- function(year = format(Sys.Date(), "%Y"),
     p <- dplyr::progress_estimated(n = length(year))
 
     # Get archive pages for each year
-    link <- lapply(year, year_archives_link)
+    link <- purrr::map(year, year_archives_link)
 
     # Get archive pages for each storm in year
-    l <- lapply(link, build_archive_df, basin, p)
+    l <- purrr::map(link, build_archive_df, basin, p)
 
     df <- purrr::map_df(l, dplyr::bind_rows)
 
