@@ -7,10 +7,10 @@ test_that("Get products from storm archive", {
   expect_equal(
     length(
       p <- get_products(
-        get_storms(2005, basin = "AL") %>% 
-          dplyr::filter(Name == "Hurricane KATRINA") %>% 
-          dplyr::select(Link) %>% 
-          dplyr::first())), 
+        get_storms(2005, basin = "AL") %>%
+          dplyr::filter(Name == "Hurricane Katrina") %>%
+          dplyr::select(Link) %>%
+          dplyr::first())),
     154)
   expect_equal(length(filter_discussions(p)), 32)
   expect_equal(length(filter_forecast_advisories(p)), 31)
@@ -22,10 +22,10 @@ test_that("Get products from storm archive", {
   expect_equal(
     length(
       p <- get_products(
-        get_storms(2008, basin = "AL") %>% 
-          dplyr::filter(Name == "Hurricane IKE") %>% 
-          dplyr::select(Link) %>% 
-          dplyr::first())), 
+        get_storms(2008, basin = "AL") %>%
+          dplyr::filter(Name == "Hurricane Ike") %>%
+          dplyr::select(Link) %>%
+          dplyr::first())),
     262)
   expect_equal(length(filter_position_estimate(p)), 11)
   expect_equal(length(filter_updates(p)), 3)

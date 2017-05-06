@@ -2,7 +2,7 @@ context("Test Public Advisory Scraping.")
 
 # 1998, Tropical Storm Alex
 al.1998.alex <- get_storms(1998, basin = "AL") %>%
-  dplyr::filter(Name == "TROPICAL STORM ALEX")
+  dplyr::filter(Name == "Tropical Storm Alex")
 al.1998.alex.products <- get_products(al.1998.alex %>%
                                         dplyr::select(Link) %>%
                                         dplyr::first())
