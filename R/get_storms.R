@@ -78,16 +78,15 @@ extract_storms <- function(basin, link) {
 
     s <- link %>%
         xml2::read_html() %>%
-        rvest::html_nodes("table")
+        rvest::html_nodes(css = "table")
 
     col <- s %>%
-        rvest::html_nodes(
-            xpath = xp)
+        rvest::html_nodes(xpath = xp)
 
     col.links <- paste0(
         year_archives_link(year),
         col %>%
-            rvest::html_attr("href"))
+            rvest::html_attr(name = "href"))
 
     col.names <- col %>%
         rvest::html_text()
