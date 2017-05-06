@@ -22,7 +22,7 @@ get_wndprb <- function(link, msg = FALSE) {
 
     products <- unlist(sapply(valid.link, get_products))
 
-    products.wndprb <- lapply(filter_wind_probabilities(products), wndprb, msg = msg)
+    products.wndprb <- lapply(filter_wndprb(products), wndprb, msg = msg)
 
     wndprb <- data.table::rbindlist(products.wndprb)
 

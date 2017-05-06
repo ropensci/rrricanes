@@ -22,7 +22,7 @@ get_public <- function(link, msg = FALSE) {
 
     products <- unlist(sapply(valid.link, get_products))
 
-    products.public <- lapply(filter_public_advisories(products), public, msg = msg)
+    products.public <- lapply(filter_public(products), public, msg = msg)
 
     public <- data.table::rbindlist(products.public)
 

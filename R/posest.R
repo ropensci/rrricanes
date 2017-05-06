@@ -38,7 +38,7 @@ get_posest <- function(link, msg = FALSE) {
 
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.posest <- purrr::map(filter_position_estimate(products), posest)
+    products.posest <- purrr::map(filter_posest(products), posest)
 
     posest <- purrr::map_df(products.posest, dplyr::bind_rows)
 

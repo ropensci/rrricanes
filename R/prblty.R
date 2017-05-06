@@ -22,7 +22,7 @@ get_prblty <- function(link, msg = FALSE) {
 
     products <- unlist(sapply(valid.link, get_products))
 
-    products.prblty <- lapply(filter_strike_probabilities(products), prblty, msg = msg)
+    products.prblty <- lapply(filter_prblty(products), prblty, msg = msg)
 
     prblty <- data.table::rbindlist(products.prblty)
 

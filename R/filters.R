@@ -1,17 +1,17 @@
-#' @title filter_discussions
+#' @title filter_discus
 #' @description Filter out storm discussion links.
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
-filter_discussions <- function(links) {
+filter_discus <- function(links) {
     ptn <- c("/dis/N[AL|EP]", "discus")
     return(filter_products(ptn, links))
 }
 
-#' @title filter_forecast_advisories
+#' @title filter_fstadv
 #' @description Filter out forecast/advisory links
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
-filter_forecast_advisories <- function(links) {
+filter_fstadv <- function(links) {
     ptn <- c("/mar/M[AL|EP]", "fstadv")
     return(filter_products(ptn, links))
 }
@@ -30,53 +30,53 @@ filter_orig <- function(links) {
     return(filter_products(ptn, links))
 }
 
-#' @title filter_position_estimate
+#' @title filter_posest
 #' @description Get position estimates
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
-filter_position_estimate <- function(links) {
+filter_posest <- function(links) {
     ptn <- "posest"
     return(filter_products(ptn, links))
 }
 
-#' @title filter_public_advisories
+#' @title filter_public
 #' @description Get public advisories
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
-filter_public_advisories <- function(links) {
+filter_public <- function(links) {
     ptn <- c("/pub/P[AL|EP]", "/pub/PA[AL|EP]", "/pub/PB[AL|EP]", "public")
     return(filter_products(ptn, links))
 }
 
-#' @title filter_strike_probabilities
+#' @title filter_prblty
 #' @description Get strike probabilities.
 #' @details Strike probability products were terminated at the end of the 2005
 #' season, replaced by wind probabilities.
-#' @seealso \code{\link{filter_wind_probabilities}}
+#' @seealso \code{\link{filter_wndprb}}
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
-filter_strike_probabilities <- function(links) {
+filter_prblty <- function(links) {
     ptn <- c("/prb/L[AL|EP]", "prblty")
     return(filter_products(ptn, links))
 }
 
-#' @title filter_updates
+#' @title filter_update
 #' @description Get updates
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
-filter_updates <- function(links) {
+filter_update <- function(links) {
     ptn <- "update"
     return(filter_products(ptn, links))
 }
 
-#' @title filter_wind_probabilities
+#' @title filter_wndprb
 #' @description Get wind probabilities
 #' @details Wind probability products replaced the strike probability products
 #' at the beginning of the 2006 season.
-#' @seealso \code{\link{filter_strike_probabilities}}
+#' @seealso \code{\link{filter_prblty}}
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
-filter_wind_probabilities <- function(links) {
+filter_wndprb <- function(links) {
     ptn <- "wndprb"
     return(filter_products(ptn, links))
 }

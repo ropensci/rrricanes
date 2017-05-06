@@ -22,7 +22,7 @@ get_updates <- function(link, msg = FALSE) {
 
     products <- unlist(sapply(valid.link, get_products))
 
-    products.updates <- lapply(filter_updates(products), updates, msg = msg)
+    products.updates <- lapply(filter_update(products), updates, msg = msg)
 
     updates <- data.table::rbindlist(products.updates)
 

@@ -8,10 +8,10 @@ al.1998.alex.products <- get_products(al.1998.alex %>%
                                         dplyr::first())
 
 test_that("Filter Public Advisories.", {
-  expect_equal(length(filter_public_advisories(al.1998.alex.products)), 25)
+  expect_equal(length(filter_public(al.1998.alex.products)), 25)
 })
 
-al.1998.alex.products.public <- filter_public_advisories(al.1998.alex.products)
+al.1998.alex.products.public <- filter_public(al.1998.alex.products)
 
 test_that("1998, Tropical Storm Alex, Advisory 1", {
   # Status

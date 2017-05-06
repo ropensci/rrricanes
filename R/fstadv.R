@@ -39,7 +39,7 @@ get_fstadv <- function(link, msg = FALSE) {
 
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.fstadv <- purrr::map(filter_forecast_advisories(products), fstadv)
+    products.fstadv <- purrr::map(filter_fstadv(products), fstadv)
 
     fstadv <- purrr::map_df(products.fstadv, dplyr::bind_rows)
 

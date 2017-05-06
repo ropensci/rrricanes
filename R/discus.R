@@ -38,7 +38,7 @@ get_discus <- function(link, msg = FALSE) {
 
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.discus <- purrr::map(filter_discussions(products), discus)
+    products.discus <- purrr::map(filter_discus(products), discus)
 
     discus <- purrr::map_df(products.discus, dplyr::bind_rows)
 
