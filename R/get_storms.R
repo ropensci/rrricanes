@@ -27,7 +27,7 @@ build_archive_df <- function(link, basin = c("AL", "EP"), p) {
     valid.link <- status(archive_link)
     valid.link <- stats::na.omit(valid.link)
     if (length(valid.link) == 0)
-        stop(sprintf("Invalid URL. %d", archive_link))
+        stop(sprintf("Invalid URL. %s", archive_link))
 
     l <- purrr::map(basin, extract_storms, link = archive_link)
 
