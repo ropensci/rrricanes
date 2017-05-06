@@ -1,19 +1,3 @@
-#' @title create_df_discus
-#' @description Template for storm discussions dataframe
-#' @return empty dataframe
-#' @seealso \code{\link{get_discus}}
-#' @keywords internal
-create_df_discus <- function() {
-  df <- tibble::data_frame("Status" = character(),
-                           "Name" = character(),
-                           # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                           "Adv" = character(),
-                           "Date" = as.POSIXct(character(), tz = "UTC"),
-                           "Contents" = character())
-
-  return(df)
-}
-
 #' @title create_df_fstadv
 #' @description Template for public advisory dataframe
 #' @return empty dataframe
