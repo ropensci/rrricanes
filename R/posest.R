@@ -36,11 +36,11 @@ get_posest <- function(link, msg = FALSE) {
     if (length(valid.link) == 0)
         stop("No valid links.")
 
-    products <- unlist(sapply(valid.link, get_products))
+    products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.posest <- lapply(filter_discussions(products), posest, msg = msg)
+    products.posest <- purrr::map(filter_position_estimate(products), posest)
 
-    posest <- data.table::rbindlist(products.posest)
+    posest <- purrr::map_df(products.posest, dplyr::bind_rows)
 
     return(posest)
 
