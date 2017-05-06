@@ -36,11 +36,11 @@ get_discus <- function(link, msg = FALSE) {
     if (length(valid.link) == 0)
         stop("No valid links.")
 
-    products <- unlist(sapply(valid.link, get_products))
+    products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.discus <- lapply(filter_discussions(products), discus, msg = msg)
+    products.discus <- purrr::map(filter_discussions(products), discus)
 
-    discus <- data.table::rbindlist(products.discus)
+    discus <- purrr::map_df(products.discus, dplyr::bind_rows)
 
     return(discus)
 
