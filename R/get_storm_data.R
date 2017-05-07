@@ -104,10 +104,10 @@ get_storm_content <- function(link) {
 get_storm_data <- function(..., names = list(), link, msg = FALSE) {
 
     x <- list(...)
-    if (!(all(x %in% c("discus", "fstadv", "posest", "public", "prblty", "update",
-                      "windprb"))) | length(x) == 0)
+    if (!(all(x %in% c("discus", "fstadv", "posest", "public",
+                       "prblty", "update", "wndprb"))) | length(x) == 0)
         stop(paste0("Invalid products included. Only discus, fstadv, posest, ",
-                    "public, prblty, update, windprb are valid options.",
+                    "public, prblty, update, wndprb are valid options.",
                     "See ?get_storm_data for more info."))
 
     if (is.null(link))
