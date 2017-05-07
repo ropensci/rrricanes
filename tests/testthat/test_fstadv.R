@@ -47,7 +47,7 @@ test_that("Test get_fstadv()", {
 ## ---- Test fstadv() ----------------------------------------------------------
 #' Test return of fstadv()
 test_that("Test fstadv()", {
-    ## ---- * Advisory #1 ------------------------------------------------------
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     df <- fstadv(link = url)
     expect_identical(df$Status[1], "Tropical Depression")
@@ -67,63 +67,63 @@ test_that("Test fstadv()", {
 
 ## ---- Lat --------------------------------------------------------------------
 test_that("Lat", {
-    ## ---- * Tropical Storm Alex, Forecast/Advisory 1
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     expect_identical(fstadv_lat(scrape_contents(url)), 11.5)
 })
 
 ## ---- Lon --------------------------------------------------------------------
 test_that("Lon", {
-    ## ---- * Tropical Storm Alex, Forecast/Advisory 1
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     expect_identical(fstadv_lon(scrape_contents(url)), -27.0)
 })
 
 ## ---- Wind -------------------------------------------------------------------
 test_that("Wind", {
-    ## ---- * Tropical Storm Alex, Forecast/Advisory 1
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     expect_identical(fstadv_winds(scrape_contents(url)), 25)
 })
 
 ## ---- Gust -------------------------------------------------------------------
 test_that("Gust", {
-    ## ---- * Tropical Storm Alex, Forecast/Advisory 1
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     expect_identical(fstadv_gusts(scrape_contents(url)), 35)
 })
 
 ## ---- Pressure ---------------------------------------------------------------
 test_that("Pressure", {
-    ## ---- * Tropical Storm Alex, Forecast/Advisory 1
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     expect_identical(fstadv_pressure(scrape_contents(url)), 1008)
 })
 
 ## ---- PosAcc -----------------------------------------------------------------
 test_that("PosAcc", {
-    ## ---- * Tropical Storm Alex, Forecast/Advisory 1
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     expect_identical(fstadv_pos_accuracy(scrape_contents(url)), 50)
 })
 
 ## ---- FwdDir -----------------------------------------------------------------
 test_that("FwdDir", {
-    ## ---- * Tropical Storm Alex, Forecast/Advisory 1
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     expect_identical(fstadv_fwd_dir(scrape_contents(url)), 280)
 })
 
 ## ---- FwdSpeed ---------------------------------------------------------------
 test_that("FwdSpeed", {
-    ## ---- * Tropical Storm Alex, Forecast/Advisory 1
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     expect_identical(fstadv_fwd_speed(scrape_contents(url)), 20)
 })
 
 ## ---- Eye --------------------------------------------------------------------
 test_that("Eye", {
-    ## ---- * Hurricane Bonnie, Forecast/Advisory 11
+    ## ---- * 1998, Hurricane Bonnie, Forecast/Advisory 11
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0298.011"
     expect_identical(fstadv_eye(scrape_contents(url)), 25)
 })
