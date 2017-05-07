@@ -36,11 +36,11 @@ get_prblty <- function(link, msg = FALSE) {
     if (length(valid.link) == 0)
         stop("No valid links.")
 
-    products <- unlist(sapply(valid.link, get_products))
+    products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.prblty <- lapply(filter_prblty(products), prblty, msg = msg)
+    products.prblty <- purrr::map(filter_prblty(products), prblty)
 
-    prblty <- data.table::rbindlist(products.prblty)
+    prblty <- purrr::map_df(products.prblty, dplyr::bind_rows)
 
     return(prblty)
 }

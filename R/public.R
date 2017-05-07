@@ -36,11 +36,11 @@ get_public <- function(link, msg = FALSE) {
     if (length(valid.link) == 0)
         stop("No valid links.")
 
-    products <- unlist(sapply(valid.link, get_products))
+    products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.public <- lapply(filter_public(products), public, msg = msg)
+    products.public <- purrr::map(filter_public(products), public)
 
-    public <- data.table::rbindlist(products.public)
+    public <- purrr::map_df(products.public, dplyr::bind_rows)
 
     return(public)
 }

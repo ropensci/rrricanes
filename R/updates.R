@@ -36,11 +36,11 @@ get_updates <- function(link, msg = FALSE) {
     if (length(valid.link) == 0)
         stop("No valid links.")
 
-    products <- unlist(sapply(valid.link, get_products))
+    products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.updates <- lapply(filter_update(products), updates, msg = msg)
+    products.updates <- purrr::map(filter_updates(products), updates)
 
-    updates <- data.table::rbindlist(products.updates)
+    updates <- purrr::map_df(products.updates, dplyr::bind_rows)
 
     return(updates)
 }

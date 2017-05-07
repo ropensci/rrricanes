@@ -36,11 +36,11 @@ get_wndprb <- function(link, msg = FALSE) {
     if (length(valid.link) == 0)
         stop("No valid links.")
 
-    products <- unlist(sapply(valid.link, get_products))
+    products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.wndprb <- lapply(filter_wndprb(products), wndprb, msg = msg)
+    products.wndprb <- purrr::map(filter_wndprb(products), wndprb)
 
-    wndprb <- data.table::rbindlist(products.wndprb)
+    wndprb <- purrr::map_df(products.wndprb, dplyr::bind_rows)
 
     return(wndprb)
 }
