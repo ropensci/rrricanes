@@ -42,10 +42,11 @@ convert_lat_lon <- function(x, y) {
     ifelse(y == 'S' | y == 'W', return(x * -1), return(x))
 }
 
-#' @title drop_dataframes
+# This function may not be used anymore. Will need to test around.
+#' @title .drop_dataframes
 #' @description Drop existing dataframes.
 #' @keywords internal
-drop_dataframes <- function() {
+.drop_dataframes <- function() {
 
     if (exists('df_advisories'))
         rm(df_advisories, envir = .GlobalEnv)
