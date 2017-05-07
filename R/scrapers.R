@@ -285,7 +285,7 @@ scrape_name <- function(header) {
     status <- scrape_status(header)
     # Because status returns toproper() string, have to convert toupper() for
     # pattern match.
-    ptn <- paste0(toupper(status), "[:blank:]([:alpha:]+)[:blank:]")
+    ptn <- paste0(toupper(status), "[:blank:]([[:alpha:]-]*)[:blank:]")
     name <- toproper(trimws(stringr::str_match(header, ptn)[,2]))
     return(name)
 }
