@@ -1,3 +1,19 @@
+#' @title create_df_updates
+#' @description Template for cyclone updates dataframe
+#' @return empty dataframe
+#' @seealso \code{\link{get_updates}}
+#' @keywords internal
+create_df_updates <- function() {
+    df <- tibble::data_frame("Status" = character(),
+                             "Name" = character(),
+                             # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                             "Adv" = character(),
+                             "Date" = as.POSIXct(character(), tz = "UTC"),
+                             "Contents" = character())
+
+    return(df)
+}
+
 #' @title get_updates
 #' @description Return dataframe of cyclone update data.
 #' \describe{
