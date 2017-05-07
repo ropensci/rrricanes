@@ -17,11 +17,11 @@ test_that("1998, Tropical Storm Alex, Advisory 1", {
   # Status
   expect_identical(public(al.1998.alex.products.public[1]) %>%
                      dplyr::select(Status) %>%
-                     dplyr::first(), "TROPICAL DEPRESSION")
+                     dplyr::first(), "Tropical Depression")
   # Name
   expect_identical(public(al.1998.alex.products.public[1]) %>%
                      dplyr::select(Name) %>%
-                     dplyr::first(), "ONE")
+                     dplyr::first(), "One")
   # Advisory number
   expect_equal(public(al.1998.alex.products.public[1]) %>%
                  dplyr::select(Adv) %>%
@@ -37,11 +37,11 @@ test_that("1998, Tropical Storm Alex, Advisory 26", {
   # Status
   expect_identical(public(al.1998.alex.products.public[25]) %>%
                      dplyr::select(Status) %>%
-                     dplyr::first(), "TROPICAL DISTURBANCE")
+                     dplyr::first(), "Tropical Disturbance")
   # Name
   expect_identical(public(al.1998.alex.products.public[25]) %>%
                      dplyr::select(Name) %>%
-                     dplyr::first(), "ALEX")
+                     dplyr::first(), "Alex")
   # Advisory number
   expect_equal(public(al.1998.alex.products.public[25]) %>%
                  dplyr::select(Adv) %>%

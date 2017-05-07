@@ -9,6 +9,7 @@ scrape_adv_num <- function(header) {
                   "NUMBER",
                   "[:blank:]+",
                   "([:digit:]+[:alpha:]*?)", # Advisory number
+                  "[:blank:]*",
                   "\n")
     adv <- trimws(stringr::str_match(header, ptn)[,2])
     return(adv)
@@ -110,6 +111,7 @@ scrape_date <- function(header) {
                   "([:digit:]{2})", # Date
                   "[:blank:]",
                   "([:digit:]{4})",  # Year
+                  "[:blank:]*",
                   "\n")
 
     datetime.extracted <- stringr::str_match(header, ptn)
@@ -215,7 +217,7 @@ scrape_header <- function(contents, ret = NULL) {
                          "[:digit:]{2}", # Date
                          "[:blank:]*",
                          "[:digit:]{4}", # Year
-                         "[:blank:]*",
+                         "[:blank:]*", # Optional
                          "\n") # Close off date/time line
     header <- stringr::str_extract(contents, ptn_header)
 
@@ -281,8 +283,10 @@ scrape_key <- function(header) {
 scrape_name <- function(header) {
     # Status helps to find name, so get status.
     status <- scrape_status(header)
-    ptn <- paste0(status, "[:blank:]([:alpha:]+)[:blank:]")
-    name <- trimws(stringr::str_match(header, ptn)[,2])
+    # Because status returns toproper() string, have to convert toupper() for
+    # pattern match.
+    ptn <- paste0(toupper(status), "[:blank:]([:alpha:]+)[:blank:]")
+    name <- toproper(trimws(stringr::str_match(header, ptn)[,2]))
     return(name)
 }
 
@@ -295,10 +299,11 @@ scrape_status <- function(header) {
     options <- c("TROPICAL DISTURBANCE",
                  "TROPICAL DEPRESSION",
                  "TROPICAL STORM",
-                 "HURRICANE")
+                 "HURRICANE",
+                 "POST-TROPICAL CYCLONE")
     if (!any(stringr::str_count(header, paste(options, sep = "|"))))
-        stop("Options not in header.")
+        stop(sprintf("Options not in header. %s", header))
     ptn <- paste(options, collapse = "|")
-    status <- trimws(stringr::str_extract(header, ptn))
+    status <- toproper(trimws(stringr::str_extract(header, ptn)))
     return(status)
 }

@@ -50,8 +50,8 @@ test_that("Test fstadv()", {
     ## ---- * Advisory #1 ------------------------------------------------------
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     df <- fstadv(link = url)
-    expect_identical(df$Status[1], "TROPICAL DEPRESSION")
-    expect_identical(df$Name[1], "ONE")
+    expect_identical(df$Status[1], "Tropical Depression")
+    expect_identical(df$Name[1], "One")
     expect_identical(df$Adv[1], "1")
     expect_identical(df$Date[1], as.POSIXct("1998-07-27 15:00:00", tz = "UTC"))
     expect_identical(df$Key[1], "AL011998")
@@ -64,3 +64,20 @@ test_that("Test fstadv()", {
     expect_identical(df$FwdSpeed, 20)
     expect_identical(is.na(df$Eye), TRUE)
 })
+
+
+## ---- Lat --------------------------------------------------------------------
+
+## ---- Lon --------------------------------------------------------------------
+
+## ---- Wind -------------------------------------------------------------------
+
+## ---- Pressure ---------------------------------------------------------------
+
+## ---- PosAcc -----------------------------------------------------------------
+
+## ---- FwdDir -----------------------------------------------------------------
+
+## ---- FwdSpeed ---------------------------------------------------------------
+
+## ---- Eye --------------------------------------------------------------------

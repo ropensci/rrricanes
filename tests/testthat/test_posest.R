@@ -26,7 +26,7 @@ test_that("Test get_posest()", {
     expect_identical(class(df$Date), c("POSIXct", "POSIXt"))
     expect_identical(dim(df), as.integer(c(11, 5)))
     ## ---- * Hurricane Ike, AL, 1998, position: 500 PM CDT --------------------
-    expect_identical(df$Status[1], "HURRICANE")
-    expect_identical(df$Name[1], "IKE")
+    expect_identical(df$Status[1], "Hurricane")
+    expect_identical(df$Name[1], "Ike")
     expect_identical(df$Date[1], as.POSIXct("2008-09-12 22:00:00", tz = "UTC"))
 })
