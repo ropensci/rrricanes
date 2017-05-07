@@ -48,6 +48,10 @@ test_that("Name", {
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
     expect_identical(scrape_header(scrape_contents(link = url), ret = "name"),
                      "One")
+    ## ---- * Tropical Storm Agatha, Forecast/Advisory 1
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MEP0198.001"
+    expect_identical(scrape_header(scrape_contents(link = url), ret = "name"),
+                     "One-e")
     ## ---- * Tropical Storm Katrina, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1999/mar/MAL1599.001.html"
     expect_identical(scrape_header(scrape_contents(link = url), ret = "name"),
