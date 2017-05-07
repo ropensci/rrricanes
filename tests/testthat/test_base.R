@@ -43,6 +43,11 @@ test_that("Convert Latitude, Longitude", {
     expect_identical(convert_lat_lon(179, "W"), as.numeric(-179))
 })
 
+## ---- * Errors ---------------------------------------------------------------
+test_that("Lat/Lon is not numeric", {
+    expect_error(convert_lat_lon("93.1N", "N"), "x is not numeric")
+})
+
 ## ---- knots_to_mph() ---------------------------------------------------------
 test_that("Knots to Miles per Hour", {
     expect_equal(knots_to_mph(91), 104.72093)
