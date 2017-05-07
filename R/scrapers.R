@@ -215,6 +215,7 @@ scrape_header <- function(contents, ret = NULL) {
                          "[:digit:]{2}", # Date
                          "[:blank:]*",
                          "[:digit:]{4}", # Year
+                         "[:blank:]*",
                          "\n") # Close off date/time line
     header <- stringr::str_extract(contents, ptn_header)
 
