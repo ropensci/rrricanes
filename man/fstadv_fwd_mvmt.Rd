@@ -24,3 +24,4 @@ Get forward movement direction and speed
 \details{
 If STATIONARY should return NA
 }
+\keyword{internal}

@@ -14,7 +14,7 @@ get_posest(link, msg = FALSE)
 \description{
 Return dataframe of position estimate data.
 \describe{
-  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane, 
+  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
     etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}

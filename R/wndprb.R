@@ -1,3 +1,19 @@
+#' @title create_df_wndprb
+#' @description Template for wind probabilities dataframe
+#' @return empty dataframe
+#' @seealso \code{\link{get_wndprb}}
+#' @keywords internal
+create_df_wndprb <- function() {
+    df <- tibble::data_frame("Status" = character(),
+                             "Name" = character(),
+                             # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                             "Adv" = character(),
+                             "Date" = as.POSIXct(character(), tz = "UTC"),
+                             "Contents" = character())
+
+    return(df)
+}
+
 #' @title get_wndprb
 #' @description Return dataframe of wind probability data.
 #' \describe{
@@ -15,16 +31,16 @@
 get_wndprb <- function(link, msg = FALSE) {
 
     # Check status of link(s)
-    valid.link <- sapply(link, .status)
+    valid.link <- sapply(link, status)
     valid.link <- na.omit(valid.link)
-    if(length(valid.link) == 0)
+    if (length(valid.link) == 0)
         stop("No valid links.")
 
-    products <- unlist(sapply(valid.link, get_products))
+    products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.wndprb <- lapply(filter_wind_probabilities(products), wndprb, msg = msg)
+    products.wndprb <- purrr::map(filter_wndprb(products), wndprb)
 
-    wndprb <- data.table::rbindlist(products.wndprb)
+    wndprb <- purrr::map_df(products.wndprb, dplyr::bind_rows)
 
     return(wndprb)
 }
@@ -37,16 +53,16 @@ get_wndprb <- function(link, msg = FALSE) {
 #' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_wndprb}}
-#' @export
+#' @keywords internal
 wndprb <- function(link, msg = FALSE) {
 
     contents <- scrape_contents(link, msg = msg)
 
     # Make sure this is a wndprb advisory product
-    if(!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP"))))
-        stop(sprint("Invalid Wind Probability link. %s", l))
+    if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP"))))
+        stop(sprintf("Invalid Wind Probability link. %s", link))
 
-    df <- .create_df_wndprb()
+    df <- create_df_wndprb()
 
     status <- scrape_header(contents, ret = "status")
     name <- scrape_header(contents, ret = "name")

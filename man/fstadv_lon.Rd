@@ -15,3 +15,4 @@ numeric, positive if in eastern hemisphere, negative for western.
 \description{
 Extract longitude from forecast/advisory product
 }
+\keyword{internal}

@@ -11,17 +11,17 @@ scrape_header(contents, ret = NULL)
 
 \item{ret}{Choose either status, name, adv or date to return.
 \describe{
-  \item{status}{status of cyclone (Hurricane, Tropical Storm, Subtropical 
+  \item{status}{status of cyclone (Hurricane, Tropical Storm, Subtropical
     Storm...)}
   \item{name}{return name of storm}
   \item{adv}{return advisory number}
   \item{date}{Date/Time of product issuance.}
-  \item{key}{Key, unique identifier for each storm. May not be available in 
+  \item{key}{Key, unique identifier for each storm. May not be available in
     some packages}
 }}
 }
 \value{
-Returns integer advisory number, character status or name, or date 
+Returns integer advisory number, character status or name, or date
   in \%F \%R (yyyy-mm-dd hh:mm) format, UTC time zone.
 }
 \description{
@@ -37,6 +37,7 @@ A typical header will look like this:
   NATIONAL WEATHER SERVICE MIAMI FL
   11 AM AST MON JUL 27 1998
 }
-The first three lines are irrelevant. This function is only concerned about 
+The first three lines are irrelevant. This function is only concerned about
 returning Status, Name, Advisory Number, and Date/Time values.
 }
+\keyword{internal}

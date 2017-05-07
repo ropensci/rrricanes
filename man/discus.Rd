@@ -18,9 +18,10 @@ Dataframe
 Parse storm Discussion products
 }
 \details{
-Given a direct link to a discussion product, parse and return 
+Given a direct link to a discussion product, parse and return
 dataframe of values.
 }
 \seealso{
 \code{\link{get_discus}}
 }
+\keyword{internal}

@@ -15,3 +15,4 @@ integer or NA
 \description{
 Extract wind gusts from a forecast/advisory product.
 }
+\keyword{internal}

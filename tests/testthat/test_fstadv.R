@@ -1,0 +1,129 @@
+context("Forecast/Advisory Products (fstadv)")
+
+## ---- Dataframe Skeleton -----------------------------------------------------
+#' Test structure of dataframe skeleton
+test_that("Dataframe Skeleton", {
+    df <- create_df_fstadv()
+    expect_true(is.data.frame(df))
+    expect_true(is_tibble(df))
+    expect_identical(class(df$Status), "character")
+    expect_identical(class(df$Name), "character")
+    expect_identical(class(df$Adv), "character")
+    expect_identical(class(df$Date), c("POSIXct", "POSIXt"))
+    expect_identical(class(df$Key), "character")
+    expect_identical(class(df$Lat), "numeric")
+    expect_identical(class(df$Lon), "numeric")
+    expect_identical(class(df$Wind), "numeric")
+    expect_identical(class(df$Pressure), "numeric")
+    expect_identical(class(df$PosAcc), "numeric")
+    expect_identical(class(df$FwdDir), "numeric")
+    expect_identical(class(df$FwdSpeed), "numeric")
+    expect_identical(class(df$Eye), "numeric")
+})
+
+## ---- Test get_fstadv() ------------------------------------------------------
+#' Test return of get_fstadv()
+test_that("Test get_fstadv()", {
+    url <- "http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html"
+    df <- get_fstadv(link = url)
+    expect_true(is.data.frame(df))
+    expect_true(is_tibble(df))
+    expect_identical(class(df$Status), "character")
+    expect_identical(class(df$Name), "character")
+    expect_identical(class(df$Adv), "character")
+    expect_identical(class(df$Date), c("POSIXct", "POSIXt"))
+    expect_identical(class(df$Key), "character")
+    expect_identical(class(df$Lat), "numeric")
+    expect_identical(class(df$Lon), "numeric")
+    expect_identical(class(df$Wind), "numeric")
+    expect_identical(class(df$Pressure), "numeric")
+    expect_identical(class(df$PosAcc), "numeric")
+    expect_identical(class(df$FwdDir), "numeric")
+    expect_identical(class(df$FwdSpeed), "numeric")
+    expect_identical(class(df$Eye), "numeric")
+    expect_identical(dim(df), as.integer(c(25, 14)))
+})
+
+## ---- Test fstadv() ----------------------------------------------------------
+#' Test return of fstadv()
+test_that("Test fstadv()", {
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+    df <- fstadv(link = url)
+    expect_identical(df$Status[1], "Tropical Depression")
+    expect_identical(df$Name[1], "One")
+    expect_identical(df$Adv[1], "1")
+    expect_identical(df$Date[1], as.POSIXct("1998-07-27 15:00:00", tz = "UTC"))
+    expect_identical(df$Key[1], "AL011998")
+    expect_identical(df$Lat, 11.5)
+    expect_identical(df$Lon, -27.0)
+    expect_identical(df$Wind, 25)
+    expect_identical(df$Pressure, 1008)
+    expect_identical(df$PosAcc, 50)
+    expect_identical(df$FwdDir, 280)
+    expect_identical(df$FwdSpeed, 20)
+    expect_identical(is.na(df$Eye), TRUE)
+})
+
+## ---- Lat --------------------------------------------------------------------
+test_that("Lat", {
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+    expect_identical(fstadv_lat(scrape_contents(url)), 11.5)
+})
+
+## ---- Lon --------------------------------------------------------------------
+test_that("Lon", {
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+    expect_identical(fstadv_lon(scrape_contents(url)), -27.0)
+})
+
+## ---- Wind -------------------------------------------------------------------
+test_that("Wind", {
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+    expect_identical(fstadv_winds(scrape_contents(url)), 25)
+})
+
+## ---- Gust -------------------------------------------------------------------
+test_that("Gust", {
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+    expect_identical(fstadv_gusts(scrape_contents(url)), 35)
+})
+
+## ---- Pressure ---------------------------------------------------------------
+test_that("Pressure", {
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+    expect_identical(fstadv_pressure(scrape_contents(url)), 1008)
+})
+
+## ---- PosAcc -----------------------------------------------------------------
+test_that("PosAcc", {
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+    expect_identical(fstadv_pos_accuracy(scrape_contents(url)), 50)
+})
+
+## ---- FwdDir -----------------------------------------------------------------
+test_that("FwdDir", {
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+    expect_identical(fstadv_fwd_dir(scrape_contents(url)), 280)
+})
+
+## ---- FwdSpeed ---------------------------------------------------------------
+test_that("FwdSpeed", {
+    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+    expect_identical(fstadv_fwd_speed(scrape_contents(url)), 20)
+})
+
+## ---- Eye --------------------------------------------------------------------
+test_that("Eye", {
+    ## ---- * 1998, Hurricane Bonnie, Forecast/Advisory 11
+    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0298.011"
+    expect_identical(fstadv_eye(scrape_contents(url)), 25)
+})

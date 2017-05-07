@@ -18,9 +18,10 @@ Dataframe
 Parse Public Advisory products
 }
 \details{
-Given a direct link to a public advisory product, parse and return 
+Given a direct link to a public advisory product, parse and return
 dataframe of values.
 }
 \seealso{
 \code{\link{get_public}}
 }
+\keyword{internal}
