@@ -1,9 +1,9 @@
-#' @title create_df_updates
-#' @description Template for cyclone updates dataframe
+#' @title create_df_update
+#' @description Template for cyclone update dataframe
 #' @return empty dataframe
-#' @seealso \code{\link{get_updates}}
+#' @seealso \code{\link{get_update}}
 #' @keywords internal
-create_df_updates <- function() {
+create_df_update <- function() {
     df <- tibble::data_frame("Status" = character(),
                              "Name" = character(),
                              # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
@@ -14,7 +14,7 @@ create_df_updates <- function() {
     return(df)
 }
 
-#' @title get_updates
+#' @title get_update
 #' @description Return dataframe of cyclone update data.
 #' \describe{
 #'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
@@ -26,9 +26,9 @@ create_df_updates <- function() {
 #' }
 #' @param link URL to storm's archive page.
 #' @param msg Show link being worked. Default, FALSE.
-#' @seealso \code{\link{get_storms}}, \code{\link{updates}}
+#' @seealso \code{\link{get_storms}}, \code{\link{update}}
 #' @export
-get_updates <- function(link, msg = FALSE) {
+get_update <- function(link, msg = FALSE) {
 
     # Check status of link(s)
     valid.link <- sapply(link, status)
@@ -38,31 +38,31 @@ get_updates <- function(link, msg = FALSE) {
 
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.updates <- purrr::map(filter_updates(products), updates)
+    products.update <- purrr::map(filter_update(products), update)
 
-    updates <- purrr::map_df(products.updates, dplyr::bind_rows)
+    update <- purrr::map_df(products.update, dplyr::bind_rows)
 
-    return(updates)
+    return(update)
 }
 
-#' @title updates
+#' @title update
 #' @description Parse cyclone update products
 #' @details Given a direct link to a cyclone update product, parse and return
 #' dataframe of values.
-#' @param link Link to a storm's specific updates advisory product.
+#' @param link Link to a storm's specific update advisory product.
 #' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
-#' @seealso \code{\link{get_updates}}
+#' @seealso \code{\link{get_update}}
 #' @keywords internal
-updates <- function(link, msg = FALSE) {
+update <- function(link, msg = FALSE) {
 
     contents <- scrape_contents(link, msg = msg)
 
-    # Make sure this is a updates advisory product
+    # Make sure this is a update advisory product
     if (!any(stringr::str_count(contents, c("MIATCUAT", "MIATCUEP"))))
         stop(sprintf("Invalid Cyclone Update link. %s", link))
 
-    df <- create_df_updates()
+    df <- create_df_update()
 
     status <- scrape_header(contents, ret = "status")
     name <- scrape_header(contents, ret = "name")

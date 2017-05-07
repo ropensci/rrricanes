@@ -1,9 +1,9 @@
-context("Updates (updates)")
+context("Update (update)")
 
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton
 test_that("Dataframe Skeleton", {
-    df <- create_df_updates()
+    df <- create_df_update()
     expect_true(is.data.frame(df))
     expect_true(is_tibble(df))
     expect_identical(class(df$Status), "character")
