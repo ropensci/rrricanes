@@ -286,7 +286,7 @@ scrape_name <- function(header) {
     # Because status returns toproper() string, have to convert toupper() for
     # pattern match.
     ptn <- paste0(toupper(status), "[:blank:]([[:alpha:]-]*)[:blank:]")
-    name <- toproper(trimws(stringr::str_match(header, ptn)[,2]))
+    name <- stringr::str_to_title(trimws(stringr::str_match(header, ptn)[,2]))
     return(name)
 }
 
@@ -304,6 +304,6 @@ scrape_status <- function(header) {
     if (!any(stringr::str_count(header, paste(options, sep = "|"))))
         stop(sprintf("Options not in header. %s", header))
     ptn <- paste(options, collapse = "|")
-    status <- toproper(trimws(stringr::str_extract(header, ptn)))
+    status <- stringr::str_to_title(trimws(stringr::str_extract(header, ptn)))
     return(status)
 }

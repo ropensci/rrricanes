@@ -39,7 +39,7 @@ test_that("Status", {
     ## ---- * Tropical Storm Arlene, Forecast/Advisory 9
     url <- "http://www.nhc.noaa.gov/archive/2017/al01/al012017.fstadv.009.shtml?"
     expect_identical(scrape_header(scrape_contents(link = url), ret = "status"),
-                     "Post-tropical Cyclone")
+                     "Post-Tropical Cyclone")
 })
 
 ## ---- Name -------------------------------------------------------------------
@@ -51,7 +51,7 @@ test_that("Name", {
     ## ---- * Tropical Storm Agatha, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MEP0198.001"
     expect_identical(scrape_header(scrape_contents(link = url), ret = "name"),
-                     "One-e")
+                     "One-E")
     ## ---- * Tropical Storm Katrina, Forecast/Advisory 1
     url <- "http://www.nhc.noaa.gov/archive/1999/mar/MAL1599.001.html"
     expect_identical(scrape_header(scrape_contents(link = url), ret = "name"),

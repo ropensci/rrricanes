@@ -97,7 +97,7 @@ extract_storms <- function(basin, link) {
     }
 
     # Make names proper case
-    col.names <- purrr::map_chr(col.names, toproper)
+    col.names <- purrr::map_chr(col.names, stringr::str_to_title)
 
     df <- tibble::add_row(df,
                           Year = year,

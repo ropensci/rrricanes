@@ -28,14 +28,6 @@ test_that("Month Abbreviated String to Number Error", {
                  "JANN is not a valid month abbreviation")
 })
 
-## ---- toproper() -------------------------------------------------------------
-test_that("To Proper Case", {
-    expect_identical(toproper("TROPICAL STORM ALEX"), "Tropical Storm Alex")
-    expect_identical(toproper("TROPICAL STORM ALEX", strict = FALSE),
-                     "TROPICAL STORM ALEX")
-})
-
-
 ## ---- convert_lat_lon() ------------------------------------------------------
 test_that("Convert Latitude, Longitude", {
     expect_identical(convert_lat_lon(93.1, "N"), as.numeric(93.1))

@@ -88,7 +88,7 @@ mb_to_in <- function(x) {
 #' @return numeric 1-12
 #' @keywords internal
 month_str_to_num <- function(m) {
-    abbr <- which(month.abb == toproper(m))
+    abbr <- which(month.abb == stringr::str_to_title(m))
     if (purrr::is_empty(abbr))
         stop(sprintf("%s is not a valid month abbreviation.", m))
     return(abbr)
@@ -109,27 +109,6 @@ status <- function(u) {
         warning(sprintf("URL unavailable. %s", u))
         return(NA)
     }
-}
-
-#' @title toproper
-#' @description Convert a string to proper case.
-#' @details Taken from \code{\link{chartr}} examples in base R. Will take a
-#'   phrase or, in the case of this project, full name and status of a cyclone,
-#'   e.g., "TROPICAL STORM ALEX" and return "Tropical Storm Alex".
-#' @param s Word or phrase to translate.
-#' @param strict TRUE by default. Will convert all upper case characters to
-#'   lower case. If FALSE, no conversion will be done.
-#' @examples
-#' \dontrun{
-#'     toproper("TROPICAL STORM ALEX")
-#'     toproper("TROPICAL STORM ALEX", strict = FALSE)
-#' }
-#' @keywords internal
-toproper <- function(s, strict = TRUE) {
-    cap <- function(s) paste(toupper(substring(s, 1, 1)),
-                             {s <- substring(s, 2); if (strict) tolower(s) else s},
-                             sep = "", collapse = " " )
-    sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
 }
 
 #' @title validate_year
