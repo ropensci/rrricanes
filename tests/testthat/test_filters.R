@@ -1,6 +1,6 @@
 context("Filters")
 
-#' Filters are to help extract product URL's from a storm's archive pages. 
+#' Filters are to help extract product URL's from a storm's archive pages.
 
 test_that("Get products from storm archive", {
   # Test number of products for Katrina, 2005
@@ -17,7 +17,7 @@ test_that("Get products from storm archive", {
   expect_equal(length(filter_orig(p)), 1)
   expect_equal(length(filter_public(p)), 61)
   expect_equal(length(filter_prblty(p)), 30)
-  
+
   # Test number of products for Ike, 2008
   expect_equal(
     length(

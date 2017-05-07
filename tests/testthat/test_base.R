@@ -35,6 +35,7 @@ test_that("To Proper Case", {
                      "TROPICAL STORM ALEX")
 })
 
+
 ## ---- convert_lat_lon() ------------------------------------------------------
 test_that("Convert Latitude, Longitude", {
     expect_identical(convert_lat_lon(93.1, "N"), as.numeric(93.1))
