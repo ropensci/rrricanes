@@ -41,89 +41,105 @@ test_that("Test get_fstadv()", {
     expect_identical(class(df$FwdDir), "numeric")
     expect_identical(class(df$FwdSpeed), "numeric")
     expect_identical(class(df$Eye), "numeric")
-    expect_identical(dim(df), as.integer(c(25, 14)))
+    expect_identical(class(df$NE34), "numeric")
+    expect_identical(class(df$SE34), "numeric")
+    expect_identical(class(df$SW34), "numeric")
+    expect_identical(class(df$NW34), "numeric")
+    expect_identical(class(df$NE50), "numeric")
+    expect_identical(class(df$SE50), "numeric")
+    expect_identical(class(df$SW50), "numeric")
+    expect_identical(class(df$NW50), "numeric")
+    expect_identical(class(df$NE64), "numeric")
+    expect_identical(class(df$SE64), "numeric")
+    expect_identical(class(df$SW64), "numeric")
+    expect_identical(class(df$NW64), "numeric")
+    expect_identical(dim(df), as.integer(c(25, 26)))
 })
 
 ## ---- Test fstadv() ----------------------------------------------------------
 #' Test return of fstadv()
 test_that("Test fstadv()", {
-    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
-    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
-    df <- fstadv(link = url)
-    expect_identical(df$Status[1], "Tropical Depression")
-    expect_identical(df$Name[1], "One")
-    expect_identical(df$Adv[1], "1")
-    expect_identical(df$Date[1], as.POSIXct("1998-07-27 15:00:00", tz = "UTC"))
-    expect_identical(df$Key[1], "AL011998")
-    expect_identical(df$Lat, 11.5)
-    expect_identical(df$Lon, -27.0)
-    expect_identical(df$Wind, 25)
-    expect_identical(df$Pressure, 1008)
-    expect_identical(df$PosAcc, 50)
-    expect_identical(df$FwdDir, 280)
-    expect_identical(df$FwdSpeed, 20)
-    expect_identical(is.na(df$Eye), TRUE)
-})
-
-## ---- Lat --------------------------------------------------------------------
-test_that("Lat", {
-    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
-    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
-    expect_identical(fstadv_lat(scrape_contents(url)), 11.5)
-})
-
-## ---- Lon --------------------------------------------------------------------
-test_that("Lon", {
-    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
-    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
-    expect_identical(fstadv_lon(scrape_contents(url)), -27.0)
-})
-
-## ---- Wind -------------------------------------------------------------------
-test_that("Wind", {
-    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
-    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
-    expect_identical(fstadv_winds(scrape_contents(url)), 25)
-})
-
-## ---- Gust -------------------------------------------------------------------
-test_that("Gust", {
-    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
-    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
-    expect_identical(fstadv_gusts(scrape_contents(url)), 35)
-})
-
-## ---- Pressure ---------------------------------------------------------------
-test_that("Pressure", {
-    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
-    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
-    expect_identical(fstadv_pressure(scrape_contents(url)), 1008)
-})
-
-## ---- PosAcc -----------------------------------------------------------------
-test_that("PosAcc", {
-    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
-    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
-    expect_identical(fstadv_pos_accuracy(scrape_contents(url)), 50)
-})
-
-## ---- FwdDir -----------------------------------------------------------------
-test_that("FwdDir", {
-    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
-    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
-    expect_identical(fstadv_fwd_dir(scrape_contents(url)), 280)
-})
-
-## ---- FwdSpeed ---------------------------------------------------------------
-test_that("FwdSpeed", {
-    ## ---- * 1998, Tropical Storm Alex, Forecast/Advisory 1
-    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
-    expect_identical(fstadv_fwd_speed(scrape_contents(url)), 20)
-})
-
-## ---- Eye --------------------------------------------------------------------
-test_that("Eye", {
-    ## ---- * 1998, Hurricane Bonnie, Forecast/Advisory 11
-    url <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0298.011"
-    expect_identical(fstadv_eye(scrape_contents(url)), 25)
+    # Pre-load dataframes
+    url.al011998.01 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+    df.al011998.01 <- fstadv(link = url.al011998.01)
+    url.al011998.07 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.007"
+    df.al011998.07 <- fstadv(link = url.al011998.07)
+    url.al021998.08 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0298.008"
+    df.al021998.08 <- fstadv(link = url.al021998.08)
+    url.al021998.11 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0298.011"
+    df.al021998.11 <- fstadv(link = url.al021998.11)
+    ## ---- * Status -----------------------------------------------------------
+    expect_identical(df.al011998.01$Status[1], "Tropical Depression")
+    ## ---- * Name -------------------------------------------------------------
+    expect_identical(df.al011998.01$Name[1], "One")
+    ## ---- * Advisory ---------------------------------------------------------
+    expect_identical(df.al011998.01$Adv[1], "1")
+    ## ---- * Date -------------------------------------------------------------
+    expect_identical(df.al011998.01$Date[1], as.POSIXct("1998-07-27 15:00:00", tz = "UTC"))
+    ## ---- * Key --------------------------------------------------------------
+    expect_identical(df.al011998.01$Key[1], "AL011998")
+    ## ---- * Lat --------------------------------------------------------------
+    expect_identical(df.al011998.01$Lat, 11.5)
+    ## ---- * Lon --------------------------------------------------------------
+    expect_identical(df.al011998.01$Lon, -27.0)
+    ## ---- * Wind -------------------------------------------------------------
+    expect_identical(df.al011998.01$Wind, 25)
+    ## ---- * Pressure ---------------------------------------------------------
+    expect_identical(df.al011998.01$Pressure, 1008)
+    ## ---- * PosAcc -----------------------------------------------------------
+    expect_identical(df.al011998.01$PosAcc, 50)
+    ## ---- * FwdDir -----------------------------------------------------------
+    expect_identical(df.al011998.01$FwdDir, 280)
+    ## ---- * FwdSpeed --------------------------------------------------------
+    expect_identical(df.al011998.01$FwdSpeed, 20)
+    ## ---- * Eye --------------------------------------------------------------
+    expect_identical(is.na(df.al011998.01$Eye), TRUE)
+    ## ---- * NE34 -------------------------------------------------------------
+    expect_identical(df.al011998.01$NE34, as.numeric(NA))
+    expect_identical(df.al011998.07$NE34, 100)
+    expect_identical(df.al021998.08$NE34, 125)
+    expect_identical(df.al021998.11$NE34, 150)
+    ## ---- * SE34 -------------------------------------------------------------
+    expect_identical(df.al011998.01$SE34, as.numeric(NA))
+    expect_identical(df.al011998.07$SE34, 50)
+    expect_identical(df.al021998.08$SE34, 25)
+    expect_identical(df.al021998.11$SE34, 50)
+    ## ---- * SW34 -------------------------------------------------------------
+    expect_identical(df.al011998.01$SW34, as.numeric(NA))
+    expect_identical(df.al011998.07$SW34, 50)
+    expect_identical(df.al021998.08$SW34, 25)
+    expect_identical(df.al021998.11$SW34, 50)
+    ## ---- * NW34 -------------------------------------------------------------
+    expect_identical(df.al011998.01$NW34, as.numeric(NA))
+    expect_identical(df.al011998.07$NW34, 100)
+    expect_identical(df.al021998.08$NW34, 125)
+    expect_identical(df.al021998.11$NW34, 150)
+    ## ---- * NE50 -------------------------------------------------------------
+    expect_identical(df.al011998.01$NE50, as.numeric(NA))
+    expect_identical(df.al021998.08$NE50, 30)
+    expect_identical(df.al021998.11$NE50, 75)
+    ## ---- * SE50 -------------------------------------------------------------
+    expect_identical(df.al011998.01$SE50, as.numeric(NA))
+    expect_identical(df.al021998.08$SE50, 0)
+    expect_identical(df.al021998.11$SE50, 25)
+    ## ---- * SW50 -------------------------------------------------------------
+    expect_identical(df.al011998.01$SW50, as.numeric(NA))
+    expect_identical(df.al021998.08$SW50, 0)
+    expect_identical(df.al021998.11$SW50, 25)
+    ## ---- * NW50 -------------------------------------------------------------
+    expect_identical(df.al011998.01$NW50, as.numeric(NA))
+    expect_identical(df.al021998.08$NW50, 30)
+    expect_identical(df.al021998.11$NW50, 50)
+    ## ---- * NE64 -------------------------------------------------------------
+    expect_identical(df.al011998.01$NE64, as.numeric(NA))
+    expect_identical(df.al021998.11$NE64, 30)
+    ## ---- * SE64 -------------------------------------------------------------
+    expect_identical(df.al011998.01$SE64, as.numeric(NA))
+    expect_identical(df.al021998.11$SE64, 0)
+    ## ---- * SW64 -------------------------------------------------------------
+    expect_identical(df.al011998.01$SW64, as.numeric(NA))
+    expect_identical(df.al021998.11$SW64, 0)
+    ## ---- * NW64 -------------------------------------------------------------
+    expect_identical(df.al011998.01$NW64, as.numeric(NA))
+    expect_identical(df.al021998.11$NW64, 30)
 })
