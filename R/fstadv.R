@@ -109,10 +109,9 @@ fstadv <- function(link, msg = FALSE) {
     wind_radius <- fstadv_wind_radius(contents, key, adv, date, wind)
 
     # Add current sea radius
+    seas <- fstadv_seas(contents, key, adv, date, wind)
 
-    # Add forecast positions
-
-    # Add forecast wind radius
+    # Add forecast positions and wind radii
 
     df <- df %>%
         tibble::add_row("Status" = status,
@@ -129,9 +128,18 @@ fstadv <- function(link, msg = FALSE) {
                         'FwdDir' = fwd_dir,
                         'FwdSpeed' = fwd_speed,
                         'Eye' = eye)
-    # Bind wind_radius
-    df <- dplyr::left_join(df, wind_radius,
-                           by = c("Key" = "Key", "Adv" = "Adv", "Date" = "Date"))
+
+    # Bind wind_radius and seas
+    df <- df %>%
+        dplyr::left_join(wind_radius,
+                         by = c("Key" = "Key",
+                                "Adv" = "Adv",
+                                "Date" = "Date")) %>%
+        dplyr::left_join(seas,
+                         by = c("Key" = "Key",
+                                "Adv" = "Adv",
+                                "Date" = "Date"))
+
     return(df)
 }
 
@@ -296,6 +304,62 @@ fstadv_lat_lon <- function(contents, what = NULL) {
 fstadv_lon <- function(contents) {
     lon <- fstadv_lat_lon(contents, what = 'lon')
     return(lon)
+}
+
+#' @title fstadv_seas
+#' @description There is only one line of sea data, 12FT seas in each quadrant. So this
+#'   should go easier than the wind fields
+#' @param content text of product
+#' @return boolean
+fstadv_seas <- function(content, key, adv, date, wind) {
+
+    # 12 FT SEAS..125NE  90SE  90SW 175NW.
+    ptn <- paste0('12 FT SEAS[\\.[:blank:]]+',
+                  '([0-9]{1,3})NE',
+                  '[ ]+([0-9]{1,3})SE',
+                  '[ ]+([0-9]{1,3})SW',
+                  '[ ]+([0-9]{1,3})NW')
+
+    x <- stringr::str_match_all(content, ptn)
+
+    # If there is Seas data, continue, otherwise ignore
+    if (length(x[[1]]) > 0) {
+
+        # Load into dataframe and get advisory's Key, Adv and ObDate
+        #    tmp <- as.data.frame(x[[1]][,2:5])
+        df_seas <- tibble::as_data_frame(x[[1]])
+        df_seas$Key = key
+        df_seas$Adv = adv
+        df_seas$Date = date
+
+        # Rename V2:V5
+        df_seas <- df_seas %>%
+            dplyr::rename(SeasNE = V2,
+                          SeasSE = V3,
+                          SeasSW = V4,
+                          SeasNW = V5)
+
+        df_seas <- df_seas %>%
+            dplyr::select(Key, Adv, Date, SeasNE, SeasSE, SeasSW, SeasNW)
+
+        # Reclass vars
+        df_seas$SeasNE <- as.numeric(df_seas$SeasNE)
+        df_seas$SeasSE <- as.numeric(df_seas$SeasSE)
+        df_seas$SeasSW <- as.numeric(df_seas$SeasSW)
+        df_seas$SeasNW <- as.numeric(df_seas$SeasNW)
+
+    } else {
+        df_seas <- tibble::tibble("Key" = key,
+                                  "Adv" = adv,
+                                  "Date" = date,
+                                  "SeasNE" = NA,
+                                  "SeasSE" = NA,
+                                  "SeasSW" = NA,
+                                  "SeasNW" = NA)
+    }
+
+    return(df_seas)
+
 }
 
 #' @title fstadv_wind_radius

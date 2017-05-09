@@ -1,5 +1,17 @@
 context("Forecast/Advisory Products (fstadv)")
 
+# Pre-load dataframes
+url.al011998 <- "http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html"
+df.al011998 <- get_fstadv(link = url.al011998)
+url.al011998.01 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
+df.al011998.01 <- fstadv(link = url.al011998.01)
+url.al011998.07 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.007"
+df.al011998.07 <- fstadv(link = url.al011998.07)
+url.al021998.08 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0298.008"
+df.al021998.08 <- fstadv(link = url.al021998.08)
+url.al021998.11 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0298.011"
+df.al021998.11 <- fstadv(link = url.al021998.11)
+
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton
 test_that("Dataframe Skeleton", {
@@ -24,50 +36,43 @@ test_that("Dataframe Skeleton", {
 ## ---- Test get_fstadv() ------------------------------------------------------
 #' Test return of get_fstadv()
 test_that("Test get_fstadv()", {
-    url <- "http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html"
-    df <- get_fstadv(link = url)
-    expect_true(is.data.frame(df))
-    expect_true(tibble::is_tibble(df))
-    expect_identical(class(df$Status), "character")
-    expect_identical(class(df$Name), "character")
-    expect_identical(class(df$Adv), "character")
-    expect_identical(class(df$Date), c("POSIXct", "POSIXt"))
-    expect_identical(class(df$Key), "character")
-    expect_identical(class(df$Lat), "numeric")
-    expect_identical(class(df$Lon), "numeric")
-    expect_identical(class(df$Wind), "numeric")
-    expect_identical(class(df$Pressure), "numeric")
-    expect_identical(class(df$PosAcc), "numeric")
-    expect_identical(class(df$FwdDir), "numeric")
-    expect_identical(class(df$FwdSpeed), "numeric")
-    expect_identical(class(df$Eye), "numeric")
-    expect_identical(class(df$NE34), "numeric")
-    expect_identical(class(df$SE34), "numeric")
-    expect_identical(class(df$SW34), "numeric")
-    expect_identical(class(df$NW34), "numeric")
-    expect_identical(class(df$NE50), "numeric")
-    expect_identical(class(df$SE50), "numeric")
-    expect_identical(class(df$SW50), "numeric")
-    expect_identical(class(df$NW50), "numeric")
-    expect_identical(class(df$NE64), "numeric")
-    expect_identical(class(df$SE64), "numeric")
-    expect_identical(class(df$SW64), "numeric")
-    expect_identical(class(df$NW64), "numeric")
-    expect_identical(dim(df), as.integer(c(25, 26)))
+    expect_true(is.data.frame(df.al011998))
+    expect_true(tibble::is_tibble(df.al011998))
+    expect_identical(class(df.al011998$Status), "character")
+    expect_identical(class(df.al011998$Name), "character")
+    expect_identical(class(df.al011998$Adv), "character")
+    expect_identical(class(df.al011998$Date), c("POSIXct", "POSIXt"))
+    expect_identical(class(df.al011998$Key), "character")
+    expect_identical(class(df.al011998$Lat), "numeric")
+    expect_identical(class(df.al011998$Lon), "numeric")
+    expect_identical(class(df.al011998$Wind), "numeric")
+    expect_identical(class(df.al011998$Pressure), "numeric")
+    expect_identical(class(df.al011998$PosAcc), "numeric")
+    expect_identical(class(df.al011998$FwdDir), "numeric")
+    expect_identical(class(df.al011998$FwdSpeed), "numeric")
+    expect_identical(class(df.al011998$Eye), "numeric")
+    expect_identical(class(df.al011998$NE34), "numeric")
+    expect_identical(class(df.al011998$SE34), "numeric")
+    expect_identical(class(df.al011998$SW34), "numeric")
+    expect_identical(class(df.al011998$NW34), "numeric")
+    expect_identical(class(df.al011998$NE50), "numeric")
+    expect_identical(class(df.al011998$SE50), "numeric")
+    expect_identical(class(df.al011998$SW50), "numeric")
+    expect_identical(class(df.al011998$NW50), "numeric")
+    expect_identical(class(df.al011998$NE64), "numeric")
+    expect_identical(class(df.al011998$SE64), "numeric")
+    expect_identical(class(df.al011998$SW64), "numeric")
+    expect_identical(class(df.al011998$NW64), "numeric")
+    expect_identical(class(df.al011998$SeasNE), "numeric")
+    expect_identical(class(df.al011998$SeasSE), "numeric")
+    expect_identical(class(df.al011998$SeasSW), "numeric")
+    expect_identical(class(df.al011998$SeasNW), "numeric")
+    expect_identical(dim(df.al011998), as.integer(c(25, 30)))
 })
 
 ## ---- Test fstadv() ----------------------------------------------------------
 #' Test return of fstadv()
 test_that("Test fstadv()", {
-    # Pre-load dataframes
-    url.al011998.01 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.001"
-    df.al011998.01 <- fstadv(link = url.al011998.01)
-    url.al011998.07 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0198.007"
-    df.al011998.07 <- fstadv(link = url.al011998.07)
-    url.al021998.08 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0298.008"
-    df.al021998.08 <- fstadv(link = url.al021998.08)
-    url.al021998.11 <- "http://www.nhc.noaa.gov/archive/1998/archive/mar/MAL0298.011"
-    df.al021998.11 <- fstadv(link = url.al021998.11)
     ## ---- * Status -----------------------------------------------------------
     expect_identical(df.al011998.01$Status[1], "Tropical Depression")
     ## ---- * Name -------------------------------------------------------------
@@ -142,4 +147,13 @@ test_that("Test fstadv()", {
     ## ---- * NW64 -------------------------------------------------------------
     expect_identical(df.al011998.01$NW64, as.numeric(NA))
     expect_identical(df.al021998.11$NW64, 30)
+    ## ---- * SeasNE -----------------------------------------------------------
+    expect_identical(df.al011998.07$SeasNE, 100)
+    ## ---- * SeasSE -----------------------------------------------------------
+    expect_identical(df.al011998.07$SeasSE, 50)
+    ## ---- * SeasSW -----------------------------------------------------------
+    expect_identical(df.al011998.07$SeasSW, 50)
+    ## ---- * SeasNW -----------------------------------------------------------
+    expect_identical(df.al011998.07$SeasNW, 100)
 })
+
