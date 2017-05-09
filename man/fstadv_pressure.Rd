@@ -13,6 +13,7 @@ fstadv_pressure(contents)
 numeric
 }
 \description{
-Return current minimum central pressure of storm in millibars (mb)
+Return current minimum central pressure of storm in
+    millibars (mb)
 }
 \keyword{internal}

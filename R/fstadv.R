@@ -6,7 +6,8 @@
 create_df_fstadv <- function() {
     df <- tibble::data_frame("Status" = character(),
                              "Name" = character(),
-                             # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                             # Allow for intermediate advisories,
+                             # i.e., "1A", "2", "2A"...
                              "Adv" = character(),
                              "Date" = as.POSIXct(character(), tz = "UTC"),
                              "Key" = character(),
@@ -66,8 +67,12 @@ get_fstadv <- function(link, msg = FALSE) {
 #'   \item{Gust}{Current maximum wind gusts in knots.}
 #'   \item{Pressure}{Central barometric pressure in millibars.}
 #'   \item{PosAcc}{Position accuracy of storm in nautical miles.}
-#'   \item{FwdDir}{Forward direction of storm on a compass scale (0-359 or NA).}
-#'   \item{FwdSpeed}{Forward speed of storm in knots or NA if stationary/drifting.}
+#'   \item{FwdDir}{
+#'       Forward direction of storm on a compass scale (0-359 or NA).
+#'   }
+#'   \item{FwdSpeed}{
+#'       Forward speed of storm in knots or NA if stationary/drifting.
+#'   }
 #'   \item{Eye}{Size of the eye in nautical miles, if available, or NA.}
 #' }
 #' @param link URL of a specific FORECAST/ADVISORY product
@@ -167,7 +172,8 @@ fstadv_fwd_dir <- function(contents) {
 #' @keywords internal
 fstadv_fwd_mvmt <- function(contents, what = NULL) {
 
-    if (!is.character(what)) {stop('\'what\' must contain \'fwd_dir\' or \'fwd_speed\'')}
+    if (!is.character(what))
+        stop('\'what\' must contain \'fwd_dir\' or \'fwd_speed\'')
 
     ptn <- paste0('PRESENT MOVEMENT TOWARD[A-Z- ]+',
                   '([0-9]{1,3})', # Forward direction
@@ -220,7 +226,8 @@ fstadv_pos_accuracy <- function(contents) {
 }
 
 #' @title fstadv_pressure
-#' @description Return current minimum central pressure of storm in millibars (mb)
+#' @description Return current minimum central pressure of storm in
+#'     millibars (mb)
 #' @param contents text contents of FORECAST/ADVISORY product
 #' @return numeric
 #' @keywords internal
@@ -245,7 +252,8 @@ fstadv_lat <- function(contents) {
 }
 
 #' @title fstadv_lat_lon
-#' @description Returns numeric for latitude or longitude; negative if in southern or eastern hemisphere
+#' @description Returns numeric for latitude or longitude; negative if in
+#'     southern or eastern hemisphere
 #' @details Helper function to take character latitude or longitude and,
 #' depending on the value of hemisphere return a positive or negative numeric,
 #' or NA if not found.
@@ -380,7 +388,8 @@ fstadv_winds <- function(contents) {
 #' @keywords internal
 fstadv_winds_gusts <- function(contents, what = NULL) {
 
-    if (!is.character(what)) {stop('\'what\' must contain \'wind\' or \'gust\'')}
+    if (!is.character(what))
+        stop('\'what\' must contain \'wind\' or \'gust\'')
 
     ptn <- paste0('MAX SUSTAINED WINDS[ ]+',
                   '([0-9]{2,3})', # Winds
