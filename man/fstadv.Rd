@@ -35,8 +35,12 @@ return dataframe of values.
   \item{Gust}{Current maximum wind gusts in knots.}
   \item{Pressure}{Central barometric pressure in millibars.}
   \item{PosAcc}{Position accuracy of storm in nautical miles.}
-  \item{FwdDir}{Forward direction of storm on a compass scale (0-359 or NA).}
-  \item{FwdSpeed}{Forward speed of storm in knots or NA if stationary/drifting.}
+  \item{FwdDir}{
+      Forward direction of storm on a compass scale (0-359 or NA).
+  }
+  \item{FwdSpeed}{
+      Forward speed of storm in knots or NA if stationary/drifting.
+  }
   \item{Eye}{Size of the eye in nautical miles, if available, or NA.}
 }
 }

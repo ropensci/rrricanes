@@ -6,7 +6,8 @@
 create_df_fstadv <- function() {
     df <- tibble::data_frame("Status" = character(),
                              "Name" = character(),
-                             # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                             # Allow for intermediate advisories,
+                             # i.e., "1A", "2", "2A"...
                              "Adv" = character(),
                              "Date" = as.POSIXct(character(), tz = "UTC"),
                              "Key" = character(),
@@ -66,8 +67,12 @@ get_fstadv <- function(link, msg = FALSE) {
 #'   \item{Gust}{Current maximum wind gusts in knots.}
 #'   \item{Pressure}{Central barometric pressure in millibars.}
 #'   \item{PosAcc}{Position accuracy of storm in nautical miles.}
-#'   \item{FwdDir}{Forward direction of storm on a compass scale (0-359 or NA).}
-#'   \item{FwdSpeed}{Forward speed of storm in knots or NA if stationary/drifting.}
+#'   \item{FwdDir}{
+#'       Forward direction of storm on a compass scale (0-359 or NA).
+#'   }
+#'   \item{FwdSpeed}{
+#'       Forward speed of storm in knots or NA if stationary/drifting.
+#'   }
 #'   \item{Eye}{Size of the eye in nautical miles, if available, or NA.}
 #' }
 #' @param link URL of a specific FORECAST/ADVISORY product
@@ -100,6 +105,15 @@ fstadv <- function(link, msg = FALSE) {
     wind <- fstadv_winds(contents)
     gust <- fstadv_gusts(contents)
 
+    # Add current wind radius
+    wind_radius <- fstadv_wind_radius(contents, key, adv, date, wind)
+
+    # Add current sea radius
+
+    # Add forecast positions
+
+    # Add forecast wind radius
+
     df <- df %>%
         tibble::add_row("Status" = status,
                         "Name" = name,
@@ -115,7 +129,9 @@ fstadv <- function(link, msg = FALSE) {
                         'FwdDir' = fwd_dir,
                         'FwdSpeed' = fwd_speed,
                         'Eye' = eye)
-
+    # Bind wind_radius
+    df <- dplyr::left_join(df, wind_radius,
+                           by = c("Key" = "Key", "Adv" = "Adv", "Date" = "Date"))
     return(df)
 }
 
@@ -156,7 +172,8 @@ fstadv_fwd_dir <- function(contents) {
 #' @keywords internal
 fstadv_fwd_mvmt <- function(contents, what = NULL) {
 
-    if (!is.character(what)) {stop('\'what\' must contain \'fwd_dir\' or \'fwd_speed\'')}
+    if (!is.character(what))
+        stop('\'what\' must contain \'fwd_dir\' or \'fwd_speed\'')
 
     ptn <- paste0('PRESENT MOVEMENT TOWARD[A-Z- ]+',
                   '([0-9]{1,3})', # Forward direction
@@ -209,7 +226,8 @@ fstadv_pos_accuracy <- function(contents) {
 }
 
 #' @title fstadv_pressure
-#' @description Return current minimum central pressure of storm in millibars (mb)
+#' @description Return current minimum central pressure of storm in
+#'     millibars (mb)
 #' @param contents text contents of FORECAST/ADVISORY product
 #' @return numeric
 #' @keywords internal
@@ -234,7 +252,8 @@ fstadv_lat <- function(contents) {
 }
 
 #' @title fstadv_lat_lon
-#' @description Returns numeric for latitude or longitude; negative if in southern or eastern hemisphere
+#' @description Returns numeric for latitude or longitude; negative if in
+#'     southern or eastern hemisphere
 #' @details Helper function to take character latitude or longitude and,
 #' depending on the value of hemisphere return a positive or negative numeric,
 #' or NA if not found.
@@ -279,6 +298,78 @@ fstadv_lon <- function(contents) {
     return(lon)
 }
 
+#' @title fstadv_wind_radius
+#' @description Parse wind radius data from product, if exists. This is somewhat tricky as the
+#'   wind fields are 64KT, 50KT and 34KT and are listed in descending order. So,
+#'   the first line will not always be 64KT, 50KT or even 34KT depending on
+#'   strength of storm. What I do here is just extract the entire blob and work
+#'   through it. I'll continue to look for ways to improve it.
+#'
+#' Complimentary to fstadv_get_wind_radius
+#'
+#' @param contents text of product
+#' @return dataframe
+#' @keywords internal
+fstadv_wind_radius <- function(content, key, adv, date, wind) {
+
+    ptn <- paste0("MAX SUSTAINED WINDS",
+                  "[[:blank:][:digit:]]+KT ",
+                  "WITH GUSTS TO[[:blank:][:digit:]]+KT",
+                  "[\\.[:space:]]*([A-Z0-9\\. \n]+)12 FT SEAS")
+
+    # Do some reformatting to make extraction easier
+    a <- stringr::str_replace_all(content, '\n \n', '\t')
+    b <- stringr::str_replace_all(a, '\n', ' ')
+    c <- stringr::str_replace_all(b, '\t', '\n')
+    d <- stringr::str_replace_all(c, '\\.\\.\\.', ' ')
+    e <- unlist(stringr::str_match_all(d, ptn))
+    # Isolate on key 2
+    f <- stringr::str_replace_all(e[2], '\\.', '')
+    g <- stringr::str_replace_all(f, '[KT|NE|SE|SW|NW]', '')
+    h <- stringr::str_replace_all(trimws(g), '[ ]+', '\t')
+
+    # move to dataframe
+    df <- data.frame('text' = h)
+
+    # split out df$text with generic cols for now.
+    df <- df %>%
+        tidyr::separate(text, into = c(paste0('x', c(1:15))), sep = '\t',
+                        fill = 'right') # Suppress warnings
+
+    df[,1:15] <- as.numeric(df[,1:15])
+
+    # The wind fields vary in order with the strongest always being listed
+    # first. So 64kt wind field will always be above the 50kt wind field. But
+    # if a storm does not have 64 kt winds then 50 kt will be listed first. The
+    # easiest way I can think to do this is with if/else statements. This whole
+    # function needs to be written anyway. Consider it all brute-force for now.
+    # Keep 64kt winds on the left, 50kt in the middle, 34kt on the right.
+    if (is.na(wind)) {
+        df <- df
+    } else if (wind >= 64) {
+        df <- df[,c(11:15, 6:10, 1:5)]
+    } else if (wind >= 50) {
+        df <- df[,c(6:10, 1:5, 11:15)]
+    } else if (wind >= 34) {
+        df <- df[,c(1:5, 11:15, 6:10)]
+    }
+
+    # Add vars to df
+    df$Key = key
+    df$Adv = adv
+    df$Date = date
+
+    names(df) <- c("WindField34", "NE34", "SE34", "SW34", "NW34",
+                   "WindField50", "NE50", "SE50", "SW50", "NW50",
+                   "WindField64", "NE64", "SE64", "SW64", "NW64",
+                   "Key", "Adv", "Date")
+
+    df <- df %>% dplyr::select(-WindField34, -WindField50, -WindField64)
+
+    return(df)
+
+}
+
 #' @title fstadv_winds
 #' @description Extract current maximum sustained winds from contents
 #' @param contents text contents of FORECAST/ADVISORY product
@@ -297,7 +388,8 @@ fstadv_winds <- function(contents) {
 #' @keywords internal
 fstadv_winds_gusts <- function(contents, what = NULL) {
 
-    if (!is.character(what)) {stop('\'what\' must contain \'wind\' or \'gust\'')}
+    if (!is.character(what))
+        stop('\'what\' must contain \'wind\' or \'gust\'')
 
     ptn <- paste0('MAX SUSTAINED WINDS[ ]+',
                   '([0-9]{2,3})', # Winds
