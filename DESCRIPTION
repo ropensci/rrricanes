@@ -20,6 +20,7 @@ Imports:
   magrittr (>= 1.5)
 Suggests:
   httr, 
+  devtools, 
   knitr, 
   rmarkdown,
   testthat,
