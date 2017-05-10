@@ -219,14 +219,6 @@ fstadv <- function(link, msg = FALSE) {
     wind <- fstadv_winds(contents)
     gust <- fstadv_gusts(contents)
 
-    # Add current wind radius
-    wind_radius <- fstadv_wind_radius(contents, key, adv, date, wind)
-
-    # Add current sea radius
-    seas <- fstadv_seas(contents, key, adv, date, wind)
-
-    # Add forecast positions and wind radii
-
     df <- df %>%
         tibble::add_row("Status" = status,
                         "Name" = name,
@@ -243,16 +235,20 @@ fstadv <- function(link, msg = FALSE) {
                         'FwdSpeed' = fwd_speed,
                         'Eye' = eye)
 
-    # Bind wind_radius and seas
-    df <- df %>%
-        dplyr::left_join(wind_radius,
-                         by = c("Key" = "Key",
-                                "Adv" = "Adv",
-                                "Date" = "Date")) %>%
-        dplyr::left_join(seas,
-                         by = c("Key" = "Key",
-                                "Adv" = "Adv",
-                                "Date" = "Date"))
+    # Add current wind radius
+    wind_radius <- fstadv_wind_radius(contents, wind)
+
+    df[, names(wind_radius)] <- wind_radius[, names(wind_radius)]
+
+    # Add current sea radius
+    seas <- fstadv_seas(contents, wind)
+
+    df[, names(seas)] <- seas[, names(seas)]
+
+    # Add forecast positions and wind radii
+    forecasts <- fstadv_forecasts(contents, date)
+
+    df[, names(forecasts)] <- forecasts[, names(forecasts)]
 
     return(df)
 }
@@ -269,6 +265,229 @@ fstadv_eye <- function(contents) {
                   '[ ]+NM')
     eye <- stringr::str_match(contents, ptn)[,2]
     return(as.numeric(eye))
+}
+
+#' @title fstadv_extract_forecasts
+#' @description Extract all forecast data from FORECAST/ADVISORY product#'
+#' @param content text of FORECAST/ADVISORY product
+#' @return list of forecasts
+#' @keywords internal
+fstadv_extract_forecasts <- function(content) {
+
+    # First I want to get the groups of each FORECAST or OUTLOOK. I'll do some
+    # text manipulations to make pattern-finding easier.
+
+    # In some texts there is a space character between the returns. In others,
+    # none.
+    a <- stringr::str_replace_all(content, '\n[:blank:]*?\n', '\t')
+
+    # Now any newline characters I'll replace with a simple space
+    b <- stringr::str_replace_all(a, '[\n]{1}', ' ')
+
+    # Put the tab character back to newline
+    c <- stringr::str_replace_all(b, '\t', '\n')
+
+    # Remove any ellipses
+    d <- stringr::str_replace_all(c, '\\.\\.\\.', ' ')
+
+    # Some products have periods in them after KT or NW. Some don't. To be
+    # consistent, I'll remove them, too. But have to be careful not to remove
+    # those in Lat and Lon
+    e <- stringr::str_replace_all(d, 'KT\\.', 'KT')
+    f <- stringr::str_replace_all(e, 'NW\\.', 'NW')
+
+    # Extract all lines that begin with FORECAST VALID or OUTLOOK VALID and end
+    # with newline character
+    g <- stringr::str_match_all(f, (paste0('[:space:]*(?:FORECAST|OUTLOOK) VALID ',
+                                           '[[:alnum:] /\\.-]+')))
+
+    # at this point we *should* have all of our forecasts.
+    h <- unlist(g)
+
+    # Replace any extra verbiage like INLAND or EXTRATROPICAL
+    i <- stringr::str_replace_all(h, '([E|W])[A-Z ]+(MAX WIND)', '\\1 \\2')
+
+    return(i)
+
+}
+
+#' @title fstadv_fcst
+#' @description Retrieve forecast data from FORECAST/ADVISORY products. Loads into
+#'   respective dataframes (df_forecasts, df_forecast_winds)
+#' @param content text content of FORECAST/ADVISORY
+#' @param date Date value of current forecast/advisory product.
+#' @return boolean
+#' @keywords internal
+fstadv_forecasts <- function(content, date) {
+
+    # At this point all I'm doing is extracting every subset that begins with
+    # either FORECAST VALID or OUTLOOK VALID
+    ds <- fstadv_extract_forecasts(content)
+
+    # Break forecasts into a list by observation time; Extracts date/time to
+    # gusts (keys 2:9) and then wind fields, if avail (key 10)
+    ds <- fstadv_parse_forecasts(ds)
+
+    # If no forecasts, exit gracefully
+    if (length(ds) == 0)
+        return(NULL)
+
+    # Reformat to load into dataframe
+    ds <- lapply(ds, data.frame, stringsAsFactors = FALSE)
+
+    # Load only from X2 (Date) to X10 (Gust)
+    df <- data.table::rbindlist(ds)[,2:11]
+    # Rename
+    data.table::setattr(df,
+                        'names',
+                        c('d', 'h', 'mi', 'lat', 'lath', 'lon', 'lonh', 'w',
+                          'g', 'wf'))
+
+    # Start cleaning up
+    # ObDate
+    # Get current observation date. Will need month
+    ob_year <- lubridate::year(date)
+    ob_month <- lubridate::month(date)
+    ob_day <- lubridate::day(date)
+
+    df$d <- as.numeric(df$d) # Day
+    df$h <- as.numeric(df$h) # Hour
+    df$mi <- as.numeric(df$mi) # Minute
+    df$lat <- as.numeric(df$lat) # Latitude
+    df$lon <- as.numeric(df$lon) # Longitude
+    df$w <- as.numeric(df$w) # Wind
+    df$g <- as.numeric(df$g) # Gust
+
+    # Here I account for the possibility of the forecast date crossing months
+    # or even years
+    df <- df %>%
+        dplyr::mutate(mo = ifelse(d < ob_day, ob_month + 1, ob_month),
+                      y = ifelse(mo < ob_month, ob_year + 1, ob_year),
+                      FcstDate = lubridate::ymd_hm(paste(paste(y, mo, d, sep = '-'),
+                                                         paste(h, mi, sep = ':'),
+                                                         sep = ' ')))
+
+    # Clean up lat, lath, lon, lonh. Though no storms should exist in southern
+    # hemisphere there will be some crossing from western hemi to east.
+    # Southern/Western hemi lat/lon are negative. Northern/Eastern are positive.
+    df <- df %>%
+        dplyr::mutate(Lat = ifelse(lath == 'S', lat * -1, lat), # Lat reformatted
+                      Lon = ifelse(lonh == 'W', lon * -1, lon)) # Lon reformatted
+
+    # Finish renaming/reclassifying vars Wind and Gust, add Key, Adv, ObDate
+    df <- df %>%
+        dplyr::mutate(Wind = as.numeric(w), # reformatted
+                      Gust = as.numeric(g)) # reformatted
+
+    # Build forecasts dataframe into wide format
+    tmp <- df %>%
+        dplyr::select(FcstDate, Lat, Lon, Wind, Gust, wf)
+
+    n <- nrow(tmp)
+
+    tmp <- tmp %>% split(.$FcstDate)
+
+    tmp <- tmp %>% purrr::map2(1:n, function(a, b) {
+        # Here, send variable `wf` to function to spread across multiple cols.
+        if (tmp[[b]]$wf != "") {
+            wf <- fstadv_forecast_wind_radius(tmp[[b]]$wf)
+            tmp[[b]] <- dplyr::bind_cols(tmp[[b]], wf)
+        }
+        tmp[[b]]$wf <- NULL
+        if (b <= 4) {
+            newnames <- paste0("Hr", b * 12, names(tmp[[b]]))
+        } else if (b == 5) {
+            newnames <- paste0("Hr72", names(tmp[[b]]))
+        } else if (b == 6) {
+            newnames <- paste0("Hr96", names(tmp[[b]]))
+        } else if (b == 7) {
+            newnames <- paste0("Hr120", names(tmp[[b]]))
+        }
+        stats::setNames(tmp[[b]], newnames)
+    })
+
+    df_forecasts <- dplyr::bind_cols(tmp)
+
+
+    return(df_forecasts)
+
+}
+
+#' @title fstadv_forecast_wind_radius
+#' @description Separate wind field columns to columns by quadrant.
+#' @keywords internal
+fstadv_forecast_wind_radius <- function(df) {
+    # There are three fields of four quadrants each: 34KT, 50KT, and 64KT. The
+    # maximum wind field will always be listed first. For example, this may be
+    # in one product:
+    #
+    # 34 KT...60NE  60SE  60SW  60NW.
+    #
+    # And this may be in another:
+    #
+    # 50 KT...30NE  30SE  20SW  30NW.
+    # 34 KT...70NE  70SE  60SW  70NW.
+    #
+    # There will also be a 64KT field for hurricanes.
+    #
+    # The quadrants will be consistent.
+    #
+    # When we get to this function we expect a dataframe of 1x1 with a
+    # character value, using the examples above, of:
+    #
+    # 34 KT...60NE  60SE  60SW  60NW.
+    #
+    # 50 KT...30NE  30SE  20SW  30NW. 34 KT...70NE  70SE  60SW  70NW.
+    #
+    # Each quadrant value must be it's own variable with the name of the
+    # variable identifying the field it is for:
+    #
+    # NE34 SE34 SW34 NW34 NE50 SE50 SW50 NW50 NE64 SE64 SW64 NW64
+
+    # Example: 34 KT 60NE  60SE  60SW  60NW
+    ptn <- paste0("([:digit:]{2})",                   # "34"
+                  "[[:alpha:][:blank:][:punct:]]+",   # " KT "
+                  "([:digit:]{1,3})",                 # "60"
+                  "[[:alpha:][:blank:]]+",            # "NE "
+                  "([:digit:]{1,3})",                 # "60"
+                  "[[:alpha:][:blank:]]+",            # "SE "
+                  "([:digit:]{1,3})",                 # "60"
+                  "[[:alpha:][:blank:]]+",            # "SW"
+                  "([:digit:]{1,3})",                 # "60"
+                  "[[:alpha:][:blank:][:punct]]+")    # "NW"
+
+    x <- stringr::str_match_all(df, ptn)
+
+    # [[1]]
+    # [,1]                            [,2] [,3] [,4] [,5] [,6]
+    # [1,] "50 KT 30NE  30SE  20SW  30NW " "50" "30" "30" "20" "30"
+    # [2,] "34 KT 70NE  70SE  60SW  70NW"  "34" "70" "70" "60" "70"
+
+    # Convert to dataframe, making values numeric
+    y <- tibble::data_frame("V1" = x[[1]][,2],
+                            "V2" = x[[1]][,3],
+                            "V3" = x[[1]][,4],
+                            "V4" = x[[1]][,5],
+                            "V5" = x[[1]][,6]) %>%
+        purrr::dmap(as.numeric) %>%
+        dplyr::rename_("WF" = "V1",
+                       "NE" = "V2",
+                       "SE" = "V3",
+                       "SW" = "V4",
+                       "NW" = "V5")
+
+    # Split by column
+    z <- y %>% split(.$WF)
+
+    # Assign names to columns
+    a <- z %>% purrr::map2(1:length(z), function(a, b) {
+        newnames <- paste0(names(z[[b]]), z[[b]][[1]])
+        stats::setNames(z[[b]], newnames)
+    })
+
+    b <- dplyr::bind_cols(a) %>% dplyr::select(-dplyr::starts_with("WF"))
+
+    return(b)
 }
 
 #' @title fstadv_fwd_dir
@@ -331,6 +550,69 @@ fstadv_fwd_speed <- function(contents) {
 fstadv_gusts <- function(contents) {
     gust <- fstadv_winds_gusts(contents, what = 'gust')
     return(gust)
+}
+
+#' @title fstadv_parse_forecasts
+#' @description Breaks forecast field strings into multidimensional list.
+#' @details Expects input like:
+#'
+#'   [1] "FORECAST VALID 10/1200Z 22.6N  85.0W MAX WIND  40 KT GUSTS  50 KT 34 KT 110NE   0SE   0SW   0NW"
+#'
+#'   [2] "FORECAST VALID 11/0000Z 25.0N  86.3W MAX WIND  45 KT GUSTS  55 KT 34 KT 120NE  70SE   0SW  70NW"
+#'
+#'   [3] "FORECAST VALID 11/1200Z 27.7N  87.9W MAX WIND  50 KT GUSTS  60 KT 50 KT  25NE  25SE   0SW  25NW 34 KT 130NE  80SE   0SW  80NW"
+#'
+#'   [4] "FORECAST VALID 12/0000Z 30.5N  88.6W NEAR MS/AL COAST MAX WIND  55 KT GUSTS  65 KT 50 KT  35NE  35SE   0SW  25NW 34 KT 130NE 100SE  50SW  80NW"
+#'
+#'   [5] "FORECAST VALID 13/0000Z 36.0N  87.0W MAX WIND  20 KT GUSTS  25 KT"
+#'
+#'   [6] "OUTLOOK VALID 14/0000Z 41.0N  82.5W MAX WIND  15 KT GUSTS  20 KT"
+#'
+#'   [7] "OUTLOOK VALID 15/0000Z DISSIPATED INLAND"
+#'
+#' The date, time, lat, lat hemi, lon, lon hemi, max wind, gusts and wind field,
+#' if avialable, will be grouped. This function will return a list with each
+#' field as it's own variable; for example:
+#'
+#' [[1]]
+#'
+#' [,1]                                                                                                [,2] [,3]   [,4]   [,5] [,6]
+#'
+#' [1,] "FORECAST VALID 10/1200Z 22.6N  85.0W MAX WIND  40 KT GUSTS  50 KT 34 KT 110NE   0SE   0SW   0NW" "10" "1200" "22.6" "N"  "85.0"
+#'
+#' [,7] [,8] [,9] [,10]
+#'
+#' [1,] "W"  "40" "50" " 34 KT 110NE   0SE   0SW   0NW"
+#'
+#' So you can access date in x[[1]][,2], time in x[[1]][,2], etc.
+#'
+#' There are some cases such as AL051999, Adv 1 that has a 50KT wind field but
+#' not a 34KT wind field which is unusual.
+#'
+#' @param content is a list of forecasts/outlooks extracted from the advisory
+#' product.
+#' @keywords internal
+fstadv_parse_forecasts <- function(content) {
+
+    ptn <- paste0('^[:blank:]*[\n[:alpha:]]+[ ]+VALID[ ]+',
+                  '([:digit:]{2})/([:digit:]{2})([:digit:]{2})Z', # Date/Hour/Minute
+                  '[ ]+([[:digit:]\\.]{3,4})([N|S])', # Lat
+                  '[ ]+([[:digit:]\\.]{3,5})([E|W])', # Lon
+                  # Following is option text; don't collect, e.g.:
+                  # POST-TROP/EXTRATROP
+                  '[:blank:]*(?:[[:alpha:]-/]+)*[:blank:]*',
+                  '[:blank:]MAX WIND[ ]+([:digit:]{2,3})[ ]+KT', # Winds
+                  '[:blank:]+GUSTS[ ]+([:digit:]{2,3})[ ]+KT', # Gusts
+                  '[:blank:]*(?:EXTRATROPICAL)*[:blank:]*', # Optional text; don't collect
+                  '[:blank:]*((?:[[:digit:]{2}[ ]+KT[ ]+[:alnum:][:blank:]]+)?$)') # Wind field, if avail
+
+    x <- stringr::str_match_all(content, ptn)
+
+    # Some data has forward and trailing blanks. Remove them
+    x <- lapply(x, trimws)
+
+    return(x)
+
 }
 
 #' @title fstadv_pos_accuracy()
@@ -424,8 +706,10 @@ fstadv_lon <- function(contents) {
 #' @description There is only one line of sea data, 12FT seas in each quadrant. So this
 #'   should go easier than the wind fields
 #' @param content text of product
+#' @param wind Wind value of current forecast/advisory product.
 #' @return boolean
-fstadv_seas <- function(content, key, adv, date, wind) {
+#' @keywords internal
+fstadv_seas <- function(content, wind) {
 
     # 12 FT SEAS..125NE  90SE  90SW 175NW.
     ptn <- paste0('12 FT SEAS[\\.[:blank:]]+',
@@ -442,9 +726,6 @@ fstadv_seas <- function(content, key, adv, date, wind) {
         # Load into dataframe and get advisory's Key, Adv and ObDate
         #    tmp <- as.data.frame(x[[1]][,2:5])
         df_seas <- tibble::as_data_frame(x[[1]])
-        df_seas$Key = key
-        df_seas$Adv = adv
-        df_seas$Date = date
 
         # Rename V2:V5
         df_seas <- df_seas %>%
@@ -454,7 +735,7 @@ fstadv_seas <- function(content, key, adv, date, wind) {
                           SeasNW = V5)
 
         df_seas <- df_seas %>%
-            dplyr::select(Key, Adv, Date, SeasNE, SeasSE, SeasSW, SeasNW)
+            dplyr::select(SeasNE, SeasSE, SeasSW, SeasNW)
 
         # Reclass vars
         df_seas$SeasNE <- as.numeric(df_seas$SeasNE)
@@ -463,10 +744,7 @@ fstadv_seas <- function(content, key, adv, date, wind) {
         df_seas$SeasNW <- as.numeric(df_seas$SeasNW)
 
     } else {
-        df_seas <- tibble::tibble("Key" = key,
-                                  "Adv" = adv,
-                                  "Date" = date,
-                                  "SeasNE" = NA,
+        df_seas <- tibble::tibble("SeasNE" = NA,
                                   "SeasSE" = NA,
                                   "SeasSW" = NA,
                                   "SeasNW" = NA)
@@ -488,26 +766,12 @@ fstadv_seas <- function(content, key, adv, date, wind) {
 #' @param contents text of product
 #' @return dataframe
 #' @keywords internal
-fstadv_wind_radius <- function(content, key, adv, date, wind) {
+fstadv_wind_radius <- function(content, wind) {
 
-    ptn <- paste0("MAX SUSTAINED WINDS",
-                  "[[:blank:][:digit:]]+KT ",
-                  "WITH GUSTS TO[[:blank:][:digit:]]+KT",
-                  "[\\.[:space:]]*([A-Z0-9\\. \n]+)12 FT SEAS")
-
-    # Do some reformatting to make extraction easier
-    a <- stringr::str_replace_all(content, '\n \n', '\t')
-    b <- stringr::str_replace_all(a, '\n', ' ')
-    c <- stringr::str_replace_all(b, '\t', '\n')
-    d <- stringr::str_replace_all(c, '\\.\\.\\.', ' ')
-    e <- unlist(stringr::str_match_all(d, ptn))
-    # Isolate on key 2
-    f <- stringr::str_replace_all(e[2], '\\.', '')
-    g <- stringr::str_replace_all(f, '[KT|NE|SE|SW|NW]', '')
-    h <- stringr::str_replace_all(trimws(g), '[ ]+', '\t')
+    text <- fstadv_wind_radius_regex(content)
 
     # move to dataframe
-    df <- data.frame('text' = h)
+    df <- data.frame("text" = text)
 
     # split out df$text with generic cols for now.
     df <- df %>%
@@ -532,20 +796,36 @@ fstadv_wind_radius <- function(content, key, adv, date, wind) {
         df <- df[,c(1:5, 11:15, 6:10)]
     }
 
-    # Add vars to df
-    df$Key = key
-    df$Adv = adv
-    df$Date = date
-
     names(df) <- c("WindField34", "NE34", "SE34", "SW34", "NW34",
                    "WindField50", "NE50", "SE50", "SW50", "NW50",
-                   "WindField64", "NE64", "SE64", "SW64", "NW64",
-                   "Key", "Adv", "Date")
+                   "WindField64", "NE64", "SE64", "SW64", "NW64")
 
     df <- df %>% dplyr::select(-WindField34, -WindField50, -WindField64)
 
     return(df)
 
+}
+
+#' @title fstadv_wind_radius_regex
+#' @description Extra current wind radius from Forecast/Advisory product.
+#' @keywords internal
+fstadv_wind_radius_regex <- function(content) {
+    ptn <- paste0("MAX SUSTAINED WINDS",
+                  "[[:blank:][:digit:]]+KT ",
+                  "WITH GUSTS TO[[:blank:][:digit:]]+KT",
+                  "[\\.[:space:]]*([A-Z0-9\\. \n]+)12 FT SEAS")
+
+    # Do some reformatting to make extraction easier
+    a <- stringr::str_replace_all(content, '\n \n', '\t')
+    b <- stringr::str_replace_all(a, '\n', ' ')
+    c <- stringr::str_replace_all(b, '\t', '\n')
+    d <- stringr::str_replace_all(c, '\\.\\.\\.', ' ')
+    e <- unlist(stringr::str_match_all(d, ptn))
+    # Isolate on key 2
+    f <- stringr::str_replace_all(e[2], '\\.', '')
+    g <- stringr::str_replace_all(f, '[KT|NE|SE|SW|NW]', '')
+    h <- stringr::str_replace_all(trimws(g), '[ ]+', '\t')
+    return(h)
 }
 
 #' @title fstadv_winds
