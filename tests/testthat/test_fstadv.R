@@ -175,10 +175,10 @@ test_that("Test get_fstadv()", {
 #' Test return of fstadv()
 
 #' Load test data files
-load(system.file("./tests/testthat/data/al011998.Rda", package = "Hurricanes"))
-load(system.file("./tests/testthat/data/al021998.Rda", package = "Hurricanes"))
-load(system.file("./tests/testthat/data/ep011998.Rda", package = "Hurricanes"))
-load(system.file("./tests/testthat/data/ep021998.Rda", package = "Hurricanes"))
+load(system.file("extdata", "al011998.Rda", package = "Hurricanes"))
+load(system.file("extdata", "al021998.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep011998.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep021998.Rda", package = "Hurricanes"))
 
 test_that("Test fstadv()", {
     expect_identical(identical(al011998, df.al011998), TRUE)
