@@ -88,6 +88,7 @@ get_storm_content <- function(link) {
 #' @return Dataframes for each of the products.
 #' @examples
 #' ## Get public advisories for Tropical Storm Charley, 1998
+#' \dontrun{
 #' get_storm_data("public",
 #'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
 #'
@@ -100,6 +101,7 @@ get_storm_content <- function(link) {
 #'                names = list("fstadv" = "al.1998.charley.fstadv",
 #'                             "discus" = "al.1998.charley.discus"),
 #'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
+#' }
 #' @export
 get_storm_data <- function(..., names = list(), link, msg = FALSE) {
 

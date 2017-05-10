@@ -4,10 +4,12 @@
 \alias{fstadv_seas}
 \title{fstadv_seas}
 \usage{
-fstadv_seas(content, key, adv, date, wind)
+fstadv_seas(content, wind)
 }
 \arguments{
 \item{content}{text of product}
+
+\item{wind}{Wind value of current forecast/advisory product.}
 }
 \value{
 boolean
@@ -16,3 +18,4 @@ boolean
 There is only one line of sea data, 12FT seas in each quadrant. So this
   should go easier than the wind fields
 }
+\keyword{internal}
