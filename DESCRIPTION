@@ -19,7 +19,7 @@ Imports:
   data.table (>= 1.9.6), 
   magrittr (>= 1.5)
 Suggests:
-  httr, 
+  devtools, 
   knitr, 
   rmarkdown,
   testthat,
