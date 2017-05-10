@@ -174,16 +174,16 @@ test_that("Test get_fstadv()", {
 ## ---- Test fstadv() ----------------------------------------------------------
 #' Test return of fstadv()
 
-#' Load test data files
-load(system.file("./tests/testthat/data/al011998.Rda", package = "Hurricanes"))
-load(system.file("./tests/testthat/data/al021998.Rda", package = "Hurricanes"))
-load(system.file("./tests/testthat/data/ep011998.Rda", package = "Hurricanes"))
-load(system.file("./tests/testthat/data/ep021998.Rda", package = "Hurricanes"))
-
-test_that("Test fstadv()", {
-    expect_identical(identical(al011998, df.al011998), TRUE)
-    expect_identical(identical(al021998, df.al021998), TRUE)
-    expect_identical(identical(ep011998, df.ep011998), TRUE)
-    expect_identical(identical(ep021998, df.ep021998), TRUE)
-})
-
+#' #' Load test data files
+#' load(system.file("./tests/testthat/data/al011998.Rda", package = "Hurricanes"))
+#' load(system.file("./tests/testthat/data/al021998.Rda", package = "Hurricanes"))
+#' load(system.file("./tests/testthat/data/ep011998.Rda", package = "Hurricanes"))
+#' load(system.file("./tests/testthat/data/ep021998.Rda", package = "Hurricanes"))
+#'
+#' test_that("Test fstadv()", {
+#'     expect_identical(identical(al011998, df.al011998), TRUE)
+#'     expect_identical(identical(al021998, df.al021998), TRUE)
+#'     expect_identical(identical(ep011998, df.ep011998), TRUE)
+#'     expect_identical(identical(ep021998, df.ep021998), TRUE)
+#' })
+#'
