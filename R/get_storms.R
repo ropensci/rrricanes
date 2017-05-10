@@ -129,6 +129,7 @@ extract_storms <- function(basin, link) {
 #' @importFrom data.table rbindlist
 #' @examples
 #' # Default. Get all storms, both basins, for last year.
+#' \dontrun{
 #' storms <- get_storms(year = 2016, basin = c("AL", "EP"))
 #'
 #' # Get storms for two different years
@@ -136,6 +137,7 @@ extract_storms <- function(basin, link) {
 #'
 #' # Get storms for two consecutive years, Atlantic basin only
 #' storms.al.2005 <- get_storms(2005:2007, basin = "AL")
+#' }
 #' @source \url{http://www.nhc.noaa.gov/archive/2016/}
 #' @export
 get_storms <- function(year = format(Sys.Date(), "%Y"),
