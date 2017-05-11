@@ -1,19 +1,3 @@
-#' @title create_df_prblty
-#' @description Template for strike probabilities dataframe
-#' @return empty dataframe
-#' @seealso \code{\link{get_prblty}}
-#' @keywords internal
-create_df_prblty <- function() {
-    df <- tibble::data_frame("Status" = character(),
-                             "Name" = character(),
-                             # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                             "Adv" = character(),
-                             "Date" = as.POSIXct(character(), tz = "UTC"),
-                             "Contents" = character())
-
-    return(df)
-}
-
 #' @title get_prblty
 #' @description Return dataframe of strike probability data.
 #' \describe{
