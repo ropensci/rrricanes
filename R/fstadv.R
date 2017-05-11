@@ -5,13 +5,13 @@
 #' @keywords internal
 create_df_fstadv <- function() {
     df <- tibble::data_frame(
-        "Status" = character(),
-        "Name" = character(),
+        "Key" = character(),
         # Allow for intermediate advisories,
         # i.e., "1A", "2", "2A"...
         "Adv" = character(),
         "Date" = as.POSIXct(character(), tz = "UTC"),
-        "Key" = character(),
+        "Name" = character(),
+        "Status" = character(),
         'Lat' = numeric(),
         'Lon' = numeric(),
         'Wind' = numeric(),
