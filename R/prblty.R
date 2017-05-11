@@ -62,19 +62,48 @@ prblty <- function(link, msg = FALSE) {
     if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP"))))
         stop(sprintf("Invalid Strike Probability link. %s", link))
 
-    df <- create_df_prblty()
-
     status <- scrape_header(contents, ret = "status")
     name <- scrape_header(contents, ret = "name")
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
 
-    df <- df %>%
-        tibble::add_row("Status" = status,
-                        "Name" = name,
-                        "Adv" = adv,
-                        "Date" = date,
-                        "Contents" = contents)
+    # 15.0N  43.4W      43  1  X  X 44   16.8N  48.2W       X  4 16  2 22
+    # 15.8N  45.9W       1 26  1  X 28
 
-    return(df)
+    ptn <- paste0("(?<=[:blank:]{3}|\n)",
+                  "([[:alpha:][:digit:][:punct:][:blank:]]{17})",   # Location
+                  "[:blank:]+",                                     # Delimiter
+                  "([:digit:]{1,2}|X)",                             # A
+                  "[:blank:]+",                                     # Delimiter
+                  "([:digit:]{1,2}|X)",                             # B
+                  "[:blank:]+",                                     # Delimiter
+                  "([:digit:]{1,2}|X)",                             # C
+                  "[:blank:]+",                                     # Delimiter
+                  "([:digit:]{1,2}|X)",                             # D
+                  "[:blank:]+",                                     # Delimiter
+                  "([:digit:]{1,2}|X)")                             # E
+
+    matches <- stringr::str_match_all(contents, ptn)
+
+    prblty <- tibble::as_data_frame(matches[[1]][,2:7])
+
+    names(prblty) <- c("Location", "A", "B", "C", "D", "E")
+
+    # Many values will have "X" for less than 1% chance. Make 0
+    prblty[prblty == "X"] <- 0
+
+    prblty <- purrr::dmap_at(.d = prblty,
+                             .at = c("A", "B", "C", "D", "E"),
+                             .f = as.numeric)
+
+    prblty <- prblty %>%
+        dplyr::mutate("Status" = status,
+                      "Name" = name,
+                      "Adv" = adv,
+                      "Date" = date) %>%
+        dplyr::select_("Status", "Name", "Adv", "Date", "A", "B", "C", "D", "E") %>%
+        dplyr::arrange_("Date", "Adv")
+
+    return(prblty)
+
 }
