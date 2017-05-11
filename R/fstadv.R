@@ -754,6 +754,131 @@ fstadv_seas <- function(content, wind) {
 
 }
 
+#' @title fstadv_split
+#' @description Takes the fstadv dataframe and splits into four relational
+#'     dataframes; one for base data, one for wind radius data for the current
+#'     product, one dataframe for each forecast position and one dataframe for
+#'     wind radius data for each forecast position (within 72 hours).
+#' @details The default dataframe for the \code{\link{get_fstadv}} contains 125
+#'     columns. This function will take that dataframe and split it out to four
+#'     narrow dataframes.
+#' @param df Name (character) of dataframe holding default forecast/advisory
+#'     data.
+#' @param remove Remove original dataframe after cleanup. Default TRUE.
+#' @export
+fstadv_split <- function(df, remove = TRUE) {
+
+    data <- get(df)
+
+    if (!is.data.frame(data))
+        stop("Expecting a dataframe.")
+
+    # Start with extracting base data for forecast/advisory product
+    fstadv <- dplyr::select_(data, "Key:Eye", "SeasNE:SeasNW")
+
+    # Collapse wind radius fields to narrow dataframe then expand on the four
+    # quadrants, keeping WindField as a variable.
+    v <- c("NE", "SE", "SW", "NW")
+
+    fstadv.wr <- purrr::map_df(
+        .x = c(34, 50, 64),
+        .f = function(y) {
+            dplyr::select_(data,
+                           .dots = c("Key",
+                                     "Adv",
+                                     "Date",
+                                     paste0(v, y))) %>%
+                dplyr::rename_(
+                    .dots = list("Key" = "Key",
+                                 "Adv" = "Adv",
+                                 "Date" = "Date",
+                                 "NE" = paste0("NE", y),
+                                 "SE" = paste0("SE", y),
+                                 "SW" = paste0("SW", y),
+                                 "NW" = paste0("NW", y))) %>%
+                dplyr::mutate_("WindField" = y)
+        }) %>%
+        dplyr::select_(.dots = c("Key", "Adv", "Date", "WindField","NE:NW")) %>%
+        # Order by Date then Adv since Adv is character. Results as expected.
+        dplyr::arrange_("Key", "Date", "Adv", "WindField")
+
+    # Remove NA rows for windfield quadrants
+    fstadv.wr <- fstadv.wr[complete.cases(fstadv.wr$NE,
+                                          fstadv.wr$SE,
+                                          fstadv.wr$SW,
+                                          fstadv.wr$NW),]
+
+    # Build forecasts dataframe with base data for each forecast position. This
+    # does not include wind radius data; that comes next. This will be similar
+    # to fstadv (without seas and some other data points which are never
+    # forecast).
+
+    # Extract child dataframe for forecasts date, position, wind and gust
+    v <- c("FcstDate", "Lat", "Lon", "Wind", "Gust")
+
+    fstadv.fst <- purrr::map_df(.x = c(12, 24, 36, 48, 72, 96, 120),
+                                .f = function(y) {
+        dplyr::select_(data,
+                       .dots = c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
+            dplyr::rename_("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
+                           "FcstDate" = paste0("Hr", y, "FcstDate"),
+                           "Lat" = paste0("Hr", y, "Lat"),
+                           "Lon" = paste0("Hr", y, "Lon"),
+                           "Wind" = paste0("Hr", y, "Wind"),
+                           "Gust" = paste0("Hr", y, "Gust"))}) %>%
+        dplyr::arrange_("Key", "Date", "Adv", "FcstDate")
+
+    # Remove NA rows
+    fstadv.fst <- fstadv.fst[complete.cases(fstadv.fst$FcstDate, fstadv.fst$Lat,
+                                            fstadv.fst$Lon, fstadv.fst$Wind,
+                                            fstadv.fst$Gust),]
+
+    # Build wind radius dataframe for each forecast position (12:72 hours; 96
+    # and 120 hours are never forecasted). This dataframe will be similar to
+    # fstadv.wr with the exception of FcstDate.
+
+    v <- c("NE", "SE", "SW", "NW")
+
+    fstadv.fst.wr <- purrr::map_df(.x = c(12, 24, 36, 48, 72),
+                                   .f = function(x) {
+        y <- purrr::map_df(.x = c(34, 50, 64), .f = function(z) {
+            dplyr::select_(data, .dots = c("Key", "Adv", "Date",
+                                        paste0("Hr", x, "FcstDate"),
+                                        paste0("Hr", x, v, z))) %>%
+                dplyr::rename_(.dots = list("Key" = "Key",
+                                            "Adv" = "Adv",
+                                            "Date" = "Date",
+                                            "FcstDate" = paste0("Hr", x,
+                                                                "FcstDate"),
+                                            "NE" = paste0("Hr", x, "NE", z),
+                                            "SE" = paste0("Hr", x, "SE", z),
+                                            "SW" = paste0("Hr", x, "SW", z),
+                                            "NW" = paste0("Hr", x, "NW", z))) %>%
+                dplyr::mutate_("WindField" = z) %>%
+                dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
+                                         "WindField", "NE:NW"))})
+        return(y)
+    })
+
+    fstadv.fst.wr <- fstadv.fst.wr %>% dplyr::arrange_("Key", "Date", "Adv",
+                                                       "FcstDate", "WindField")
+
+    fstadv.fst.wr <- fstadv.fst.wr[complete.cases(fstadv.fst.wr$NE,
+                                                  fstadv.fst.wr$SE,
+                                                  fstadv.fst.wr$SW,
+                                                  fstadv.fst.wr$NW),]
+
+    # At this point have all dataframes. Want to return them to global
+    # environment while keeping name of original dataframe. So prefix "fstadv"
+    # will be replaced by value of df.
+    assign(df, fstadv, envir = .GlobalEnv)
+    assign(paste0(df, ".fst"), fstadv.fst, envir = .GlobalEnv)
+    assign(paste0(df, ".fst.wr"), fstadv.fst.wr, envir = .GlobalEnv)
+    assign(paste0(df, ".wr"), fstadv.wr, envir = .GlobalEnv)
+
+    return(TRUE)
+}
+
 #' @title fstadv_wind_radius
 #' @description Parse wind radius data from product, if exists. This is somewhat tricky as the
 #'   wind fields are 64KT, 50KT and 34KT and are listed in descending order. So,
