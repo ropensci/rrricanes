@@ -1,5 +1,8 @@
 context("Forecast/Advisory Products (fstadv)")
 
+## ---- Data -------------------------------------------------------------------
+
+## ---- * Current Data ---------------------------------------------------------
 # Pre-load dataframes
 url.al011998 <- "http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html"
 df.al011998 <- get_fstadv(link = url.al011998)
@@ -23,13 +26,19 @@ ep1998 <- get_storms(year = 1998, basin = "EP") %>%
     purrr::flatten_chr()
 
 #' Load Tropical Storm Alex
-df.al011998 <- get_fstadv(al1998[1])
+df.al011998.fstadv <- get_fstadv(al1998[1])
 #' Load Hurricane Bonnie
-df.al021998 <- get_fstadv(al1998[2])
+df.al021998.fstadv <- get_fstadv(al1998[2])
 #' Load Tropical Storm Agatha
-df.ep011998 <- get_fstadv(ep1998[1])
+df.ep011998.fstadv <- get_fstadv(ep1998[1])
 #' Load Tropical Depression Two-E
-df.ep021998 <- get_fstadv(ep1998[2])
+df.ep021998.fstadv <- get_fstadv(ep1998[2])
+
+## ---- * Saved Data -----------------------------------------------------------
+load(system.file("extdata", "al011998.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "al021998.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep011998.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep021998.fstadv.Rda", package = "Hurricanes"))
 
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton
@@ -173,17 +182,10 @@ test_that("Test get_fstadv()", {
 
 ## ---- Test fstadv() ----------------------------------------------------------
 #' Test return of fstadv()
-
-#' Load test data files
-load(system.file("extdata", "al011998.Rda", package = "Hurricanes"))
-load(system.file("extdata", "al021998.Rda", package = "Hurricanes"))
-load(system.file("extdata", "ep011998.Rda", package = "Hurricanes"))
-load(system.file("extdata", "ep021998.Rda", package = "Hurricanes"))
-
 test_that("Test fstadv()", {
-    expect_identical(identical(al011998, df.al011998), TRUE)
-    expect_identical(identical(al021998, df.al021998), TRUE)
-    expect_identical(identical(ep011998, df.ep011998), TRUE)
-    expect_identical(identical(ep021998, df.ep021998), TRUE)
+    expect_identical(identical(al011998.fstadv, df.al011998.fstadv), TRUE)
+    expect_identical(identical(al021998.fstadv, df.al021998.fstadv), TRUE)
+    expect_identical(identical(ep011998.fstadv, df.ep011998.fstadv), TRUE)
+    expect_identical(identical(ep021998.fstadv, df.ep021998.fstadv), TRUE)
 })
 
