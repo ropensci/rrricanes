@@ -28,22 +28,6 @@ cp_prblty_stations <- function() {
     return(df)
 }
 
-#' @title create_df_wndprb
-#' @description Template for wind probabilities dataframe
-#' @return empty dataframe
-#' @seealso \code{\link{get_wndprb}}
-#' @keywords internal
-create_df_wndprb <- function() {
-    df <- tibble::data_frame("Status" = character(),
-                             "Name" = character(),
-                             # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
-                             "Adv" = character(),
-                             "Date" = as.POSIXct(character(), tz = "UTC"),
-                             "Contents" = character())
-
-    return(df)
-}
-
 #' @title ep_prblty_stations
 #' @description Retrieve list of probability stations based in the eastern
 #'     Pacific from the NHC. To be used in tandem with `wndprb` products.
