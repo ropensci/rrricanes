@@ -1,13 +1,13 @@
 
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=issues-36)](https://travis-ci.org/timtrice/Hurricanes) [![codecov](https://codecov.io/gh/timtrice/Hurricanes/branch/issues-36/graph/badge.svg)](https://codecov.io/gh/timtrice/Hurricanes)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop-0.1.0)](https://travis-ci.org/timtrice/Hurricanes) [![codecov](https://codecov.io/gh/timtrice/Hurricanes/branch/develop-0.1.0/graph/badge.svg)](https://codecov.io/gh/timtrice/Hurricanes)
 
 ------------------------------------------------------------------------
 
-[![minimal R version](https://img.shields.io/badge/R%3E%3D-3.2.3-6666ff.svg)](https://cran.r-project.org/) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/Hurricanes)](https://cran.r-project.org/package=Hurricanes) [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/master)
+[![minimal R version](https://img.shields.io/badge/R%3E%3D-3.2.3-6666ff.svg)](https://cran.r-project.org/) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/Hurricanes)](https://cran.r-project.org/package=Hurricanes) [![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)](commits/develop-0.1.0)
 
 ------------------------------------------------------------------------
 
-[![Last-changedate](https://img.shields.io/badge/last%20change-2017--05--12-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2017--05--12-yellowgreen.svg)](/commits/develop-0.1.0)
 
 Hurricanes
 ==========
