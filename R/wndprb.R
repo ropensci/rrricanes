@@ -1,3 +1,18 @@
+#' @title al_prblty_stations
+#' @description Retrieve list of probability stations based in the Atlantic
+#'     basin from the NHC. To be used in tandem with `wndprb` products.
+#' @export
+al_prblty_stations <- function() {
+    url <- "http://www.nhc.noaa.gov/data/wsp/al_prblty_station.lst.csv.txt"
+    df <- readr::read_csv(url,
+                          col_names = c("Location", "Lat", "Lon"),
+                          col_types = readr::cols(Location = "c",
+                                                  Lat = "n",
+                                                  Lon = "n")) %>%
+        dplyr::arrange_("Location")
+    return(df)
+}
+
 #' @title create_df_wndprb
 #' @description Template for wind probabilities dataframe
 #' @return empty dataframe
