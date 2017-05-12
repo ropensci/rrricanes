@@ -54,7 +54,7 @@ ep_prblty_stations <- function() {
 #' @seealso \code{\link{get_storms}}, \code{\link{wndprb}},
 #'     \code{\link{al_prblty_stations}}, \code{\link{ep_prblty_stations}},
 #'     \code{\link{cp_prblty_stations}}
-#' @source \link{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
+#' @source \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 #' @export
 get_wndprb <- function(link, msg = FALSE) {
 

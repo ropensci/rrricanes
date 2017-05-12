@@ -4,7 +4,7 @@
 \alias{get_wndprb}
 \title{get_wndprb}
 \source{
-\link{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
+\url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 }
 \usage{
 get_wndprb(link, msg = FALSE)
