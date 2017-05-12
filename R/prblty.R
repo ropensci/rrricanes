@@ -73,6 +73,9 @@ prblty <- function(link, msg = FALSE) {
 
     names(prblty) <- c("Location", "A", "B", "C", "D", "E")
 
+    # Trim whitespace
+    prblty <- purrr::dmap(.d = prblty, .f = stringr::str_trim)
+
     # Many values will have "X" for less than 1% chance. Make 0
     prblty[prblty == "X"] <- 0
 
@@ -85,7 +88,8 @@ prblty <- function(link, msg = FALSE) {
                       "Name" = name,
                       "Adv" = adv,
                       "Date" = date) %>%
-        dplyr::select_("Status", "Name", "Adv", "Date", "A", "B", "C", "D", "E") %>%
+        dplyr::select_("Status", "Name", "Adv", "Date", "Location", "A", "B",
+                       "C", "D", "E") %>%
         dplyr::arrange_("Date", "Adv")
 
     return(prblty)
