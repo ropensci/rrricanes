@@ -4,12 +4,12 @@
 \alias{public}
 \title{public}
 \usage{
-public(link, display_link = TRUE)
+public(link, msg = FALSE)
 }
 \arguments{
 \item{link}{Link to a storm's specific public advisory product.}
 
-\item{display_link}{Display each link as being worked; default is TRUE.}
+\item{msg}{Display each link as being worked; default is FALSE}
 }
 \value{
 Dataframe
@@ -18,9 +18,10 @@ Dataframe
 Parse Public Advisory products
 }
 \details{
-Given a direct link to a public advisory product, parse and return 
+Given a direct link to a public advisory product, parse and return
 dataframe of values.
 }
 \seealso{
 \code{\link{get_public}}
 }
+\keyword{internal}

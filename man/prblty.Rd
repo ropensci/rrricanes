@@ -4,12 +4,12 @@
 \alias{prblty}
 \title{prblty}
 \usage{
-prblty(link, display_link = TRUE)
+prblty(link, msg = FALSE)
 }
 \arguments{
 \item{link}{Link to a storm's specific strike probability advisory product.}
 
-\item{display_link}{Display each link as being worked; default is TRUE.}
+\item{msg}{Display each link as being worked; default is FALSE}
 }
 \value{
 Dataframe
@@ -18,9 +18,10 @@ Dataframe
 Parse strike probability products
 }
 \details{
-Given a direct link to a strike probability advisory product, parse 
+Given a direct link to a strike probability advisory product, parse
 and return dataframe of values.
 }
 \seealso{
 \code{\link{get_prblty}}
 }
+\keyword{internal}

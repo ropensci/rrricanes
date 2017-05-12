@@ -15,3 +15,4 @@ numeric
 \description{
 Get position accuracy
 }
+\keyword{internal}

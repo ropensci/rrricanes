@@ -4,15 +4,17 @@
 \alias{get_discus}
 \title{get_discus}
 \usage{
-get_discus(link)
+get_discus(link, msg = FALSE)
 }
 \arguments{
 \item{link}{URL to storm's archive page.}
+
+\item{msg}{Show link being worked. Default, FALSE.}
 }
 \description{
 Return dataframe of discussion data.
 \describe{
-  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane, 
+  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
     etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}

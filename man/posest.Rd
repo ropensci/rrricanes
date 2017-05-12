@@ -4,12 +4,12 @@
 \alias{posest}
 \title{posest}
 \usage{
-posest(link, display_link = TRUE)
+posest(link, msg = FALSE)
 }
 \arguments{
 \item{link}{URL of a specific position estimate product}
 
-\item{display_link}{Display each link as being worked; default is TRUE.}
+\item{msg}{Display each link as being worked; default is FALSE.}
 }
 \value{
 Dataframe
@@ -18,9 +18,10 @@ Dataframe
 Extrapolate data from Position Estimate products.
 }
 \details{
-Given a direct link to a position estimate product, parse and return 
+Given a direct link to a position estimate product, parse and return
 dataframe of values.
 }
 \seealso{
 \code{\link{get_posest}}
 }
+\keyword{internal}

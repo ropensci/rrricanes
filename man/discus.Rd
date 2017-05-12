@@ -4,12 +4,12 @@
 \alias{discus}
 \title{discus}
 \usage{
-discus(link, display_link = TRUE)
+discus(link, msg = FALSE)
 }
 \arguments{
 \item{link}{Link to a storm's specific discussion product.}
 
-\item{display_link}{Display each link as being worked; default is TRUE.}
+\item{msg}{Display each link as being worked; default is FALSE}
 }
 \value{
 Dataframe
@@ -18,9 +18,10 @@ Dataframe
 Parse storm Discussion products
 }
 \details{
-Given a direct link to a discussion product, parse and return 
+Given a direct link to a discussion product, parse and return
 dataframe of values.
 }
 \seealso{
 \code{\link{get_discus}}
 }
+\keyword{internal}

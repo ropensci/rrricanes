@@ -9,12 +9,14 @@
   \item{Name}{Character, name of storm mixed-case}
   \item{Basin}{AL (Atlantic) or EP (East Pacific)}
   \item{Link}{URL to storms' product pages}
-}}
+}
+
+To disable the progress bar set option dplyr.show_progress to FALSE.}
 \source{
 \url{http://www.nhc.noaa.gov/archive/2016/}
 }
 \usage{
-get_storms(year = lubridate::year(Sys.Date()), basin = c("AL", "EP"))
+get_storms(year = format(Sys.Date(), "\%Y"), basin = c("AL", "EP"))
 }
 \arguments{
 \item{year}{numeric or vector, four digits (\%Y format)}
@@ -28,11 +30,12 @@ Dataframe of storms.
 Returns storms and product link.
 }
 \details{
-By default returns all storms for the current year. If no storms 
+By default returns all storms for the current year. If no storms
 have developed will return an empty dataframe.
 }
 \examples{
 # Default. Get all storms, both basins, for last year.
+\dontrun{
 storms <- get_storms(year = 2016, basin = c("AL", "EP"))
 
 # Get storms for two different years
@@ -40,4 +43,5 @@ storms.2010 <- get_storms(c(2010, 2015))
 
 # Get storms for two consecutive years, Atlantic basin only
 storms.al.2005 <- get_storms(2005:2007, basin = "AL")
+}
 }

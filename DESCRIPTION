@@ -1,12 +1,12 @@
 Package: Hurricanes
 Type: Package
 Title: Hurricanes
-Version: 0.0.0.9002
+Version: 0.1.0
 Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
 Depends:
   R (>= 3.2.3), 
-  magrittr (>= 1.5)
+  tidyverse (>= 1.0.0)
 Description: Get archived data of past and current hurricanes for the Atlantic 
   and eastern Pacific oceans.
   This package will also combine HURDAT which was another R library I wrote to 
@@ -17,9 +17,9 @@ License: MIT + file LICENSE
 LazyData: TRUE
 Imports:
   data.table (>= 1.9.6), 
-  tidyverse (>= 1.0.0)
+  magrittr (>= 1.5)
 Suggests:
-  httr, 
+  devtools, 
   knitr, 
   rmarkdown,
   testthat,

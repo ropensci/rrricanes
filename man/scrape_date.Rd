@@ -15,3 +15,4 @@ Scrape date/time of product issuance from header.
 \seealso{
 \code{\link{scrape_header}}
 }
+\keyword{internal}

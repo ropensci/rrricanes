@@ -4,15 +4,17 @@
 \alias{get_public}
 \title{get_public}
 \usage{
-get_public(link)
+get_public(link, msg = FALSE)
 }
 \arguments{
 \item{link}{URL to storm's archive page.}
+
+\item{msg}{Show link being worked. Default, FALSE.}
 }
 \description{
 Return dataframe of public advisory data.
 \describe{
-  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane, 
+  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
     etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}

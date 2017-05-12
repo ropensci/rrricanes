@@ -3,16 +3,21 @@
 \name{get_wndprb}
 \alias{get_wndprb}
 \title{get_wndprb}
+\source{
+\url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
+}
 \usage{
-get_wndprb(link)
+get_wndprb(link, msg = FALSE)
 }
 \arguments{
 \item{link}{URL to storm's archive page.}
+
+\item{msg}{Show link being worked. Default, FALSE.}
 }
 \description{
 Return dataframe of wind probability data.
 \describe{
-  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane, 
+  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
     etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
@@ -21,5 +26,7 @@ Return dataframe of wind probability data.
 }
 }
 \seealso{
-\code{\link{get_storms}}, \code{\link{wndprb}}
+\code{\link{get_storms}}, \code{\link{wndprb}},
+    \code{\link{al_prblty_stations}}, \code{\link{ep_prblty_stations}},
+    \code{\link{cp_prblty_stations}}
 }
