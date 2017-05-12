@@ -1,5 +1,15 @@
 language: r
+
 warnings_are_errors: false
 
 r_packages:
-  - rmarkdown
+  - covr
+
+r_check_args: --no-tests
+
+r_build_args: --no-build-vignettes
+
+cache: packages
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
