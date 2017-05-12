@@ -5,7 +5,9 @@ warnings_are_errors: false
 r_packages:
   - covr
 
-r_check_args: --no-build-vignettes --no-tests
+r_check_args: --no-tests
+
+r_build_args: --no-build-vignettes
 
 cache: packages
 
