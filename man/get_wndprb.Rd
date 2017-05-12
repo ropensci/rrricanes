@@ -3,6 +3,9 @@
 \name{get_wndprb}
 \alias{get_wndprb}
 \title{get_wndprb}
+\source{
+\link{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
+}
 \usage{
 get_wndprb(link, msg = FALSE)
 }
@@ -23,5 +26,7 @@ Return dataframe of wind probability data.
 }
 }
 \seealso{
-\code{\link{get_storms}}, \code{\link{wndprb}}
+\code{\link{get_storms}}, \code{\link{wndprb}},
+    \code{\link{al_prblty_stations}}, \code{\link{ep_prblty_stations}},
+    \code{\link{cp_prblty_stations}}
 }

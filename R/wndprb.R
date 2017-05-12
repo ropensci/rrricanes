@@ -67,7 +67,10 @@ ep_prblty_stations <- function() {
 #' }
 #' @param link URL to storm's archive page.
 #' @param msg Show link being worked. Default, FALSE.
-#' @seealso \code{\link{get_storms}}, \code{\link{wndprb}}
+#' @seealso \code{\link{get_storms}}, \code{\link{wndprb}},
+#'     \code{\link{al_prblty_stations}}, \code{\link{ep_prblty_stations}},
+#'     \code{\link{cp_prblty_stations}}
+#' @source \link{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 #' @export
 get_wndprb <- function(link, msg = FALSE) {
 
