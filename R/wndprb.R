@@ -97,7 +97,7 @@ get_wndprb <- function(link, msg = FALSE) {
 #' @param msg Display each link as being worked; default is FALSE
 #' @return Dataframe
 #' @seealso \code{\link{get_wndprb}}
-#' @keywords internal
+#' @export
 wndprb <- function(link, msg = FALSE) {
 
     contents <- scrape_contents(link, msg = msg)
@@ -106,19 +106,87 @@ wndprb <- function(link, msg = FALSE) {
     if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP"))))
         stop(sprintf("Invalid Wind Probability link. %s", link))
 
-    df <- create_df_wndprb()
-
-    status <- scrape_header(contents, ret = "status")
-    name <- scrape_header(contents, ret = "name")
+    key <- scrape_header(contents, ret = "key")
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
 
-    df <- df %>%
-        tibble::add_row("Status" = status,
-                        "Name" = name,
-                        "Adv" = adv,
-                        "Date" = date,
-                        "Contents" = contents)
+    ## ---- * Wind Speed Probabilities for Selected Locations ------------------
 
-    return(df)
+    ptn <- paste0("(?<=\n)", # Look-behind
+                  # Location - first value must be capital letter.
+                  "([:upper:]{1}[[:alnum:][:blank:]]{14})",
+                  # Wind
+                  "([[:digit:]]{2})",
+                  # Wind12
+                  "[:blank:]+([:digit:]{1,2}|X)",
+                  # Delim
+                  "[:blank:]+",
+                  # Wind24
+                  "([:digit:]{1,2}|X)",
+                  # Wind24 cumulative
+                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  # Delim
+                  "[:blank:]+",
+                  # Wind36
+                  "([:digit:]{1,2}|X)",
+                  # Wind36 cumulative
+                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  # Delim
+                  "[:blank:]+",
+                  # Wind48
+                  "([:digit:]{1,2}|X)",
+                  # Wind48 cumulative
+                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  # Delim
+                  "[:blank:]+",
+                  # Wind72
+                  "([:digit:]{1,2}|X)",
+                  # Wind72 cumulative
+                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  # Delim
+                  "[:blank:]+",
+                  # Wind96
+                  "([:digit:]{1,2}|X)",
+                  # Wind96 cumulative
+                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  # Delim
+                  "[:blank:]+",
+                  # Wind120
+                  "([:digit:]{1,2}|X)",
+                  # Wind120 cumulative
+                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  # End
+                  "[[:blank:]\n]+")
+
+    matches <- stringr::str_match_all(contents, pattern = ptn)
+
+    # Load matches into dataframe
+    wndprb <- tibble::as_data_frame(matches[[1]][,2:16])
+
+    # Rename variables
+    names(wndprb) <- c("Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
+                       "Wind36", "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
+                       "Wind72Cum", "Wind96", "Wind96Cum", "Wind120",
+                       "Wind120Cum")
+
+    # Trim whitespace
+    wndprb <- purrr::dmap(.d = wndprb, .f = stringr::str_trim)
+
+    # Make "X" values 0
+    wndprb[wndprb == "X"] <- 0
+
+    # Make Wind:Wind120Cum numeric
+    wndprb <- purrr::dmap_at(.d = wndprb,
+                             .at = c(2:16),
+                             .f = as.numeric)
+
+    # Add Key, Adv, Date and rearrange.
+    wndprb <- wndprb %>%
+        mutate("Key" = key,
+               "Adv" = adv,
+               "Date" = date) %>%
+        select_("Key:Date", "Location:Wind120Cum") %>%
+        arrange_("Key", "Date", "Adv")
+
+    return(wndprb)
 }
