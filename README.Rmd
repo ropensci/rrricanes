@@ -59,7 +59,7 @@ On future revisions I will work on minimizing package dependencies if it helps i
 `Hurricanes` is currently only available in GitHub. It can be installed using the `devtools` package:
 
 ```r
-devtools::install_github("timtrice/Hurricanes", ref = "develop")
+devtools::install_github("timtrice/Hurricanes")
 ```
 
 ## Built With
