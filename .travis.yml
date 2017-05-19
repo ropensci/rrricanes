@@ -2,26 +2,6 @@ language: r
 
 warnings_are_errors: true
 
-# Test package on multiple platforms
-matrix:
-  include:
-    - os: linux
-      dist: precise
-      sudo: false
-      r: 3.3.3
-    - os: linux
-      dist: precise
-      sudo: false
-      r: release
-    - os: linux
-      dist: precise
-      sudo: false
-      r: devel
-    - os: osx
-      r: 3.3.3
-    - os: osx
-      r: release
-
 r_packages:
   - covr
 
