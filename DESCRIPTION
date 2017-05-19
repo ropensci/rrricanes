@@ -5,10 +5,12 @@ Version: 0.1.1
 Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
 Depends:
-  R (>= 3.3.3)
-Description: Get archived data of past and current hurricanes and tropical 
-  storms for the Atlantic and eastern Pacific oceans. Data is available for 
-  storms since 1998.
+  R (>= 3.4.0), 
+  tidyverse (>= 1.0.0)
+Description: Get archived data of past and current hurricanes for the Atlantic 
+  and eastern Pacific oceans.
+  This package will also combine HURDAT which was another R library I wrote to 
+  get best-track data from the National Hurricane Center.
 URL: http://www.timtrice.net
 BugReports: https://github.com/timtrice/rrricanes/issues
 License: MIT + file LICENSE
