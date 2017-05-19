@@ -21,10 +21,11 @@ environment:
     R_ARCH: x64
     GCC_PATH: mingw_64
 
-matrix:
-  fast_finish: true
+  - R_VERSION: patched
+    GCC_PATH: mingw_32
 
 build_script:
+  - travis-tool.sh install_github r-pkgs/remotes@303db43
   - travis-tool.sh install_deps
 
 test_script:
@@ -52,13 +53,3 @@ artifacts:
 
   - path: '\*_*.zip'
     name: Bits
-
-notifications:
- - provider: Email
-   to:
-     - tim.trice@gmail.com
-   subject: 'Hurricanes build {{status}}'
-   message: "https://ci.appveyor.com/project/timtrice/Hurricanes"
-   on_build_success: false
-   on_build_failure: true
-   on_build_status_changed: true
