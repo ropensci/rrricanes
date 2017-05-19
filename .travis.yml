@@ -6,7 +6,9 @@ os:
   - linux
 
 r:
+  - oldrelease
   - release
+  - devel
 
 r_packages:
   - covr
