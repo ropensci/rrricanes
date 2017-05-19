@@ -7,3 +7,4 @@
 ^\.Rprofile$
 ^README\.Rmd$
 ^data-raw$
+^docs$
