@@ -4,7 +4,7 @@ context("Wind Speed Probabilities (wndprb)")
 ## ---- * Current Data ---------------------------------------------------------
 al2006 <- get_storms(year = 2006, basin = "AL") %>%
     dplyr::select(Link) %>%
-    flatten_chr()
+    purrr::flatten_chr()
 
 df.al012006.wndprb <- get_wndprb(al2006[1])
 
