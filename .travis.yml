@@ -6,7 +6,7 @@ os:
   - linux
 
 r:
-  - oldrelease
+  - 3.3.3
   - release
   - devel
 
