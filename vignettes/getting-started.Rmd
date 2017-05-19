@@ -11,7 +11,7 @@ vignette: >
 
 ```{r}
 library(dplyr)
-library(rrricanes)
+library(Hurricanes)
 ```
 
 ## General Introduction
