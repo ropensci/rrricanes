@@ -4,14 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.1.0.1] - 2017-05-31
+## Unreleased
 
 ### Added
   - NA
 
 ### Changed
-  - Update package renamed to `rrricanes`
-  - `purrr::dmap` functions replaced with `purrr::map_df`
+  - NA
+
+### Removed
+  - NA
+
+### Deprecated
+  - NA
+
+### Fixed
+  - NA
+
+### Security
+  - NA
 
 ## [0.1.0] - 2017-05-12
 

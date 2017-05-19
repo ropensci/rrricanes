@@ -1,8 +1,7 @@
 Package: rrricanes
 Type: Package
-Title: Web scraper for real-time and archived advisory products for Atlantic and 
-    east Pacific hurricanes and tropical storms
-Version: 0.1.0.1
+Title: Hurricanes
+Version: 0.1.1
 Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
 Depends:
