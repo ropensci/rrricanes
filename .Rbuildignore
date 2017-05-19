@@ -7,5 +7,3 @@
 ^\.Rprofile$
 ^README\.Rmd$
 ^data-raw$
-^docs$
-^appveyor\.yml$
