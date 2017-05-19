@@ -6,8 +6,7 @@ Version: 0.1.1
 Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
 Depends:
-  R (>= 3.4.0), 
-  tidyverse (>= 1.0.0)
+  R (>= 3.4.0)
 Description: Get archived data of past and current hurricanes for the Atlantic 
   and eastern Pacific oceans.
   This package will also combine HURDAT which was another R library I wrote to 
