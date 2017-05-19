@@ -79,7 +79,9 @@ prblty <- function(link, msg = FALSE) {
     # Many values will have "X" for less than 1% chance. Make 0
     prblty[prblty == "X"] <- 0
 
-    prblty <- dplyr::mutate_at(prblty, .cols = dplyr::vars(c(A, B, C, D, E)), .funs = as.numeric)
+    prblty <- dplyr::mutate_at(.tbl = wndprb,
+                               .cols = c(2:15),
+                               .funs = "as.numeric")
 
     prblty <- prblty %>%
         dplyr::mutate("Status" = status,

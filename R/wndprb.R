@@ -160,7 +160,9 @@ wndprb <- function(link, msg = FALSE) {
     wndprb[wndprb == "X"] <- 0
 
     # Make Wind:Wind120Cum numeric
-    wndprb <- dplyr::mutate_at(wndprb, .cols = c(2:15), .funs = as.numeric)
+    wndprb <- dplyr::mutate_at(.tbl = wndprb,
+                               .cols = c(2:15),
+                               .funs = "as.numeric")
 
     # Add Key, Adv, Date and rearrange.
     wndprb <- wndprb %>%
