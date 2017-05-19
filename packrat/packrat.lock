@@ -159,6 +159,11 @@ Version: 0.2.0
 Hash: e5a3b0b96a39f5581467b0c6366f7408
 Requires: magrittr, tibble
 
+Package: formatR
+Source: CRAN
+Version: 1.5
+Hash: 258cf79a8dbeedf1c981cdb53837d2af
+
 Package: ggplot2
 Source: CRAN
 Version: 2.2.1
