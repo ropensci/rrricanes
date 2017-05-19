@@ -1,7 +1,6 @@
 Package: rrricanes
 Type: Package
-Title: Grab real-time and archived text products for Atlantic and Pacific 
-    tropical cyclones for years >= 1998
+Title: Hurricanes
 Version: 0.1.1
 Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
