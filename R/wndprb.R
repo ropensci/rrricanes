@@ -154,23 +154,23 @@ wndprb <- function(link, msg = FALSE) {
                        "Wind120Cum")
 
     # Trim whitespace
-    wndprb <- purrr::dmap(.d = wndprb, .f = stringr::str_trim)
+    wndprb <- purrr::map_df(.x = wndprb, .f = stringr::str_trim)
 
     # Make "X" values 0
     wndprb[wndprb == "X"] <- 0
 
     # Make Wind:Wind120Cum numeric
-    wndprb <- purrr::dmap_at(.d = wndprb,
-                             .at = c(2:16),
-                             .f = as.numeric)
+    wndprb <- dplyr::mutate_at(.tbl = wndprb,
+                               .cols = c(2:15),
+                               .funs = "as.numeric")
 
     # Add Key, Adv, Date and rearrange.
     wndprb <- wndprb %>%
-        mutate("Key" = key,
+        dplyr::mutate("Key" = key,
                "Adv" = adv,
                "Date" = date) %>%
-        select_("Key:Date", "Location:Wind120Cum") %>%
-        arrange_("Key", "Date", "Adv")
+        dplyr::select_("Key:Date", "Location:Wind120Cum") %>%
+        dplyr::arrange_("Key", "Date", "Adv")
 
     return(wndprb)
 }

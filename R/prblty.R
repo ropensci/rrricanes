@@ -74,14 +74,14 @@ prblty <- function(link, msg = FALSE) {
     names(prblty) <- c("Location", "A", "B", "C", "D", "E")
 
     # Trim whitespace
-    prblty <- purrr::dmap(.d = prblty, .f = stringr::str_trim)
+    prblty <- purrr::map_df(.x = prblty, .f = stringr::str_trim)
 
     # Many values will have "X" for less than 1% chance. Make 0
     prblty[prblty == "X"] <- 0
 
-    prblty <- purrr::dmap_at(.d = prblty,
-                             .at = c("A", "B", "C", "D", "E"),
-                             .f = as.numeric)
+    prblty <- dplyr::mutate_at(.tbl = wndprb,
+                               .cols = c(2:15),
+                               .funs = "as.numeric")
 
     prblty <- prblty %>%
         dplyr::mutate("Status" = status,
