@@ -1,7 +1,7 @@
 Package: Hurricanes
 Type: Package
 Title: Hurricanes
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
 Depends:

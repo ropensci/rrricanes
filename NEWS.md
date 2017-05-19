@@ -1,3 +1,11 @@
+# Hurricanes 0.1.1
+
+## Major Changes
+
+## Minor Changes
+
+## Deprecated
+
 # Hurricanes 0.1.0
 
 ## Major new features
