@@ -1,13 +1,5 @@
 
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop-pkgdown)](https://travis-ci.org/timtrice/Hurricanes) [![codecov](https://codecov.io/gh/timtrice/Hurricanes/branch/develop-pkgdown/graph/badge.svg)](https://codecov.io/gh/timtrice/Hurricanes)
-
-------------------------------------------------------------------------
-
-[![minimal R version](https://img.shields.io/badge/R%3E%3D-3.4.0-6666ff.svg)](https://cran.r-project.org/) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/Hurricanes)](https://cran.r-project.org/package=Hurricanes) [![packageversion](https://img.shields.io/badge/Package%20version-0.1.1-orange.svg?style=flat-square)](commits/master)
-
-------------------------------------------------------------------------
-
-[![Last-changedate](https://img.shields.io/badge/last%20change-2017--05--19-yellowgreen.svg)](/commits/master)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.1.1-orange.svg?style=flat-square)](commits/master) [![Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop-pkgdown)](https://travis-ci.org/timtrice/Hurricanes) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/timtrice/Hurricanes?branch=develop-pkgdown&svg=true)](https://ci.appveyor.com/project/timtrice/Hurricanes) [![codecov](https://codecov.io/gh/timtrice/Hurricanes/branch/develop-pkgdown/graph/badge.svg)](https://codecov.io/gh/timtrice/Hurricanes) [![minimal R version](https://img.shields.io/badge/R%3E%3D-3.4.0-6666ff.svg)](https://cran.r-project.org/) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/Hurricanes)](https://cran.r-project.org/package=Hurricanes)
 
 Hurricanes
 ==========
