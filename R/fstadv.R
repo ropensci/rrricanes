@@ -469,7 +469,7 @@ fstadv_forecast_wind_radius <- function(df) {
                             "V3" = x[[1]][,4],
                             "V4" = x[[1]][,5],
                             "V5" = x[[1]][,6]) %>%
-        purrr::dmap(as.numeric) %>%
+        purrr::map_df(as.numeric) %>%
         dplyr::rename_("WF" = "V1",
                        "NE" = "V2",
                        "SE" = "V3",
