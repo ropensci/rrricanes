@@ -21,8 +21,27 @@ environment:
     R_ARCH: x64
     GCC_PATH: mingw_64
 
-#  - R_VERSION: patched
-#    GCC_PATH: mingw_32
+  matrix:
+  - R_VERSION: release
+    R_ARCH: x64
+
+  - R_VERSION: stable
+
+  - R_VERSION: devel
+    GCC_PATH: mingw_32
+
+  - R_VERSION: devel
+    R_ARCH: x64
+    GCC_PATH: mingw_64
+
+  - R_VERSION: patched
+
+  - R_VERSION: oldrel
+    RTOOLS_VERSION: 33
+    CRAN: http://cran.rstudio.com
+
+matrix:
+  fast_finish: true
 
 build_script:
   - travis-tool.sh install_github r-pkgs/remotes@303db43
