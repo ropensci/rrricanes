@@ -21,8 +21,9 @@ matrix:
       r: 3.3.3
     - os: osx
       r: release
-    - os: osx
-      r: devel
+# Disable for time being. https://github.com/travis-ci/travis-ci/issues/6629
+#    - os: osx
+#      r: devel
 
 r_packages:
   - covr
