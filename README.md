@@ -1,6 +1,5 @@
 
-[![minimal R version](https://img.shields.io/badge/R%3E%3D-3.3.3-6666ff.svg)](https://cran.r-project.org/)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.1.1-orange.svg?style=flat-square)](commits/master) [![Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop-pkgdown)](https://travis-ci.org/timtrice/Hurricanes) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/timtrice/Hurricanes?branch=develop-pkgdown&svg=true)](https://ci.appveyor.com/project/timtrice/Hurricanes) [![codecov](https://codecov.io/gh/timtrice/Hurricanes/branch/develop-pkgdown/graph/badge.svg)](https://codecov.io/gh/timtrice/Hurricanes) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/Hurricanes)](https://cran.r-project.org/package=Hurricanes)
+[![minimal R version](https://img.shields.io/badge/R%3E%3D-3.3.3-6666ff.svg)](https://cran.r-project.org/) [![packageversion](https://img.shields.io/badge/Package%20version-0.1.1-orange.svg?style=flat-square)](commits/master) [![Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop-pkgdown)](https://travis-ci.org/timtrice/Hurricanes) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/timtrice/Hurricanes?branch=develop-pkgdown&svg=true)](https://ci.appveyor.com/project/timtrice/Hurricanes) [![codecov](https://codecov.io/gh/timtrice/Hurricanes/branch/develop-pkgdown/graph/badge.svg)](https://codecov.io/gh/timtrice/Hurricanes) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/Hurricanes)](https://cran.r-project.org/package=Hurricanes)
 
 Hurricanes
 ==========
@@ -50,7 +49,7 @@ Please read [CONTRIBUTING.md](https://gist.github.com/timtrice/f2a4c2a020c876691
 Versioning
 ----------
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/timtrice/Hurricanes/tags).
 
 Authors
 -------
