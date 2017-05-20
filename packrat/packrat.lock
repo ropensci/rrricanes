@@ -270,6 +270,11 @@ Source: CRAN
 Version: 1.5
 Hash: bdc4d48c3135e8f3b399536ddf160df4
 
+Package: maps
+Source: CRAN
+Version: 3.1.1
+Hash: 4a0a1b1764bfe2c41c6fc21790408caf
+
 Package: markdown
 Source: CRAN
 Version: 0.8
@@ -402,6 +407,12 @@ Version: 1.4.2
 Hash: 790c06c11c84041b814139d731a872b9
 Requires: Rcpp, plyr, stringr
 
+Package: rgdal
+Source: CRAN
+Version: 1.2-7
+Hash: d79393d8e532c8da734a0735ce20c7da
+Requires: sp
+
 Package: rlang
 Source: CRAN
 Version: 0.1.1
@@ -449,6 +460,11 @@ Source: CRAN
 Version: 0.3-1
 Hash: 367275e3dcdd208339e131c7a41bec56
 Requires: stringr
+
+Package: sp
+Source: CRAN
+Version: 1.2-4
+Hash: 4ffcf86fffee89e7b859f760528dd545
 
 Package: stringi
 Source: CRAN
