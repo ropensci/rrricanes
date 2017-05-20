@@ -59,6 +59,6 @@ notifications:
      - tim.trice@gmail.com
    subject: 'Hurricanes build {{status}}'
    message: "https://ci.appveyor.com/project/timtrice/Hurricanes"
-   on_build_success: true
+   on_build_success: false
    on_build_failure: true
    on_build_status_changed: true
