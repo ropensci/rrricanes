@@ -69,9 +69,11 @@ prblty <- function(link, msg = FALSE) {
 
     matches <- stringr::str_match_all(contents, ptn)
 
-    prblty <- tibble::as_data_frame(matches[[1]][,2:7])
+    prblty <- tibble::as_data_frame(matches[[1]])
 
-    names(prblty) <- c("Location", "A", "B", "C", "D", "E")
+    names(prblty) <- c("Del", "Location", "A", "B", "C", "D", "E")
+
+    prblty$Del <- NULL
 
     # Trim whitespace
     prblty <- purrr::map_df(.x = prblty, .f = stringr::str_trim)
