@@ -413,6 +413,12 @@ Version: 1.2-7
 Hash: d79393d8e532c8da734a0735ce20c7da
 Requires: sp
 
+Package: rgeos
+Source: CRAN
+Version: 0.3-23
+Hash: 7f7ce992b079e8de185c20dfe1ae71c8
+Requires: sp
+
 Package: rlang
 Source: CRAN
 Version: 0.1.1
