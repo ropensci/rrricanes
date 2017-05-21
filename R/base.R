@@ -23,6 +23,9 @@
 #' @name rrricanes
 NULL
 
+#' @import rnaturalearthdata
+#' @import rnaturalearthhires
+
 #' @importFrom magrittr %>%
 
 #' @importFrom stats na.omit
