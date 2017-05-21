@@ -6,9 +6,6 @@
 \usage{
 al_tracking_chart(...)
 }
-\arguments{
-\item{...}{Additional parameters for ggplot2}
-}
 \value{
 ggplot2 object centered on Atlantic basin.
 }
