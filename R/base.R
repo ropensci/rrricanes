@@ -23,8 +23,8 @@
 #' @name Hurricanes
 NULL
 
-#' @import rnaturalearthdata
-#' @import rnaturalearthhires
+# #' @import rnaturalearthdata
+# #' @import rnaturalearthhires
 
 #' @importFrom magrittr %>%
 
