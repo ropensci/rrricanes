@@ -50,6 +50,14 @@ save(ep031999.fstadv, file = "./inst/extdata/ep031999.fstadv.Rda", compression_l
 ep041999.fstadv <- get_fstadv(ep1999[4])
 save(ep041999.fstadv, file = "./inst/extdata/ep041999.fstadv.Rda", compression_level = 9)
 
+## ---- * 1999, EP, 07 ---------------------------------------------------------
+ep071999.fstadv <- get_fstadv(ep1999[7])
+save(ep071999.fstadv, file = "./inst/extdata/ep071999.fstadv.Rda", compression_level = 9)
+
+## ---- * 1999, EP, 08 ---------------------------------------------------------
+ep081999.fstadv <- get_fstadv(ep1999[8])
+save(ep081999.fstadv, file = "./inst/extdata/ep081999.fstadv.Rda", compression_level = 9)
+
 ## ---- prblty -----------------------------------------------------------------
 
 ## ---- * 1998, AL, 01 ---------------------------------------------------------
