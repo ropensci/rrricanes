@@ -252,10 +252,15 @@ scrape_key <- function(header) {
     # Get year
     y <- lubridate::year(scrape_header(header, ret = "date"))
 
-    # For <= 2003 Identifier is 6-digits with a 2-digit year.
-    ptn <- list(paste0('(?:NATIONAL[:blank:]HURRICANE[:blank:]CENTER|',
-                       'NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?',
-                       '[:blank:]+MIAMI[:blank:]FL[:blank:]+'))
+    # There are several possibilities that can preceed Key in the storm header.
+    # ptn should capture each possibility, but only one of.
+    ptn <- paste0("(?:(?:NATIONAL HURRICANE CENTER|",
+                  "NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?",
+                  "[:blank:]+MIAMI FL[:blank:]+|",
+                  "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+)")
+
+    # For <= 2003 Identifier is 6-digits with a 2-digit year. Append either
+    # option to ptn based on year of cyclone.
     if (y <= 2003) {
         ptn <- c(ptn, '([:alnum:]{6})')
     } else {
@@ -263,6 +268,12 @@ scrape_key <- function(header) {
     }
     ptn <- paste0(ptn, collapse = '')
     x <- stringr::str_match(header, ptn)[,2]
+
+    # If year is 1999 and Key is "EP9099", send warning.
+    # This is a temp correction for Issue #55 in GitHub repo.
+    if (all(y == 1999, x == "EP9099"))
+        warning("Known data quality error. Key for Advisory 1 is incorrect. See GitHub Issue #55",
+                call. = FALSE)
 
     # In some instances x is NA. Stop and research.
     if (nchar(x) != 6 & nchar(x) != 8) {
