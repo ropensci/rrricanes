@@ -5,7 +5,7 @@ context("Storm Discussions (discus)")
 test_that("Dataframe Skeleton", {
     df <- create_df_discus()
     expect_true(is.data.frame(df))
-    expect_true(is_tibble(df))
+    expect_true(tibble::is_tibble(df))
     expect_identical(class(df$Status), "character")
     expect_identical(class(df$Name), "character")
     expect_identical(class(df$Adv), "character")
@@ -20,7 +20,7 @@ test_that("Test discus()", {
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/dis/NAL0198.001"
     df <- discus(link = url)
     expect_true(is.data.frame(df))
-    expect_true(is_tibble(df))
+    expect_true(tibble::is_tibble(df))
     expect_identical(class(df$Status), "character")
     expect_identical(class(df$Name), "character")
     expect_identical(class(df$Adv), "character")
@@ -33,7 +33,7 @@ test_that("Test discus()", {
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/dis/NAL0198.007"
     df <- discus(link = url)
     expect_true(is.data.frame(df))
-    expect_true(is_tibble(df))
+    expect_true(tibble::is_tibble(df))
     expect_identical(class(df$Status), "character")
     expect_identical(class(df$Name), "character")
     expect_identical(class(df$Adv), "character")
@@ -53,7 +53,7 @@ test_that("Test discus()", {
     url <- "http://www.nhc.noaa.gov/archive/1998/archive/dis/NAL0198.024"
     df <- discus(link = url)
     expect_true(is.data.frame(df))
-    expect_true(is_tibble(df))
+    expect_true(tibble::is_tibble(df))
     expect_identical(class(df$Status), "character")
     expect_identical(class(df$Name), "character")
     expect_identical(class(df$Adv), "character")
@@ -70,7 +70,7 @@ test_that("Test get_discus()", {
     url <- "http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html"
     df <- get_discus(link = url)
     expect_true(is.data.frame(df))
-    expect_true(is_tibble(df))
+    expect_true(tibble::is_tibble(df))
     expect_identical(class(df$Status), "character")
     expect_identical(class(df$Name), "character")
     expect_identical(class(df$Adv), "character")

@@ -69,19 +69,21 @@ prblty <- function(link, msg = FALSE) {
 
     matches <- stringr::str_match_all(contents, ptn)
 
-    prblty <- tibble::as_data_frame(matches[[1]][,2:7])
+    prblty <- tibble::as_data_frame(matches[[1]])
 
-    names(prblty) <- c("Location", "A", "B", "C", "D", "E")
+    names(prblty) <- c("Del", "Location", "A", "B", "C", "D", "E")
+
+    prblty$Del <- NULL
 
     # Trim whitespace
-    prblty <- purrr::dmap(.d = prblty, .f = stringr::str_trim)
+    prblty <- purrr::map_df(.x = prblty, .f = stringr::str_trim)
 
     # Many values will have "X" for less than 1% chance. Make 0
     prblty[prblty == "X"] <- 0
 
-    prblty <- purrr::dmap_at(.d = prblty,
-                             .at = c("A", "B", "C", "D", "E"),
-                             .f = as.numeric)
+    prblty <- dplyr::mutate_at(.tbl = prblty,
+                               .cols = c(2:6),
+                               .funs = "as.numeric")
 
     prblty <- prblty %>%
         dplyr::mutate("Status" = status,

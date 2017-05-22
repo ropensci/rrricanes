@@ -10,7 +10,7 @@ vignette: >
 ---
 
 ```{r}
-library(tidyverse)
+library(dplyr)
 library(Hurricanes)
 ```
 

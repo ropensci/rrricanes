@@ -1,2 +1,7 @@
 README.Rmd merge=ours
 README.md merge=ours
+# Appveyor
+* text=auto
+data/* binary
+src/* text=lf
+R/* text=lf
