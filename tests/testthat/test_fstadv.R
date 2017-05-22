@@ -25,6 +25,11 @@ ep1998 <- get_storms(year = 1998, basin = "EP") %>%
     dplyr::select(Link) %>%
     purrr::flatten_chr()
 
+#' Get all storms for 1999, EP basin
+ep1999 <- get_storms(year = 1999, basin = "EP") %>%
+    dplyr::select(Link) %>%
+    purrr::flatten_chr()
+
 #' Load Tropical Storm Alex
 df.al011998.fstadv <- get_fstadv(al1998[1])
 #' Load Hurricane Bonnie
@@ -33,12 +38,15 @@ df.al021998.fstadv <- get_fstadv(al1998[2])
 df.ep011998.fstadv <- get_fstadv(ep1998[1])
 #' Load Tropical Depression Two-E
 df.ep021998.fstadv <- get_fstadv(ep1998[2])
+#' Load Tropical Depression Three-E
+df.ep031999.fstadv <- get_fstadv(ep1999[3])
 
 ## ---- * Saved Data -----------------------------------------------------------
-load(system.file("extdata", "al011998.fstadv.Rda", package = "rrricanes"))
-load(system.file("extdata", "al021998.fstadv.Rda", package = "rrricanes"))
-load(system.file("extdata", "ep011998.fstadv.Rda", package = "rrricanes"))
-load(system.file("extdata", "ep021998.fstadv.Rda", package = "rrricanes"))
+load(system.file("extdata", "al011998.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "al021998.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep011998.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep021998.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep031999.fstadv.Rda", package = "Hurricanes"))
 
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton
@@ -187,5 +195,6 @@ test_that("Test fstadv()", {
     expect_identical(identical(al021998.fstadv, df.al021998.fstadv), TRUE)
     expect_identical(identical(ep011998.fstadv, df.ep011998.fstadv), TRUE)
     expect_identical(identical(ep021998.fstadv, df.ep021998.fstadv), TRUE)
+    expect_identical(identical(ep031999.fstadv, df.ep031999.fstadv), TRUE)
 })
 
