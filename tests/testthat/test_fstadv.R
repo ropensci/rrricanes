@@ -42,6 +42,10 @@ df.ep021998.fstadv <- get_fstadv(ep1998[2])
 df.ep031999.fstadv <- get_fstadv(ep1999[3])
 #' Load Tropical Depression Four-E
 df.ep041999.fstadv <- get_fstadv(ep1999[4])
+#' Load Hurricane Dora
+df.ep071999.fstadv <- get_fstadv(ep1999[7])
+#' Load Hurricane Eugene
+df.ep081999.fstadv <- get_fstadv(ep1999[8])
 
 ## ---- * Saved Data -----------------------------------------------------------
 load(system.file("extdata", "al011998.fstadv.Rda", package = "Hurricanes"))
@@ -50,6 +54,8 @@ load(system.file("extdata", "ep011998.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep021998.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep031999.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep041999.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep071999.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep081999.fstadv.Rda", package = "Hurricanes"))
 
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton
@@ -200,6 +206,8 @@ test_that("Test fstadv()", {
     expect_identical(identical(ep021998.fstadv, df.ep021998.fstadv), TRUE)
     expect_identical(identical(ep031999.fstadv, df.ep031999.fstadv), TRUE)
     expect_identical(identical(ep041999.fstadv, df.ep041999.fstadv), TRUE)
+    expect_identical(identical(ep071999.fstadv, df.ep071999.fstadv), TRUE)
+    expect_identical(identical(ep081999.fstadv, df.ep081999.fstadv), TRUE)
     expect_warning(ep041999.fstadv <- get_fstadv(ep1999[4]),
                    "Known data quality error")
 })

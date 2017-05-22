@@ -96,7 +96,7 @@ scrape_date <- function(header) {
     # What is standard is that time comes first followed by time zone, day of
     # the week, month, date and year. So, find the pattern that matches.
 
-    ptn <- paste0("(?<=\n)",
+    ptn <- paste0("(?<=(?:\n|\r))",
                   "([:digit:]{1,2})", # Hour
                   "(?<=[:digit:]{1})([:digit:]{2})?", # Minute
                   "(?:Z)?", # For forecast; Z is military, no offset for UTC
@@ -111,8 +111,7 @@ scrape_date <- function(header) {
                   "([:digit:]{2})", # Date
                   "[:blank:]",
                   "([:digit:]{4})",  # Year
-                  "[:blank:]*",
-                  "\n")
+                  "[[:blank:]\n\r]*")
 
     datetime.extracted <- stringr::str_match(header, ptn)
 
@@ -209,7 +208,7 @@ scrape_header <- function(contents, ret = NULL) {
     # There may be additional line breaks inside the header. Must account for.
     # Use day, month, date and year which seems to be consistent across all
     # products.
-    ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]\n]*?", # most of header
+    ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]\n\r]*?", # most of header
                          "[:alpha:]{3}", # Day of week
                          "[:blank:]*",
                          "[:alpha:]{3}", # Month, abbreviated
@@ -217,8 +216,7 @@ scrape_header <- function(contents, ret = NULL) {
                          "[:digit:]{2}", # Date
                          "[:blank:]*",
                          "[:digit:]{4}", # Year
-                         "[:blank:]*", # Optional
-                         "\n") # Close off date/time line
+                         "[[:blank:]\n\r]*") # Close off date/time line
     header <- stringr::str_extract(contents, ptn_header)
 
     if (ret == "status") {
