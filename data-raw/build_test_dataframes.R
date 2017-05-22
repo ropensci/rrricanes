@@ -66,14 +66,24 @@ save(ep081999.fstadv, file = "./inst/extdata/ep081999.fstadv.Rda", compression_l
 ## ---- * 2000, AL, 02 ---------------------------------------------------------
 al022000.fstadv <- get_fstadv(al2000[2])
 save(al022000.fstadv, file = "./inst/extdata/al022000.fstadv.Rda", compression_level = 9)
-al022000.prblty <- get_prblty(al2000[2])
-save(al022000.prblty, file = "./inst/extdata/al022000.prblty.Rda", compression_level = 9)
+
+## ---- * 2000, AL, 02 ---------------------------------------------------------
+al022000.fstadv <- get_fstadv(al2000[2])
+save(al022000.fstadv, file = "./inst/extdata/al022000.fstadv.Rda", compression_level = 9)
 
 ## ---- prblty -----------------------------------------------------------------
 
 ## ---- * 1998, AL, 01 ---------------------------------------------------------
 al011998.prblty <- get_prblty(al1998[1])
 save(al011998.prblty, file = "./inst/extdata/al011998.prblty.Rda", compression_level = 9)
+
+## ---- * 2000, AL, 02 ---------------------------------------------------------
+al022000.prblty <- get_prblty(al2000[2])
+save(al022000.prblty, file = "./inst/extdata/al022000.prblty.Rda", compression_level = 9)
+
+## ---- * 2000, AL, 03 ---------------------------------------------------------
+al032000.prblty <- get_prblty(al2000[3])
+save(al032000.prblty, file = "./inst/extdata/al032000.prblty.Rda", compression_level = 9)
 
 ## ---- wndprb -----------------------------------------------------------------
 

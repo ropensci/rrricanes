@@ -78,6 +78,10 @@ prblty <- function(link, msg = FALSE) {
     # Trim whitespace
     prblty <- purrr::map_df(.x = prblty, .f = stringr::str_trim)
 
+    # If no strike probabilities, return NULL
+    if (nrow(prblty) == 0)
+        return(NULL)
+
     # Many values will have "X" for less than 1% chance. Make 0
     prblty[prblty == "X"] <- 0
 
