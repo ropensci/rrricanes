@@ -54,6 +54,8 @@ load(system.file("extdata", "ep011998.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep021998.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep031999.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep041999.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep071999.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep081999.fstadv.Rda", package = "Hurricanes"))
 
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton
