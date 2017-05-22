@@ -18,11 +18,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r badges, eval = FALSE, echo = FALSE, warning = FALSE, include = FALSE}
-badgecreatr::badgeplacer(githubaccount = "timtrice", githubrepo = "Hurricanes", branch = "develop-0.1.0")
-```
-
-
 # Hurricanes
 
 `Hurricanes` is a R library that extracts information from available archives on past and current tropical cyclones. Currently, archives date back to 1998. This is considered "raw data" in the sense that information extracted is from then real-time advisories. 
