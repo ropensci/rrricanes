@@ -10,8 +10,8 @@ library(Hurricanes)
 library(purrr)
 library(readr)
 
-year <- 1999
-basin <- "EP"
+year <- 1998
+basin <- "AL"
 
 data.dir <- sprintf("~/Projects/HurricanesData/data/%d", year)
 if (!dir.exists(data.dir))
@@ -23,7 +23,7 @@ storms <- get_storms(year = year, basin = basin) %>%
     select(Key, Name, Link)
 
 # Storms to get
-nums <- c(3:nrow(storms))
+nums <- c(1:nrow(storms))
 
 write_csv(storms, path = paste(data.dir, paste0(basin, year, ".csv"), sep = "/"))
 
