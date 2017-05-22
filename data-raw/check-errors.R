@@ -1,4 +1,4 @@
-#' @title data-quality
+#' @title check-errors
 #' @description Loop through all storms to look for errors and discrepancies.
 #' @details This does not check for data quality; it only looks for any errors
 #'     that arise from a given storm. Checking for data quality will have to be
