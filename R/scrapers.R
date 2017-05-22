@@ -269,6 +269,12 @@ scrape_key <- function(header) {
     ptn <- paste0(ptn, collapse = '')
     x <- stringr::str_match(header, ptn)[,2]
 
+    # If year is 1999 and Key is "EP9099", send warning.
+    # This is a temp correction for Issue #55 in GitHub repo.
+    if (all(y == 1999, x == "EP9099"))
+        warning("Known data quality error. Key for Advisory 1 is incorrect. See GitHub Issue #55",
+                call. = FALSE)
+
     # In some instances x is NA. Stop and research.
     if (nchar(x) != 6 & nchar(x) != 8) {
         stop('Identifier is improperly formatted.')
