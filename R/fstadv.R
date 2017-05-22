@@ -329,7 +329,7 @@ fstadv_forecasts <- function(content, date) {
     ds <- fstadv_parse_forecasts(ds)
 
     # If no forecasts, exit gracefully
-    if (length(ds) == 0)
+    if (all(purrr::map_lgl(ds, purrr::is_empty)))
         return(NULL)
 
     # Reformat to load into dataframe
