@@ -43,7 +43,7 @@ prblty <- function(link, msg = FALSE) {
     contents <- scrape_contents(link, msg = msg)
 
     # Make sure this is a strike probability product
-    if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP", "SPFAT"))))
+    if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP", "SPFAT", "MIAWRKSP"))))
         stop(sprintf("Invalid Strike Probability link. %s", link))
 
     status <- scrape_header(contents, ret = "status")
