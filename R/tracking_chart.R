@@ -1,5 +1,6 @@
 #' @title al_tracking_chart
 #' @description Build tracking chart centered on Atlantic Basin.
+#' @param ... Additional parameters for ggplot2
 #' @seealso \code{\link{tracking_chart}}
 #' @return ggplot2 object centered on Atlantic basin.
 #' @export
@@ -11,6 +12,7 @@ al_tracking_chart <- function(...) {
 
 #' @title ep_tracking_chart
 #' @description Build tracking chart centered on northeast Pacific Basin.
+#' @param ... Additional parameters for ggplot2
 #' @seealso \code{\link{tracking_chart}}
 #' @return ggplot2 object centered on northeast Pacific basin.
 #' @export
