@@ -252,10 +252,15 @@ scrape_key <- function(header) {
     # Get year
     y <- lubridate::year(scrape_header(header, ret = "date"))
 
-    # For <= 2003 Identifier is 6-digits with a 2-digit year.
-    ptn <- list(paste0('(?:NATIONAL[:blank:]HURRICANE[:blank:]CENTER|',
-                       'NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?',
-                       '[:blank:]+MIAMI[:blank:]FL[:blank:]+'))
+    # There are several possibilities that can preceed Key in the storm header.
+    # ptn should capture each possibility, but only one of.
+    ptn <- paste0("(?:(?:NATIONAL HURRICANE CENTER|",
+                  "NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?",
+                  "[:blank:]+MIAMI FL[:blank:]+|",
+                  "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+)")
+
+    # For <= 2003 Identifier is 6-digits with a 2-digit year. Append either
+    # option to ptn based on year of cyclone.
     if (y <= 2003) {
         ptn <- c(ptn, '([:alnum:]{6})')
     } else {
