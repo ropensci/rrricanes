@@ -35,6 +35,11 @@ al2000 <- get_storms(year = 2000, basin = "AL") %>%
     dplyr::select(Link) %>%
     purrr::flatten_chr()
 
+#' Get storms for 2000, EP basin
+ep2000 <- get_storms(year = 2000, basin = "EP") %>%
+    dplyr::select(Link) %>%
+    purrr::flatten_chr()
+
 #' Load Tropical Storm Alex
 df.al011998.fstadv <- get_fstadv(al1998[1])
 #' Load Hurricane Bonnie
@@ -53,6 +58,8 @@ df.ep071999.fstadv <- get_fstadv(ep1999[7])
 df.ep081999.fstadv <- get_fstadv(ep1999[8])
 ## ---- * 2000, AL, 02 ---------------------------------------------------------
 df.al022000.fstadv <- get_fstadv(al2000[2])
+## ---- * 2000, EP, 06 ---------------------------------------------------------
+df.ep062000.fstadv <- get_fstadv(ep2000[6])
 
 ## ---- * Saved Data -----------------------------------------------------------
 load(system.file("extdata", "al011998.fstadv.Rda", package = "Hurricanes"))
@@ -64,6 +71,7 @@ load(system.file("extdata", "ep041999.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep071999.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep081999.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "al022000.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep062000.fstadv.Rda", package = "Hurricanes"))
 
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton
@@ -214,10 +222,11 @@ test_that("Test fstadv()", {
     expect_identical(identical(ep021998.fstadv, df.ep021998.fstadv), TRUE)
     expect_identical(identical(ep031999.fstadv, df.ep031999.fstadv), TRUE)
     expect_identical(identical(ep041999.fstadv, df.ep041999.fstadv), TRUE)
+    expect_warning(ep041999.fstadv <- get_fstadv(ep1999[4]),
+                   "Known data quality error")
     expect_identical(identical(ep071999.fstadv, df.ep071999.fstadv), TRUE)
     expect_identical(identical(ep081999.fstadv, df.ep081999.fstadv), TRUE)
     expect_identical(identical(al022000.fstadv, df.al022000.fstadv), TRUE)
-    expect_warning(ep041999.fstadv <- get_fstadv(ep1999[4]),
-                   "Known data quality error")
+    expect_identical(identical(ep062000.fstadv, df.ep062000.fstadv), TRUE)
 })
 
