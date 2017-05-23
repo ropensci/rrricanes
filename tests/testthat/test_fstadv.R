@@ -216,17 +216,17 @@ test_that("Test get_fstadv()", {
 ## ---- Test fstadv() ----------------------------------------------------------
 #' Test return of fstadv()
 test_that("Test fstadv()", {
-    expect_identical(identical(al011998.fstadv, df.al011998.fstadv), TRUE)
-    expect_identical(identical(al021998.fstadv, df.al021998.fstadv), TRUE)
-    expect_identical(identical(ep011998.fstadv, df.ep011998.fstadv), TRUE)
-    expect_identical(identical(ep021998.fstadv, df.ep021998.fstadv), TRUE)
-    expect_identical(identical(ep031999.fstadv, df.ep031999.fstadv), TRUE)
-    expect_identical(identical(ep041999.fstadv, df.ep041999.fstadv), TRUE)
+    expect_identical(al011998.fstadv, df.al011998.fstadv)
+    expect_identical(al021998.fstadv, df.al021998.fstadv)
+    expect_identical(ep011998.fstadv, df.ep011998.fstadv)
+    expect_identical(ep021998.fstadv, df.ep021998.fstadv)
+    expect_identical(ep031999.fstadv, df.ep031999.fstadv)
+    expect_identical(ep041999.fstadv, df.ep041999.fstadv)
     expect_warning(ep041999.fstadv <- get_fstadv(ep1999[4]),
                    "Known data quality error")
-    expect_identical(identical(ep071999.fstadv, df.ep071999.fstadv), TRUE)
-    expect_identical(identical(ep081999.fstadv, df.ep081999.fstadv), TRUE)
-    expect_identical(identical(al022000.fstadv, df.al022000.fstadv), TRUE)
-    expect_identical(identical(ep062000.fstadv, df.ep062000.fstadv), TRUE)
+    expect_identical(ep071999.fstadv, df.ep071999.fstadv)
+    expect_identical(ep081999.fstadv, df.ep081999.fstadv)
+    expect_identical(al022000.fstadv, df.al022000.fstadv)
+    expect_identical(ep062000.fstadv, df.ep062000.fstadv)
 })
 
