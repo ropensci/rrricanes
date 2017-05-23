@@ -364,9 +364,20 @@ fstadv_forecasts <- function(content, date) {
     # or even years
     df <- df %>%
         dplyr::mutate(mo = ifelse(d < ob_day, ob_month + 1, ob_month),
-                      y = ifelse(mo < ob_month, ob_year + 1, ob_year),
-                      FcstDate = lubridate::ymd_hm(paste(paste(y, mo, d, sep = '-'),
-                                                         paste(h, mi, sep = ':'),
+                      y = ifelse(mo < ob_month, ob_year + 1, ob_year))
+    # In case of storms like Zeta (AL302005) where storm existed across multiple
+    # years, make sure the calculation above does not give a month greater than
+    # 12. If so, substract 12. In otherwords, going from December to January.
+    df <- df %>%
+        dplyr::mutate(mo = ifelse(mo > 12, mo - 12, mo))
+    df <- df %>%
+        dplyr::mutate(FcstDate = lubridate::ymd_hm(paste(paste(y,
+                                                               mo,
+                                                               d,
+                                                               sep = '-'),
+                                                         paste(h,
+                                                               mi,
+                                                               sep = ':'),
                                                          sep = ' ')))
 
     # Clean up lat, lath, lon, lonh. Though no storms should exist in southern
