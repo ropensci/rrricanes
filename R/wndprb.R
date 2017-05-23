@@ -92,13 +92,14 @@ wndprb <- function(link, msg = FALSE) {
 
     key <- scrape_header(contents, ret = "key")
     adv <- scrape_header(contents, ret = "adv")
+    message(adv)
     date <- scrape_header(contents, ret = "date")
 
     ## ---- * Wind Speed Probabilities for Selected Locations ------------------
 
     ptn <- paste0("(?<=\n)", # Look-behind
                   # Location - first value must be capital letter.
-                  "([:upper:]{1}[[:alnum:][:blank:]]{14})",
+                  "([:upper:]{1}[[:alnum:][:blank:][:punct:]]{14})",
                   # Wind
                   "([[:digit:]]{2})",
                   # Wind12
@@ -108,37 +109,37 @@ wndprb <- function(link, msg = FALSE) {
                   # Wind24
                   "([:digit:]{1,2}|X)",
                   # Wind24 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # Delim
                   "[:blank:]+",
                   # Wind36
                   "([:digit:]{1,2}|X)",
                   # Wind36 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # Delim
                   "[:blank:]+",
                   # Wind48
                   "([:digit:]{1,2}|X)",
                   # Wind48 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # Delim
                   "[:blank:]+",
                   # Wind72
                   "([:digit:]{1,2}|X)",
                   # Wind72 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # Delim
                   "[:blank:]+",
                   # Wind96
                   "([:digit:]{1,2}|X)",
                   # Wind96 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # Delim
                   "[:blank:]+",
                   # Wind120
                   "([:digit:]{1,2}|X)",
                   # Wind120 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # End
                   "[[:blank:]\n]+")
 
@@ -155,6 +156,10 @@ wndprb <- function(link, msg = FALSE) {
 
     # Trim whitespace
     wndprb <- purrr::map_df(.x = wndprb, .f = stringr::str_trim)
+
+    # If no wnd speed probabilities, return NULL
+    if (nrow(wndprb) == 0)
+        return(NULL)
 
     # Make "X" values 0
     wndprb[wndprb == "X"] <- 0
