@@ -1,10 +1,9 @@
-
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-3.3.3-6666ff.svg)](https://cran.r-project.org/) 
-[![packageversion](https://img.shields.io/badge/Package%20version-0.1.1-orange.svg?style=flat-square)](commits/develop)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.1.1-orange.svg?style=flat-square)](commits/develop-0.1.1)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/Hurricanes)](https://cran.r-project.org/package=Hurricanes) 
-[![Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop)](https://travis-ci.org/timtrice/Hurricanes) 
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/timtrice/Hurricanes?branch=develop&svg=true)](https://ci.appveyor.com/project/timtrice/Hurricanes) 
-[![codecov](https://codecov.io/gh/timtrice/Hurricanes/branch/develop/graph/badge.svg)](https://codecov.io/gh/timtrice/Hurricanes) 
+[![Build Status](https://travis-ci.org/timtrice/Hurricanes.svg?branch=develop-0.1.1)](https://travis-ci.org/timtrice/Hurricanes) 
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/timtrice/Hurricanes?branch=develop-0.1.1&svg=true)](https://ci.appveyor.com/project/timtrice/Hurricanes) 
+[![codecov](https://codecov.io/gh/timtrice/Hurricanes/branch/develop-0.1.1/graph/badge.svg)](https://codecov.io/gh/timtrice/Hurricanes) 
 
 Hurricanes
 ==========
