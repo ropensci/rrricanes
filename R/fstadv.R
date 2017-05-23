@@ -388,7 +388,7 @@ fstadv_forecasts <- function(content, date) {
     n <- nrow(tmp)
 
     # Make any wf vars that are not valid wf values NA
-    tmp$wf[tmp$wf %in% c("", "DISSIPATING", "DISSIPATED")] <- NA
+    tmp$wf[tmp$wf %in% c("", "DISSIPATING", "DISSIPATED", "REMNANT LOW")] <- NA
 
     tmp <- tmp %>% split(.$FcstDate)
 
