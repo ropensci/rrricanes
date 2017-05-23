@@ -385,11 +385,14 @@ fstadv_forecasts <- function(content, date) {
 
     n <- nrow(tmp)
 
+    # Make any wf vars that are not valid wf values NA
+    tmp$wf[tmp$wf %in% c("", "DISSIPATING", "DISSIPATED")] <- NA
+
     tmp <- tmp %>% split(.$FcstDate)
 
     tmp <- tmp %>% purrr::map2(1:n, function(a, b) {
         # Here, send variable `wf` to function to spread across multiple cols.
-        if (tmp[[b]]$wf != "") {
+        if (!is.na(tmp[[b]]$wf)) {
             wf <- fstadv_forecast_wind_radius(tmp[[b]]$wf)
             tmp[[b]] <- dplyr::bind_cols(tmp[[b]], wf)
         }
