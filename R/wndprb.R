@@ -87,12 +87,11 @@ wndprb <- function(link, msg = FALSE) {
     contents <- scrape_contents(link, msg = msg)
 
     # Make sure this is a wndprb advisory product
-    if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP"))))
+    if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP", "PWS"))))
         stop(sprintf("Invalid Wind Probability link. %s", link))
 
     key <- scrape_header(contents, ret = "key")
     adv <- scrape_header(contents, ret = "adv")
-    message(adv)
     date <- scrape_header(contents, ret = "date")
 
     ## ---- * Wind Speed Probabilities for Selected Locations ------------------
