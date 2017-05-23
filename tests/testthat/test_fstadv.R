@@ -40,6 +40,11 @@ ep2000 <- get_storms(year = 2000, basin = "EP") %>%
     dplyr::select(Link) %>%
     purrr::flatten_chr()
 
+#' Get storms for 2002, AL basin
+al2002 <- get_storms(year = 2002, basin = "AL") %>%
+    dplyr::select(Link) %>%
+    purrr::flatten_chr()
+
 #' Load Tropical Storm Alex
 df.al011998.fstadv <- get_fstadv(al1998[1])
 #' Load Hurricane Bonnie
@@ -60,6 +65,8 @@ df.ep081999.fstadv <- get_fstadv(ep1999[8])
 df.al022000.fstadv <- get_fstadv(al2000[2])
 ## ---- * 2000, EP, 06 ---------------------------------------------------------
 df.ep062000.fstadv <- get_fstadv(ep2000[6])
+## ---- * 2002, AL, 13 ---------------------------------------------------------
+df.al132002.fstadv <- get_fstadv(al2002[13])
 
 ## ---- * Saved Data -----------------------------------------------------------
 load(system.file("extdata", "al011998.fstadv.Rda", package = "Hurricanes"))
@@ -72,6 +79,7 @@ load(system.file("extdata", "ep071999.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep081999.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "al022000.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep062000.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "al132002.fstadv.Rda", package = "Hurricanes"))
 
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton
@@ -228,5 +236,6 @@ test_that("Test fstadv()", {
     expect_identical(ep081999.fstadv, df.ep081999.fstadv)
     expect_identical(al022000.fstadv, df.al022000.fstadv)
     expect_identical(ep062000.fstadv, df.ep062000.fstadv)
+    expect_identical(al132002.fstadv, df.al132002.fstadv)
 })
 

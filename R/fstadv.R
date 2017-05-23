@@ -608,7 +608,7 @@ fstadv_parse_forecasts <- function(content) {
                   '[:blank:]*(?:[[:alpha:]-/]+)*[:blank:]*',
                   '[:blank:]MAX WIND[ ]+([:digit:]{2,3})[ ]+KT', # Winds
                   '[:blank:]+GUSTS[ ]+([:digit:]{2,3})[ ]+KT', # Gusts
-                  '[:blank:]*(?:EXTRATROPICAL)*[:blank:]*', # Optional text; don't collect
+                  '[:blank:]*(?:EXTRATROPICAL)*[:blank:]*(?:LOW)*[:blank:]*', # Optional text; don't collect
                   '[:blank:]*((?:[[:digit:]{2}[ ]+KT[ ]+[:alnum:][:blank:]]+)?$)') # Wind field, if avail
 
     x <- stringr::str_match_all(content, ptn)
