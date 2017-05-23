@@ -148,6 +148,14 @@ wndprb <- function(link, msg = FALSE) {
     # Load matches into dataframe
     wndprb <- tibble::as_data_frame(matches[[1]][,2:16])
 
+    # If only one row, need to transpose wndprb
+    if (ncol(wndprb) == 1)
+        wndprb <- wndprb %>% t() %>% tibble::as_data_frame()
+
+    # If no wnd speed probabilities, return NULL
+    if (nrow(wndprb) == 0)
+        return(NULL)
+
     # Rename variables
     names(wndprb) <- c("Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
                        "Wind36", "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
@@ -156,10 +164,6 @@ wndprb <- function(link, msg = FALSE) {
 
     # Trim whitespace
     wndprb <- purrr::map_df(.x = wndprb, .f = stringr::str_trim)
-
-    # If no wnd speed probabilities, return NULL
-    if (nrow(wndprb) == 0)
-        return(NULL)
 
     # Make "X" values 0
     wndprb[wndprb == "X"] <- 0
