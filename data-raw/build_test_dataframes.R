@@ -123,3 +123,8 @@ save(al162001.prblty, file = "./inst/extdata/al162001.prblty.Rda", compression_l
 al012006.wndprb <- get_wndprb(al2006[1])
 save(al012006.wndprb,
      file = "./inst/extdata/al012006.wndprb.Rda", compression_level = 9)
+
+## ---- * 2006, AL, 03 ---------------------------------------------------------
+al032006.wndprb <- get_wndprb(al2006[3])
+save(al032006.wndprb,
+     file = "./inst/extdata/al032006.wndprb.Rda", compression_level = 9)
