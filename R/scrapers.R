@@ -96,12 +96,11 @@ scrape_date <- function(header) {
     # What is standard is that time comes first followed by time zone, day of
     # the week, month, date and year. So, find the pattern that matches.
 
-    # For AL162001, Adv 1, time should be 12 PM but it is listed as NOON.
-    # Do substring replace in that instance. See Issue #59 for details.
-    if (stringr::str_count(header, pattern = "NOON AST MON NOV 05 200"))
-        header <- stringr::str_replace(header,
-                                       "\n(NOON)( AST MON NOV 05 2001)\n",
-                                       "\n12 PM\\2\n")
+    # In some instances the time value in the header may be listed as "NOON"
+    # rather than "12 PM". This is documented in Issue #59. In these cases,
+    # correct header.
+    if (stringr::str_count(header, pattern = "\nNOON [:upper:]{3} [:upper:]{3} [:upper:]{3} [:digit:]{2} [:digit:]{4}\n"))
+        header <- stringr::str_replace(header, "\n(NOON)( [:upper:]{3} [:upper:]{3} [:upper:]{3} [:digit:]{2} [:digit:]{4})\n", "\n12 PM\\2\n")
 
     ptn <- paste0("(?<=(?:\n|\r))",
                   "([:digit:]{1,2})", # Hour
