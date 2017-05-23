@@ -28,6 +28,11 @@ ep2000 <- get_storms(year = 2000, basin = "EP") %>%
     select(Link) %>%
     flatten_chr()
 
+#' Get storms for 2001, AL basin
+al2001 <- get_storms(year = 2001, basin = "AL") %>%
+    select(Link) %>%
+    flatten_chr()
+
 #' Get storms for 2006, AL basin
 al2006 <- get_storms(year = 2006, basin = "AL") %>%
     select(Link) %>%
@@ -72,10 +77,6 @@ save(ep081999.fstadv, file = "./inst/extdata/ep081999.fstadv.Rda", compression_l
 al022000.fstadv <- get_fstadv(al2000[2])
 save(al022000.fstadv, file = "./inst/extdata/al022000.fstadv.Rda", compression_level = 9)
 
-## ---- * 2000, AL, 02 ---------------------------------------------------------
-al022000.fstadv <- get_fstadv(al2000[2])
-save(al022000.fstadv, file = "./inst/extdata/al022000.fstadv.Rda", compression_level = 9)
-
 ## ---- * 2000, EP, 06 ---------------------------------------------------------
 ep062000.fstadv <- get_fstadv(ep2000[6])
 save(ep062000.fstadv, file = "./inst/extdata/ep062000.fstadv.Rda", compression_level = 9)
@@ -94,6 +95,10 @@ save(al022000.prblty, file = "./inst/extdata/al022000.prblty.Rda", compression_l
 ## ---- * 2000, AL, 03 ---------------------------------------------------------
 al032000.prblty <- get_prblty(al2000[3])
 save(al032000.prblty, file = "./inst/extdata/al032000.prblty.Rda", compression_level = 9)
+
+## ---- * 2001, AL, 16 ---------------------------------------------------------
+al162001.prblty <- get_prblty(al2001[16])
+save(al162001.prblty, file = "./inst/extdata/al162001.prblty.Rda", compression_level = 9)
 
 ## ---- wndprb -----------------------------------------------------------------
 
