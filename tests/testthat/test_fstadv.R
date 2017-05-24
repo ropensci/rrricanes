@@ -58,6 +58,8 @@ df.al021998.fstadv <- get_fstadv(al1998[2])
 df.ep011998.fstadv <- get_fstadv(ep1998[1])
 #' Load Tropical Depression Two-E
 df.ep021998.fstadv <- get_fstadv(ep1998[2])
+## ---- * 1998, EP, 08 ---------------------------------------------------------
+df.ep081998.fstadv <- get_fstadv(ep1998[8])
 #' Load Tropical Depression Three-E
 df.ep031999.fstadv <- get_fstadv(ep1999[3])
 #' Load Tropical Depression Four-E
@@ -80,6 +82,7 @@ load(system.file("extdata", "al011998.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "al021998.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep011998.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep021998.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "ep081998.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep031999.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep041999.fstadv.Rda", package = "Hurricanes"))
 load(system.file("extdata", "ep071999.fstadv.Rda", package = "Hurricanes"))
@@ -236,6 +239,7 @@ test_that("Test fstadv()", {
     expect_identical(al021998.fstadv, df.al021998.fstadv)
     expect_identical(ep011998.fstadv, df.ep011998.fstadv)
     expect_identical(ep021998.fstadv, df.ep021998.fstadv)
+    expect_identical(ep081998.fstadv, df.ep081998.fstadv)
     expect_identical(ep031999.fstadv, df.ep031999.fstadv)
     expect_identical(ep041999.fstadv, df.ep041999.fstadv)
     expect_warning(ep041999.fstadv <- get_fstadv(ep1999[4]),
