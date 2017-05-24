@@ -261,7 +261,8 @@ scrape_key <- function(header) {
     ptn <- paste0("(?:(?:NATIONAL HURRICANE CENTER|",
                   "NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?",
                   "[:blank:]+MIAMI FL[:blank:]+|",
-                  "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+)")
+                  "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+|",
+                  "NWS CENTRAL PACIFIC HURRICANE CENTER HONOLULU HI[:blank:]+)")
 
     # For <= 2003 Identifier is 6-digits with a 2-digit year. Append either
     # option to ptn based on year of cyclone.
