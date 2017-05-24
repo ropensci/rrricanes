@@ -13,7 +13,7 @@ library(readr)
 year <- 1998
 basin <- "AL"
 
-data.dir <- sprintf("~/Projects/HurricanesData/data/%d", year)
+data.dir <- sprintf("~/Projects/datasets/Hurricanes/data/%d", year)
 if (!dir.exists(data.dir))
     dir.create(data.dir)
 
