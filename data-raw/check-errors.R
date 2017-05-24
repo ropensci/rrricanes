@@ -1,5 +1,5 @@
 #' @title check-errors
-#' @description Loop through all storms to look for errors and discrepancies.
+#' @description Loop through all storms to look for errors.
 #' @details This does not check for data quality; it only looks for any errors
 #'     that arise from a given storm. Checking for data quality will have to be
 #'     done in other ways.
@@ -32,12 +32,16 @@ map(.x = nums, .f = function(x) {
     key <- storms %>% slice(x) %>% .$Key
     obs.fstadv <- get_fstadv(url)
     obs.prblty <- get_prblty(url)
+    obs.wndprb <- get_wndprb(url)
 
     storm.dir <- paste(data.dir, key, sep = "/")
     if (!dir.exists(storm.dir))
         dir.create(storm.dir)
 
-    write_csv(obs.fstadv, path = paste(storm.dir, paste0(key, "-fstadv.csv"), sep = "/"))
-    write_csv(obs.prblty, path = paste(storm.dir, paste0(key, "-prblty.csv"), sep = "/"))
-
+    if (nrow(obs.fstadv) > 0)
+        write_csv(obs.fstadv, path = paste(storm.dir, paste0(key, "-fstadv.csv"), sep = "/"))
+    if (nrow(obs.prblty) > 0)
+        write_csv(obs.prblty, path = paste(storm.dir, paste0(key, "-prblty.csv"), sep = "/"))
+    if (nrow(obs.wndprb) > 0)
+        write_csv(obs.wndprb, path = paste(storm.dir, paste0(key, "-wndprb.csv"), sep = "/"))
 })
