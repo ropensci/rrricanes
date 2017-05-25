@@ -60,7 +60,7 @@ products <- c("discus", "fstadv", "posest", "prblty", "public", "update",
 # Get specific storm (by storm number for the year). Either handles all storms
 # with a NULL setting or one storm at a time (n <- 1 or n <- 2. n <- 1:2 will
 # not work).
-n <- 1
+n <- NULL
 
 ## ---- Functionality ----------------------------------------------------------
 # Walk through years
