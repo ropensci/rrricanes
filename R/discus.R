@@ -59,6 +59,9 @@ discus <- function(link, msg = FALSE) {
 
     contents <- scrape_contents(link, msg = msg)
 
+    # Replace all carriage returns with empty string.
+    contents <- stringr::str_replace_all(contents, "\r", "")
+
     # Make sure this is a discussion product
     if (!any(stringr::str_count(contents, c("MIATCDAT", "MIATCDEP"))))
         stop(sprintf("Invalid Discussion link. %s", link))
