@@ -86,6 +86,9 @@ wndprb <- function(link, msg = FALSE) {
 
     contents <- scrape_contents(link, msg = msg)
 
+    # Replace all carriage returns with empty string.
+    contents <- stringr::str_replace_all(contents, "\r", "")
+
     # Make sure this is a wndprb advisory product
     if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP", "PWS"))))
         stop(sprintf("Invalid Wind Probability link. %s", link))
