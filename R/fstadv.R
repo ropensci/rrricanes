@@ -303,8 +303,29 @@ fstadv_extract_forecasts <- function(content) {
 
     # Extract all lines that begin with FORECAST VALID or OUTLOOK VALID and end
     # with newline character
-    g <- stringr::str_match_all(f, (paste0('[:space:]*(?:FORECAST|OUTLOOK) VALID ',
-                                           '[[:alnum:] /\\.-]+')))
+    # Extract all lines that begin with FORECAST VALID or OUTLOOK VALID and end
+    # with newline character
+    ptn <- paste0("(?:FORECAST|OUTLOOK) VALID[:blank:]+",
+                  # Date and time field
+                  "[:digit:]{1,2}/[:digit:]{1,4}Z",
+                  # Latitude
+                  "[:blank:]+[:digit:]{1,2}\\.[:digit:][N|S]",
+                  # Longitude
+                  "[:blank:]+[:digit:]{1,3}\\.[:digit:][E|W]",
+                  # After LON, there may be additional text. Capture it.
+                  ".*",
+                  # MAX WIND
+                  "(?:[:blank:]+MAX WIND[:blank:]+[:digit:]{1,3}[:blank:]+KT)?",
+                  # GUSTS
+                  "(?:[:blank:]+GUSTS[:blank:]+[:digit:]{1,3}[:blank:]+KT)?",
+                  # Optional 64KT wind field
+                  "(?:[:blank:]+64[:blank:]+KT[[:blank:]\\.]+[:digit:]{1,3}NE[:blank:]+[:digit:]{1,3}SE[:blank:]+[:digit:]{1,3}SW[:blank:]+[:digit:]{1,3}NW)?",
+                  # Optional 50KT wind field
+                  "(?:[:blank:]+50[:blank:]+KT[[:blank:]\\.]+[:digit:]{1,3}NE[:blank:]+[:digit:]{1,3}SE[:blank:]+[:digit:]{1,3}SW[:blank:]+[:digit:]{1,3}NW)?",
+                  # Optional 34KT wind field
+                  "(?:[:blank:]+34[:blank:]+KT[[:blank:]\\.]+[:digit:]{1,3}NE[:blank:]+[:digit:]{1,3}SE[:blank:]+[:digit:]{1,3}SW[:blank:]+[:digit:]{1,3}NW)?")
+
+    g <- stringr::str_match_all(f, pattern = ptn)
 
     # at this point we *should* have all of our forecasts.
     h <- unlist(g)
