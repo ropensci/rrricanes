@@ -677,9 +677,7 @@ fstadv_pos_accuracy <- function(contents) {
 #' @keywords internal
 fstadv_pressure <- function(contents) {
 
-    ptn <- paste0('MINIMUM CENTRAL PRESSURE[ ]+',
-                  '([0-9]{3,4})', # Pressure
-                  '[ ]+MB')
+    ptn <- paste0('MINIMUM CENTRAL PRESSURE[:blank:]+([:digit:]{3,4})[:blank:]*MB')
     pressure <- stringr::str_match(contents, ptn)[,2]
     return(as.numeric(pressure))
 
