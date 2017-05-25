@@ -65,8 +65,14 @@ n <- NULL
 ## ---- Functionality ----------------------------------------------------------
 # Walk through years
 walk(years, .f = function(x) {
-    # Would through each basin for current year
+    # Check if year directory exists; if not, create it
+    if (!dir.exists(sprintf("%s%s", d, x)))
+        dir.create(sprintf("%s%s", d, x))
+    # Walk through each basin for current year
     walk2(.x = x, .y = basins, .f = function(x, y) {
+        # Check if basin directory exists; if not, create it
+        if (!dir.exists(sprintf("%s%s/%s", d, x, y)))
+            dir.create(sprintf("%s%s/%s", d, x, y))
         # Load dataframe of storms for current year
         storms <- get_storms(year = x, basin = y)
         # Walk through each product for current basin, current year
@@ -99,7 +105,7 @@ walk(years, .f = function(x) {
                           df.name <- sprintf("%s_%s", k, product)
                           # Bring to global if s is TRUE
                           if (s) assign(df.name, df, envir = .GlobalEnv)
-                          key_dir <- sprintf("%s/%s/%s/%s", d, basin, year, k)
+                          key_dir <- sprintf("%s/%s/%s/%s", d, year, basin, k)
                           if (!dir.exists(key_dir)) dir.create(key_dir)
                           write_csv(df, path = sprintf("%s/%s.csv", key_dir, df.name))
                       }
@@ -126,14 +132,16 @@ walk(years, .f = function(x) {
                               if (s) assign(df.name, summary, envir = .GlobalEnv)
                               # Write summary dataframe
                               write_csv(summary,
-                                        path = sprintf("%s/%s.csv", d, df.name))
+                                        path = sprintf("%s/%s/%s/%s.csv",
+                                                       d, year, basin, df.name))
                           }
                           # Name of product dataframe (i.e., AL1998_fstadv)
                           df.name <- sprintf("%s%s_%s", basin, year, product)
                           # Bring to global environment, if TRUE
                           if (s) assign(df.name, df, envir = .GlobalEnv)
                           # Save product dataframe
-                          write_csv(df, path = sprintf("%s/%s.csv", d, df.name))
+                          write_csv(df, path = sprintf("%s/%s/%s/%s.csv",
+                                                       d, year, basin, df.name))
                       }
                   }
               })
