@@ -32,6 +32,14 @@ NULL
 #' @export
 stats::na.omit
 
+.onLoad <- function(libname, pkgname) {
+    op <- options()
+    op.rrricanes <- list(rrricanes.working_msg = FALSE)
+    toset <- !(names(op.rrricanes) %in% names(op))
+    if (any(toset)) options(op.rrricanes[toset])
+    invisible()
+}
+
 #' @title convert_lat_lon
 #' @description Converts lat, lon to negative if in southern, western
 #'   hemisphere, respectively
