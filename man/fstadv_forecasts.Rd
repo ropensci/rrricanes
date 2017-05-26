@@ -15,7 +15,7 @@ fstadv_forecasts(content, date)
 boolean
 }
 \description{
-Retrieve forecast data from FORECAST/ADVISORY products. Loads into
-  respective dataframes (df_forecasts, df_forecast_winds)
+Retrieve forecast data from FORECAST/ADVISORY products. Loads
+  into respective dataframes (df_forecasts, df_forecast_winds)
 }
 \keyword{internal}
