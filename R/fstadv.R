@@ -338,119 +338,123 @@ fstadv_extract_forecasts <- function(content) {
 }
 
 #' @title fstadv_fcst
-#' @description Retrieve forecast data from FORECAST/ADVISORY products. Loads into
-#'   respective dataframes (df_forecasts, df_forecast_winds)
+#' @description Retrieve forecast data from FORECAST/ADVISORY products. Loads
+#'   into respective dataframes (df_forecasts, df_forecast_winds)
 #' @param content text content of FORECAST/ADVISORY
 #' @param date Date value of current forecast/advisory product.
 #' @return boolean
 #' @keywords internal
 fstadv_forecasts <- function(content, date) {
 
-    # At this point all I'm doing is extracting every subset that begins with
-    # either FORECAST VALID or OUTLOOK VALID
-    ds <- fstadv_extract_forecasts(content)
+    ptn <- paste0("([:digit:]{2})/([:digit:]{2})([:digit:]{2})Z",
+                  "[:blank:]+([:digit:]{1,2}\\.[:digit:])([N|S])",
+                  "[:blank:]+([:digit:]{1,3}\\.[:digit:]{1})([E|W])",
+                  "[[:space:][:punct:][:alpha:]]+",
+                  "MAX WIND[:blank:]+([:digit:]{1,3})[:blank:]*KT",
+                  "[[:blank:][:punct:]]+GUSTS[:blank:]+",
+                  "([:digit:]{1,3})[:blank:]*KT[[:space:][:punct:]]+",
+                  "(?:64 KT[[:blank:][:punct:]]+",
+                  "([:digit:]{1,3})NE",
+                  "[:blank:]+([:digit:]{1,3})SE",
+                  "[:blank:]+([:digit:]{1,3})SW",
+                  "[:blank:]+([:digit:]{1,3})NW",
+                  "[[:punct:][:space:]]+)?",
+                  "(?:50 KT[[:blank:][:punct:]]+",
+                  "([:digit:]{1,3})NE",
+                  "[:blank:]+([:digit:]{1,3})SE",
+                  "[:blank:]+([:digit:]{1,3})SW",
+                  "[:blank:]+([:digit:]{1,3})NW",
+                  "[[:punct:][:space:]]+)?",
+                  "(?:34 KT[[:blank:][:punct:]]+",
+                  "([:digit:]{1,3})NE",
+                  "[:blank:]+([:digit:]{1,3})SE",
+                  "[:blank:]+([:digit:]{1,3})SW",
+                  "[:blank:]+([:digit:]{1,3})NW",
+                  "[[:punct:][:space:]]+)?")
 
-    # Break forecasts into a list by observation time; Extracts date/time to
-    # gusts (keys 2:9) and then wind fields, if avail (key 10)
-    ds <- fstadv_parse_forecasts(ds)
+    ds <- stringr::str_match_all(content, pattern = ptn)
 
     # If no forecasts, exit gracefully
     if (all(purrr::map_lgl(ds, purrr::is_empty)))
         return(NULL)
 
-    # Reformat to load into dataframe
-    ds <- lapply(ds, data.frame, stringsAsFactors = FALSE)
+    df <- purrr::map_df(ds, tibble::as_data_frame)
 
-    # Load only from X2 (Date) to X10 (Gust)
-    df <- data.table::rbindlist(ds)[,2:11]
-    # Rename
-    data.table::setattr(df,
-                        'names',
-                        c('d', 'h', 'mi', 'lat', 'lath', 'lon', 'lonh', 'w',
-                          'g', 'wf'))
+    df$V1 <- NULL
 
-    # Start cleaning up
-    # ObDate
-    # Get current observation date. Will need month
+    quads <- c("NE", "SE", "SW", "NW")
+
+    df_names <- c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon", "LonHemi",
+                  "Wind", "Gust", paste0(quads, "64"), paste0(quads, "50"),
+                  paste0(quads, "34"))
+
+    names(df) <- df_names
+
+    df <- df %>%
+        dplyr::mutate_at(.cols = dplyr::vars(Date:Lat, Lon, Wind:NW34),
+                         .funs = as.numeric)
+
+    # Since we have no month or year must do some calculations. If forecast day
+    # is lower than current day then advance month by 1. If forecast month is
+    # less than current month, then advance year by one **and subtract 12 from
+    # month**. Otherwise, month will be number 13 which of course is invalid.
+
+    # Get current observation date
     ob_year <- lubridate::year(date)
     ob_month <- lubridate::month(date)
     ob_day <- lubridate::day(date)
 
-    df$d <- as.numeric(df$d) # Day
-    df$h <- as.numeric(df$h) # Hour
-    df$mi <- as.numeric(df$mi) # Minute
-    df$lat <- as.numeric(df$lat) # Latitude
-    df$lon <- as.numeric(df$lon) # Longitude
-    df$w <- as.numeric(df$w) # Wind
-    df$g <- as.numeric(df$g) # Gust
-
     # Here I account for the possibility of the forecast date crossing months
     # or even years
     df <- df %>%
-        dplyr::mutate(mo = ifelse(d < ob_day, ob_month + 1, ob_month),
-                      y = ifelse(mo < ob_month, ob_year + 1, ob_year))
+        dplyr::mutate(Month = dplyr::if_else(Date < ob_day,
+                                             ob_month + 1,
+                                             ob_month),
+                      Year = dplyr::if_else(Month < ob_month,
+                                            ob_year + 1,
+                                            ob_year))
+
     # In case of storms like Zeta (AL302005) where storm existed across multiple
     # years, make sure the calculation above does not give a month greater than
     # 12. If so, substract 12. In otherwords, going from December to January.
+    df <- df %>% dplyr::mutate(Month = dplyr::if_else(Month > 12,
+                                                      Month - 12,
+                                                      Month))
+
+    # Build FcstDate variable
     df <- df %>%
-        dplyr::mutate(mo = ifelse(mo > 12, mo - 12, mo))
-    df <- df %>%
-        dplyr::mutate(FcstDate = lubridate::ymd_hm(paste(paste(y,
-                                                               mo,
-                                                               d,
+        dplyr::mutate(FcstDate = lubridate::ymd_hm(paste(paste(Year, Month, Date,
                                                                sep = '-'),
-                                                         paste(h,
-                                                               mi,
+                                                         paste(Hour, Minute,
                                                                sep = ':'),
                                                          sep = ' ')))
 
-    # Clean up lat, lath, lon, lonh. Though no storms should exist in southern
-    # hemisphere there will be some crossing from western hemi to east.
-    # Southern/Western hemi lat/lon are negative. Northern/Eastern are positive.
+    # Clean up Latitude, Longitude
     df <- df %>%
-        dplyr::mutate(Lat = ifelse(lath == 'S', lat * -1, lat), # Lat reformatted
-                      Lon = ifelse(lonh == 'W', lon * -1, lon)) # Lon reformatted
+        dplyr::mutate(Lat = ifelse(LatHemi == 'S', Lat * -1, Lat),
+                      Lon = ifelse(LonHemi == 'W', Lon * -1, Lon))
 
-    # Finish renaming/reclassifying vars Wind and Gust, add Key, Adv, ObDate
+    # Rearrange, drop some vars
     df <- df %>%
-        dplyr::mutate(Wind = as.numeric(w), # reformatted
-                      Gust = as.numeric(g)) # reformatted
+        dplyr::select_(.dots = dplyr::vars(FcstDate, Lat, Lon, Wind:NW34))
 
-    # Build forecasts dataframe into wide format
-    tmp <- df %>%
-        dplyr::select(FcstDate, Lat, Lon, Wind, Gust, wf)
+    df_names <- names(df)
 
-    n <- nrow(tmp)
+    fcst_periods <- paste0("Hr", c(12, 24, 36, 48, 72, 96, 120))
+    # Modify fcst_periods to lengt of df
+    fcst_periods <- fcst_periods[1:nrow(df)]
 
-    # Make any wf vars that are not valid wf values NA
-    tmp$wf[tmp$wf %in% c("", "DISSIPATING", "DISSIPATED", "REMNANT LOW", "BECOMING ABSORBED")] <- NA
+    df <- df %>% split(.$FcstDate)
 
-    tmp <- tmp %>% split(.$FcstDate)
+    df <- purrr::map2(1:length(df),
+                      fcst_periods,
+                      function(a, b) {
+                          stats::setNames(df[[a]], paste0(b, names(df[[a]])))
+                          })
 
-    tmp <- tmp %>% purrr::map2(1:n, function(a, b) {
-        # Here, send variable `wf` to function to spread across multiple cols.
-        if (!is.na(tmp[[b]]$wf)) {
-            wf <- fstadv_forecast_wind_radius(tmp[[b]]$wf)
-            tmp[[b]] <- dplyr::bind_cols(tmp[[b]], wf)
-        }
-        tmp[[b]]$wf <- NULL
-        if (b <= 4) {
-            newnames <- paste0("Hr", b * 12, names(tmp[[b]]))
-        } else if (b == 5) {
-            newnames <- paste0("Hr72", names(tmp[[b]]))
-        } else if (b == 6) {
-            newnames <- paste0("Hr96", names(tmp[[b]]))
-        } else if (b == 7) {
-            newnames <- paste0("Hr120", names(tmp[[b]]))
-        }
-        stats::setNames(tmp[[b]], newnames)
-    })
+    df <- dplyr::bind_cols(df)
 
-    df_forecasts <- dplyr::bind_cols(tmp)
-
-
-    return(df_forecasts)
-
+    return(df)
 }
 
 #' @title fstadv_forecast_wind_radius
