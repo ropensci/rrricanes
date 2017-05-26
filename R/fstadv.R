@@ -661,12 +661,9 @@ fstadv_parse_forecasts <- function(content) {
 #' @return numeric
 #' @keywords internal
 fstadv_pos_accuracy <- function(contents) {
-    ptn <- paste0('POSITION ACCURATE WITHIN[ ]+',
-                  '([0-9]{2,3})',
-                  '[ ]+NM')
+    ptn <- paste0("POSITION ACCURATE WITHIN[:blank:]+([0-9]{2,3})[:blank:]+NM")
     pos_acc <- stringr::str_match(contents, ptn)[,2]
     return(as.numeric(pos_acc))
-
 }
 
 #' @title fstadv_pressure
