@@ -48,8 +48,8 @@ library(tibble)
 ## ---- Variables --------------------------------------------------------------
 # Save dataframe to global env?
 s <- TRUE
-# Where is data being saved?
-d <- "~/Projects/datasets/Hurricanes/"
+# Where is data being saved? Add trailing slash
+d <- "./datasets/"
 # Basins to retrieve
 basins <- c("AL", "EP")
 # Years to retrieve
