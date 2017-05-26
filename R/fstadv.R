@@ -1,10 +1,12 @@
 #' @title get_fstadv
 #' @description Return dataframe of forecast/advisory data.
+#' @details To disable the progress bar set option dplyr.show_progress to
+#'     FALSE. You can also enable messages to show the storm and advisory
+#'     currentlby being worked by setting the rrricanes.working_msg to TRUE.
 #' @param link URL to storm's archive page.
-#' @param msg Show link currently being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
-get_fstadv <- function(link, msg = FALSE) {
+get_fstadv <- function(link) {
 
     # Check status of link(s)
     valid.link <- sapply(link, status)
@@ -12,13 +14,22 @@ get_fstadv <- function(link, msg = FALSE) {
     if (length(valid.link) == 0)
         stop("No valid links.")
 
+    # Get all products for the current storm
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.fstadv <- purrr::map(filter_fstadv(products), fstadv)
+    # Filter out fstadv products
+    products <- filter_fstadv(products)
 
-    fstadv <- purrr::map_df(products.fstadv, dplyr::bind_rows)
+    # Set progress bar
+    p <- dplyr::progress_estimated(n = length(products))
 
-    return(fstadv)
+    # Work products
+    products.fstadv <- purrr::map(products, fstadv, p)
+
+    # Build final dataframe
+    df <- purrr::map_df(products.fstadv, dplyr::bind_rows)
+
+    return(df)
 
 }
 
@@ -50,13 +61,15 @@ get_fstadv <- function(link, msg = FALSE) {
 #'   \item{Eye}{Size of the eye in nautical miles, if available, or NA.}
 #' }
 #' @param link URL of a specific FORECAST/ADVISORY product
-#' @param msg Display each link as being worked; default is FALSE
+#' @param p dplyr::progress_estimate.
 #' @return Dataframe
 #' @seealso \code{\link{get_fstadv}}
 #' @keywords internal
-fstadv <- function(link, msg = FALSE) {
+fstadv <- function(link, p) {
 
-    contents <- scrape_contents(link, msg = msg)
+    p$pause(0.5)$tick()$print()
+
+    contents <- scrape_contents(link)
 
     # Replace all carriage returns with empty string.
     contents <- stringr::str_replace_all(contents, "\r", "")
@@ -67,12 +80,15 @@ fstadv <- function(link, msg = FALSE) {
                                   "WTPZ", "HFOTCMEP", "HFOTCMCP"))))
         stop(sprintf("Invalid Forecast/Advisory link. %s", link))
 
-    df <- create_df_fstadv()
-
     status <- scrape_header(contents, ret = "status")
     name <- scrape_header(contents, ret = "name")
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
+
+    if (getOption("rrricanes.working_msg"))
+        message(sprintf("Working %s %s advisory #%s (%s)",
+                        status, name, adv, date))
+
     key <- scrape_header(contents, ret = "key")
     lat <- fstadv_lat(contents)
     lon <- fstadv_lon(contents)
@@ -84,21 +100,12 @@ fstadv <- function(link, msg = FALSE) {
     wind <- fstadv_winds(contents)
     gust <- fstadv_gusts(contents)
 
-    df <- df %>%
-        tibble::add_row("Status" = status,
-                        "Name" = name,
-                        "Adv" = adv,
-                        "Date" = date,
-                        "Key" = key,
-                        'Lat' = lat,
-                        'Lon' = lon,
-                        'Wind' = wind,
-                        'Gust' = gust,
-                        'Pressure' = pressure,
-                        'PosAcc' = posacc,
-                        'FwdDir' = fwd_dir,
-                        'FwdSpeed' = fwd_speed,
-                        'Eye' = eye)
+    df <- tibble::data_frame("Status" = status, "Name" = name, "Adv" = adv,
+                             "Date" = date, "Key" = key, "Lat" = lat,
+                             "Lon" = lon, "Wind" = wind, "Gust" = gust,
+                             "Pressure" = pressure, "PosAcc" = posacc,
+                             "FwdDir" = fwd_dir, "FwdSpeed" = fwd_speed,
+                             "Eye" = eye)
 
     # Add current wind radius
     wind_radius <- fstadv_wind_radius(contents, wind)

@@ -18,10 +18,9 @@ scrape_adv_num <- function(header) {
 #' @title scrape_contents
 #' @description Extract text product from HTML
 #' @param link URL to product page
-#' @param msg Show link currently being worked. TRUE by default.
 #' @return Contents of product
 #' @keywords internal
-scrape_contents <- function(link, msg = TRUE) {
+scrape_contents <- function(link) {
 
     pre.1999 <- function(l) {
         contents <- l %>%
@@ -46,9 +45,6 @@ scrape_contents <- function(link, msg = TRUE) {
 
     if (length(link) == 0)
         stop("No valid links.")
-
-    if (msg)
-        message(sprintf("Working %s", link))
 
     if (year == 1998) {
         return(pre.1999(link))
