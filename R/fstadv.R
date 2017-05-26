@@ -933,35 +933,11 @@ fstadv_wind_radius <- function(content, wind) {
 
     text <- fstadv_wind_radius_regex(content)
 
-    # move to dataframe
-    df <- data.frame("text" = text)
+    df <- tibble::as_tibble(t(text))
 
-    # split out df$text with generic cols for now.
-    df <- df %>%
-        tidyr::separate(text, into = c(paste0('x', c(1:15))), sep = '\t',
-                        fill = 'right') # Suppress warnings
-
-    df[,1:15] <- as.numeric(df[,1:15])
-
-    # The wind fields vary in order with the strongest always being listed
-    # first. So 64kt wind field will always be above the 50kt wind field. But
-    # if a storm does not have 64 kt winds then 50 kt will be listed first. The
-    # easiest way I can think to do this is with if/else statements. This whole
-    # function needs to be written anyway. Consider it all brute-force for now.
-    # Keep 64kt winds on the left, 50kt in the middle, 34kt on the right.
-    if (is.na(wind)) {
-        df <- df
-    } else if (wind >= 64) {
-        df <- df[,c(11:15, 6:10, 1:5)]
-    } else if (wind >= 50) {
-        df <- df[,c(6:10, 1:5, 11:15)]
-    } else if (wind >= 34) {
-        df <- df[,c(1:5, 11:15, 6:10)]
-    }
-
-    names(df) <- c("WindField34", "NE34", "SE34", "SW34", "NW34",
+    names(df) <- c("WindField64", "NE64", "SE64", "SW64", "NW64",
                    "WindField50", "NE50", "SE50", "SW50", "NW50",
-                   "WindField64", "NE64", "SE64", "SW64", "NW64")
+                   "WindField34", "NE34", "SE34", "SW34", "NW34")
 
     df <- df %>% dplyr::select(-WindField34, -WindField50, -WindField64)
 
@@ -973,22 +949,13 @@ fstadv_wind_radius <- function(content, wind) {
 #' @description Extra current wind radius from Forecast/Advisory product.
 #' @keywords internal
 fstadv_wind_radius_regex <- function(content) {
-    ptn <- paste0("MAX SUSTAINED WINDS",
-                  "[[:blank:][:digit:]]+KT ",
-                  "WITH GUSTS TO[[:blank:][:digit:]]+KT",
-                  "[\\.[:space:]]*([A-Z0-9\\. \n]+)12 FT SEAS")
-
-    # Do some reformatting to make extraction easier
-    a <- stringr::str_replace_all(content, '\n \n', '\t')
-    b <- stringr::str_replace_all(a, '\n', ' ')
-    c <- stringr::str_replace_all(b, '\t', '\n')
-    d <- stringr::str_replace_all(c, '\\.\\.\\.', ' ')
-    e <- unlist(stringr::str_match_all(d, ptn))
-    # Isolate on key 2
-    f <- stringr::str_replace_all(e[2], '\\.', '')
-    g <- stringr::str_replace_all(f, '[KT|NE|SE|SW|NW]', '')
-    h <- stringr::str_replace_all(trimws(g), '[ ]+', '\t')
-    return(h)
+    ptn <- paste0("MAX SUSTAINED WINDS[:blank:]+[:digit:]{1,3} KT ",
+                  "WITH GUSTS TO[:blank:]+[:digit:]{1,3} KT[[:punct:][:space:][:upper:]]+",
+                  "(?:(64) KT[[:blank:][:punct:]]+([:digit:]{1,3})NE[:blank:]+([:digit:]{1,3})SE[:blank:]+([:digit:]{1,3})SW[:blank:]+([:digit:]{1,3})NW[[:punct:][:space:]]+)?",
+                  "(?:(50) KT[[:blank:][:punct:]]+([:digit:]{1,3})NE[:blank:]+([:digit:]{1,3})SE[:blank:]+([:digit:]{1,3})SW[:blank:]+([:digit:]{1,3})NW[[:punct:][:space:]]+)?",
+                  "(?:(34) KT[[:blank:][:punct:]]+([:digit:]{1,3})NE[:blank:]+([:digit:]{1,3})SE[:blank:]+([:digit:]{1,3})SW[:blank:]+([:digit:]{1,3})NW[[:punct:][:space:]]+)?")
+    x <- stringr::str_match_all(content, ptn)
+    return(as.numeric(x[[1]][,2:16]))
 }
 
 #' @title fstadv_winds
