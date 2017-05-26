@@ -702,12 +702,12 @@ fstadv_lat_lon <- function(contents, what = NULL) {
 
     if (!is.character(what)) {stop('\'what\' must contain \'lat\' or \'lon\'')}
 
-    ptn <- paste0('[CENTER LOCATED | DISSIPATING] NEAR[ ]+',
-                  '([0-9\\.]{3,4})', # Latitude can be 9.9N or 99.9N
-                  '([N | S]{1})', # Norhtern meisphere
-                  '[ ]+([0-9\\.]{4,5})', #Longitude can be 0 to 180
-                  '([E | W]){1}', # Hemisphere
-                  '[ ]+')
+    ptn <- paste0("[CENTER LOCATED | DISSIPATING] NEAR[:blank:]+",
+                  "([0-9\\.]{3,4})", # Latitude can be 9.9N or 99.9N
+                  "([N|S]{1})", # Northern meisphere
+                  "[:blank:]+([0-9\\.]{4,5})", #Longitude can be 0 to 180
+                  "([E|W]){1}", # Hemisphere
+                  "[:blank:]+")
 
     x <- stringr::str_match(contents, ptn)
 
