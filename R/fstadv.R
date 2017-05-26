@@ -556,11 +556,9 @@ fstadv_fwd_mvmt <- function(contents, what = NULL) {
     if (!is.character(what))
         stop('\'what\' must contain \'fwd_dir\' or \'fwd_speed\'')
 
-    ptn <- paste0('PRESENT MOVEMENT TOWARD[A-Z- ]+',
-                  '([0-9]{1,3})', # Forward direction
-                  '[ ]+DEGREES AT[ ]+',
-                  '([0-9]{1,3})', # Forward speed
-                  ' KT')
+    ptn <- paste0("PRESENT MOVEMENT TOWARD[[:alpha:][:punct:][:space:]]+",
+                  "([:digit:]{1,3})[:blank:]+DEGREES AT[:blank:]+",
+                  "([:digit:]{1,3})[:blank:]KT")
 
     if (what == 'fwd_dir') {
         return(as.numeric(stringr::str_match(contents, ptn)[,2]))
