@@ -114,6 +114,15 @@ fstadv <- function(link, p) {
 
     # Add current sea radius
     seas <- fstadv_seas(contents, wind)
+    # AL161999 has two rows of Seas data for advisory 5. The second row is
+    # within the forecast area where typically does not exist. Assumption is a
+    # typo. Would like to save this into attributes or something...
+    if (all(!is.null(seas), nrow(seas) > 1)) {
+        warning(sprintf("Too many rows of sea data for %s %s #%s.\n%s",
+                        status, name, adv, seas[2:nrow(seas),]),
+                call.= FALSE)
+        seas <- seas[1,]
+    }
 
     df[, names(seas)] <- seas[, names(seas)]
 
@@ -567,6 +576,9 @@ fstadv_split <- function(df, remove = TRUE) {
 fstadv_wind_radius <- function(content, wind) {
 
     text <- fstadv_wind_radius_regex(content)
+
+    # Bail if no wind data
+    if (purrr::is_empty(text)) return(NULL)
 
     df <- tibble::as_tibble(t(text))
 
