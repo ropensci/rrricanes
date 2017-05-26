@@ -107,6 +107,7 @@ walk(years, .f = function(x) {
                           if (s) assign(df.name, df, envir = .GlobalEnv)
                           key_dir <- sprintf("%s/%s/%s/%s", d, year, basin, k)
                           if (!dir.exists(key_dir)) dir.create(key_dir)
+                          if (s) assign(df.name, df, envir = .GlobalEnv)
                           write_csv(df, path = sprintf("%s/%s.csv", key_dir, df.name))
                       }
                   } else {
