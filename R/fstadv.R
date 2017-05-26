@@ -452,69 +452,6 @@ fstadv_gusts <- function(contents) {
     return(gust)
 }
 
-#' @title fstadv_parse_forecasts
-#' @description Breaks forecast field strings into multidimensional list.
-#' @details Expects input like:
-#'
-#'   [1] "FORECAST VALID 10/1200Z 22.6N  85.0W MAX WIND  40 KT GUSTS  50 KT 34 KT 110NE   0SE   0SW   0NW"
-#'
-#'   [2] "FORECAST VALID 11/0000Z 25.0N  86.3W MAX WIND  45 KT GUSTS  55 KT 34 KT 120NE  70SE   0SW  70NW"
-#'
-#'   [3] "FORECAST VALID 11/1200Z 27.7N  87.9W MAX WIND  50 KT GUSTS  60 KT 50 KT  25NE  25SE   0SW  25NW 34 KT 130NE  80SE   0SW  80NW"
-#'
-#'   [4] "FORECAST VALID 12/0000Z 30.5N  88.6W NEAR MS/AL COAST MAX WIND  55 KT GUSTS  65 KT 50 KT  35NE  35SE   0SW  25NW 34 KT 130NE 100SE  50SW  80NW"
-#'
-#'   [5] "FORECAST VALID 13/0000Z 36.0N  87.0W MAX WIND  20 KT GUSTS  25 KT"
-#'
-#'   [6] "OUTLOOK VALID 14/0000Z 41.0N  82.5W MAX WIND  15 KT GUSTS  20 KT"
-#'
-#'   [7] "OUTLOOK VALID 15/0000Z DISSIPATED INLAND"
-#'
-#' The date, time, lat, lat hemi, lon, lon hemi, max wind, gusts and wind field,
-#' if avialable, will be grouped. This function will return a list with each
-#' field as it's own variable; for example:
-#'
-#' [[1]]
-#'
-#' [,1]                                                                                                [,2] [,3]   [,4]   [,5] [,6]
-#'
-#' [1,] "FORECAST VALID 10/1200Z 22.6N  85.0W MAX WIND  40 KT GUSTS  50 KT 34 KT 110NE   0SE   0SW   0NW" "10" "1200" "22.6" "N"  "85.0"
-#'
-#' [,7] [,8] [,9] [,10]
-#'
-#' [1,] "W"  "40" "50" " 34 KT 110NE   0SE   0SW   0NW"
-#'
-#' So you can access date in x[[1]][,2], time in x[[1]][,2], etc.
-#'
-#' There are some cases such as AL051999, Adv 1 that has a 50KT wind field but
-#' not a 34KT wind field which is unusual.
-#'
-#' @param content is a list of forecasts/outlooks extracted from the advisory
-#' product.
-#' @keywords internal
-fstadv_parse_forecasts <- function(content) {
-
-    ptn <- paste0('^[:blank:]*[\n[:alpha:]]+[ ]+VALID[ ]+',
-                  '([:digit:]{2})/([:digit:]{2})([:digit:]{2})Z', # Date/Hour/Minute
-                  '[ ]+([[:digit:]\\.]{3,4})([N|S])', # Lat
-                  '[ ]+([[:digit:]\\.]{3,5})([E|W])', # Lon
-                  # Following is option text; don't collect, e.g.:
-                  # POST-TROP/EXTRATROP
-                  '[:blank:]*(?:[[:alpha:]-/]+)*[:blank:]*',
-                  '[:blank:]MAX WIND[ ]+([:digit:]{2,3})[ ]+KT', # Winds
-                  '[:blank:]+GUSTS[ ]+([:digit:]{2,3})[ ]+KT', # Gusts
-                  '[:blank:]*(?:EXTRATROPICAL)*[:blank:]*(?:LOW)*[:blank:]*', # Optional text; don't collect
-                  '[:blank:]*((?:[[:digit:]{2}[ ]+KT[ ]+[:alnum:][:blank:]]+)?$)') # Wind field, if avail
-
-    x <- stringr::str_match_all(content, ptn)
-
-    # Some data has forward and trailing blanks. Remove them
-    x <- lapply(x, trimws)
-
-    return(x)
-
-}
-
 #' @title fstadv_pos_accuracy()
 #' @description Get position accuracy
 #' @param contents text contents of FORECAST/ADVISORY
