@@ -750,46 +750,22 @@ fstadv_lon <- function(contents) {
 fstadv_seas <- function(content, wind) {
 
     # 12 FT SEAS..125NE  90SE  90SW 175NW.
-    ptn <- paste0('12 FT SEAS[\\.[:blank:]]+',
-                  '([0-9]{1,3})NE',
-                  '[ ]+([0-9]{1,3})SE',
-                  '[ ]+([0-9]{1,3})SW',
-                  '[ ]+([0-9]{1,3})NW')
+    ptn <- paste0("12 FT SEAS",
+                  "[[:punct:][:blank:]]+([0-9]{1,3})NE",
+                  "[:blank:]+([0-9]{1,3})SE",
+                  "[:blank:]+([0-9]{1,3})SW",
+                  "[:blank:]+([0-9]{1,3})NW")
 
     x <- stringr::str_match_all(content, ptn)
-
     # If there is Seas data, continue, otherwise ignore
-    if (length(x[[1]]) > 0) {
-
-        # Load into dataframe and get advisory's Key, Adv and ObDate
-        #    tmp <- as.data.frame(x[[1]][,2:5])
-        df_seas <- tibble::as_data_frame(x[[1]])
-
-        # Rename V2:V5
-        df_seas <- df_seas %>%
-            dplyr::rename(SeasNE = V2,
-                          SeasSE = V3,
-                          SeasSW = V4,
-                          SeasNW = V5)
-
-        df_seas <- df_seas %>%
-            dplyr::select(SeasNE, SeasSE, SeasSW, SeasNW)
-
-        # Reclass vars
-        df_seas$SeasNE <- as.numeric(df_seas$SeasNE)
-        df_seas$SeasSE <- as.numeric(df_seas$SeasSE)
-        df_seas$SeasSW <- as.numeric(df_seas$SeasSW)
-        df_seas$SeasNW <- as.numeric(df_seas$SeasNW)
-
-    } else {
-        df_seas <- tibble::tibble("SeasNE" = NA,
-                                  "SeasSE" = NA,
-                                  "SeasSW" = NA,
-                                  "SeasNW" = NA)
-    }
-
-    return(df_seas)
-
+    if (purrr::is_empty(x[[1]])) return(NULL)
+    df <- tibble::as_data_frame(x[[1]])
+    df_names <- paste0("Seas", c("NE", "SE", "SW", "NW"))
+    names(df)[2:5] <- df_names
+    df <- df %>%
+        dplyr::mutate_at(df_names, .funs = as.numeric) %>%
+        dplyr::select_(.dots = df_names)
+    return(df)
 }
 
 #' @title fstadv_split
