@@ -61,6 +61,9 @@ products <- c("discus", "fstadv", "posest", "prblty", "public", "update",
 # with a NULL setting or one storm at a time (n <- 1 or n <- 2. n <- 1:2 will
 # not work).
 n <- NULL
+# Set rrricanes.working_msg
+opt.msg <- getOption("rrricanes.working_msg")
+options(rrricanes.working_msg = TRUE)
 
 ## ---- Functionality ----------------------------------------------------------
 # Walk through years
@@ -148,3 +151,6 @@ walk(years, .f = function(x) {
               })
         })
     })
+
+# Reset rrricanes.working_msg
+options(rrricanes.working_msg = opt.msg)
