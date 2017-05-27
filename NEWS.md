@@ -6,6 +6,8 @@ Changed name from `Hurricanes` to `rrricanes`.
 
 ## Minor Changes
 
+Modified numerous regex patterns to ensure data quality.
+
 ## Deprecated
 
 # Hurricanes 0.1.0
