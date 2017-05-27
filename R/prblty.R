@@ -16,8 +16,6 @@ get_prblty <- function(link) {
     # Check status of link(s)
     valid.link <- sapply(link, status)
     valid.link <- na.omit(valid.link)
-    if (length(valid.link) == 0)
-        stop("No valid links.")
 
     # Get all products for the current storm
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
