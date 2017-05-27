@@ -163,6 +163,10 @@ scrape_date <- function(header) {
         dt <- as.POSIXct(x, tz = "Etc/GMT+4")
     } else if (tz %in% c("EST")) {
         dt <- as.POSIXct(x, tz = "Etc/GMT+5")
+    } else if (tz %in% c("PDT")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+7")
+    } else if (tz %in% c("PST")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+8")
     } else {
         stop(sprintf("Timezone %s not available.", tz), call. = TRUE)
     }
