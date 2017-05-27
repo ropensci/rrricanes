@@ -84,7 +84,6 @@ get_storm_content <- function(link) {
 #' the returned dataframes. Pass a named list where the name of each element
 #' is that of the product. See examples for more information.
 #' @param link to storm's archive page.
-#' @param msg Show link currently being worked. Default, FALSE.
 #' @return Dataframes for each of the products.
 #' @examples
 #' ## Get public advisories for Tropical Storm Charley, 1998
@@ -103,7 +102,7 @@ get_storm_content <- function(link) {
 #'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
 #' }
 #' @export
-get_storm_data <- function(..., names = list(), link, msg = FALSE) {
+get_storm_data <- function(..., names = list(), link) {
 
     x <- list(...)
     if (!(all(x %in% c("discus", "fstadv", "posest", "public",
@@ -117,9 +116,9 @@ get_storm_data <- function(..., names = list(), link, msg = FALSE) {
 
     x <- unlist(x)
 
-    s <- sapply(x, function(z, n = names, l = link, m = msg){
+    s <- sapply(x, function(z, n = names, l = link){
         f <- paste("get", z, sep = "_")
-        res <- do.call(f, args = list("link" = l, "msg" = m))
+        res <- do.call(f, args = list("link" = l))
         if (!is.null(n[[z]])) {
             assign(n[z][[1]], res, envir = .GlobalEnv)
         } else {
