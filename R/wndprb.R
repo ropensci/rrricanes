@@ -50,13 +50,12 @@ ep_prblty_stations <- function() {
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
-#' @param msg Show link being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{wndprb}},
 #'     \code{\link{al_prblty_stations}}, \code{\link{ep_prblty_stations}},
 #'     \code{\link{cp_prblty_stations}}
 #' @source \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 #' @export
-get_wndprb <- function(link, msg = FALSE) {
+get_wndprb <- function(link) {
 
     # Check status of link(s)
     valid.link <- sapply(link, status)
@@ -64,9 +63,16 @@ get_wndprb <- function(link, msg = FALSE) {
     if (length(valid.link) == 0)
         stop("No valid links.")
 
+    # Get all products for the current storm
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.wndprb <- purrr::map(filter_wndprb(products), wndprb)
+    # Filter out wndprb products
+    products <- filter_wndprb(products)
+
+    # Set progress bar
+    p <- dplyr::progress_estimated(n = length(products))
+
+    products.wndprb <- purrr::map(products, wndprb, p)
 
     wndprb <- purrr::map_df(products.wndprb, dplyr::bind_rows)
 
@@ -78,13 +84,15 @@ get_wndprb <- function(link, msg = FALSE) {
 #' @details Given a direct link to a wind probability product, parse and return
 #' dataframe of values.
 #' @param link Link to a storm's specific wind probability product.
-#' @param msg Display each link as being worked; default is FALSE
+#' @param p dplyr::progress_estimate.
 #' @return Dataframe
 #' @seealso \code{\link{get_wndprb}}
 #' @export
-wndprb <- function(link, msg = FALSE) {
+wndprb <- function(link, p) {
 
-    contents <- scrape_contents(link, msg = msg)
+    p$pause(0.5)$tick()$print()
+
+    contents <- scrape_contents(link)
 
     # Replace all carriage returns with empty string.
     contents <- stringr::str_replace_all(contents, "\r", "")
