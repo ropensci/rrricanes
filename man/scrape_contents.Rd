@@ -4,12 +4,10 @@
 \alias{scrape_contents}
 \title{scrape_contents}
 \usage{
-scrape_contents(link, msg = TRUE)
+scrape_contents(link)
 }
 \arguments{
 \item{link}{URL to product page}
-
-\item{msg}{Show link currently being worked. TRUE by default.}
 }
 \value{
 Contents of product

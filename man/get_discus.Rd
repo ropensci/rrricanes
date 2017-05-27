@@ -4,7 +4,7 @@
 \alias{get_discus}
 \title{get_discus}
 \usage{
-get_discus(link, msg = FALSE)
+get_discus(link)
 }
 \arguments{
 \item{link}{URL to storm's archive page.}

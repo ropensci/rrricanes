@@ -4,12 +4,12 @@
 \alias{discus}
 \title{discus}
 \usage{
-discus(link, msg = FALSE)
+discus(link, p)
 }
 \arguments{
 \item{link}{Link to a storm's specific discussion product.}
 
-\item{msg}{Display each link as being worked; default is FALSE}
+\item{p}{dplyr::progress_estimate.}
 }
 \value{
 Dataframe

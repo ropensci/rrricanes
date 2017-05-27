@@ -4,12 +4,12 @@
 \alias{fstadv}
 \title{fstadv}
 \usage{
-fstadv(link, msg = FALSE)
+fstadv(link, p)
 }
 \arguments{
 \item{link}{URL of a specific FORECAST/ADVISORY product}
 
-\item{msg}{Display each link as being worked; default is FALSE}
+\item{p}{dplyr::progress_estimate.}
 }
 \value{
 Dataframe
