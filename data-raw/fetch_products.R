@@ -1,6 +1,6 @@
 #' Fetch Products
 #'
-#' This script is designed to run the latest version of Hurricanes and grab
+#' This script is designed to run the latest version of rrricanes and grab
 #' every product available for every storm, each basin. If the product dataframe
 #' is not empty, the dataframe is saved as a CSV to the directory assigned in
 #' `d`. If `s` is TRUE, the dataframe is also returned to the global
@@ -39,10 +39,10 @@
 ## ---- Libraries --------------------------------------------------------------
 library(assertr)
 library(dplyr)
-library(Hurricanes)
 library(magrittr)
 library(purrr)
 library(readr)
+library(rrricanes)
 library(tibble)
 
 ## ---- Variables --------------------------------------------------------------

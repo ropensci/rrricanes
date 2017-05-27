@@ -1,5 +1,5 @@
-#' @title Hurricanes
-#' @description Hurricanes is a web-scraping library for R designed to deliver
+#' @title rrricanes
+#' @description rrricanes is a web-scraping library for R designed to deliver
 #' hurricane data (past and current) into well-organized datasets. With these
 #' datasets you can explore past hurricane tracks, forecasts and structure
 #' elements.
@@ -20,7 +20,7 @@
 #' To be written...
 #'
 #' @docType package
-#' @name Hurricanes
+#' @name rrricanes
 NULL
 
 # #' @import rnaturalearthdata

@@ -1,6 +1,8 @@
-# Hurricanes 0.1.1
+# rrricanes 0.1.1
 
 ## Major Changes
+
+Changed name from `Hurricanes` to `rrricanes`.
 
 ## Minor Changes
 

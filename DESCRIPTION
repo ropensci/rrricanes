@@ -1,4 +1,4 @@
-Package: Hurricanes
+Package: rrricanes
 Type: Package
 Title: Web scraper for real-time and archived advisory products for Atlantic and 
     east Pacific hurricanes and tropical storms
@@ -11,7 +11,7 @@ Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
 Depends:
   R (>= 3.3.3)
 URL: http://www.timtrice.net
-BugReports: https://github.com/timtrice/Hurricanes/issues
+BugReports: https://github.com/timtrice/rrricanes/issues
 License: MIT + file LICENSE
 LazyData: TRUE
 Imports:

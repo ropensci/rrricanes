@@ -3,7 +3,7 @@ context("Storm Discussions (discus)")
 ## ---- Base Data --------------------------------------------------------------
 ## ---- * 2008, AL -------------------------------------------------------------
 df.al092008.discus <- al2008 %>% dplyr::slice(9) %>% .$Link %>% get_discus()
-load(system.file("extdata", "al092008.discus.Rda", package = "Hurricanes"))
+load(system.file("extdata", "al092008.discus.Rda", package = "rrricanes"))
 
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton
