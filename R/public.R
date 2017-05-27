@@ -25,10 +25,9 @@ create_df_public <- function() {
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
-#' @param msg Show link being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
-get_public <- function(link, msg = FALSE) {
+get_public <- function(link) {
 
     # Check status of link(s)
     valid.link <- sapply(link, status)
@@ -38,7 +37,12 @@ get_public <- function(link, msg = FALSE) {
 
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.public <- purrr::map(filter_public(products), public)
+    products <- filter_public(products)
+
+    # Set progress bar
+    p <- dplyr::progress_estimated(n = length(products))
+
+    products.public <- purrr::map(products, public, p)
 
     public <- purrr::map_df(products.public, dplyr::bind_rows)
 
@@ -50,13 +54,15 @@ get_public <- function(link, msg = FALSE) {
 #' @details Given a direct link to a public advisory product, parse and return
 #' dataframe of values.
 #' @param link Link to a storm's specific public advisory product.
-#' @param msg Display each link as being worked; default is FALSE
+#' @param p dplyr::progress_estimate.
 #' @return Dataframe
 #' @seealso \code{\link{get_public}}
 #' @keywords internal
-public <- function(link, msg = FALSE) {
+public <- function(link, p) {
 
-    contents <- scrape_contents(link, msg = msg)
+    p$pause(0.5)$tick()$print()
+
+    contents <- scrape_contents(link)
 
     # Replace all carriage returns with empty string.
     contents <- stringr::str_replace_all(contents, "\r", "")
