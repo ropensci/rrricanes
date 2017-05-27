@@ -105,6 +105,10 @@ wndprb <- function(link, p) {
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
 
+    if (getOption("rrricanes.working_msg"))
+        message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
+                        status, name, adv, date))
+
     ## ---- * Wind Speed Probabilities for Selected Locations ------------------
 
     ptn <- paste0("(?<=\n)", # Look-behind

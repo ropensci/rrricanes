@@ -80,6 +80,10 @@ discus <- function(link, p) {
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
 
+    if (getOption("rrricanes.working_msg"))
+        message(sprintf("Working %s %s Storm Discussion #%s (%s)",
+                        status, name, adv, date))
+
     df <- df %>%
         tibble::add_row("Status" = status,
                         "Name" = name,
