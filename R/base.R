@@ -40,6 +40,17 @@ stats::na.omit
     invisible()
 }
 
+# This "hack" is to avoid NOTES on R CMD check. These are names that are
+# assigned to various dataframes.
+# https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
+utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
+                         "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
+                         "WindField34", "WindField50", "WindField64", "lat",
+                         "long", "group",
+                         paste0(c("NE", "SE", "SW", "NW", "64")),
+                         paste0(c("NE", "SE", "SW", "NW", "50")),
+                         paste0(c("NE", "SE", "SW", "NW", "34"))))
+
 #' @title convert_lat_lon
 #' @description Converts lat, lon to negative if in southern, western
 #'   hemisphere, respectively
