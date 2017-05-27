@@ -4,12 +4,12 @@
 \alias{wndprb}
 \title{wndprb}
 \usage{
-wndprb(link, msg = FALSE)
+wndprb(link, p)
 }
 \arguments{
 \item{link}{Link to a storm's specific wind probability product.}
 
-\item{msg}{Display each link as being worked; default is FALSE}
+\item{p}{dplyr::progress_estimate.}
 }
 \value{
 Dataframe
