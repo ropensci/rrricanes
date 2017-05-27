@@ -56,7 +56,7 @@ get_storm_content <- function(link) {
 #' @title get_storm_data
 #' @description Retrieve data from products.
 #' @details \code{get_storm_data} is a wrapper function to make it more
-#' convenient to access the various storm products.
+#'     convenient to access the various storm products.
 #'
 #' Types of products:
 #' \describe{
@@ -77,36 +77,35 @@ get_storm_content <- function(link) {
 #'   \item{windprb}{Wind Probability. Replace strike probabilities beginning in
 #'     the 2006 season. Nearly identical.}
 #' }
-#' @param ... Products to retrieve. c("discus", "fstadv", "posest", "public",
-#' "prblty", "update", "windprb")
-#' @param names By default product dataframes will be returned as shown in
-#' \code{...}. The names parameter gives a way to provide alternative names for
-#' the returned dataframes. Pass a named list where the name of each element
-#' is that of the product. See examples for more information.
-#' @param link to storm's archive page.
-#' @return Dataframes for each of the products.
-#' @examples
-#' ## Get public advisories for Tropical Storm Charley, 1998
-#' \dontrun{
-#' get_storm_data("public",
-#'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
 #'
-#' ## Same as above but give alternate name.
-#' get_storm_data("public",
-#'                names = list("public" = "al.1998.charley.public"),
-#'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
-#' ## Get forecast/advisory and storm discussion
-#' get_storm_data("fstadv", "discus",
-#'                names = list("fstadv" = "al.1998.charley.fstadv",
-#'                             "discus" = "al.1998.charley.discus"),
-#'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
+#' Progress bars are displayed by default. These can be turned off by setting
+#' the dplyr.show_progress to FALSE. Additionally, you can display messages for
+#' each advisory being worked by setting the rrricanes.working_msg to TRUE.
+#'
+#' @param link to storm's archive page.
+#' @param products Products to retrieve; discus, fstadv, posest, public,
+#'     prblty, update, and windprb.
+#' @return list of dataframes for each of the products.
+#' @examples
+#' \dontrun{
+#' ## Get public advisories for first storm of 2016 Atlantic season.
+#' get_storms(year = 2016, basin = "AL") %>%
+#'     slice(1) %>%
+#'     .$Link %>%
+#'     get_storm_data(products = "public")
+#' ## Get public advisories and storm discussions for first storm of 2017 Atlantic season.
+#' get_storms(year = 2017, basin = "AL") %>%
+#'     slice(1) %>%
+#'     .$Link %>%
+#'     get_storm_data(products = c("discus", "public"))
 #' }
 #' @export
-get_storm_data <- function(..., names = list(), link) {
+get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
+                                              "public", "prblty", "update",
+                                              "wndprb")) {
 
-    x <- list(...)
-    if (!(all(x %in% c("discus", "fstadv", "posest", "public",
-                       "prblty", "update", "wndprb"))) | length(x) == 0)
+    if (!(all(products %in% c("discus", "fstadv", "posest", "public", "prblty",
+                              "update", "wndprb"))) | length(products) == 0)
         stop(paste0("Invalid products included. Only discus, fstadv, posest, ",
                     "public, prblty, update, wndprb are valid options.",
                     "See ?get_storm_data for more info."))
@@ -114,18 +113,9 @@ get_storm_data <- function(..., names = list(), link) {
     if (is.null(link))
         stop("No link provided.")
 
-    x <- unlist(x)
-
-    s <- sapply(x, function(z, n = names, l = link){
-        f <- paste("get", z, sep = "_")
-        res <- do.call(f, args = list("link" = l))
-        if (!is.null(n[[z]])) {
-            assign(n[z][[1]], res, envir = .GlobalEnv)
-        } else {
-            assign(z, res, envir = .GlobalEnv)
-        }
-    })
-
-    return(TRUE)
-
+    ds <- purrr::map(products, .f = function(x) {
+        sprintf("get_%s", x) %>%
+            purrr::invoke_map(.x = list(link = link)) %>%
+            purrr::flatten_df()})
+    return(ds)
 }

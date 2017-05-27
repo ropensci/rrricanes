@@ -4,6 +4,8 @@
 
 Changed name from `Hurricanes` to `rrricanes`.
 
+`get_storm_data` can now be chained to other commands and returns a list of dataframes.
+
 ## Minor Changes
 
 Modified numerous regex patterns to ensure data quality.
