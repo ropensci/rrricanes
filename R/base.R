@@ -46,7 +46,7 @@ stats::na.omit
 utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
                          "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
                          "WindField34", "WindField50", "WindField64", "lat",
-                         "long", "group",
+                         "long", "group", ".", "NW34", "name",
                          paste0(c("NE", "SE", "SW", "NW", "64")),
                          paste0(c("NE", "SE", "SW", "NW", "50")),
                          paste0(c("NE", "SE", "SW", "NW", "34"))))
