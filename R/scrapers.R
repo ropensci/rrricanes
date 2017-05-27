@@ -312,7 +312,8 @@ scrape_name <- function(header) {
 #' @seealso \code{\link{scrape_header}}
 #' @keywords internal
 scrape_status <- function(header) {
-    options <- c("TROPICAL DISTURBANCE",
+    options <- c("SUBTROPICAL DEPRESSION",
+                 "TROPICAL DISTURBANCE",
                  "TROPICAL DEPRESSION",
                  "TROPICAL STORM",
                  "HURRICANE",
