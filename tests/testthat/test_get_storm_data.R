@@ -18,5 +18,5 @@ test_that("get_storm_data()", {
                      .$Link %>%
                      get_storm_data(products = "test"),
                  "Invalid products included.")
-    expect_error(get_storm_data(), "No link provided")
+    expect_error(get_storm_data(), "argument \"link\" is missing, with no default")
 })
