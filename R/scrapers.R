@@ -222,6 +222,9 @@ scrape_header <- function(contents, ret = NULL) {
                          "[[:blank:]\n\r]*") # Close off date/time line
     header <- stringr::str_extract(contents, ptn_header)
 
+    # Convert header to upper as some products may use proper/lower case
+    header <- stringr::str_to_upper(header)
+
     if (ret == "status") {
         status <- scrape_status(header)
         return(status)
