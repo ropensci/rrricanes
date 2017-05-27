@@ -1,4 +1,4 @@
-context("Test getting storm data.")
+context("Get Storm Data")
 
 al.charley.1998.url <- "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html"
 
