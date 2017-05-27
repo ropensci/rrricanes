@@ -12,6 +12,13 @@ al2008 <- get_storms(year = 2008, basin = "AL") %>% dplyr::select(Link)
 ## ---- * 1998, AL -------------------------------------------------------------
 al1998 <- get_storms(year = 2008, basin = "AL") %>% dplyr::select(Link)
 
+## ---- get_storm_data ---------------------------------------------------------
+al_2017_storm_data <- get_storms(year = 2017, basin = "AL") %>%
+    dplyr::slice(1) %>%
+    .$Link %>%
+    get_storm_data(products = c("discus", "fstadv"))
+save(al_2017_storm_data, file = "./inst/extdata/al_2017_storm_data.Rda", compression_level = 9)
+
 ## ---- discus -----------------------------------------------------------------
 ## ---- * 2008, AL, 09 ---------------------------------------------------------
 al092008.discus <- al2008 %>% slice(9) %>% .$Link %>% get_discus()
@@ -52,3 +59,4 @@ save(al_prblty_stations, file = "./inst/extdata/al_prblty_stations.Rda", compres
 
 cp_prblty_stations <- cp_prblty_stations()
 save(cp_prblty_stations, file = "./inst/extdata/cp_prblty_stations.Rda", compression_level = 9)
+
