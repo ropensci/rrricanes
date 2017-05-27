@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - rrricanes.working_msg option to show current working advisory.
 
 ### Changed
-  - NA
+  - `get_storm_data` now takes link as first parameter for chaining. Returns a list of dataframes for each product.
 
 ### Removed
   - `fstadv_split`. Dataframe can be split if desired by user. 
