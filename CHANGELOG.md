@@ -7,13 +7,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 ### Added
-  - NA
+  - dplyr.progress_bar for all products
+  - rrricanes.working_msg option to show current working advisory.
 
 ### Changed
   - NA
 
 ### Removed
-  - NA
+  - `fstadv_split`. Dataframe can be split if desired by user. 
 
 ### Deprecated
   - NA
