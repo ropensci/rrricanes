@@ -106,31 +106,11 @@ The dataframe returned is rather wide:
 dim(al.09.2016)
 ```
 
-There is a function that will break the dataframe down into four narrow frames; each with it's own purpose. Let's look at that and then I'll go over the variables returned.
-
-```{r}
-fstadv_split("al.09.2016")
-```
-
-The `fstadv_split` function takes the name of the dataframe in character format. The original dataframe is then split up and each "child" dataframe receives the same name with it's purpose appended to the name. In this instance, `al.09.2016` remains the parent dataframe but it is much more narrow:
-
-```{r}
-dim(al.09.2016)
-```
-
-And our child dataframes:
-
-```{r}
-dim(al.09.2016.wr)
-dim(al.09.2016.fst)
-dim(al.09.2016.fst.wr)
-```
-
 ### Current Details
 
 In this example, `al.09.2016` is our parent dataframe. It contains the core data for each advisory listed for this particular cyclone.
 
-```{r}
+```{r, eval = FALSE}
 str(al.09.2016)
 ```
 
@@ -140,11 +120,11 @@ The variables `Key`, `Adv` and `Date` should be used if you wish to join this pa
 
 Any cyclone of at least tropical storm-strength will have associated wind field values. 
 
-```{r}
+```{r, eval = FALSE}
 str(al.09.2016.wr)
 ```
 
-```{r}
+```{r, eval = FALSE}
 head(al.09.2016.wr)
 ```
 
@@ -164,7 +144,7 @@ Each forecast/advisory product can have many (or none) forecast positions. And t
 
 Forecasts exist for every 12-hour period up to 48 hours. After that time, a forecast will be available for sequential 24-hour periods; i.e., 12, 24, 36, 48, 72, 96 and 120.
 
-```{r}
+```{r, eval = FALSE}
 str(al.09.2016.fst)
 ```
 
@@ -172,7 +152,7 @@ str(al.09.2016.fst)
 
 Some forecast positions may also contain wind radius information (only up to 72 hours). This data can be found in `al.09.2016.fst.wr`. It's structure is very similar to `al.2019.2016.wr`.
 
-```{r}
+```{r, eval = FALSE}
 str(al.09.2016.fst.wr)
 ```
 
