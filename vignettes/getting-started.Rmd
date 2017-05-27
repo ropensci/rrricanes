@@ -11,7 +11,7 @@ vignette: >
 
 ```{r}
 library(dplyr)
-library(Hurricanes)
+library(rrricanes)
 ```
 
 ## General Introduction
@@ -130,7 +130,7 @@ head(al.09.2016.wr)
 
 In the example above you can see that for advisory #13, this cyclone had one-minute sustained wind speeds of at least 34 kts spread out 110 nautical miles to the northeast of the center of circulation, 110 nautical miles to the southeast, but 0 miles in both the southwest and northwest quadrant. (This is not unusual as many weak cyclones are assymetric in some fashion.)
 
-On advisory #14 there are two rows of data: one for the 34kt wind field and another for the 50kt wind field (a third, 64kt, will be present for hurricanes). 
+On advisory #14 there are two rows of data: one for the 34kt wind field and another for the 50kt wind field (a third, 64kt, will be present for rrricanes). 
 
 You can identify that on this advisory the storm system has expanded it's circulation into the southwestern quadrant but still hasn't wrapped around to encompass the northwestern quadrant. The radius of 50kt winds remains tightly around the center in the eastern quadrant.
 

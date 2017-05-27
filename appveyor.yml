@@ -57,8 +57,8 @@ notifications:
  - provider: Email
    to:
      - tim.trice@gmail.com
-   subject: 'Hurricanes build {{status}}'
-   message: "https://ci.appveyor.com/project/timtrice/Hurricanes"
+   subject: 'rrricanes build {{status}}'
+   message: "https://ci.appveyor.com/project/timtrice/rrricanes"
    on_build_success: false
    on_build_failure: true
    on_build_status_changed: true

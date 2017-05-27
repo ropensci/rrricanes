@@ -3,7 +3,7 @@ context("Position Estimates (posest)")
 ## ---- Base Data --------------------------------------------------------------
 ## ---- * 2008, AL -------------------------------------------------------------
 df.al092008.posest <- al2008 %>% dplyr::slice(9) %>% .$Link %>% get_posest()
-load(system.file("extdata", "al092008.posest.Rda", package = "Hurricanes"))
+load(system.file("extdata", "al092008.posest.Rda", package = "rrricanes"))
 
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton
