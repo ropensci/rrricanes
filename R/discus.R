@@ -25,7 +25,6 @@ create_df_discus <- function() {
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
-#' @param msg Show link being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
 get_discus <- function(link) {
