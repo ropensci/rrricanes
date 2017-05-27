@@ -63,6 +63,10 @@ prblty <- function(link, p) {
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
 
+    if (getOption("rrricanes.working_msg"))
+        message(sprintf("Working %s %s Strike Probability #%s (%s)",
+                        status, name, adv, date))
+
     # 15.0N  43.4W      43  1  X  X 44   16.8N  48.2W       X  4 16  2 22
     # 15.8N  45.9W       1 26  1  X 28
 

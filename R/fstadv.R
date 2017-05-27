@@ -86,7 +86,7 @@ fstadv <- function(link, p) {
     date <- scrape_header(contents, ret = "date")
 
     if (getOption("rrricanes.working_msg"))
-        message(sprintf("Working %s %s advisory #%s (%s)",
+        message(sprintf("Working %s %s Forecast/Advisory #%s (%s)",
                         status, name, adv, date))
 
     key <- scrape_header(contents, ret = "key")
