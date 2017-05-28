@@ -31,3 +31,6 @@ cache: packages
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
+
+r_github_packages:
+  - ropenscilabs/rnaturalearthhires
