@@ -13,18 +13,3 @@ load(system.file("extdata", "cp_prblty_stations.Rda", package = "rrricanes"))
 test_that("Test get_wndprb()", {
     expect_identical(al092008.wndprb, df.al092008.wndprb)
 })
-
-## ---- Test al_prblty_stations() ----------------------------------------------
-test_that("Test al_prblty_stations()", {
-    expect_equal(al_prblty_stations, al_prblty_stations())
-})
-
-## ---- Test ep_prblty_stations() ----------------------------------------------
-test_that("Test ep_prblty_stations()", {
-    expect_equal(ep_prblty_stations(), FALSE)
-})
-
-## ---- Test cp_prblty_stations() ----------------------------------------------
-test_that("Test cp_prblty_stations()", {
-    expect_equal(cp_prblty_stations(), cp_prblty_stations)
-})
