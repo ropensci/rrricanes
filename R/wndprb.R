@@ -33,7 +33,7 @@ cp_prblty_stations <- function() {
 #'     Pacific from the NHC. To be used in tandem with `wndprb` products.
 #' @details This is a placeholder function. The current listing does not match
 #'     the format for Atlantic and central Pacific stations.
-#' @keywords internal
+#' @export
 ep_prblty_stations <- function() {
     url <- "http://www.nhc.noaa.gov/data/wsp/ep_prblty_station.lst.csv.txt"
     return(FALSE)
