@@ -16,7 +16,7 @@ test_that("Test get_wndprb()", {
 
 ## ---- Test al_prblty_stations() ----------------------------------------------
 test_that("Test al_prblty_stations()", {
-    expect_identical(al_prblty_stations(), al_prblty_stations)
+    expect_identical(al_prblty_stations, al_prblty_stations())
 })
 
 ## ---- Test ep_prblty_stations() ----------------------------------------------
