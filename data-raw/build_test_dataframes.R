@@ -54,9 +54,11 @@ save(al092008.update, file = "./inst/extdata/al092008.update.Rda", compression_l
 al092008.wndprb <- al2008 %>% slice(9) %>% .$Link %>% get_wndprb()
 save(al092008.wndprb, file = "./inst/extdata/al092008.wndprb.Rda", compression_level = 9)
 
+## ---- * AL probability stations ----------------------------------------------
 al_prblty_stations <- al_prblty_stations()
 save(al_prblty_stations, file = "./inst/extdata/al_prblty_stations.Rda", compression_level = 9)
 
+## ---- * CP probability stations ----------------------------------------------
 cp_prblty_stations <- cp_prblty_stations()
 save(cp_prblty_stations, file = "./inst/extdata/cp_prblty_stations.Rda", compression_level = 9)
 
