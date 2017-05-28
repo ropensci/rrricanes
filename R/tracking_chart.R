@@ -22,6 +22,8 @@ ep_tracking_chart <- function(...) {
     return(p)
 }
 
+
+
 #' @title tracking_chart
 #' @description Build base tracking chart using ggplot
 #' @param countries Show country borders. Default TRUE.
@@ -55,29 +57,44 @@ tracking_chart <- function(countries = TRUE, states = TRUE, res = 110, ...) {
     # countries is FALSE, return coastlines data. Otherwise, build countries w/
     # states if states is TRUE.
     if (!countries) {
-        x <- get(paste0("coastline", res))
+        base_map <- build_tracking_chart_df(dataset = paste0("coastline", res), package = pkg)
     } else {
-        x <- get(paste0("countries", res))
+        base_map <- build_tracking_chart_df(dataset = paste0("countries", res), package = pkg)
         if (states) {
             if (res >= 50) {
                 # Resolution for states is only 10 or 50. If res is > 50, use
                 # rnaturalearthdata::states50
-                y <- get(paste0("states", 50))
+                state_map <- build_tracking_chart_df(dataset = paste0("states", 50), package = pkg)
             } else {
-                y <- get(paste0("states", res))
+                state_map <- build_tracking_chart_df(dataset = paste0("states", res), package = pkg)
             }
         }
     }
 
     p <- ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = x,
+        ggplot2::geom_polygon(data = base_map,
                               ggplot2::aes(long, lat, group = group), ...) +
         ggplot2::coord_equal()
 
-    if (exists("y"))
+    if (exists("state_map"))
         p <- p +
-        ggplot2::geom_polygon(data = y,
+        ggplot2::geom_polygon(data = state_map,
                               ggplot2::aes(long, lat, group = group), ...)
 
     return(p)
 }
+
+#' @title build_tracking_chart_df
+#' @description Helper function to retrieve appropriate dataset from the
+#'     rnaturalearth data packages.
+#' @param dataset Name of dataset to retrieve
+#' @param package Package to which the requested dataset belongs.
+#' @keywords internal
+build_tracking_chart_df <- function(dataset, package) {
+    # Load natural earth dataframe
+    data(list = dataset, package = package, envir = environment())
+    # Assign new dataframe to var x
+    x <- get(dataset)
+    return(x)
+}
+
