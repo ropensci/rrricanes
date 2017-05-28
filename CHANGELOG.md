@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
   - dplyr.progress_bar for all products
   - rrricanes.working_msg option to show current working advisory.
+  - `tracking_chart()` for a base world plot. `al_tracking_chart()` for chart centered on Atlantic basin. `ep_tracking_chart()` for chart centered on northeast Pacific.
 
 ### Changed
   - `get_storm_data` now takes link as first parameter for chaining. Returns a list of dataframes for each product.
