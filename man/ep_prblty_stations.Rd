@@ -14,4 +14,3 @@ Retrieve list of probability stations based in the eastern
 This is a placeholder function. The current listing does not match
     the format for Atlantic and central Pacific stations.
 }
-\keyword{internal}

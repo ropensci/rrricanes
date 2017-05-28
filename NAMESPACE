@@ -3,6 +3,7 @@
 export(al_prblty_stations)
 export(al_tracking_chart)
 export(cp_prblty_stations)
+export(ep_prblty_stations)
 export(ep_tracking_chart)
 export(get_discus)
 export(get_fstadv)
