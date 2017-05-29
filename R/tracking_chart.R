@@ -3,6 +3,24 @@
 #' @param ... Additional parameters for \link{tracking_chart} and ggplot2
 #' @seealso \code{\link{tracking_chart}}
 #' @return ggplot2 object centered on Atlantic basin.
+#' @examples
+#' \dontrun{
+#' # Build map with white land areas, thin black borders
+#' al_tracking_chart(color = "black", size = 0.1, fill = "white")
+#'
+#' # 50nm resolution, no states
+#' al_tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
+#'                   fill = "white")
+#'
+#' # 50nm resolution, coastlines only
+#' al_tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
+#'                   fill = "white")
+#'
+#' # Adding and modifying with ggplot functions
+#' al_tracking_chart(color = "black", size = 0.1, fill = "white") +
+#'     ggplot2::labs(x = "Lon", y = "Lat",
+#'     title = "Base Atlantic Tracking Chart")
+#' }
 #' @export
 al_tracking_chart <- function(...) {
     p <- tracking_chart(...)
@@ -15,14 +33,30 @@ al_tracking_chart <- function(...) {
 #' @param ... Additional parameters for ggplot2
 #' @seealso \code{\link{tracking_chart}}
 #' @return ggplot2 object centered on northeast Pacific basin.
+#' @examples
+#' \dontrun{
+#' # Build map with white land areas, thin black borders
+#' ep_tracking_chart(color = "black", size = 0.1, fill = "white")
+#'
+#' # 50nm resolution, no states
+#' ep_tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
+#'                   fill = "white")
+#'
+#' # 50nm resolution, coastlines only
+#' ep_tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
+#'                   fill = "white")
+#'
+#' # Adding and modifying with ggplot functions
+#' ep_tracking_chart(color = "black", size = 0.1, fill = "white") +
+#'     ggplot2::labs(x = "Lon", y = "Lat",
+#'     title = "Base East Pacific Tracking Chart")
+#' }
 #' @export
 ep_tracking_chart <- function(...) {
     p <- tracking_chart(...)
     p <- p + ggplot2::coord_equal(xlim = c(-180, -80), ylim = c(0, 35))
     return(p)
 }
-
-
 
 #' @title tracking_chart
 #' @description Build base tracking chart using ggplot
@@ -36,6 +70,23 @@ ep_tracking_chart <- function(...) {
 #' @return Returns ggplot2 object that can be printed directly or have new
 #'     layers added.
 #' @seealso \code{\link[ggplot2]{aes}}
+#' @examples
+#' \dontrun{
+#' # Build map with white land areas, thin black borders
+#' tracking_chart(color = "black", size = 0.1, fill = "white")
+#'
+#' # 50nm resolution, no states
+#' tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
+#'                fill = "white")
+#'
+#' # 50nm resolution, coastlines only
+#' tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
+#'                fill = "white")
+#'
+#' # Adding and modifying with ggplot functions
+#' tracking_chart(color = "black", size = 0.1, fill = "white") +
+#'     ggplot2::labs(x = "Lon", y = "Lat", title = "Base Tracking Chart")
+#' }
 #' @export
 tracking_chart <- function(countries = TRUE, states = TRUE, res = 110, ...) {
 
