@@ -20,3 +20,13 @@ test_that("get_storm_data()", {
                  "Invalid products included.")
     expect_error(get_storm_data(), "argument \"link\" is missing, with no default")
 })
+
+## ---- load_storm_data() ------------------------------------------------------
+test_that("load_storm_data()", {
+    expect_error(load_storm_data(years = 1997:1999),
+                 "years must be between 1998 and current year")
+    expect_error(load_storm_data(years = 2017, basins = "CP"),
+                 "basins must be one or both of AL, EP")
+    expect_error(load_storm_data(years = 2017, products = "test"),
+                 "products must either be NULL or have at least one valid product")
+})

@@ -6,6 +6,8 @@ Changed name from `Hurricanes` to `rrricanes`.
 
 `get_storm_data` can now be chained to other commands and returns a list of dataframes.
 
+`load_storm_data` accesses pre-scraped datasets and returns requested products through the github repo `rrricanesdata`. This was done to make it quicker to get data. It should not be relied on to get the most immediate data for current storms. However, it should be fairly up-to-date. Original functions can be used if for some reason immediate data access is needed.
+
 ## Minor Changes
 
 Modified numerous regex patterns to ensure data quality.
