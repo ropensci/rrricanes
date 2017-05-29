@@ -1,6 +1,6 @@
 #' @title al_tracking_chart
 #' @description Build tracking chart centered on Atlantic Basin.
-#' @param ... Additional parameters for ggplot2
+#' @param ... Additional parameters for \link{tracking_chart} and ggplot2
 #' @seealso \code{\link{tracking_chart}}
 #' @return ggplot2 object centered on Atlantic basin.
 #' @export
@@ -57,44 +57,31 @@ tracking_chart <- function(countries = TRUE, states = TRUE, res = 110, ...) {
     # countries is FALSE, return coastlines data. Otherwise, build countries w/
     # states if states is TRUE.
     if (!countries) {
-        base_map <- build_tracking_chart_df(dataset = paste0("coastline", res), package = pkg)
+        dataset <- paste0("coastline", res)
+        base_map_data <- getExportedValue(ns = pkg, name = dataset)
     } else {
-        base_map <- build_tracking_chart_df(dataset = paste0("countries", res), package = pkg)
+        dataset <- paste0("countries", res)
+        base_map_data <- getExportedValue(ns = pkg, name = dataset)
         if (states) {
             if (res >= 50) {
-                # Resolution for states is only 10 or 50. If res is > 50, use
-                # rnaturalearthdata::states50
-                state_map <- build_tracking_chart_df(dataset = paste0("states", 50), package = pkg)
+                dataset <- paste0("states", 50)
+                state_map_data <- getExportedValue(ns = pkg, name = dataset)
             } else {
-                state_map <- build_tracking_chart_df(dataset = paste0("states", res), package = pkg)
+                dataset <- paste0("states", res)
+                state_map_data <- getExportedValue(ns = pkg, name = dataset)
             }
         }
     }
 
     p <- ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = base_map,
+        ggplot2::geom_polygon(data = base_map_data,
                               ggplot2::aes(long, lat, group = group), ...) +
         ggplot2::coord_equal()
 
-    if (exists("state_map"))
+    if (exists("state_map_data"))
         p <- p +
-        ggplot2::geom_polygon(data = state_map,
+        ggplot2::geom_polygon(data = state_map_data,
                               ggplot2::aes(long, lat, group = group), ...)
 
     return(p)
 }
-
-#' @title build_tracking_chart_df
-#' @description Helper function to retrieve appropriate dataset from the
-#'     rnaturalearth data packages.
-#' @param dataset Name of dataset to retrieve
-#' @param package Package to which the requested dataset belongs.
-#' @keywords internal
-build_tracking_chart_df <- function(dataset, package) {
-    # Load natural earth dataframe
-    data(list = dataset, package = package, envir = environment())
-    # Assign new dataframe to var x
-    x <- get(dataset)
-    return(x)
-}
-
