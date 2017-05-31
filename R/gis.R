@@ -67,6 +67,29 @@ gis_download <- function(url, destdir = tempdir()) {
     return(ds)
 }
 
+#' @title gis_latest
+#' @description Latest GIS datasets for active cyclones
+#' @param destdir Directory to save shapefile data. Default is tempdir()
+#' @export
+gis_latest <- function(basins = c("AL", "EP"), destdir = tempdir()) {
+
+    if (!(all(basins %in% c("AL", "EP"))))
+        stop("Invalid basin")
+
+    urls <- list("AL" = "http://www.nhc.noaa.gov/gis-at.xml",
+                 "EP" = "http://www.nhc.noaa.gov/gis-ep.xml")
+
+    x <- purrr::map(basins, ~ xml2::read_xml(urls[[.x]]))
+    x.links <- purrr::map(x, ~ xml2::xml_find_all(.x, xpath = ".//link"))
+    x.ziplinks <- purrr::map(x.links, ~ stringr::str_detect(.x, pattern = "^<link>.+zip</link>$"))
+    x.matches <- purrr::map2(x.links, x.ziplinks, ~ .x[.y])
+    zips <- purrr::map(x.matches, as.character) %>% purrr::flatten_chr() %>% stringr::str_match("^<link>(.+)</link>$")
+    if (any(purrr::is_empty(zips), purrr::is_empty(zips[,2])))
+        return(NULL)
+    ds <- purrr::map(zips[,2], gis_download, destdir = destdir)
+    return(ds)
+}
+
 #' @title gis_outlook
 #' @description Tropical Weather Outlook
 #' @param destdir Directory to save shapefile data. Saved to tmp dir by default.
