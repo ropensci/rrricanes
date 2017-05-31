@@ -30,12 +30,15 @@ NULL
 stats::na.omit
 
 .onLoad <- function(libname, pkgname) {
-    packageStartupMessage("rrricanes is not intended for use in emergency situations.")
     op <- options()
     op.rrricanes <- list(rrricanes.working_msg = FALSE)
     toset <- !(names(op.rrricanes) %in% names(op))
     if (any(toset)) options(op.rrricanes[toset])
     invisible()
+}
+
+.onAttach <- function(libname, pkgname) {
+    packageStartupMessage("rrricanes is not intended for use in emergency situations.")
 }
 
 # This "hack" is to avoid NOTES on R CMD check. These are names that are
