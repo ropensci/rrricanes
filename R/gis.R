@@ -46,68 +46,25 @@ gis_advisory <- function(key, advisory = as.character()) {
 
 #' @title gis_download
 #' @description Get GIS data for storm.
-#' @param key Key of storm (i.e., AL012008, EP092015)
-#' @param advisory Advisory number. If NULL, all advisories are returned. Intermediate
-#' advisories are acceptable.
+#' @param URL of GIS dataset to download.
 #' @param destdir Directory to save shapefile data.
-#' @details Only available for storms >= 2008.
 #' @export
-gis_download <- function(key, advisory = 1, destdir = tempdir()) {
-
-    if (is.null(key))
-        stop("Please provide storm key")
-
-    if (!grepl("^[[:upper:]]{2}[[:digit:]]{6}$", key))
-        stop("Invalid key")
-
-    matches <- stringr::str_match(key, pattern = "([:upper:]{2})([:digit:]{2})([:digit:]{4})")
-
-    # GIS data has basin in lower case. Convert.
-    basin <- stringr::str_to_lower(matches[,2])
-    year_num <- matches[,3]
-    year <- as.numeric(matches[,4])
-
-    # Get list of GIS forecast zips for storm and download
-    url <- sprintf("http://www.nhc.noaa.gov/gis/archive_forecast_results.php?id=%s%s&year=%s", basin, year_num, year)
+gis_download <- function(url, destdir = tempdir()) {
     utils::download.file(file.path(url), zip_file <- tempfile())
-    contents <- readr::read_lines(zip_file)
-    # Match zip files
-    ptn <- sprintf(".+(forecast/archive/%s%s%s.*?\\.zip).+", basin, year_num, year)
-    matches <- contents[stringr::str_detect(contents, pattern = ptn)]
-    # Extract link to zip files
-    links <- stringr::str_match(matches, pattern = ptn)[,2]
-    # Create sub directories for each zip file
-    subdirs <- stringr::str_match(links, pattern = "forecast/archive/(.+)\\.zip")[,2]
-    # If subdirs don't exist in destdir, create them
-    subdirs %>% purrr::map2_lgl(.y = destdir, .f = function(x, y) {
-        d <- sprintf("%s/%s", y, x)
-        if (dir.exists(d))
-            unlink(d, recursive = TRUE)
-        dir.create(d)
+    utils::unzip(zip_file, exdir = destdir)
+    shp_files <- list.files(path = destdir, pattern = ".+shp$")
+    ds <- purrr::map2(.x = shp_files, .y = destdir, .f = function(f, d) {
+        shp_file <- stringr::str_match(f, "^(.+)\\.shp$")[,2]
+        shp <- rgdal::readOGR(dsn = d, layer = shp_file)
+        shp@data$id <- rownames(shp@data)
+        shp.points <- broom::tidy(shp, region = "id")
+        df <- dplyr::left_join(shp.points, shp@data, by = "id")
+        return(df)
     })
-    ds_gis <- purrr::map(links, .f = function(link) {
-        address <- sprintf("http://www.nhc.noaa.gov/gis/%s", link)
-        destdir <- get("destdir", envir = parent.env(environment()))
-        subdir <- stringr::str_match(link, pattern = "forecast/archive/(.+)\\.zip")[,2]
-        destsubdir <- sprintf("%s/%s/", destdir, subdir)
-        utils::download.file(file.path(address), z <- tempfile())
-        utils::unzip(z, exdir = destsubdir)
-        # Get all shapefiles
-        shp_files <- list.files(path = destsubdir, pattern = ".+shp$")
-        shp_file_names <- stringr::str_match(shp_files, "^(.+)\\.shp$")[,2]
-        ds <- purrr::map2(.x = shp_files, .y = destsubdir, .f = function(f, d) {
-            f <- stringr::str_match(f, "^(.+)\\.shp$")[,2]
-            shp <- rgdal::readOGR(dsn = d, layer = f)
-            shp@data$id <- rownames(shp@data)
-            shp.points <- broom::tidy(shp, region = "id")
-            df <- dplyr::left_join(shp.points, shp@data, by = "id")
-            return(df)
-        })
-        names(ds) <- shp_file_names
-        return(ds)
-    })
-    names(ds_gis) <- subdirs
-    return(ds_gis)
+    shp_file_names <- stringr::str_match(shp_files, "^(.+)\\.shp$")[,2] %>%
+        stringr::str_replace_all("[[:punct:][:space:]]", "_")
+    names(ds) <- shp_file_names
+    return(ds)
 }
 
 #' @title gis_outlook
