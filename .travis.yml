@@ -38,6 +38,7 @@ addons:
     - libgdal-dev
     - libgdal1-dev
     - libudunits2-dev
+    - libhdf5-serial-dev
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
