@@ -59,4 +59,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 Acknowledgments
 ---------------
 
--   None yet :(
+-   [Molyneux, James](https://github.com/jimmylovestea)
+-   [Rudis, BobRudis](https://github.com/hrbrmstr)

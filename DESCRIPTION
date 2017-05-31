@@ -6,8 +6,10 @@ Description: Get archived data of past and current hurricanes and tropical
   storms for the Atlantic and eastern Pacific oceans. Data is available for 
   storms since 1998.
 Version: 0.1.1
-Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
-                  role = c("aut", "cre"))
+Authors@R: c(
+  person("Tim", "Trice", email = "tim.trice@gmail.com", role = c("aut", "cre")), 
+  person("Bob", "Rudis", email = "bob@rud.is", role = c("ctb")), 
+  person("James", "Molyneux", email = "jmolyneux@ucla.edu", role = c("ctb")))
 Depends:
   R (>= 3.3.3)
 URL: http://www.timtrice.net

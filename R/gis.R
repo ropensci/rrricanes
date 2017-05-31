@@ -331,3 +331,53 @@ gis_windfield <- function(key, advisory = as.character()) {
     subdirs <- stringr::str_match(links, pattern = "forecast/archive/(.+)\\.zip")[,2]
     return(subdirs)
 }
+
+#' @title gis_wsp
+#' @description Wind Speed Probabilities
+#' @param datetime Datetime in \%Y\%m\%d\%H format. \%m, \%d and \%H are
+#' optional but will return more datasets.
+#' @param res Resolution as a numeric vector; 5, 0.5, 0.1.
+#' @details Probability winds affecting an area within a forecast period.
+#' Datasets contain windfields for 34kt, 50kt and 64kt. Resolution is at 5km,
+#' 0.5 degrees and 0.1 degrees. Not all resolutions may be available for all
+#' storms. Not all windfields will be available for all advisories.
+#' @examples
+#' \dontrun{
+#' # Return datasets for January 1, 2016 with resolution of 0.5 degrees
+#' gis_wndprb("20160101", res = 0.5)
+#'
+#' # Return wsp of 0.1 and 0.5 degree resolution, July, 2015
+#' gis_wndprb("201507", res = c(0.5, 0.1))
+#' }
+#' @export
+gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
+
+    if (!grepl("[[:digit:]]{4,10}", datetime))
+        stop("Invalid datetime")
+
+    if (!(all(res %in% c(5.0, 0.5, 0.1))))
+        stop("Invalid resolution")
+
+    res <- as.character(res)
+    res <- stringr::str_replace(res, "^5$", "5km")
+    res <- stringr::str_replace(res, "^0.5$", "halfDeg")
+    res <- stringr::str_replace(res, "^0.1$", "tenthDeg")
+
+    year <- stringr::str_sub(datetime, 0L, 4L)
+
+    request <- httr::POST("http://www.nhc.noaa.gov/gis/archive_wsp.php",
+                      body = list(year = year), encode = "form")
+    contents <- httr::content(request, as = "parsed", encoding = "UTF-8")
+    ds <- rvest::html_nodes(contents, "a[href*='zip']") %>% rvest::html_attr("href")
+    if (nchar(datetime) < 10) {
+        ptn_datetime <- paste0(datetime, "[:digit:]+")
+    } else {
+        ptn_datetime <- datetime
+    }
+
+    ptn_res <- paste(res, collapse = "|")
+
+    ptn <- sprintf("%s_wsp_[:digit:]{1,3}hr(%s)", ptn_datetime, ptn_res)
+    ds <- ds[stringr::str_detect(ds, ptn)]
+    return(ds)
+}
