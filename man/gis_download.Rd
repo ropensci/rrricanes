@@ -4,19 +4,13 @@
 \alias{gis_download}
 \title{gis_download}
 \usage{
-gis_download(key, advisory = 1, destdir = tempdir())
+gis_download(url, destdir = tempdir())
 }
 \arguments{
-\item{key}{Key of storm (i.e., AL012008, EP092015)}
-
-\item{advisory}{Advisory number. If NULL, all advisories are returned. Intermediate
-advisories are acceptable.}
-
 \item{destdir}{Directory to save shapefile data.}
+
+\item{URL}{of GIS dataset to download.}
 }
 \description{
 Get GIS data for storm.
-}
-\details{
-Only available for storms >= 2008.
 }
