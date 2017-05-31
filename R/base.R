@@ -117,6 +117,14 @@ month_str_to_num <- function(m) {
     return(abbr)
 }
 
+#' @title saffir
+#' @description Return category of storm based on wind. Assumes storm is a
+#' cyclone. Saffir-Simpson Hurricane Scale does not apply to non-tropical storms.
+#' @export
+saffir <- function(x) {
+    return(NULL)
+}
+
 #' @title status
 #' @description Test URL status.
 #' @details Return URL if status is 'OK'. Otherwise, return NA and print
