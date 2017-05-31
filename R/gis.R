@@ -219,3 +219,59 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL, nobs = ~ length
     # subdirs <- stringr::str_match(links, pattern = "storm_surge/(.+)\\.zip")[,2]
     # return(subdirs)
 }
+
+#' @title gis_storm_surge_flood
+#' @description Potential Storm Surge Flooding (Inundation)
+#' @param key Key of storm (i.e., AL012008, EP092015)
+#' @param advisory Advisory number. If NULL, all available advisories are
+#' returned.
+#' @param products indundation or tidalmask
+#' @export
+gis_storm_surge_flood <- function(key, advisory = as.numeric(),
+                                products = c("inundation", "tidalmask")) {
+
+    if (is.null(key))
+        stop("Please provide storm key")
+
+    key <- stringr::str_to_upper(key)
+
+    if (!grepl("^[[:alpha:]]{2}[[:digit:]]{6}$", key))
+        stop("Invalid key")
+
+    if (!(any(products %in% c("inundation", "tidalmask"))))
+        stop("Invalid products")
+
+    key <- stringr::str_match(key, pattern = "([:alpha:]{2})([:digit:]{2})([:digit:]{4})")
+    names(key) <- c("original", "basin", "year_num", "year")
+
+    # Get list of GIS zips for storm and download
+    url <- sprintf("http://www.nhc.noaa.gov/gis/archive_inundation_results.php?id=%s%s&year=%s",
+                   key[["basin"]], key[["year_num"]], key[["year"]])
+    contents <- readr::read_lines(url)
+
+    if (purrr::is_empty(advisory)) {
+        ptn <- sprintf(".+(inundation/forecasts/%s%s%s_[:digit:]{1,2}_(%s)\\.zip).+",
+                       key[["basin"]],
+                       key[["year_num"]],
+                       stringr::str_sub(key[["year"]], start = 3L, end = 4L),
+                       paste(products, collapse = "|"))
+    } else {
+        ptn <- sprintf(".+(inundation/forecasts/%s%s%s_%s_(%s)\\.zip).+",
+                       key[["basin"]],
+                       key[["year_num"]],
+                       stringr::str_sub(key[["year"]], start = 3L, end = 4L),
+                       stringr::str_pad(advisory, width = 2, side = "left", pad = "0"),
+                       paste(products, collapse = "|"))
+    }
+
+    matches <- contents[stringr::str_detect(contents, pattern = ptn)]
+    # Extract link to zip files. Error gracefully if no matches.
+    tryCatch(links <- stringr::str_match(matches, pattern = ptn)[,2],
+             error = function(c) {
+                 c$message <- "No data avaialable for requested storm/advisory"
+                 stop(c$message, call. = FALSE)
+             })
+    # Create sub directories for each zip file
+    subdirs <- stringr::str_match(links, pattern = "inundation/forecasts/(.+)\\.zip")[,2]
+    return(subdirs)
+}
