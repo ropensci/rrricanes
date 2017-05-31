@@ -18,6 +18,7 @@ Additional_repositories: http://packages.ropensci.org
 License: MIT + file LICENSE
 LazyData: TRUE
 Imports:
+  broom (>= 0.4.2), 
   data.table (>= 1.9.6), 
   dplyr (>= 0.5.0), 
   ggplot2 (>= 2.2.1), 
@@ -26,6 +27,7 @@ Imports:
   magrittr (>= 1.5), 
   purrr (>= 0.2.2.2), 
   readr (>= 1.1.0), 
+  rgdal (>= 1.2-7), 
   rnaturalearthdata (>= 0.1.0),
   rnaturalearthhires (>= 0.1.0),
   rvest (>= 0.3.2), 
