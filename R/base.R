@@ -30,6 +30,7 @@ NULL
 stats::na.omit
 
 .onLoad <- function(libname, pkgname) {
+    packageStartupMessage("rrricanes is not intended for use in emergency situations.")
     op <- options()
     op.rrricanes <- list(rrricanes.working_msg = FALSE)
     toset <- !(names(op.rrricanes) %in% names(op))
