@@ -102,16 +102,13 @@ gis_outlook <- function(destdir = tempdir()) {
     shp_file_names <- stringr::str_match(shp_files, "^(.+)\\.shp$")[,2]
     ds <- purrr::map2(.x = shp_files, .y = destdir, .f = function(f, d) {
         f <- stringr::str_match(f, "^(.+)\\.shp$")[,2]
-        tryCatch(shp <- rgdal::readOGR(dsn = d, layer = f),
-                 error = function(c) "error",
-                 warning = function(c) "warning",
-                 message = function(c) "message",
-                 finally = {
-                     shp@data$id <- rownames(shp@data)
-                     shp.points <- broom::tidy(shp, region = "id")
-                     df <- dplyr::left_join(shp.points, shp@data, by = "id")
-                     return(df)
-                 })
+        try({
+            shp <- rgdal::readOGR(dsn = d, layer = f)
+            shp@data$id <- rownames(shp@data)
+            shp.points <- broom::tidy(shp, region = "id")
+            df <- dplyr::left_join(shp.points, shp@data, by = "id")
+            return(df)
+        })
     })
     names(ds) <- shp_file_names
     return(ds)
