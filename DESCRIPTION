@@ -29,6 +29,7 @@ Imports:
   purrr (>= 0.2.2.2), 
   readr (>= 1.1.0), 
   rgdal (>= 1.2-7), 
+  rgeos (>= 0.3-23), 
   rnaturalearthdata (>= 0.1.0),
   rnaturalearthhires (>= 0.1.0),
   rvest (>= 0.3.2), 
