@@ -43,3 +43,30 @@ gis_advisory <- function(key, advisory = as.character()) {
     subdirs <- stringr::str_match(links, pattern = "forecast/archive/(.+)\\.zip")[,2]
     return(subdirs)
 }
+
+#' @title gis_outlook
+#' @description Tropical Weather Outlook
+#' @param destdir Directory to save shapefile data. Saved to tmp dir by default.
+#' @export
+gis_outlook <- function(destdir = tempdir()) {
+    url <- "http://www.nhc.noaa.gov/xgtwo/gtwo_shapefiles.zip"
+    utils::download.file(file.path(url), z <- tempfile())
+    utils::unzip(z, exdir = destdir)
+    shp_files <- list.files(path = destdir, pattern = ".+shp$")
+    shp_file_names <- stringr::str_match(shp_files, "^(.+)\\.shp$")[,2]
+    ds <- purrr::map2(.x = shp_files, .y = destdir, .f = function(f, d) {
+        f <- stringr::str_match(f, "^(.+)\\.shp$")[,2]
+        tryCatch(shp <- rgdal::readOGR(dsn = d, layer = f),
+                 error = function(c) "error",
+                 warning = function(c) "warning",
+                 message = function(c) "message",
+                 finally = {
+                     shp@data$id <- rownames(shp@data)
+                     shp.points <- broom::tidy(shp, region = "id")
+                     df <- dplyr::left_join(shp.points, shp@data, by = "id")
+                     return(df)
+                 })
+    })
+    names(ds) <- shp_file_names
+    return(ds)
+}
