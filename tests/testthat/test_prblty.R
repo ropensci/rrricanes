@@ -9,7 +9,7 @@ al1998 <- get_storms(year = 1998, basin = "AL") %>%
 df.al011998.prblty <- get_prblty(al1998[1])
 
 ## ---- * Saved Data -----------------------------------------------------------
-load(system.file("extdata", "al011998.prblty.Rda", package = "Hurricanes"))
+load(system.file("extdata", "al011998.prblty.Rda", package = "rrricanes"))
 
 ## ---- Test prblty ------------------------------------------------------------
 #' Test return of prblty

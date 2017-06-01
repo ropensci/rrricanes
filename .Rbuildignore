@@ -3,3 +3,4 @@
 ^NEWS\.md$
 ^CHANGELOG\.md$
 ^\.travis\.yml$
+^packrat/

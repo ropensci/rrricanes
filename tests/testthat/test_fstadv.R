@@ -35,10 +35,10 @@ df.ep011998.fstadv <- get_fstadv(ep1998[1])
 df.ep021998.fstadv <- get_fstadv(ep1998[2])
 
 ## ---- * Saved Data -----------------------------------------------------------
-load(system.file("extdata", "al011998.fstadv.Rda", package = "Hurricanes"))
-load(system.file("extdata", "al021998.fstadv.Rda", package = "Hurricanes"))
-load(system.file("extdata", "ep011998.fstadv.Rda", package = "Hurricanes"))
-load(system.file("extdata", "ep021998.fstadv.Rda", package = "Hurricanes"))
+load(system.file("extdata", "al011998.fstadv.Rda", package = "rrricanes"))
+load(system.file("extdata", "al021998.fstadv.Rda", package = "rrricanes"))
+load(system.file("extdata", "ep011998.fstadv.Rda", package = "rrricanes"))
+load(system.file("extdata", "ep021998.fstadv.Rda", package = "rrricanes"))
 
 ## ---- Dataframe Skeleton -----------------------------------------------------
 #' Test structure of dataframe skeleton

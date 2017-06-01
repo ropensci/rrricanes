@@ -10,13 +10,13 @@ vignette: >
 ---
 
 ```{r}
-library(tidyverse)
-library(Hurricanes)
+library(dplyr)
+library(rrricanes)
 ```
 
 ## General Introduction
 
-`Hurricanes` is intended to give easy access to hurricane archives. In short, it is a web-scraping tool that parses the National Hurricane Center's (NHC) archives to get storm data. 
+`rrricanes` is intended to give easy access to hurricane archives. In short, it is a web-scraping tool that parses the National Hurricane Center's (NHC) archives to get storm data. 
 
 At this point, data is only available back to 1998. 
 
@@ -99,86 +99,6 @@ The core of a storm's dataset is located in the Forecast/Advisory product. This 
 ```{r}
 al.09.2016 <- get_fstadv(link = url)
 ```
-
-The dataframe returned is rather wide:
-
-```{r}
-dim(al.09.2016)
-```
-
-There is a function that will break the dataframe down into four narrow frames; each with it's own purpose. Let's look at that and then I'll go over the variables returned.
-
-```{r}
-fstadv_split("al.09.2016")
-```
-
-The `fstadv_split` function takes the name of the dataframe in character format. The original dataframe is then split up and each "child" dataframe receives the same name with it's purpose appended to the name. In this instance, `al.09.2016` remains the parent dataframe but it is much more narrow:
-
-```{r}
-dim(al.09.2016)
-```
-
-And our child dataframes:
-
-```{r}
-dim(al.09.2016.wr)
-dim(al.09.2016.fst)
-dim(al.09.2016.fst.wr)
-```
-
-### Current Details
-
-In this example, `al.09.2016` is our parent dataframe. It contains the core data for each advisory listed for this particular cyclone.
-
-```{r}
-str(al.09.2016)
-```
-
-The variables `Key`, `Adv` and `Date` should be used if you wish to join this parent data frame with any of the child dataframes.
-
-### Wind Radius
-
-Any cyclone of at least tropical storm-strength will have associated wind field values. 
-
-```{r}
-str(al.09.2016.wr)
-```
-
-```{r}
-head(al.09.2016.wr)
-```
-
-In the example above you can see that for advisory #13, this cyclone had one-minute sustained wind speeds of at least 34 kts spread out 110 nautical miles to the northeast of the center of circulation, 110 nautical miles to the southeast, but 0 miles in both the southwest and northwest quadrant. (This is not unusual as many weak cyclones are assymetric in some fashion.)
-
-On advisory #14 there are two rows of data: one for the 34kt wind field and another for the 50kt wind field (a third, 64kt, will be present for hurricanes). 
-
-You can identify that on this advisory the storm system has expanded it's circulation into the southwestern quadrant but still hasn't wrapped around to encompass the northwestern quadrant. The radius of 50kt winds remains tightly around the center in the eastern quadrant.
-
-Note that if a storm is not of tropical storm-strength, this data will not exist.
-
-### Forecast
-
-Most Forecast/Advisory products will have forecast data associated with it unless the storm is expected to dissipate very soon or already has. This data can be found in `al.09.2016.fst`.
-
-Each forecast/advisory product can have many (or none) forecast positions. And this number has changed over the years. Originally forecasts were only issued for 72 hours but this has expanded now to 120 hours.
-
-Forecasts exist for every 12-hour period up to 48 hours. After that time, a forecast will be available for sequential 24-hour periods; i.e., 12, 24, 36, 48, 72, 96 and 120.
-
-```{r}
-str(al.09.2016.fst)
-```
-
-### Forecast Wind Radius
-
-Some forecast positions may also contain wind radius information (only up to 72 hours). This data can be found in `al.09.2016.fst.wr`. It's structure is very similar to `al.2019.2016.wr`.
-
-```{r}
-str(al.09.2016.fst.wr)
-```
-
-You can join this dataframe to `al.09.2016.fst` by the `Key`, `Adv`, `Date` and `FcstDate` variables. 
-
-Please see the National Hurricane Center's website for more information on understanding the [Forecast/Advisory product](http://www.nhc.noaa.gov/help/tcm.shtml?).
 
 ## Strike Probabilities (`prblty`)
 

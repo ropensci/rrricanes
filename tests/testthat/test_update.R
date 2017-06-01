@@ -5,7 +5,7 @@ context("Update (update)")
 test_that("Dataframe Skeleton", {
     df <- create_df_update()
     expect_true(is.data.frame(df))
-    expect_true(is_tibble(df))
+    expect_true(tibble::is_tibble(df))
     expect_identical(class(df$Status), "character")
     expect_identical(class(df$Name), "character")
     expect_identical(class(df$Adv), "character")
@@ -19,7 +19,7 @@ test_that("Test get_update()", {
     url <- "http://www.nhc.noaa.gov/archive/2008/IKE.shtml?"
     df <- get_update(link = url)
     expect_true(is.data.frame(df))
-    expect_true(is_tibble(df))
+    expect_true(tibble::is_tibble(df))
     expect_identical(class(df$Status), "character")
     expect_identical(class(df$Name), "character")
     expect_identical(class(df$Adv), "character")
