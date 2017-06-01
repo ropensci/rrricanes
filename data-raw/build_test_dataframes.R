@@ -1,6 +1,6 @@
-library(Hurricanes)
 library(dplyr)
 library(purrr)
+library(rrricanes)
 
 ## ---- Base Data --------------------------------------------------------------
 #' Get all storms for 1998, AL basin
@@ -40,8 +40,7 @@ save(ep021998.fstadv, file = "./inst/extdata/ep021998.fstadv.Rda", compression_l
 
 ## ---- * 1998, AL, 01 ---------------------------------------------------------
 al011998.prblty <- get_prblty(al1998[1])
-save(al011998.prblty,
-     file = "./inst/extdata/al011998.prblty.Rda", compression_level = 9)
+save(al011998.prblty, file = "./inst/extdata/al011998.prblty.Rda", compression_level = 9)
 
 ## ---- wndprb -----------------------------------------------------------------
 

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Tim Trice" />
 
-<meta name="date" content="2017-05-12" />
+<meta name="date" content="2017-06-01" />
 
 <title>Getting Started</title>
 
@@ -70,15 +70,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Getting Started</h1>
 <h4 class="author"><em>Tim Trice</em></h4>
-<h4 class="date"><em>2017-05-12</em></h4>
+<h4 class="date"><em>2017-06-01</em></h4>
 
 
 
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(Hurricanes)</code></pre></div>
+<span class="kw">library</span>(rrricanes)</code></pre></div>
 <div id="general-introduction" class="section level2">
 <h2>General Introduction</h2>
-<p><code>Hurricanes</code> is intended to give easy access to hurricane archives. In short, it is a web-scraping tool that parses the National Hurricane Center’s (NHC) archives to get storm data.</p>
+<p><code>rrricanes</code> is intended to give easy access to hurricane archives. In short, it is a web-scraping tool that parses the National Hurricane Center’s (NHC) archives to get storm data.</p>
 <p>At this point, data is only available back to 1998.</p>
 <p>There are two basins which data is available: north Atlantic (“AL”) and northeastern Pacific (“EP”). The northeastern Pacific basin typically covers from the west coast of North America to -140° longitude (140°W). The Central Pacific Hurricane Center (CPHC) covers the north Pacific from -140° to -180°.</p>
 <p>The NHC will stop issuing advisories once a storm crosses -140° where the CPHC takes over. However, I cannot rule out that some storms that have crossed this “boundary” or even developed in CPHC waters will not exist in records retrieved.</p>
@@ -89,18 +89,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Get Storms</h2>
 <p>By default, <code>get_storms</code> will return all storms that have developed for the current year in both basins. If no storms have developed, an error will be generated. For this example, we’ll use 2016.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">al<span class="fl">.2016</span> &lt;-<span class="st"> </span><span class="kw">get_storms</span>(<span class="dt">year =</span> <span class="dv">2016</span>, <span class="dt">basin =</span> <span class="st">&quot;AL&quot;</span>) %&gt;%<span class="st"> </span>tbl_df %&gt;%<span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="kw">nrow</span>(.))</code></pre></div>
-<pre><code>## # A tibble: 16 × 4
+<pre><code>## # A tibble: 16 x 4
 ##     Year                      Name Basin
 ##    &lt;dbl&gt;                     &lt;chr&gt; &lt;chr&gt;
-## 1   2016            Hurricane Alex    AL
-## 2   2016     Tropical Storm Bonnie    AL
-## 3   2016      Tropical Storm Colin    AL
-## 4   2016   Tropical Storm Danielle    AL
-## 5   2016            Hurricane Earl    AL
-## 6   2016      Tropical Storm Fiona    AL
-## 7   2016          Hurricane Gaston    AL
-## 8   2016 Tropical Depression Eight    AL
-## 9   2016         Hurricane Hermine    AL
+##  1  2016            Hurricane Alex    AL
+##  2  2016     Tropical Storm Bonnie    AL
+##  3  2016      Tropical Storm Colin    AL
+##  4  2016   Tropical Storm Danielle    AL
+##  5  2016            Hurricane Earl    AL
+##  6  2016      Tropical Storm Fiona    AL
+##  7  2016          Hurricane Gaston    AL
+##  8  2016 Tropical Depression Eight    AL
+##  9  2016         Hurricane Hermine    AL
 ## 10  2016        Tropical Storm Ian    AL
 ## 11  2016      Tropical Storm Julia    AL
 ## 12  2016       Tropical Storm Karl    AL
@@ -121,7 +121,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <pre><code>## [1] TRUE</code></pre>
 <p>This call brings a dataframe to the global environment: <code>fstadv</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(fstadv)</code></pre></div>
-<pre><code>## # A tibble: 6 × 125
+<pre><code>## # A tibble: 6 x 125
 ##        Key   Adv                Date  Name              Status   Lat   Lon
 ##      &lt;chr&gt; &lt;chr&gt;              &lt;dttm&gt; &lt;chr&gt;               &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1 AL092016     1 2016-08-28 21:00:00  Nine Tropical Depression  23.7 -81.7
@@ -178,108 +178,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Forecast/Advisory Product (<code>fstadv</code>)</h2>
 <p>The core of a storm’s dataset is located in the Forecast/Advisory product. This product contains current location, forecast position, movement and structural detail of the cyclone.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">al<span class="fl">.09.2016</span> &lt;-<span class="st"> </span><span class="kw">get_fstadv</span>(<span class="dt">link =</span> url)</code></pre></div>
-<p>The dataframe returned is rather wide:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(al<span class="fl">.09.2016</span>)</code></pre></div>
-<pre><code>## [1]  38 125</code></pre>
-<p>There is a function that will break the dataframe down into four narrow frames; each with it’s own purpose. Let’s look at that and then I’ll go over the variables returned.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fstadv_split</span>(<span class="st">&quot;al.09.2016&quot;</span>)</code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
-<p>The <code>fstadv_split</code> function takes the name of the dataframe in character format. The original dataframe is then split up and each “child” dataframe receives the same name with it’s purpose appended to the name. In this instance, <code>al.09.2016</code> remains the parent dataframe but it is much more narrow:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(al<span class="fl">.09.2016</span>)</code></pre></div>
-<pre><code>## [1] 38 18</code></pre>
-<p>And our child dataframes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(al<span class="fl">.09.2016</span>.wr)</code></pre></div>
-<pre><code>## [1] 49  8</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(al<span class="fl">.09.2016</span>.fst)</code></pre></div>
-<pre><code>## [1] 249   8</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(al<span class="fl">.09.2016</span>.fst.wr)</code></pre></div>
-<pre><code>## [1] 287   9</code></pre>
-<div id="current-details" class="section level3">
-<h3>Current Details</h3>
-<p>In this example, <code>al.09.2016</code> is our parent dataframe. It contains the core data for each advisory listed for this particular cyclone.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(al<span class="fl">.09.2016</span>)</code></pre></div>
-<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    38 obs. of  18 variables:
-##  $ Key     : chr  &quot;AL092016&quot; &quot;AL092016&quot; &quot;AL092016&quot; &quot;AL092016&quot; ...
-##  $ Adv     : chr  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
-##  $ Date    : POSIXct, format: &quot;2016-08-28 21:00:00&quot; &quot;2016-08-29 03:00:00&quot; ...
-##  $ Name    : chr  &quot;Nine&quot; &quot;Nine&quot; &quot;Nine&quot; &quot;Nine&quot; ...
-##  $ Status  : chr  &quot;Tropical Depression&quot; &quot;Tropical Depression&quot; &quot;Tropical Depression&quot; &quot;Tropical Depression&quot; ...
-##  $ Lat     : num  23.7 23.4 23.5 23.6 24 23.9 23.8 24 24.4 24.3 ...
-##  $ Lon     : num  -81.7 -82.7 -83.9 -84.3 -84.8 -85.5 -86.6 -87.2 -87.3 -87.8 ...
-##  $ Wind    : num  30 30 30 30 30 30 30 30 30 30 ...
-##  $ Gust    : num  40 40 40 40 40 40 40 40 40 40 ...
-##  $ Pressure: num  1009 1007 1007 1007 1007 ...
-##  $ PosAcc  : num  25 25 20 25 25 20 20 25 20 20 ...
-##  $ FwdDir  : num  270 270 275 280 290 280 275 290 320 345 ...
-##  $ FwdSpeed: num  8 8 8 6 4 6 6 6 4 2 ...
-##  $ Eye     : num  NA NA NA NA NA NA NA NA NA NA ...
-##  $ SeasNE  : num  NA NA NA NA NA NA NA NA NA NA ...
-##  $ SeasSE  : num  NA NA NA NA NA NA NA NA NA NA ...
-##  $ SeasSW  : num  NA NA NA NA NA NA NA NA NA NA ...
-##  $ SeasNW  : num  NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<p>The variables <code>Key</code>, <code>Adv</code> and <code>Date</code> should be used if you wish to join this parent data frame with any of the child dataframes.</p>
-</div>
-<div id="wind-radius" class="section level3">
-<h3>Wind Radius</h3>
-<p>Any cyclone of at least tropical storm-strength will have associated wind field values.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(al<span class="fl">.09.2016</span>.wr)</code></pre></div>
-<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    49 obs. of  8 variables:
-##  $ Key      : chr  &quot;AL092016&quot; &quot;AL092016&quot; &quot;AL092016&quot; &quot;AL092016&quot; ...
-##  $ Adv      : chr  &quot;13&quot; &quot;14&quot; &quot;14&quot; &quot;15&quot; ...
-##  $ Date     : POSIXct, format: &quot;2016-08-31 21:00:00&quot; &quot;2016-09-01 03:00:00&quot; ...
-##  $ WindField: num  34 34 50 34 50 34 50 34 50 34 ...
-##  $ NE       : num  110 110 20 120 20 120 60 150 100 150 ...
-##  $ SE       : num  110 110 20 120 20 120 60 160 120 160 ...
-##  $ SW       : num  0 90 0 60 0 60 0 60 30 60 ...
-##  $ NW       : num  0 0 0 0 0 40 0 60 30 60 ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(al<span class="fl">.09.2016</span>.wr)</code></pre></div>
-<pre><code>## # A tibble: 6 × 8
-##        Key   Adv                Date WindField    NE    SE    SW    NW
-##      &lt;chr&gt; &lt;chr&gt;              &lt;dttm&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 AL092016    13 2016-08-31 21:00:00        34   110   110     0     0
-## 2 AL092016    14 2016-09-01 03:00:00        34   110   110    90     0
-## 3 AL092016    14 2016-09-01 03:00:00        50    20    20     0     0
-## 4 AL092016    15 2016-09-01 09:00:00        34   120   120    60     0
-## 5 AL092016    15 2016-09-01 09:00:00        50    20    20     0     0
-## 6 AL092016    16 2016-09-01 15:00:00        34   120   120    60    40</code></pre>
-<p>In the example above you can see that for advisory #13, this cyclone had one-minute sustained wind speeds of at least 34 kts spread out 110 nautical miles to the northeast of the center of circulation, 110 nautical miles to the southeast, but 0 miles in both the southwest and northwest quadrant. (This is not unusual as many weak cyclones are assymetric in some fashion.)</p>
-<p>On advisory #14 there are two rows of data: one for the 34kt wind field and another for the 50kt wind field (a third, 64kt, will be present for hurricanes).</p>
-<p>You can identify that on this advisory the storm system has expanded it’s circulation into the southwestern quadrant but still hasn’t wrapped around to encompass the northwestern quadrant. The radius of 50kt winds remains tightly around the center in the eastern quadrant.</p>
-<p>Note that if a storm is not of tropical storm-strength, this data will not exist.</p>
-</div>
-<div id="forecast" class="section level3">
-<h3>Forecast</h3>
-<p>Most Forecast/Advisory products will have forecast data associated with it unless the storm is expected to dissipate very soon or already has. This data can be found in <code>al.09.2016.fst</code>.</p>
-<p>Each forecast/advisory product can have many (or none) forecast positions. And this number has changed over the years. Originally forecasts were only issued for 72 hours but this has expanded now to 120 hours.</p>
-<p>Forecasts exist for every 12-hour period up to 48 hours. After that time, a forecast will be available for sequential 24-hour periods; i.e., 12, 24, 36, 48, 72, 96 and 120.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(al<span class="fl">.09.2016</span>.fst)</code></pre></div>
-<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    249 obs. of  8 variables:
-##  $ Key     : chr  &quot;AL092016&quot; &quot;AL092016&quot; &quot;AL092016&quot; &quot;AL092016&quot; ...
-##  $ Adv     : chr  &quot;1&quot; &quot;1&quot; &quot;1&quot; &quot;1&quot; ...
-##  $ Date    : POSIXct, format: &quot;2016-08-28 21:00:00&quot; &quot;2016-08-28 21:00:00&quot; ...
-##  $ FcstDate: POSIXct, format: &quot;2016-08-29 06:00:00&quot; &quot;2016-08-29 18:00:00&quot; ...
-##  $ Lat     : num  23.9 24.3 24.6 25.1 26.8 29 31 23.5 23.8 24.4 ...
-##  $ Lon     : num  -83.6 -85.4 -86.8 -87.6 -87.4 -84.5 -80 -84 -85.4 -86.8 ...
-##  $ Wind    : num  30 35 35 40 45 45 45 30 35 35 ...
-##  $ Gust    : num  40 45 45 50 55 55 55 40 45 45 ...</code></pre>
-</div>
-<div id="forecast-wind-radius" class="section level3">
-<h3>Forecast Wind Radius</h3>
-<p>Some forecast positions may also contain wind radius information (only up to 72 hours). This data can be found in <code>al.09.2016.fst.wr</code>. It’s structure is very similar to <code>al.2019.2016.wr</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(al<span class="fl">.09.2016</span>.fst.wr)</code></pre></div>
-<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    287 obs. of  9 variables:
-##  $ Key      : chr  &quot;AL092016&quot; &quot;AL092016&quot; &quot;AL092016&quot; &quot;AL092016&quot; ...
-##  $ Adv      : chr  &quot;1&quot; &quot;1&quot; &quot;1&quot; &quot;1&quot; ...
-##  $ Date     : POSIXct, format: &quot;2016-08-28 21:00:00&quot; &quot;2016-08-28 21:00:00&quot; ...
-##  $ FcstDate : POSIXct, format: &quot;2016-08-29 18:00:00&quot; &quot;2016-08-30 06:00:00&quot; ...
-##  $ WindField: num  34 34 34 34 34 34 34 34 34 34 ...
-##  $ NE       : num  30 30 50 60 30 40 50 60 40 40 ...
-##  $ SE       : num  0 0 30 60 0 20 30 50 0 20 ...
-##  $ SW       : num  0 0 0 40 0 0 20 30 0 0 ...
-##  $ NW       : num  30 30 40 50 30 30 40 50 40 30 ...</code></pre>
-<p>You can join this dataframe to <code>al.09.2016.fst</code> by the <code>Key</code>, <code>Adv</code>, <code>Date</code> and <code>FcstDate</code> variables.</p>
-<p>Please see the National Hurricane Center’s website for more information on understanding the <a href="http://www.nhc.noaa.gov/help/tcm.shtml?">Forecast/Advisory product</a>.</p>
-</div>
 </div>
 <div id="strike-probabilities-prblty" class="section level2">
 <h2>Strike Probabilities (<code>prblty</code>)</h2>

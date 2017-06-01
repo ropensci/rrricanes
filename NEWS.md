@@ -1,3 +1,21 @@
+# rrricanes 0.1.0.1
+
+## NEW FEATURES
+
+Package renamed from `Hurricanes` to `rrricanes`. Apologies for any issues this creates.
+
+## MINOR IMPROVEMENTS
+
+NA
+
+## BUG FIXES
+
+NA
+
+## DEPRECATED AND DEFUNCT
+
+NA
+
 # Hurricanes 0.1.0
 
 ## Major new features

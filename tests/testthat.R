@@ -1,4 +1,4 @@
 library(testthat)
-library(Hurricanes)
+library(rrricanes)
 
-test_check("Hurricanes")
+test_check("rrricanes")

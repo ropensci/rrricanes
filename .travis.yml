@@ -1,13 +1,31 @@
 language: r
 
-warnings_are_errors: false
+warnings_are_errors: true
+
+# Test package on multiple platforms
+matrix:
+  include:
+    - os: linux
+      dist: precise
+      sudo: false
+      r: 3.3.3
+    - os: linux
+      dist: precise
+      sudo: false
+      r: release
+    - os: linux
+      dist: precise
+      sudo: false
+      r: devel
+    - os: osx
+      r: 3.3.3
+    - os: osx
+      r: release
+    - os: osx
+      r: devel
 
 r_packages:
   - covr
-
-r_check_args: --no-tests
-
-r_build_args: --no-build-vignettes
 
 cache: packages
 

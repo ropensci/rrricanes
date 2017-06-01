@@ -1,23 +1,32 @@
-Package: Hurricanes
+Package: rrricanes
 Type: Package
-Title: Hurricanes
-Version: 0.1.0
+Title: Web scraper for real-time and archived advisory products for Atlantic and 
+    east Pacific hurricanes and tropical storms
+Version: 0.1.0.1
 Authors@R: person("Tim", "Trice", email = "tim.trice@gmail.com",
                   role = c("aut", "cre"))
 Depends:
-  R (>= 3.2.3), 
-  tidyverse (>= 1.0.0)
-Description: Get archived data of past and current hurricanes for the Atlantic 
-  and eastern Pacific oceans.
-  This package will also combine HURDAT which was another R library I wrote to 
-  get best-track data from the National Hurricane Center.
+  R (>= 3.3.3)
+Description: Get archived data of past and current hurricanes and tropical 
+  storms for the Atlantic and eastern Pacific oceans. Data is available for 
+  storms since 1998.
 URL: http://www.timtrice.net
-BugReports: https://github.com/timtrice/Hurricanes/issues
+BugReports: https://github.com/timtrice/rrricanes/issues
 License: MIT + file LICENSE
 LazyData: TRUE
 Imports:
   data.table (>= 1.9.6), 
-  magrittr (>= 1.5)
+  dplyr (>= 0.5.0), 
+  httr (>= 1.2.1), 
+  lubridate (>= 1.6.0), 
+  magrittr (>= 1.5), 
+  purrr (>= 0.2.2.2), 
+  readr (>= 1.1.0), 
+  rvest (>= 0.3.2), 
+  stringr (>= 1.2.0), 
+  tibble (>= 1.3.1), 
+  tidyr (>= 0.6.2), 
+  xml2 (>= 1.1.1)
 Suggests:
   devtools, 
   knitr, 
