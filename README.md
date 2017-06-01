@@ -4,7 +4,7 @@
 rrricanes
 =========
 
-`rrricanes` is a R library that extracts information from available archives on past and current tropical cyclones. Currently, archives date back to 1998. This is considered "raw data" in the sense that information extracted is from then real-time advisories.
+`rrricanes` is a R library that extracts information from available archives on past and current tropical cyclones. Currently, archives date back to 1998.
 
 Data can be obtained for cyclones in the north Atlantic (considered the Atlantic Basin) and north-eastern Pacific (the East Pacific Basin from 140°W and eastward, and Central Pacific Basin from 140°W to 180°W).
 
@@ -19,14 +19,7 @@ vignette("getting-started", package = "rrricanes")
 
 ### Prerequisites
 
-`rrricanes` does require an active internet connection as data is extracted from online archives.
-
-The following R packages are also currently used for data processing:
-
--   data.table (&gt;= 1.9.6),
--   tidyverse (&gt;= 1.0.0)
-
-On future revisions I will work on minimizing package dependencies if it helps increase processing speed.
+`rrricanes` only require an active internet connection as data is extracted from online archives.
 
 ### Installing
 
@@ -39,7 +32,7 @@ devtools::install_github("timtrice/rrricanes")
 Built With
 ----------
 
--   [R 3.2.3](https://www.r-project.org/) - The R Project for Statistical Computing
+-   [R 3.3.3](https://www.r-project.org/) - The R Project for Statistical Computing
 
 Contributing
 ------------
