@@ -39,9 +39,9 @@ gis_advisory <- function(key, advisory = as.character()) {
                  c$message <- "No data avaialable for requested storm/advisory"
                  stop(c$message, call. = FALSE)
              })
-    # Create sub directories for each zip file
-    subdirs <- stringr::str_match(links, pattern = "forecast/archive/(.+)\\.zip")[,2]
-    return(subdirs)
+    # Append website domain to links
+    links <- paste0("http://www.nhc.noaa.gov/gis/", links)
+    return(links)
 }
 
 #' @title gis_download
