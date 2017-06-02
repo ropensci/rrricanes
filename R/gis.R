@@ -161,7 +161,7 @@ gis_outlook <- function(destdir = tempdir()) {
 #'         day then all data for August will be returned. You cannot drop values
 #'         on the left side; only from the right. This is to help ensure you get
 #'         the dataset you are requesting.}
-#'     \item{nobs}{A formula or numeric vector specifying the range of datasets
+#'     \item{nobs}{A formula specifying the range of datasets
 #'         to retrieve.}
 #' }
 #' See examples for more guidance on using datetime and nobs together.
@@ -172,18 +172,18 @@ gis_outlook <- function(destdir = tempdir()) {
 #' gis_prob_storm_surge("AL092016", products = list("psurge" = 0))
 #'
 #' # Return the first psurge0 and esurge10 product for storm AL092016
-#' gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10), nobs = 1)
+#' gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10), nobs = ~1)
 #'
-#' # Return all psurge0 products for September 3, 2016, storm AL092016
+#' # Return the first and last psurge0 products for Sep 2, 2016, storm AL092016
 #' gis_prob_storm_surge("AL092016", products = list("psurge" = 0),
-#'                      datetime = "20160903", nobs = ~c(1:length(x)))
+#'                      datetime = "20160902", nobs = ~c(1, length(x)))
 #'
 #' # Last five esurge40 and esurge50 products for month of September, storm AL092016
 #' gis_prob_storm_surge("AL092016", products = list("esurge" = c(40, 50)),
-#'                      datetime = "201609", nobs = ~c((length(x)-10):length(x)))
+#'                      datetime = "201609", nobs = ~c((length(x)-5):length(x)))
 #' }
 #' @export
-gis_prob_storm_surge <- function(key, products, datetime = NULL, nobs = ~ length(x)) {
+gis_prob_storm_surge <- function(key, products, datetime = NULL, nobs = NULL) {
 
     if (is.null(key))
         stop("Please provide storm key")
@@ -240,27 +240,22 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL, nobs = ~ length
 
     ds <- contents[stringr::str_detect(contents, pattern = ptn)]
 
-    # Filter datasets, if first, last or nth is not NULL
+    # Filter datasets, if nobs is not NULL
     if (is.language(nobs)) {
         ds <- ptn_product %>% purrr::map(.f = ~ ds[grepl(.x, ds)]) %>%
             purrr::map(~ .x[lazyeval::f_eval(nobs, data = list(x = .x))]) %>%
             purrr::flatten_chr()
-    } else {
-        ds <- ptn_product %>% purrr::map(.f = ~ ds[grepl(.x, ds)]) %>%
-            purrr::map(~ .x[nobs]) %>%
-            purrr::flatten_chr()
     }
 
-    return(ds)
-    # # Extract link to zip files. Error gracefully if no matches.
-    # tryCatch(links <- stringr::str_match(matches, pattern = ptn)[,2],
-    #          error = function(c) {
-    #              c$message <- "No data available for requested storm/advisory"
-    #              stop(c$message, call. = FALSE)
-    #          })
-    # # Create sub directories for each zip file
-    # subdirs <- stringr::str_match(links, pattern = "storm_surge/(.+)\\.zip")[,2]
-    # return(subdirs)
+    # Extract link to zip files. Error gracefully if no matches.
+    tryCatch(links <- stringr::str_match(ds, pattern = ptn)[,2],
+             error = function(c) {
+                 c$message <- "No data available for requested storm/advisory"
+                 stop(c$message, call. = FALSE)
+             })
+    # Prepend domains to links
+    links <- paste0("http://www.nhc.noaa.gov/gis/", links)
+    return(links)
 }
 
 #' @title gis_storm_surge_flood
