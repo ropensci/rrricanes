@@ -169,18 +169,18 @@ gis_outlook <- function(destdir = tempdir()) {
 #' @examples
 #' \dontrun{
 #' # Return the last psurge0 product for storm AL092016
-#' gis_storm_surge("AL092016", products = list("psurge" = 0))
+#' gis_prob_storm_surge("AL092016", products = list("psurge" = 0))
 #'
 #' # Return the first psurge0 and esurge10 product for storm AL092016
-#' gis_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10), nobs = 1)
+#' gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10), nobs = 1)
 #'
 #' # Return all psurge0 products for September 3, 2016, storm AL092016
-#' gis_storm_surge("AL092016", products = list("psurge" = 0),
-#'                 datetime = "20160903", nobs = ~c(1:length(x)))
+#' gis_prob_storm_surge("AL092016", products = list("psurge" = 0),
+#'                      datetime = "20160903", nobs = ~c(1:length(x)))
 #'
 #' # Last five esurge40 and esurge50 products for month of September, storm AL092016
-#' gis_storm_surge("AL092016", products = list("esurge" = c(40, 50)),
-#'                 datetime = "201609", nobs = ~c((length(x)-10):length(x)))
+#' gis_prob_storm_surge("AL092016", products = list("esurge" = c(40, 50)),
+#'                      datetime = "201609", nobs = ~c((length(x)-10):length(x)))
 #' }
 #' @export
 gis_prob_storm_surge <- function(key, products, datetime = NULL, nobs = ~ length(x)) {
