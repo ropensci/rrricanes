@@ -4,11 +4,14 @@
 \alias{gis_outlook}
 \title{gis_outlook}
 \usage{
-gis_outlook(destdir = tempdir())
+gis_outlook()
 }
-\arguments{
-\item{destdir}{Directory to save shapefile data. Saved to tmp dir by default.}
+\value{
+URL to latest Tropical Weather Outlook GIS dataset.
 }
 \description{
 Tropical Weather Outlook
+}
+\seealso{
+\code{\link{gis_download}}
 }
