@@ -94,26 +94,12 @@ gis_latest <- function(basins = c("AL", "EP"), destdir = tempdir()) {
 
 #' @title gis_outlook
 #' @description Tropical Weather Outlook
-#' @param destdir Directory to save shapefile data. Saved to tmp dir by default.
+#' @return URL to latest Tropical Weather Outlook GIS dataset.
+#' @seealso \code{\link{gis_download}}
 #' @export
-gis_outlook <- function(destdir = tempdir()) {
+gis_outlook <- function() {
     url <- "http://www.nhc.noaa.gov/xgtwo/gtwo_shapefiles.zip"
-    utils::download.file(file.path(url), z <- tempfile())
-    utils::unzip(z, exdir = destdir)
-    shp_files <- list.files(path = destdir, pattern = ".+shp$")
-    shp_file_names <- stringr::str_match(shp_files, "^(.+)\\.shp$")[,2]
-    ds <- purrr::map2(.x = shp_files, .y = destdir, .f = function(f, d) {
-        f <- stringr::str_match(f, "^(.+)\\.shp$")[,2]
-        try({
-            shp <- rgdal::readOGR(dsn = d, layer = f)
-            shp@data$id <- rownames(shp@data)
-            shp.points <- broom::tidy(shp, region = "id")
-            df <- dplyr::left_join(shp.points, shp@data, by = "id")
-            return(df)
-        })
-    })
-    names(ds) <- shp_file_names
-    return(ds)
+    return(url)
 }
 
 #' @title gis_prob_storm_surge
