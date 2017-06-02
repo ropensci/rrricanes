@@ -3,6 +3,8 @@
 #' @param key Key of storm (i.e., AL012008, EP092015)
 #' @param advisory Advisory number. If NULL, all advisories are returned. Intermediate
 #' advisories are acceptable.
+#' @return Full urls of requested advisories.
+#' @seealso \code{\link{gis_download}}
 #' @export
 gis_advisory <- function(key, advisory = as.character()) {
 
