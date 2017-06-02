@@ -142,6 +142,38 @@ status <- function(u) {
     }
 }
 
+#' @title status_abbr_to_str
+#' @description Convert Status abbreviation to string
+#' @param x character vector of status abbreviations
+#' @details Status abbreviations
+#' \describe{
+#'     \item{DB}{Disturbance (of any intensity)}
+#'     \item{EX}{Extratropical cyclone (of any intensity)}
+#'     \item{HU}{Tropical cyclone of hurricane intensity (> 64 knots)}
+#'     \item{LO}{A low that is neither a tropical cyclone, a subtropical cyclone, nor an extratropical cyclone (of any intensity)}
+#'     \item{SD}{Subtropical cyclone of subtropical depression intensity (< 34 knots)}
+#'     \item{SS}{Subtropical cyclone of subtropical storm intensity (> 34 knots)}
+#'     \item{TD}{Tropical cyclone of tropical depression intensity (< 34 knots)}
+#'     \item{TS}{Tropical cyclone of tropical storm intensity (34-63 knots)}
+#'     \item{WV}{Tropical Wave (of any intensity)}
+#' }
+#' @return character vector of strings
+#' @seealso \url{http://www.aoml.noaa.gov/hrd/hurdat/newhurdat-format.pdf}
+#' @export
+status_abbr_to_str <- function(x) {
+    y <- character(length = 0)
+    y[x == "TD"] <- "Tropical Depression"
+    y[x == "TS"] <- "Tropical Storm"
+    y[x == "HU"] <- "Hurricane"
+    y[x == "EX"] <- "Extratropical Cyclone"
+    y[x == "SD"] <- "Subtropical Depression"
+    y[x == "SS"] <- "Subtropical Storm"
+    y[x == "LO"] <- "Low"
+    y[x == "WV"] <- "Tropical Wave"
+    y[x == "DB"] <- "Disturbance"
+    return(y)
+}
+
 #' @title validate_year
 #' @description Test if year is 4-digit numeric.
 #' @return numeric year(s)
