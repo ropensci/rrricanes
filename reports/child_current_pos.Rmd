@@ -1,0 +1,21 @@
+
+## `r name` Current Position
+
+```{r}
+# Past track line plot
+ds <- stringr::str_match_all(datasets, "^.+(?<!5day)_lin$") %>% purrr::flatten_chr()
+if (exists(ds)) {
+    df <- EP022017_lin
+    df <- mutate(df, STORMTYPE = status_abbr_to_str(STORMTYPE))
+    lin_best_track <- geom_path(data = get(ds), aes(x = long, y = lat))
+    p + lin_best_track
+}
+
+ds <- stringr::str_match_all(datasets, "^.+(?<!5day)_pts$") %>% purrr::flatten_chr()
+if (exists(ds)) {
+    ptn_best_track <- geom_point(data = gis[[1]][[ds]], aes(x = LON.x, y = LAT.x, size = INTENSITY.x, color = STORMTYPE.x))
+    p <- p + ptn_best_track
+}
+
+```
+
