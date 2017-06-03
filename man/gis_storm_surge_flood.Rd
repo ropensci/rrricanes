@@ -18,3 +18,6 @@ returned.}
 \description{
 Potential Storm Surge Flooding (Inundation)
 }
+\seealso{
+\code{\link{gis_download}}
+}

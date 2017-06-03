@@ -89,4 +89,6 @@ gis_prob_storm_surge("AL092016", products = list("esurge" = c(40, 50)),
 }
 \seealso{
 \href{http://www.nhc.noaa.gov/surge/psurge.php}{Tropical Cyclone Storm Surge Probabilities}
+
+\code{\link{gis_download}}
 }

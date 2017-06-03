@@ -1,0 +1,195 @@
+---
+title: "GIS data"
+author: "Tim Trice"
+date: "June 3, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(rrricanes)
+```
+
+**All products are experimental and there maybe fluctuations particularly in current datasets.**
+
+Functions that do not take key or advisory parameters but require datetime instead, datetime will *typically* be the datetime of the advisory minus three hours. Forecast/Advisory products, for example, would be issued at 3AM but there is a note notating the location three hours prior; 12AM. These hours, 00, 06, 12, and 18 seem to reflect the datetime parameters required in some GIS products. These products will most likely contain data for multiple storms, if they exist.
+
+## Obtaining GIS data
+
+Hurricane Mathew Adv 32
+
+```{r}
+gis_advisory(key = "AL142016", advisory = "32")
+```
+
+```{r}
+df <- gis_advisory(key = "AL142016", advisory = "32") %>% gis_download()
+```
+
+```{r}
+names(df)
+```
+
+## Build a Tracking Chart
+
+```{r}
+(bp <- al_tracking_chart(res = 50, color = "black", size = 0.1, fill = "white"))
+```
+
+Refine chart
+
+```{r}
+(bp <- bp + 
+    coord_equal(xlim = c(-90, -60), ylim = c(20, 40)) +
+    scale_x_continuous(expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0)))
+```
+
+## Five Day Line Forecast
+
+x = long
+y = lat
+
+```{r}
+bp + geom_path(data = df$al142016_032_5day_lin, aes(x = long, y = lat))
+```
+
+## Five Day Points
+
+x = LON
+y = LAT
+
+```{r}
+bp + geom_point(data = df$al142016_032_5day_pts, aes(x = LON, y = LAT))
+```
+
+## Five Day Polygon
+
+72 and 120 appear to be the same. Am I missing something??? See this graphic for what it *should* roughly look like
+
+http://www.nhc.noaa.gov/archive/2016/graphics/al14/AL142016_5NLW_033_0.GIF
+
+```{r}
+bp + geom_path(data = df$al142016_032_5day_pgn, aes(x = long, y = lat, group = FCSTPRD))
+```
+
+## Watches and Warnings
+
+```{r}
+bp + geom_path(data = df$al142016_032_ww_wwlin, 
+               aes(x = long, y = lat, color = TCWW), size = 2)
+```
+
+## Probabilistic Storm Surge
+
+The Tropical Cyclone Storm Surge Probabilities data shows the probability, in percent, of a specified storm surge occurring during the forecast period indicated. The product is based upon an ensemble of Sea, Lake, and Overland Surge from Hurricanes (SLOSH) model runs using the National Hurricane Center (NHC) official advisory and accounts for track, size, and intensity errors based on historical errors.
+
+see: http://www.nhc.noaa.gov/gis/metadata_ex_gt5_at.xml
+
+* Does not take an advisory number
+* `datetime` and `nobs` parameters created to help
+
+cumulative probablity of storm surge greater than 5ft
+
+```{r}
+gis_prob_storm_surge(key = "AL142016", products = list(psurge = 0), 
+                     datetime = "20161006", nobs = ~1)
+```
+
+```{r}
+df_prob_ss <- gis_prob_storm_surge(key = "AL142016", 
+                                   products = list(psurge = 0), 
+                                   datetime = "20161006", nobs = ~1) %>% 
+    gis_download()
+```
+
+```{r}
+bp + geom_point(data = df_prob_ss$al142016_2016100600_gt0, 
+                aes(x = long, y = lat, color = PSurge00c), size = 1)
+```
+
+## Potential Storm Surge Flooding
+
+These are raster files, not shapefiles. Revisit
+
+```{r, eval = FALSE}
+gis_storm_surge_flood("AL142016", advisory = 32, products = "inundation")
+```
+
+```{r, eval = FALSE}
+df_surge_in <- gis_storm_surge_flood("AL142016", advisory = 32, 
+                                     products = "inundation") %>% 
+    gis_download()
+```
+
+## Current and Forecast Wind Field Radii
+
+No data in this one either it seems...
+
+There is no dataset for advisory 32. I'll use advisory 33.
+
+```{r}
+gis_windfield("AL142016", advisory = "33")
+```
+
+```{r}
+df_radii <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
+```
+
+Initial radius
+
+```{r}
+bp + geom_polygon(data = df_radii$al142016_2016100606_initialradii, 
+                  aes(x = long, y = lat, fill = factor(RADII)), alpha = 0.5)
+```
+
+```{r}
+bp + geom_polygon(data = df_radii$al142016_2016100606_forecastradii, 
+                  aes(x = long, y = lat, group = RADII, fill = factor(RADII)), 
+                  alpha = 0.5)
+```
+
+## Wind Speed Probabilities
+
+5nm resolution seems to be scarce. 
+
+Go for 1/2 degree resolution
+
+```{r}
+gis_wsp(datetime = "2016100606", res = 0.5)
+```
+
+```{r}
+df_wsp <- gis_wsp(datetime = "2016100606", res = 0.5) %>% 
+    gis_download()
+```
+
+### Cumulative Probability for >34kt Winds
+
+```{r}
+bp + geom_point(data = df_wsp$`2016100606_wsp34knt120hr_halfDeg`, 
+                aes(x = coords.x1, y = coords.x2, color = PWIND120.x, 
+                    size = PWIND120.x))
+```
+
+### Cumulative Probability for >50kt Winds
+
+```{r}
+bp + geom_point(data = df_wsp$`2016100606_wsp50knt120hr_halfDeg`, 
+                aes(x = coords.x1, y = coords.x2, color = PWIND120.x, 
+                    size = PWIND120.x))
+```
+
+### Cumulative Probability for >64kt Winds
+
+```{r}
+bp + geom_point(data = df_wsp$`2016100606_wsp64knt120hr_halfDeg`, 
+                aes(x = coords.x1, y = coords.x2, color = PWIND120.x, 
+                    size = PWIND120.x))
+```
+
