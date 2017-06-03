@@ -27,3 +27,6 @@ Not all advisories will be available for storms. For example,
 \href{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year=2016}{Hurricane Matthew (AL142016)}
 is missing several advisories.
 }
+\seealso{
+\code{\link{gis_download}}
+}

@@ -30,3 +30,6 @@ gis_wndprb("20160101", res = 0.5)
 gis_wndprb("201507", res = c(0.5, 0.1))
 }
 }
+\seealso{
+\code{\link{gis_download}}
+}

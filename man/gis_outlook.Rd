@@ -6,9 +6,6 @@
 \usage{
 gis_outlook()
 }
-\value{
-URL to latest Tropical Weather Outlook GIS dataset.
-}
 \description{
 Tropical Weather Outlook
 }

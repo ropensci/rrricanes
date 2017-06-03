@@ -3,7 +3,6 @@
 #' @param key Key of storm (i.e., AL012008, EP092015)
 #' @param advisory Advisory number. If NULL, all advisories are returned. Intermediate
 #' advisories are acceptable.
-#' @return Full urls of requested advisories.
 #' @seealso \code{\link{gis_download}}
 #' @export
 gis_advisory <- function(key, advisory = as.character()) {
@@ -52,16 +51,28 @@ gis_advisory <- function(key, advisory = as.character()) {
 #' @param destdir Directory to save shapefile data.
 #' @export
 gis_download <- function(url, destdir = tempdir()) {
+    message("Remove files when processing complete.")
     utils::download.file(file.path(url), zip_file <- tempfile())
     utils::unzip(zip_file, exdir = destdir)
     shp_files <- list.files(path = destdir, pattern = ".+shp$")
     ds <- purrr::map2(.x = shp_files, .y = destdir, .f = function(f, d) {
         shp_file <- stringr::str_match(f, "^(.+)\\.shp$")[,2]
         shp <- rgdal::readOGR(dsn = d, layer = shp_file)
-        shp@data$id <- rownames(shp@data)
-        shp.points <- broom::tidy(shp, region = "id")
-        df <- dplyr::left_join(shp.points, shp@data, by = "id")
-        return(df)
+        # For linear plots
+        if (any(grepl(".+lin\\.shp$", f), grepl(".+pgn\\.shp$", f))) {
+            shp@data$id <- rownames(shp@data)
+            shp.points <- broom::tidy(shp, region = "id")
+            df <- dplyr::left_join(shp.points, shp@data, by = "id")
+            return(df)
+        } else if (grepl(".+pts\\.shp$", f)) {
+            df <- tibble::as_data_frame(shp)
+            return(df)
+        } else {
+            shp@data$id <- rownames(shp@data)
+            shp.points <- broom::tidy(shp, region = "id")
+            df <- dplyr::left_join(shp.points, shp@data, by = "id")
+            return(df)
+        }
     })
     shp_file_names <- stringr::str_match(shp_files, "^(.+)\\.shp$")[,2] %>%
         stringr::str_replace_all("[[:punct:][:space:]]", "_")
@@ -86,15 +97,16 @@ gis_latest <- function(basins = c("AL", "EP"), destdir = tempdir()) {
     x.ziplinks <- purrr::map(x.links, ~ stringr::str_detect(.x, pattern = "^<link>.+zip</link>$"))
     x.matches <- purrr::map2(x.links, x.ziplinks, ~ .x[.y])
     zips <- purrr::map(x.matches, as.character) %>% purrr::flatten_chr() %>% stringr::str_match("^<link>(.+)</link>$")
-    if (any(purrr::is_empty(zips), purrr::is_empty(zips[,2])))
-        return(NULL)
-    ds <- purrr::map(zips[,2], gis_download, destdir = destdir)
-    return(ds)
+    tryCatch(links <- ds <- purrr::map(zips[,2], gis_download, destdir = destdir)[,2],
+             error = function(c) {
+                 c$message <- "No data available for current storms."
+                 stop(c$message, call. = FALSE)
+             })
+    return(links)
 }
 
 #' @title gis_outlook
 #' @description Tropical Weather Outlook
-#' @return URL to latest Tropical Weather Outlook GIS dataset.
 #' @seealso \code{\link{gis_download}}
 #' @export
 gis_outlook <- function() {
@@ -154,6 +166,7 @@ gis_outlook <- function() {
 #' }
 #' See examples for more guidance on using datetime and nobs together.
 #' @seealso \href{http://www.nhc.noaa.gov/surge/psurge.php}{Tropical Cyclone Storm Surge Probabilities}
+#' @seealso \code{\link{gis_download}}
 #' @examples
 #' \dontrun{
 #' # Return the last psurge0 product for storm AL092016
@@ -252,10 +265,11 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL, nobs = NULL) {
 #' @param advisory Advisory number. If NULL, all available advisories are
 #' returned.
 #' @param products indundation or tidalmask
+#' @seealso \code{\link{gis_download}}
 #' @export
 gis_storm_surge_flood <- function(key, advisory = as.numeric(),
                                 products = c("inundation", "tidalmask")) {
-
+    warning("These are raster files, not shapefiles.")
     if (is.null(key))
         stop("Please provide storm key")
 
@@ -298,8 +312,8 @@ gis_storm_surge_flood <- function(key, advisory = as.numeric(),
                  stop(c$message, call. = FALSE)
              })
     # Create sub directories for each zip file
-    subdirs <- stringr::str_match(links, pattern = "inundation/forecasts/(.+)\\.zip")[,2]
-    return(subdirs)
+    links <- paste0("http://www.nhc.noaa.gov/gis/", links)
+    return(links)
 }
 
 #' @title gis_windfield
@@ -317,6 +331,7 @@ gis_storm_surge_flood <- function(key, advisory = as.numeric(),
 #' Not all advisories will be available for storms. For example,
 #' \href{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year=2016}{Hurricane Matthew (AL142016)}
 #' is missing several advisories.
+#' @seealso \code{\link{gis_download}}
 #' @export
 gis_windfield <- function(key, advisory = as.character()) {
 
@@ -353,9 +368,8 @@ gis_windfield <- function(key, advisory = as.character()) {
                  c$message <- "No data avaialable for requested storm/advisory"
                  stop(c$message, call. = FALSE)
                  })
-    # Create sub directories for each zip file
-    subdirs <- stringr::str_match(links, pattern = "forecast/archive/(.+)\\.zip")[,2]
-    return(subdirs)
+    links <- paste0("http://www.nhc.noaa.gov/gis/", links)
+    return(links)
 }
 
 #' @title gis_wsp
@@ -367,6 +381,7 @@ gis_windfield <- function(key, advisory = as.character()) {
 #' Datasets contain windfields for 34kt, 50kt and 64kt. Resolution is at 5km,
 #' 0.5 degrees and 0.1 degrees. Not all resolutions may be available for all
 #' storms. Not all windfields will be available for all advisories.
+#' @seealso \code{\link{gis_download}}
 #' @examples
 #' \dontrun{
 #' # Return datasets for January 1, 2016 with resolution of 0.5 degrees
@@ -377,6 +392,8 @@ gis_windfield <- function(key, advisory = as.character()) {
 #' }
 #' @export
 gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
+
+    message("Add nobs param")
 
     if (!grepl("[[:digit:]]{4,10}", datetime))
         stop("Invalid datetime")
@@ -404,6 +421,7 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
     ptn_res <- paste(res, collapse = "|")
 
     ptn <- sprintf("%s_wsp_[:digit:]{1,3}hr(%s)", ptn_datetime, ptn_res)
-    ds <- ds[stringr::str_detect(ds, ptn)]
-    return(ds)
+    links <- ds[stringr::str_detect(ds, ptn)]
+    links <- paste0("http://www.nhc.noaa.gov/gis/", links)
+    return(links)
 }

@@ -12,9 +12,6 @@ gis_advisory(key, advisory = as.character())
 \item{advisory}{Advisory number. If NULL, all advisories are returned. Intermediate
 advisories are acceptable.}
 }
-\value{
-Full urls of requested advisories.
-}
 \description{
 Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings
 }
