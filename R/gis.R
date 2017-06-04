@@ -266,7 +266,7 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL, nobs = NULL) {
 #' returned.
 #' @param products indundation or tidalmask
 #' @seealso \code{\link{gis_download}}
-#' @export
+#' @keywords internal
 gis_storm_surge_flood <- function(key, advisory = as.numeric(),
                                 products = c("inundation", "tidalmask")) {
     warning("These are raster files, not shapefiles.")
