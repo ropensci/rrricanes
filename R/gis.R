@@ -47,7 +47,7 @@ gis_advisory <- function(key, advisory = as.character()) {
 
 #' @title gis_download
 #' @description Get GIS data for storm.
-#' @param URL of GIS dataset to download.
+#' @param url link to GIS dataset to download.
 #' @param destdir Directory to save shapefile data.
 #' @export
 gis_download <- function(url, destdir = tempdir()) {
