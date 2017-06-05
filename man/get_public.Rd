@@ -4,12 +4,10 @@
 \alias{get_public}
 \title{get_public}
 \usage{
-get_public(link, msg = FALSE)
+get_public(link)
 }
 \arguments{
 \item{link}{URL to storm's archive page.}
-
-\item{msg}{Show link being worked. Default, FALSE.}
 }
 \description{
 Return dataframe of public advisory data.

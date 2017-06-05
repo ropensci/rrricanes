@@ -1,94 +1,55 @@
-library(Hurricanes)
 library(dplyr)
 library(purrr)
+library(rrricanes)
 
 ## ---- Base Data --------------------------------------------------------------
-#' Get all storms for 1998, AL basin
-al1998 <- get_storms(year = 1998, basin = "AL") %>%
-    dplyr::select(Link) %>%
-    purrr::flatten_chr()
+## ---- * 1998, AL -------------------------------------------------------------
+al1998 <- get_storms(year = 1998, basin = "AL") %>% dplyr::select(Link)
 
-#' Get all storms for 1998, EP basin
-ep1998 <- get_storms(year = 1998, basin = "EP") %>%
-    dplyr::select(Link) %>%
-    purrr::flatten_chr()
+## ---- * 2008, AL -------------------------------------------------------------
+al2008 <- get_storms(year = 2008, basin = "AL") %>% dplyr::select(Link)
 
-#' Get all storms for 1999, EP basin
-ep1999 <- get_storms(year = 1999, basin = "EP") %>%
-    dplyr::select(Link) %>%
-    purrr::flatten_chr()
+## ---- * 1998, AL -------------------------------------------------------------
+al1998 <- get_storms(year = 2008, basin = "AL") %>% dplyr::select(Link)
 
-#' Get storms for 2000, AL basin
-al2000 <- get_storms(year = 2000, basin = "AL") %>%
-    select(Link) %>%
-    flatten_chr()
+## ---- get_storm_data ---------------------------------------------------------
+al_2017_storm_data <- get_storms(year = 2017, basin = "AL") %>%
+    dplyr::slice(1) %>%
+    .$Link %>%
+    get_storm_data(products = c("discus", "fstadv"))
+save(al_2017_storm_data, file = "./inst/extdata/al_2017_storm_data.Rda", compression_level = 9)
 
-#' Get storms for 2006, AL basin
-al2006 <- get_storms(year = 2006, basin = "AL") %>%
-    select(Link) %>%
-    flatten_chr()
+## ---- discus -----------------------------------------------------------------
+## ---- * 2008, AL, 09 ---------------------------------------------------------
+al092008.discus <- al2008 %>% slice(9) %>% .$Link %>% get_discus()
+save(al092008.discus, file = "./inst/extdata/al092008.discus.Rda", compression_level = 9)
 
 ## ---- fstadv -----------------------------------------------------------------
+## ---- * 2008, AL, 09 ---------------------------------------------------------
+al092008.fstadv <- al2008 %>% slice(9) %>% .$Link %>% get_fstadv()
+save(al092008.fstadv, file = "./inst/extdata/al092008.fstadv.Rda", compression_level = 9)
 
-## ---- * 1998, AL, 01 ---------------------------------------------------------
-al011998.fstadv <- get_fstadv(al1998[1])
-save(al011998.fstadv, file = "./inst/extdata/al011998.fstadv.Rda", compression_level = 9)
-
-## ---- * 1998, AL, 02 ---------------------------------------------------------
-al021998.fstadv <- get_fstadv(al1998[2])
-save(al021998.fstadv, file = "./inst/extdata/al021998.fstadv.Rda", compression_level = 9)
-
-## ---- * 1998, EP, 01 ---------------------------------------------------------
-ep011998.fstadv <- get_fstadv(ep1998[1])
-save(ep011998.fstadv, file = "./inst/extdata/ep011998.fstadv.Rda", compression_level = 9)
-
-## ---- * 1998, EP, 02 ---------------------------------------------------------
-ep021998.fstadv <- get_fstadv(ep1998[2])
-save(ep021998.fstadv, file = "./inst/extdata/ep021998.fstadv.Rda", compression_level = 9)
-
-## ---- * 1999, EP, 03 ---------------------------------------------------------
-#' See GitHub Issue #53
-ep031999.fstadv <- get_fstadv(ep1999[3])
-save(ep031999.fstadv, file = "./inst/extdata/ep031999.fstadv.Rda", compression_level = 9)
-
-## ---- * 1999, EP, 04 ---------------------------------------------------------
-ep041999.fstadv <- get_fstadv(ep1999[4])
-save(ep041999.fstadv, file = "./inst/extdata/ep041999.fstadv.Rda", compression_level = 9)
-
-## ---- * 1999, EP, 07 ---------------------------------------------------------
-ep071999.fstadv <- get_fstadv(ep1999[7])
-save(ep071999.fstadv, file = "./inst/extdata/ep071999.fstadv.Rda", compression_level = 9)
-
-## ---- * 1999, EP, 08 ---------------------------------------------------------
-ep081999.fstadv <- get_fstadv(ep1999[8])
-save(ep081999.fstadv, file = "./inst/extdata/ep081999.fstadv.Rda", compression_level = 9)
-
-## ---- * 2000, AL, 02 ---------------------------------------------------------
-al022000.fstadv <- get_fstadv(al2000[2])
-save(al022000.fstadv, file = "./inst/extdata/al022000.fstadv.Rda", compression_level = 9)
-
-## ---- * 2000, AL, 02 ---------------------------------------------------------
-al022000.fstadv <- get_fstadv(al2000[2])
-save(al022000.fstadv, file = "./inst/extdata/al022000.fstadv.Rda", compression_level = 9)
+## ---- posest -----------------------------------------------------------------
+## ---- * 2008, AL, 09 ---------------------------------------------------------
+al092008.posest <- al2008 %>% slice(9) %>% .$Link %>% get_posest()
+save(al092008.posest, file = "./inst/extdata/al092008.posest.Rda", compression_level = 9)
 
 ## ---- prblty -----------------------------------------------------------------
-
 ## ---- * 1998, AL, 01 ---------------------------------------------------------
-al011998.prblty <- get_prblty(al1998[1])
-save(al011998.prblty,
-     file = "./inst/extdata/al011998.prblty.Rda", compression_level = 9)
+al011998.prblty <- al1998 %>% slice(1) %>% .$Link %>% get_prblty()
+save(al011998.prblty, file = "./inst/extdata/al011998.prblty.Rda", compression_level = 9)
 
-## ---- * 2000, AL, 02 ---------------------------------------------------------
-al022000.prblty <- get_prblty(al2000[2])
-save(al022000.prblty, file = "./inst/extdata/al022000.prblty.Rda", compression_level = 9)
+## ---- public -----------------------------------------------------------------
+## ---- * 2008, AL, 09 ---------------------------------------------------------
+al092008.public <- al2008 %>% slice(9) %>% .$Link %>% get_public()
+save(al092008.public, file = "./inst/extdata/al092008.public.Rda", compression_level = 9)
 
-## ---- * 2000, AL, 03 ---------------------------------------------------------
-al032000.prblty <- get_prblty(al2000[3])
-save(al032000.prblty, file = "./inst/extdata/al032000.prblty.Rda", compression_level = 9)
+## ---- update -----------------------------------------------------------------
+## ---- * 2008, AL, 09 ---------------------------------------------------------
+al092008.update <- al2008 %>% slice(9) %>% .$Link %>% get_update()
+save(al092008.update, file = "./inst/extdata/al092008.update.Rda", compression_level = 9)
 
 ## ---- wndprb -----------------------------------------------------------------
-
-## ---- * 2006, AL, 01 ---------------------------------------------------------
-al012006.wndprb <- get_wndprb(al2006[1])
-save(al012006.wndprb,
-     file = "./inst/extdata/al012006.wndprb.Rda", compression_level = 9)
+## ---- * 2008, AL, 09 ---------------------------------------------------------
+al092008.wndprb <- al2008 %>% slice(9) %>% .$Link %>% get_wndprb()
+save(al092008.wndprb, file = "./inst/extdata/al092008.wndprb.Rda", compression_level = 9)

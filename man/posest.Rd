@@ -4,12 +4,12 @@
 \alias{posest}
 \title{posest}
 \usage{
-posest(link, msg = FALSE)
+posest(link, p)
 }
 \arguments{
 \item{link}{URL of a specific position estimate product}
 
-\item{msg}{Display each link as being worked; default is FALSE.}
+\item{p}{dplyr::progress_estimate.}
 }
 \value{
 Dataframe

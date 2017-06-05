@@ -4,12 +4,10 @@
 \alias{get_posest}
 \title{get_posest}
 \usage{
-get_posest(link, msg = FALSE)
+get_posest(link)
 }
 \arguments{
 \item{link}{URL to storm's archive page.}
-
-\item{msg}{Show link being worked. Default, FALSE.}
 }
 \description{
 Return dataframe of position estimate data.

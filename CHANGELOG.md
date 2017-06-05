@@ -7,13 +7,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 ### Added
-  - NA
+  - dplyr.progress_bar for all products
+  - rrricanes.working_msg option to show current working advisory.
+  - `tracking_chart()` for a base world plot. `al_tracking_chart()` for chart centered on Atlantic basin. `ep_tracking_chart()` for chart centered on northeast Pacific.
+  - `load_storm_data()` helps get datasets that have already been scraped and processed. Designed to make it more efficient to get data faster.
+  - `gis_advisory` get url to an advisory package. 
+  - `gis_prob_storm_surge` get url to storm surge probabilities
+  - `gis_windfield` get url to windfield datasets
+  - `gis_wsp` returns urls to wind speed probabilities datasets
+  - `gis_outlook` returns urls to latest GIS tropical weather outlook
+  - `gis_latest` returns urls to all datasets for current cyclones
+  - `gis_download` downloads GIS datasets based off url parameters.
 
 ### Changed
-  - NA
+  - `get_storm_data` now takes link as first parameter for chaining. Returns a list of dataframes for each product.
 
 ### Removed
-  - NA
+  - `fstadv_split`. Dataframe can be split if desired by user. 
 
 ### Deprecated
   - NA

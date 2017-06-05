@@ -7,13 +7,32 @@
 al_tracking_chart(...)
 }
 \arguments{
-\item{...}{Additional parameters for ggplot2}
+\item{...}{Additional parameters for \link{tracking_chart} and ggplot2}
 }
 \value{
 ggplot2 object centered on Atlantic basin.
 }
 \description{
 Build tracking chart centered on Atlantic Basin.
+}
+\examples{
+\dontrun{
+# Build map with white land areas, thin black borders
+al_tracking_chart(color = "black", size = 0.1, fill = "white")
+
+# 50nm resolution, no states
+al_tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
+                  fill = "white")
+
+# 50nm resolution, coastlines only
+al_tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
+                  fill = "white")
+
+# Adding and modifying with ggplot functions
+al_tracking_chart(color = "black", size = 0.1, fill = "white") +
+    ggplot2::labs(x = "Lon", y = "Lat",
+    title = "Base Atlantic Tracking Chart")
+}
 }
 \seealso{
 \code{\link{tracking_chart}}

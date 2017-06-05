@@ -4,12 +4,12 @@
 \alias{update}
 \title{update}
 \usage{
-update(link, msg = FALSE)
+update(link, p)
 }
 \arguments{
 \item{link}{Link to a storm's specific update advisory product.}
 
-\item{msg}{Display each link as being worked; default is FALSE}
+\item{p}{dplyr::progress_estimate.}
 }
 \value{
 Dataframe

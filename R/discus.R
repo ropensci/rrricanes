@@ -25,20 +25,22 @@ create_df_discus <- function() {
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
-#' @param msg Show link being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
-get_discus <- function(link, msg = FALSE) {
+get_discus <- function(link) {
 
     # Check status of link(s)
     valid.link <- sapply(link, status)
     valid.link <- na.omit(valid.link)
-    if (length(valid.link) == 0)
-        stop("No valid links.")
 
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.discus <- purrr::map(filter_discus(products), discus)
+    products <- filter_discus(products)
+
+    # Set progress bar
+    p <- dplyr::progress_estimated(n = length(products))
+
+    products.discus <- purrr::map(products, discus, p)
 
     discus <- purrr::map_df(products.discus, dplyr::bind_rows)
 
@@ -51,13 +53,18 @@ get_discus <- function(link, msg = FALSE) {
 #' @details Given a direct link to a discussion product, parse and return
 #' dataframe of values.
 #' @param link Link to a storm's specific discussion product.
-#' @param msg Display each link as being worked; default is FALSE
+#' @param p dplyr::progress_estimate.
 #' @return Dataframe
 #' @seealso \code{\link{get_discus}}
 #' @keywords internal
-discus <- function(link, msg = FALSE) {
+discus <- function(link, p) {
 
-    contents <- scrape_contents(link, msg = msg)
+    p$pause(0.5)$tick()$print()
+
+    contents <- scrape_contents(link)
+
+    # Replace all carriage returns with empty string.
+    contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a discussion product
     if (!any(stringr::str_count(contents, c("MIATCDAT", "MIATCDEP"))))
@@ -69,6 +76,10 @@ discus <- function(link, msg = FALSE) {
     name <- scrape_header(contents, ret = "name")
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
+
+    if (getOption("rrricanes.working_msg"))
+        message(sprintf("Working %s %s Storm Discussion #%s (%s)",
+                        status, name, adv, date))
 
     df <- df %>%
         tibble::add_row("Status" = status,

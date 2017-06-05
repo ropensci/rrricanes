@@ -4,12 +4,10 @@
 \alias{get_prblty}
 \title{get_prblty}
 \usage{
-get_prblty(link, msg = FALSE)
+get_prblty(link)
 }
 \arguments{
 \item{link}{URL to storm's archive page.}
-
-\item{msg}{Show link being worked. Default, FALSE.}
 }
 \description{
 Return dataframe of strike probability data.

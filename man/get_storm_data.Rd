@@ -4,30 +4,24 @@
 \alias{get_storm_data}
 \title{get_storm_data}
 \usage{
-get_storm_data(..., names = list(), link, msg = FALSE)
+get_storm_data(link, products = c("discus", "fstadv", "posest", "public",
+  "prblty", "update", "wndprb"))
 }
 \arguments{
-\item{...}{Products to retrieve. c("discus", "fstadv", "posest", "public",
-"prblty", "update", "windprb")}
-
-\item{names}{By default product dataframes will be returned as shown in
-\code{...}. The names parameter gives a way to provide alternative names for
-the returned dataframes. Pass a named list where the name of each element
-is that of the product. See examples for more information.}
-
 \item{link}{to storm's archive page.}
 
-\item{msg}{Show link currently being worked. Default, FALSE.}
+\item{products}{Products to retrieve; discus, fstadv, posest, public,
+prblty, update, and windprb.}
 }
 \value{
-Dataframes for each of the products.
+list of dataframes for each of the products.
 }
 \description{
 Retrieve data from products.
 }
 \details{
 \code{get_storm_data} is a wrapper function to make it more
-convenient to access the various storm products.
+    convenient to access the various storm products.
 
 Types of products:
 \describe{
@@ -48,21 +42,22 @@ Types of products:
   \item{windprb}{Wind Probability. Replace strike probabilities beginning in
     the 2006 season. Nearly identical.}
 }
+
+Progress bars are displayed by default. These can be turned off by setting
+the dplyr.show_progress to FALSE. Additionally, you can display messages for
+each advisory being worked by setting the rrricanes.working_msg to TRUE.
 }
 \examples{
-## Get public advisories for Tropical Storm Charley, 1998
 \dontrun{
-get_storm_data("public",
-               link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
-
-## Same as above but give alternate name.
-get_storm_data("public",
-               names = list("public" = "al.1998.charley.public"),
-               link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
-## Get forecast/advisory and storm discussion
-get_storm_data("fstadv", "discus",
-               names = list("fstadv" = "al.1998.charley.fstadv",
-                            "discus" = "al.1998.charley.discus"),
-               link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
+## Get public advisories for first storm of 2016 Atlantic season.
+get_storms(year = 2016, basin = "AL") \%>\%
+    slice(1) \%>\%
+    .$Link \%>\%
+    get_storm_data(products = "public")
+## Get public advisories and storm discussions for first storm of 2017 Atlantic season.
+get_storms(year = 2017, basin = "AL") \%>\%
+    slice(1) \%>\%
+    .$Link \%>\%
+    get_storm_data(products = c("discus", "public"))
 }
 }

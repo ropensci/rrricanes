@@ -9,3 +9,5 @@
 ^data-raw$
 ^docs$
 ^appveyor\.yml$
+^datasets/
+^reports/

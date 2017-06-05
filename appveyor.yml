@@ -13,10 +13,25 @@ install:
 # Adapt as necessary starting from here
 
 environment:
+  R_CHECK_ARGS: --no-build-vignettes --no-manual --no-tests # Disable tests due to issues w/ NHC archives.
   global:
     WARNINGS_ARE_ERRORS: 1
 
   matrix:
+  - R_VERSION: stable
+
+  - R_VERSION: patched
+
+  - R_VERSION: release
+    R_ARCH: x64
+
+  - R_VERSION: oldrel
+    RTOOLS_VERSION: 33
+    CRAN: http://cran.rstudio.com
+
+  - R_VERSION: devel
+    GCC_PATH: mingw_32
+
   - R_VERSION: devel
     R_ARCH: x64
     GCC_PATH: mingw_64
@@ -25,6 +40,8 @@ matrix:
   fast_finish: true
 
 build_script:
+  - travis-tool.sh install_github ropenscilabs/rnaturalearthhires
+  - travis-tool.sh r_binary_install proto rgdal
   - travis-tool.sh install_deps
 
 test_script:
@@ -57,8 +74,8 @@ notifications:
  - provider: Email
    to:
      - tim.trice@gmail.com
-   subject: 'Hurricanes build {{status}}'
-   message: "https://ci.appveyor.com/project/timtrice/Hurricanes"
+   subject: 'rrricanes build {{status}}'
+   message: "https://ci.appveyor.com/project/timtrice/rrricanes"
    on_build_success: false
    on_build_failure: true
    on_build_status_changed: true

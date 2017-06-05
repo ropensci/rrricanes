@@ -4,13 +4,10 @@
 #' @seealso \code{\link{scrape_header}}
 #' @keywords internal
 scrape_adv_num <- function(header) {
-    ptn <- paste0("(?:ADVISORY|DISCUSSION|PROBABILITIES)",
-                  "[:blank:]",
-                  "NUMBER",
-                  "[:blank:]+",
-                  "([:digit:]+[:alpha:]*?)", # Advisory number
-                  "[:blank:]*",
-                  "\n")
+    ptn <- paste0("(?:ADVISORY|DISCUSSION|PROBABILITIES)[:blank:]+NUMBER",
+                  # Advisory number. Could alphanum; i.e., 1, 1A, 2, 2A, 2B
+                  "[:blank:]+([:digit:]{1,3}[:alpha:]*?)",
+                  "(?:[[:space:][:punct:][:alpha:]]*)+")
     adv <- trimws(stringr::str_match(header, ptn)[,2])
     return(adv)
 }
@@ -18,10 +15,9 @@ scrape_adv_num <- function(header) {
 #' @title scrape_contents
 #' @description Extract text product from HTML
 #' @param link URL to product page
-#' @param msg Show link currently being worked. TRUE by default.
 #' @return Contents of product
 #' @keywords internal
-scrape_contents <- function(link, msg = TRUE) {
+scrape_contents <- function(link) {
 
     pre.1999 <- function(l) {
         contents <- l %>%
@@ -47,9 +43,6 @@ scrape_contents <- function(link, msg = TRUE) {
     if (length(link) == 0)
         stop("No valid links.")
 
-    if (msg)
-        message(sprintf("Working %s", link))
-
     if (year == 1998) {
         return(pre.1999(link))
     } else {
@@ -73,7 +66,7 @@ scrape_date <- function(header) {
             m <- 0
 
         # If !is.na(p), convert h appropriately
-        if (all(!is.na(p), p == "PM"))
+        if (all(!is.na(p), p == "PM", h < 12))
             h <- h + 12
 
         h <- stringr::str_pad(h, 2, side = "left", pad = "0")
@@ -95,6 +88,12 @@ scrape_date <- function(header) {
 
     # What is standard is that time comes first followed by time zone, day of
     # the week, month, date and year. So, find the pattern that matches.
+
+    # In some instances the time value in the header may be listed as "NOON"
+    # rather than "12 PM". This is documented in Issue #59. In these cases,
+    # correct header.
+    if (stringr::str_count(header, pattern = "\nNOON [:upper:]{3} [:upper:]{3} [:upper:]{3} [:digit:]{2} [:digit:]{4}\n"))
+        header <- stringr::str_replace(header, "\n(NOON)( [:upper:]{3} [:upper:]{3} [:upper:]{3} [:digit:]{2} [:digit:]{4})\n", "\n12 PM\\2\n")
 
     ptn <- paste0("(?<=(?:\n|\r))",
                   "([:digit:]{1,2})", # Hour
@@ -161,6 +160,10 @@ scrape_date <- function(header) {
         dt <- as.POSIXct(x, tz = "Etc/GMT+4")
     } else if (tz %in% c("EST")) {
         dt <- as.POSIXct(x, tz = "Etc/GMT+5")
+    } else if (tz %in% c("PDT")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+7")
+    } else if (tz %in% c("PST")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+8")
     } else {
         stop(sprintf("Timezone %s not available.", tz), call. = TRUE)
     }
@@ -219,6 +222,9 @@ scrape_header <- function(contents, ret = NULL) {
                          "[[:blank:]\n\r]*") # Close off date/time line
     header <- stringr::str_extract(contents, ptn_header)
 
+    # Convert header to upper as some products may use proper/lower case
+    header <- stringr::str_to_upper(header)
+
     if (ret == "status") {
         status <- scrape_status(header)
         return(status)
@@ -255,7 +261,8 @@ scrape_key <- function(header) {
     ptn <- paste0("(?:(?:NATIONAL HURRICANE CENTER|",
                   "NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?",
                   "[:blank:]+MIAMI FL[:blank:]+|",
-                  "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+)")
+                  "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+|",
+                  "NWS CENTRAL PACIFIC HURRICANE CENTER HONOLULU HI[:blank:]+)")
 
     # For <= 2003 Identifier is 6-digits with a 2-digit year. Append either
     # option to ptn based on year of cyclone.
@@ -305,7 +312,8 @@ scrape_name <- function(header) {
 #' @seealso \code{\link{scrape_header}}
 #' @keywords internal
 scrape_status <- function(header) {
-    options <- c("TROPICAL DISTURBANCE",
+    options <- c("SUBTROPICAL DEPRESSION",
+                 "TROPICAL DISTURBANCE",
                  "TROPICAL DEPRESSION",
                  "TROPICAL STORM",
                  "HURRICANE",

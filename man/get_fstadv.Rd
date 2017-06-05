@@ -4,15 +4,18 @@
 \alias{get_fstadv}
 \title{get_fstadv}
 \usage{
-get_fstadv(link, msg = FALSE)
+get_fstadv(link)
 }
 \arguments{
 \item{link}{URL to storm's archive page.}
-
-\item{msg}{Show link currently being worked. Default, FALSE.}
 }
 \description{
 Return dataframe of forecast/advisory data.
+}
+\details{
+To disable the progress bar set option dplyr.show_progress to
+    FALSE. You can also enable messages to show the storm and advisory
+    currentlby being worked by setting the rrricanes.working_msg to TRUE.
 }
 \seealso{
 \code{\link{get_storms}}, \code{\link{public}}

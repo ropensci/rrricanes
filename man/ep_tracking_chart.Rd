@@ -15,6 +15,25 @@ ggplot2 object centered on northeast Pacific basin.
 \description{
 Build tracking chart centered on northeast Pacific Basin.
 }
+\examples{
+\dontrun{
+# Build map with white land areas, thin black borders
+ep_tracking_chart(color = "black", size = 0.1, fill = "white")
+
+# 50nm resolution, no states
+ep_tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
+                  fill = "white")
+
+# 50nm resolution, coastlines only
+ep_tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
+                  fill = "white")
+
+# Adding and modifying with ggplot functions
+ep_tracking_chart(color = "black", size = 0.1, fill = "white") +
+    ggplot2::labs(x = "Lon", y = "Lat",
+    title = "Base East Pacific Tracking Chart")
+}
+}
 \seealso{
 \code{\link{tracking_chart}}
 }

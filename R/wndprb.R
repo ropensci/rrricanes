@@ -33,7 +33,7 @@ cp_prblty_stations <- function() {
 #'     Pacific from the NHC. To be used in tandem with `wndprb` products.
 #' @details This is a placeholder function. The current listing does not match
 #'     the format for Atlantic and central Pacific stations.
-#' @keywords internal
+#' @export
 ep_prblty_stations <- function() {
     url <- "http://www.nhc.noaa.gov/data/wsp/ep_prblty_station.lst.csv.txt"
     return(FALSE)
@@ -50,23 +50,27 @@ ep_prblty_stations <- function() {
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
-#' @param msg Show link being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{wndprb}},
 #'     \code{\link{al_prblty_stations}}, \code{\link{ep_prblty_stations}},
 #'     \code{\link{cp_prblty_stations}}
 #' @source \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 #' @export
-get_wndprb <- function(link, msg = FALSE) {
+get_wndprb <- function(link) {
 
     # Check status of link(s)
     valid.link <- sapply(link, status)
     valid.link <- na.omit(valid.link)
-    if (length(valid.link) == 0)
-        stop("No valid links.")
 
+    # Get all products for the current storm
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.wndprb <- purrr::map(filter_wndprb(products), wndprb)
+    # Filter out wndprb products
+    products <- filter_wndprb(products)
+
+    # Set progress bar
+    p <- dplyr::progress_estimated(n = length(products))
+
+    products.wndprb <- purrr::map(products, wndprb, p)
 
     wndprb <- purrr::map_df(products.wndprb, dplyr::bind_rows)
 
@@ -78,27 +82,36 @@ get_wndprb <- function(link, msg = FALSE) {
 #' @details Given a direct link to a wind probability product, parse and return
 #' dataframe of values.
 #' @param link Link to a storm's specific wind probability product.
-#' @param msg Display each link as being worked; default is FALSE
+#' @param p dplyr::progress_estimate.
 #' @return Dataframe
 #' @seealso \code{\link{get_wndprb}}
 #' @export
-wndprb <- function(link, msg = FALSE) {
+wndprb <- function(link, p) {
 
-    contents <- scrape_contents(link, msg = msg)
+    p$pause(0.5)$tick()$print()
+
+    contents <- scrape_contents(link)
+
+    # Replace all carriage returns with empty string.
+    contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a wndprb advisory product
-    if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP"))))
+    if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP", "PWS"))))
         stop(sprintf("Invalid Wind Probability link. %s", link))
 
     key <- scrape_header(contents, ret = "key")
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
 
+    if (getOption("rrricanes.working_msg"))
+        message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
+                        status, name, adv, date))
+
     ## ---- * Wind Speed Probabilities for Selected Locations ------------------
 
     ptn <- paste0("(?<=\n)", # Look-behind
                   # Location - first value must be capital letter.
-                  "([:upper:]{1}[[:alnum:][:blank:]]{14})",
+                  "([:upper:]{1}[[:alnum:][:blank:][:punct:]]{14})",
                   # Wind
                   "([[:digit:]]{2})",
                   # Wind12
@@ -108,37 +121,37 @@ wndprb <- function(link, msg = FALSE) {
                   # Wind24
                   "([:digit:]{1,2}|X)",
                   # Wind24 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # Delim
                   "[:blank:]+",
                   # Wind36
                   "([:digit:]{1,2}|X)",
                   # Wind36 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # Delim
                   "[:blank:]+",
                   # Wind48
                   "([:digit:]{1,2}|X)",
                   # Wind48 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # Delim
                   "[:blank:]+",
                   # Wind72
                   "([:digit:]{1,2}|X)",
                   # Wind72 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # Delim
                   "[:blank:]+",
                   # Wind96
                   "([:digit:]{1,2}|X)",
                   # Wind96 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # Delim
                   "[:blank:]+",
                   # Wind120
                   "([:digit:]{1,2}|X)",
                   # Wind120 cumulative
-                  "+\\(([:blank:][:digit:]{1,2}|[:blank:]X)\\)",
+                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
                   # End
                   "[[:blank:]\n]+")
 
@@ -146,6 +159,14 @@ wndprb <- function(link, msg = FALSE) {
 
     # Load matches into dataframe
     wndprb <- tibble::as_data_frame(matches[[1]][,2:16])
+
+    # If only one row, need to transpose wndprb
+    if (ncol(wndprb) == 1)
+        wndprb <- wndprb %>% t() %>% tibble::as_data_frame()
+
+    # If no wnd speed probabilities, return NULL
+    if (nrow(wndprb) == 0)
+        return(NULL)
 
     # Rename variables
     names(wndprb) <- c("Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
