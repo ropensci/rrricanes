@@ -1,9 +1,54 @@
 language: r
+
 sudo: required
-dist: trusty
+
+warnings_are_errors: true
 
 addons:
   apt:
     packages:
       - libgdal-dev
       - libproj-dev
+
+env:
+  global:
+    - R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
+
+addons:
+  apt:
+    packages:
+      - libgdal-dev
+      - libproj-dev
+
+# Test package on multiple platforms
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: false
+      r: 3.3.3
+    - os: linux
+      dist: trusty
+      sudo: false
+      r: release
+    - os: linux
+      dist: trusty
+      sudo: false
+      r: devel
+    - os: osx
+      r: 3.3.3
+    - os: osx
+      r: release
+    - os: osx
+      r: devel
+
+r_packages:
+  - covr
+
+cache: packages
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
+
+r_github_packages:
+  - ropenscilabs/rnaturalearthhires
