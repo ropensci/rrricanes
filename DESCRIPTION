@@ -5,7 +5,7 @@ Title: Web scraper for real-time and archived advisory products for Atlantic and
 Description: Get archived data of past and current hurricanes and tropical 
   storms for the Atlantic and eastern Pacific oceans. Data is available for 
   storms since 1998.
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: c(
   person("Tim", "Trice", email = "tim.trice@gmail.com", role = c("aut", "cre")), 
   person("Bob", "Rudis", email = "bob@rud.is", role = c("ctb")), 
