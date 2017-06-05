@@ -15,74 +15,122 @@ library(ggplot2)
 library(rrricanes)
 ```
 
+Most storms will contain a variation of GIS datasets that can be plotted with `ggplot2`. The helper functions for this have the prefix 'gis'.
+
 **All products are experimental and there maybe fluctuations particularly in current datasets.**
 
-Functions that do not take key or advisory parameters but require datetime instead, datetime will *typically* be the datetime of the advisory minus three hours. Forecast/Advisory products, for example, would be issued at 3AM but there is a note notating the location three hours prior; 12AM. These hours, 00, 06, 12, and 18 seem to reflect the datetime parameters required in some GIS products. These products will most likely contain data for multiple storms, if they exist.
+In general, datasets are available for storms dated back to 1998. However, products such as Wind Speed Probabilities only go back to 1999. 
 
-## Obtaining GIS data
-
-Hurricane Mathew Adv 32
-
-```{r}
-gis_advisory(key = "AL142016", advisory = "32")
-```
-
-```{r}
-df <- gis_advisory(key = "AL142016", advisory = "32") %>% gis_download()
-```
-
-```{r}
-names(df)
-```
+Some datasets require the use of the storm key and an optional advisory. Other products require a datetime value and cannot be isolated by storm key or advisory. The datetime values are not based on the issue time of the advisory, but rather three hours prior. For example, if you are seeking a dataset where the forecast/advisory was issued at 9:00AM UTC, you will want the dataset for 6:00AM UTC. This will be explained a little further below.
 
 ## Build a Tracking Chart
 
+There are three functions available to help you plot GIS data; `tracking_chart`, `al_tracking_chart` and `ep_tracking_chart`. `al_tracking_chart` and `ep_tracking_chart` are just helpers centered on the Atlantic and northeast Pacific ocean, respectively. 
+
+Building tracking charts requires the `rnaturalearthdata` and, for high resolution charts, `rnaturalearthhires` packages.
+
 ```{r}
-(bp <- al_tracking_chart(res = 50, color = "black", size = 0.1, fill = "white"))
+args(rrricanes::tracking_chart)
 ```
 
-Refine chart
+The countries and states parameters are TRUE by default. This means a basic call to `tracking_chart` will return a map with country and state borders. The basic call does not show this.
 
 ```{r}
-(bp <- bp + 
-    coord_equal(xlim = c(-90, -60), ylim = c(20, 40)) +
-    scale_x_continuous(expand = c(0, 0)) +
-    scale_y_continuous(expand = c(0, 0)))
+tracking_chart()
 ```
 
-## Five Day Line Forecast
-
-x = long
-y = lat
+You can pass typical `aes` parameters to refine the color and fill of the plot; remember the tracking chart is a ggplot object.
 
 ```{r}
-bp + geom_path(data = df$al142016_032_5day_lin, aes(x = long, y = lat))
+tracking_chart(color = "black", fill = "white", size = 0.1)
 ```
 
-## Five Day Points
-
-x = LON
-y = LAT
+You may choose to only show coastline data instead. In this case, just set the countries parameter to FALSE.
 
 ```{r}
-bp + geom_point(data = df$al142016_032_5day_pts, aes(x = LON, y = LAT))
+tracking_chart(countries = FALSE, res = 50, color = "black", fill = "white", 
+               size = 0.1)
 ```
 
-## Five Day Polygon
-
-72 and 120 appear to be the same. Am I missing something??? See this graphic for what it *should* roughly look like
-
-http://www.nhc.noaa.gov/archive/2016/graphics/al14/AL142016_5NLW_033_0.GIF
+For the purposes of this vignette we'll focus on Atlantic storms.
 
 ```{r}
-bp + geom_path(data = df$al142016_032_5day_pgn, aes(x = long, y = lat, group = FCSTPRD))
+(p <- al_tracking_chart(color = "black", fill = "white", size = 0.1, res = 50))
+```
+
+The `res` parameter defines the resolution of the chart presented. Options are in 110nm, 50nm and 10nm. The lower the resolution the longer the chart takes to be built. 
+
+States cannot be drawn on resolution greater than 50nm. 
+
+## GIS Datasets
+
+There are several datasets that are published for active cyclones. The following functions are designed to return the URL to those datasets:
+
+* `gis_advisory`
+* `gis_prob_storm_surge`
+* `gis_windfield`
+* `gis_latest`
+
+## Advisory Package
+
+```{r}
+gis_advisory(key = "AL182012", advisory = "18")
+```
+
+```{r}
+adv <- gis_advisory(key = "AL182012", advisory = "18") %>% gis_download()
+```
+
+```{r}
+names(adv)
+```
+
+For this particular storm and advisory, included are the base line, point and polygon datasets along with a dataset for watches and warnings. The objects returned are spatial dataframes contained within the list of dataframes, `adv`.
+
+### Line track
+
+```{r}
+str(adv$al182012_018_5day_lin)
+```
+
+```{r}
+fcst_line <- as(adv$al182012_018_5day_lin, "SpatialPointsDataFrame") %>%
+    broom::tidy()
+```
+
+```{r}
+p + geom_path(data = fcst_line, aes(coords.x1, coords.x2, group = FCSTPRD))
+```
+
+### Point track
+
+```{r}
+p + geom_point(data = adv$al182012_018_5day_pts@data, aes(LON, LAT))
+```
+
+## Forecast Cone
+
+Forecast cone data is contained in the polygon dataset. To deal with this dataset we need to make some steps to build an appropriate dataframe.
+
+```{r}
+fcst <- adv$al182012_018_5day_pgn
+fcst@data$id <- rownames(fcst@data)
+fcst.points = broom::tidy(fcst, region = "id")
+fcst <- dplyr::left_join(fcst.points, fcst@data, by = "id")
+```
+
+```{r}
+p + geom_polygon(data = fcst %>% filter(FCSTPRD == 120), 
+                 aes(long, lat, group = group, fill = factor(FCSTPRD))) + 
+    geom_polygon(data = fcst %>% filter(FCSTPRD == 72), 
+                 aes(long, lat, group = group, fill = factor(FCSTPRD)))
 ```
 
 ## Watches and Warnings
 
 ```{r}
-bp + geom_path(data = df$al142016_032_ww_wwlin, 
-               aes(x = long, y = lat, color = TCWW), size = 2)
+p + geom_path(data = adv$al182012_018_ww_wwlin, 
+               aes(x = long, y = lat, group = group), size = 2)
 ```
 
 ## Probabilistic Storm Surge
@@ -98,98 +146,86 @@ cumulative probablity of storm surge greater than 5ft
 
 ```{r}
 gis_prob_storm_surge(key = "AL142016", products = list(psurge = 0), 
-                     datetime = "20161006", nobs = ~1)
+                     datetime = "20161006")
 ```
 
 ```{r}
-df_prob_ss <- gis_prob_storm_surge(key = "AL142016", 
-                                   products = list(psurge = 0), 
-                                   datetime = "20161006", nobs = ~1) %>% 
+ss <- gis_prob_storm_surge(key = "AL142016", 
+                           products = list(psurge = 0), 
+                           datetime = "20161006") %>% 
+    last() %>% 
     gis_download()
 ```
 
 ```{r}
-bp + geom_point(data = df_prob_ss$al142016_2016100600_gt0, 
-                aes(x = long, y = lat, color = PSurge00c), size = 1)
-```
-
-## Potential Storm Surge Flooding
-
-These are raster files, not shapefiles. Revisit
-
-```{r, eval = FALSE}
-gis_storm_surge_flood("AL142016", advisory = 32, products = "inundation")
-```
-
-```{r, eval = FALSE}
-df_surge_in <- gis_storm_surge_flood("AL142016", advisory = 32, 
-                                     products = "inundation") %>% 
-    gis_download()
+p + geom_path(data = ss$al142016_2016100618_gt0, 
+               aes(x = long, y = lat, group = group), size = 1)
 ```
 
 ## Current and Forecast Wind Field Radii
-
-No data in this one either it seems...
-
-There is no dataset for advisory 32. I'll use advisory 33.
 
 ```{r}
 gis_windfield("AL142016", advisory = "33")
 ```
 
 ```{r}
-df_radii <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
+wf <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
 ```
 
 Initial radius
 
 ```{r}
-bp + geom_polygon(data = df_radii$al142016_2016100606_initialradii, 
+wf_init <- wf$al142016_2016100606_initialradii
+wf_init@data$id <- rownames(wf_init@data)
+wf_init.points = broom::tidy(wf_init, region = "id")
+wf_init <- dplyr::left_join(wf_init.points, wf_init@data, by = "id")
+```
+
+```{r}
+p + geom_polygon(data = wf_init, 
                   aes(x = long, y = lat, fill = factor(RADII)), alpha = 0.5)
 ```
 
 ```{r}
-bp + geom_polygon(data = df_radii$al142016_2016100606_forecastradii, 
-                  aes(x = long, y = lat, group = RADII, fill = factor(RADII)), 
+wf_fcst <- wf$al142016_2016100606_forecastradii
+wf_fcst@data$id <- rownames(wf_fcst@data)
+wf_fcst.points = broom::tidy(wf_fcst, region = "id")
+wf_fcst <- dplyr::left_join(wf_fcst.points, wf_fcst@data, by = "id")
+```
+
+```{r}
+p + geom_polygon(data = wf_fcst, 
+                  aes(x = long, y = lat, group = group, fill = factor(RADII)), 
                   alpha = 0.5)
 ```
 
 ## Wind Speed Probabilities
-
-5nm resolution seems to be scarce. 
-
-Go for 1/2 degree resolution
 
 ```{r}
 gis_wsp(datetime = "2016100606", res = 0.5)
 ```
 
 ```{r}
-df_wsp <- gis_wsp(datetime = "2016100606", res = 0.5) %>% 
-    gis_download()
+wsp <- gis_wsp(datetime = "2016100606", res = 0.5) %>% gis_download()
 ```
 
 ### Cumulative Probability for >34kt Winds
 
 ```{r}
-bp + geom_point(data = df_wsp$`2016100606_wsp34knt120hr_halfDeg`, 
-                aes(x = coords.x1, y = coords.x2, color = PWIND120.x, 
-                    size = PWIND120.x))
+p + geom_point(data = broom::tidy(wsp$`2016100606_wsp34knt120hr_halfDeg`), 
+               aes(x = coords.x1, y = coords.x2, color = PWIND120))
 ```
 
 ### Cumulative Probability for >50kt Winds
 
 ```{r}
-bp + geom_point(data = df_wsp$`2016100606_wsp50knt120hr_halfDeg`, 
-                aes(x = coords.x1, y = coords.x2, color = PWIND120.x, 
-                    size = PWIND120.x))
+p + geom_point(data = broom::tidy(wsp$`2016100606_wsp50knt120hr_halfDeg`), 
+               aes(x = coords.x1, y = coords.x2, color = PWIND120))
 ```
 
 ### Cumulative Probability for >64kt Winds
 
 ```{r}
-bp + geom_point(data = df_wsp$`2016100606_wsp64knt120hr_halfDeg`, 
-                aes(x = coords.x1, y = coords.x2, color = PWIND120.x, 
-                    size = PWIND120.x))
+p + geom_point(data = broom::tidy(wsp$`2016100606_wsp64knt120hr_halfDeg`), 
+               aes(x = coords.x1, y = coords.x2, color = PWIND120))
 ```
-
