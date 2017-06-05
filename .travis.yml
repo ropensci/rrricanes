@@ -1,7 +1,5 @@
 language: r
 
-sudo: required
-
 warnings_are_errors: true
 
 addons:
@@ -10,9 +8,7 @@ addons:
       - libgdal-dev
       - libproj-dev
 
-env:
-  global:
-    - R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
+r_check_args: --no-tests --no-build-vignettes --no-manual
 
 addons:
   apt:
