@@ -2,19 +2,33 @@ language: r
 
 warnings_are_errors: true
 
+addons:
+  apt:
+    packages:
+      - libgdal-dev
+      - libproj-dev
+
+r_check_args: --no-tests --no-build-vignettes --no-manual
+
+addons:
+  apt:
+    packages:
+      - libgdal-dev
+      - libproj-dev
+
 # Test package on multiple platforms
 matrix:
   include:
     - os: linux
-      dist: precise
+      dist: trusty
       sudo: false
       r: 3.3.3
     - os: linux
-      dist: precise
+      dist: trusty
       sudo: false
       r: release
     - os: linux
-      dist: precise
+      dist: trusty
       sudo: false
       r: devel
     - os: osx

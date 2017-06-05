@@ -1,0 +1,230 @@
+---
+author: "Tim Trice"
+date: "`r strftime(Sys.time(), '%a %b %e, %Y %R')`"
+output: 
+    html_document:
+        code_folding: hide
+        toc: true
+        toc_depth: 3
+params:
+    title: "`r as.character()`"
+title: "`r params$title`"
+---
+
+```{r setup, include = FALSE}
+opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, 
+                      fig.width = 10, fig.height = 7, fig.align = "center", 
+                      fig.path = sprintf("%s/%s/", storm_vars$year, 
+                                         storm_vars$key))
+```
+
+## Current Storm Details
+
+```{r current_position}
+# If any of necessary datasets exist, copy base plot to current plot
+if (any(exists("storm_pts"), exists("storm_lin"), exists("storm_ww")))
+    cp <- bp
+
+if (exists("storm_lin")) {
+    p_storm_lin <- geom_line(data = storm_lin, aes(x = long, y = lat))
+    cp <- cp + p_storm_lin
+}
+
+if (exists("storm_pts")) {
+
+    p_storm_pts <- geom_point(data = storm_pts, 
+                              aes(x = Lon, y = Lat, fill = Status, 
+                                  shape = Status, size = Wind))
+    cp <- cp + p_storm_pts
+}
+
+if (exists("storm_ww")) {
+    p_storm_ww <- geom_line(data = storm_ww, 
+                            aes(x = long, y = lat, color = TCWW), size = 2)
+    cp <- cp + p_storm_ww
+}
+
+# Print current plot
+if (exists("cp")) 
+    cp + 
+    scale_color_manual(values = "blue") + 
+    scale_shape_manual(values = c(21, 21, 21, 21)) + 
+    guides(shape = guide_legend(override.aes = list(size = 3))) + 
+    guides(size = guide_legend(nrow = 1)) + 
+    theme(legend.position = "bottom", 
+          legend.box = "vertical") + 
+    labs(title = "Track, Watches and Warnings",
+         subtitle = sprintf("%s (Adv %s, %s)", storm_vars$name, storm_vars$adv,
+                            strftime(storm_vars$date, "%b %e, %Y %R %Z")))
+```
+
+### Wind and Pressure Details
+
+```{r wind_radius}
+if (any(exists("windswath"), exists("storm_radii")))
+    wr <- bp
+
+if (exists("windswath")) {
+    p_windswath <- geom_polygon(data = windswath, 
+                                  aes(x = long, y = lat, 
+                                      fill = as.factor(RADII)), 
+                                  alpha = 0.75)
+    wr <- wr + p_windswath
+}
+
+if (exists("storm_radii")) {
+    p_storm_radii <- geom_polygon(data = storm_radii, 
+                                  aes(x = long, y = lat, 
+                                      fill = as.factor(RADII)), 
+                                  alpha = 0.75)
+    wr <- wr + p_storm_radii
+}
+
+# Print wind radius
+if (exists("wr")) 
+    wr + 
+    geom_point(data = storm_pts %>% slice(n()), aes(x = Lon, y = Lat), 
+               size = 1, color = "black")
+```
+
+#### Wind Profile
+
+```{r wind_profile}
+# Plot wind values
+wind_press %>% ggplot(aes(x = Date, y = Wind)) + 
+    geom_line() + 
+    geom_point(aes(color = Status), size = 3) + 
+    scale_y_continuous(name = "Wind (kts)") + 
+    theme_bw() + 
+    theme(legend.position = "bottom")
+```
+
+#### Pressure Profile
+
+```{r pressure_profile}
+# Plot pressure values
+wind_press %>% ggplot(aes(x = Date, y = Pressure)) + 
+    geom_line() + 
+    geom_point(aes(color = Status), size = 3) + 
+    scale_y_continuous(name = "Pressure (mb)") + 
+    theme_bw() + 
+    theme(legend.position = "bottom")
+```
+
+#### Wind/Pressure Relational Change
+
+```{r wind_press_chng}
+wind_press_cum %>% ggplot(aes(x = Date, y = Val, group = Var, color = Var)) + 
+    geom_line(size = 2) + 
+    theme_bw() + 
+    theme(legend.position = "bottom", legend.title = element_blank()) + 
+    labs(title = "Wind/Pressure Change", 
+         subtitle = "",
+         y = "")
+```
+
+### Public Advisory Statement
+
+`r pub_adv`
+
+## Forecast
+
+```{r plot_forecast}
+# If any of necessary datasets exist, copy base plot to current plot
+if (any(exists("fcst_lin"), exists("fcst_pts"), exists("fcst_pgn")))
+    fp <- bp
+
+## ---- 5-day forecast line ----------------------------------------------------
+if (exists("fcst_lin")) {
+    p_fcst_lin <- geom_path(data = fcst_lin, aes(x = long, y = lat))
+    fp <- fp + p_fcst_lin
+}
+
+## ---- 5-day forecast points --------------------------------------------------
+if (exists("fcst_pts")) {
+    p_fcst_pts <- geom_point(data = fcst_pts, 
+                                 aes(x = LON.x, y = LAT.x, color = TCDVLP.x, 
+                                     size = MAXWIND.x))
+    fp <- fp + p_fcst_pts
+}
+
+## ---- 5-day forecast polygon -------------------------------------------------
+if (exists("fcst_pgn")) {
+    p_fcst_pgn <- geom_polygon(data = fcst_pgn, 
+                                  aes(x = long, y = lat, 
+                                      fill = as.factor(FCSTPRD)), 
+                                  alpha = 0.3)
+    fp <- fp + p_fcst_pgn
+}
+
+# Print forecast plot
+if (exists("fp")) fp
+```
+
+```{r tbl_forecast, results = "markdown"}
+kable(fcst, caption = sprintf("%s Forecast", storm_vars$name))
+```
+
+### Cumulative Wind Speed Probabilities
+
+#### 0.5-Degree Resolution
+
+```{r check_wsp, echo = FALSE}
+# If any of necessary datasets exist, copy base plot to current plot
+if (any(exists("wsp34_half"), exists("wsp50_half"), exists("wsp64_half")))
+    wsp <- bp
+```
+
+```{r wsp34_half, fig.cap = "Wind Speed Probabilities (>= 34kts)"}
+if (exists("wsp34_half")) {
+    p_wsp34_half <- geom_point(data = wsp34_half, 
+                               aes(x = coords.x1, y = coords.x2, 
+                                   size = PWIND120.x, color = PWIND120.x))
+    wsp + p_wsp34_half
+}
+```
+
+```{r wsp50_half, fig.cap = "Wind Speed Probabilities (>= 50kts)"}
+if (exists("wsp50_half")) {
+    p_wsp50_half <- geom_point(data = wsp50_half, 
+                               aes(x = coords.x1, y = coords.x2, 
+                                   size = PWIND120.x, color = PWIND120.x))
+    wsp + p_wsp50_half
+}
+```
+
+```{r wsp64_half, fig.cap = "Wind Speed Probabilities (>= 64kts)"}
+if (exists("wsp64_half")) {
+    p_wsp64_half <- geom_point(data = wsp64_half, 
+                               aes(x = coords.x1, y = coords.x2, 
+                                   size = PWIND120.x, color = PWIND120.x))
+    wsp + p_wsp64_half
+}
+```
+
+Cumulative wind speed probabilities are the sum of wind speed probablities for every forecast period issued. Below is a table (if available) of wind speed probabilities for select locations throughout each forecast period (12 hours, 24 hours, 36, 48, 72, 96 and 120). 
+
+```{r tbl_wndprb, results = "markdown"}
+if (nrow(wndprb) > 0) {
+    kable(wndprb, caption = "Wind Speed Probabilities")
+} else {
+    message("There are no wind speed probabilities with this advisory.")
+}
+```
+
+## Past Advisories
+
+```{r tbl_advisories, results = "markdown"}
+kable(fstadv %>% select(Status, Adv, Date, Wind, Gust, Pressure, Eye), 
+      caption = sprintf("%s Advisories", storm_vars$name))
+```
+
+## Storm Discussion
+
+`r discus$Contents`
+
+## About `rrricanes`
+
+<span style="color:red">rrricanes is not intended for use in emergency situations.</span>
+
+`rrricanes` is a R package designed to get current and archived real-time data on tropical storms and hurricanes. Contributors are strongly encouraged. View the [GitHub repository](https://github.com/timtrice/rrricanes) for more information.

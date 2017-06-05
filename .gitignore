@@ -7,3 +7,4 @@ packrat/lib*/
 ..Rcheck
 rrricanes.Rcheck
 datasets
+inst/doc
