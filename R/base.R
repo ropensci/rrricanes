@@ -120,7 +120,8 @@ month_str_to_num <- function(m) {
 #' @title saffir
 #' @description Return category of storm based on wind. Assumes storm is a
 #' cyclone. Saffir-Simpson Hurricane Scale does not apply to non-tropical storms.
-#' @export
+#' @param x Vector of wind speed values.
+#' @keywords internal
 saffir <- function(x) {
     return(NULL)
 }
