@@ -70,6 +70,7 @@ gis_download <- function(url, destdir = tempdir()) {
 
 #' @title gis_latest
 #' @description Latest GIS datasets for active cyclones
+#' @param basins AL and/or EP.
 #' @param destdir Directory to save shapefile data. Default is tempdir()
 #' @export
 gis_latest <- function(basins = c("AL", "EP"), destdir = tempdir()) {

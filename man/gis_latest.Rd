@@ -7,6 +7,8 @@
 gis_latest(basins = c("AL", "EP"), destdir = tempdir())
 }
 \arguments{
+\item{basins}{AL and/or EP.}
+
 \item{destdir}{Directory to save shapefile data. Default is tempdir()}
 }
 \description{
