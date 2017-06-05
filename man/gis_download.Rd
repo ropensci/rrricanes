@@ -7,9 +7,9 @@
 gis_download(url, destdir = tempdir())
 }
 \arguments{
-\item{destdir}{Directory to save shapefile data.}
+\item{url}{link to GIS dataset to download.}
 
-\item{URL}{of GIS dataset to download.}
+\item{destdir}{Directory to save shapefile data.}
 }
 \description{
 Get GIS data for storm.
