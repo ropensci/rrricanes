@@ -51,28 +51,16 @@ gis_advisory <- function(key, advisory = as.character()) {
 #' @param destdir Directory to save shapefile data.
 #' @export
 gis_download <- function(url, destdir = tempdir()) {
-    message("Remove files when processing complete.")
     utils::download.file(file.path(url), zip_file <- tempfile())
     utils::unzip(zip_file, exdir = destdir)
     shp_files <- list.files(path = destdir, pattern = ".+shp$")
     ds <- purrr::map2(.x = shp_files, .y = destdir, .f = function(f, d) {
         shp_file <- stringr::str_match(f, "^(.+)\\.shp$")[,2]
-        shp <- rgdal::readOGR(dsn = d, layer = shp_file)
-        # For linear plots
-        if (any(grepl(".+lin\\.shp$", f), grepl(".+pgn\\.shp$", f))) {
-            shp@data$id <- rownames(shp@data)
-            shp.points <- broom::tidy(shp, region = "id")
-            df <- dplyr::left_join(shp.points, shp@data, by = "id")
-            return(df)
-        } else if (grepl(".+pts\\.shp$", f)) {
-            df <- tibble::as_data_frame(shp)
-            return(df)
-        } else {
-            shp@data$id <- rownames(shp@data)
-            shp.points <- broom::tidy(shp, region = "id")
-            df <- dplyr::left_join(shp.points, shp@data, by = "id")
-            return(df)
-        }
+        sp_object <- rgdal::readOGR(dsn = d, layer = shp_file,
+                                    encoding = "UTF-8",
+                                    stringsAsFactors = FALSE,
+                                    use_iconv = TRUE)
+        return(sp_object)
     })
     shp_file_names <- stringr::str_match(shp_files, "^(.+)\\.shp$")[,2] %>%
         stringr::str_replace_all("[[:punct:][:space:]]", "_")
