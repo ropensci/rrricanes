@@ -6,6 +6,12 @@ env:
   global:
     - R_CHECK_ARGS="--no-tests"
 
+addons:
+  apt:
+    packages:
+      - libgdal-dev
+      - libproj-dev
+
 # Test package on multiple platforms
 matrix:
   include:
