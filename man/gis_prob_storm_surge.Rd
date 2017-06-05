@@ -4,7 +4,7 @@
 \alias{gis_prob_storm_surge}
 \title{gis_prob_storm_surge}
 \usage{
-gis_prob_storm_surge(key, products, datetime = NULL, nobs = NULL)
+gis_prob_storm_surge(key, products, datetime = NULL)
 }
 \arguments{
 \item{key}{Key of storm (i.e., AL012008, EP092015)}
@@ -48,43 +48,17 @@ Probabilistic Storm Surge Forecasts
 }
 }
 
-\section{Subsetting datasets}{
-
-Unlike other GIS data, these datasets do not contain advisory numbers but
-are grouped by date/time values in \%Y\%m\%d\%H format. Typically, valid
-hours will be 00, 06, 12 and 18 UTC though this may not always be the case.
-To help you get the dataset you need you can use datetime and nobs together.
-There are two parameters you can pass to help narrow down the dataset you
-want.
-\describe{
-    \item{datetime}{The datetime in character formatted as \%Y\%m\%d\%H; i.e.,
-        "2016083000".  If you pass this value then the GIS dataset for August
-        30, 2016, 00:00 UTC will be returned. If you leave off the hour then
-        all data for Aug 30, 2016 will be returned; leave off the hour and
-        day then all data for August will be returned. You cannot drop values
-        on the left side; only from the right. This is to help ensure you get
-        the dataset you are requesting.}
-    \item{nobs}{A formula specifying the range of datasets
-        to retrieve.}
-}
-See examples for more guidance on using datetime and nobs together.
-}
-
 \examples{
 \dontrun{
 # Return the last psurge0 product for storm AL092016
 gis_prob_storm_surge("AL092016", products = list("psurge" = 0))
 
-# Return the first psurge0 and esurge10 product for storm AL092016
-gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10), nobs = ~1)
+# Return the psurge0 and esurge10 products for storm AL092016
+gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10))
 
-# Return the first and last psurge0 products for Sep 2, 2016, storm AL092016
+# Return all psurge0 products for Sep 2, 2016, storm AL092016
 gis_prob_storm_surge("AL092016", products = list("psurge" = 0),
-                     datetime = "20160902", nobs = ~c(1, length(x)))
-
-# Last five esurge40 and esurge50 products for month of September, storm AL092016
-gis_prob_storm_surge("AL092016", products = list("esurge" = c(40, 50)),
-                     datetime = "201609", nobs = ~c((length(x)-5):length(x)))
+                     datetime = "20160902")
 }
 }
 \seealso{
