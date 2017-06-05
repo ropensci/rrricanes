@@ -19,5 +19,5 @@ where `title`, `description` and `pubDate` reside. `link` is also
 available to point to the NHC website.
 }
 \seealso{
-\link{http://www.nhc.noaa.gov/xml/TWOEP.xml}
+\url{http://www.nhc.noaa.gov/xml/TWOEP.xml}
 }
