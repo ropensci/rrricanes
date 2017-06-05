@@ -109,8 +109,6 @@ gis_outlook <- function() {
 #' @param products list of products and associated n values; psurge (0:20) or
 #'     esurge (10, 20, 30, 40, 50).
 #' @param datetime Datetime in \%Y\%m\%d\%H format.
-#' @param nobs specific observations to retrieve by formula or numeric vector.
-#'     By default, only the last observation for each product is returned.
 #' @details Probabilistic Storm Surge Forecasts
 #' @section Products:
 #' \describe{

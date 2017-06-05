@@ -13,9 +13,6 @@ gis_prob_storm_surge(key, products, datetime = NULL)
 esurge (10, 20, 30, 40, 50).}
 
 \item{datetime}{Datetime in \%Y\%m\%d\%H format.}
-
-\item{nobs}{specific observations to retrieve by formula or numeric vector.
-By default, only the last observation for each product is returned.}
 }
 \description{
 Probabilistic Storm Surge
