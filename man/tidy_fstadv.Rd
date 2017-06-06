@@ -6,6 +6,9 @@
 \usage{
 tidy_fstadv(df)
 }
+\arguments{
+\item{df}{fstadv dataframe object}
+}
 \description{
 Tidy current details of a fstadv dataframe object.
 }

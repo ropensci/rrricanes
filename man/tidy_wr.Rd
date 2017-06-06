@@ -6,6 +6,9 @@
 \usage{
 tidy_wr(df)
 }
+\arguments{
+\item{df}{fstadv dataframe object}
+}
 \description{
 Tidy current wind radius of a fstadv dataframe object.
 }

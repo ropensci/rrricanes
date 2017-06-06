@@ -6,6 +6,9 @@
 \usage{
 tidy_fcst_wr(df)
 }
+\arguments{
+\item{df}{fstadv dataframe object}
+}
 \description{
 Tidy forecast wind radii of a fstadv dataframe object
 }

@@ -6,6 +6,9 @@
 \usage{
 tidy_fcst(df)
 }
+\arguments{
+\item{df}{fstadv dataframe object}
+}
 \description{
 Tidy forecasts of a fstadv dataframe object.
 }
