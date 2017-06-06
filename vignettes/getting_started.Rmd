@@ -1,0 +1,238 @@
+---
+title: "Getting Started"
+author: "Tim Trice"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+library(dplyr)
+library(rrricanes)
+```
+
+## General Introduction
+
+`rrricanes` is intended to give easy access to hurricane archives. It is a web-scraping tool that parses the National Hurricane Center's (NHC) archives to get storm data. Data is available for storms dating back to 1998.
+
+There are two basins which data is available: north Atlantic ("AL") and northeastern Pacific ("EP"). The northeastern Pacific basin typically covers from the west coast of North America to -140&deg; longitude (140&deg;W). 
+
+## Get Storms
+
+By default, `get_storms` will return all storms that have developed for the current year in both basins. If no storms have developed, an error will be generated. For this example, we'll use 2016.
+
+```{r get.storms}
+al.2012 <- get_storms(year = 2012, basin = "AL")
+```
+
+## Getting Storm Data
+
+`get_storm_data` can be used to retrieve one or multiple products for one or more cyclones. A list of dataframes is returned.
+
+```{r}
+al182012_fstadv <- al.2012 %>% 
+    filter(Name == "Hurricane Sandy") %>% 
+    .$Link %>% 
+    get_storm_data(products = "fstadv")
+```
+
+We can get the forecast/advisory data and wind speed probabilities at once:
+
+```{r}
+al182012 <- al.2012 %>% 
+    filter(Name == "Hurricane Sandy") %>% 
+    .$Link %>% 
+    get_storm_data(c("fstadv", "wndprb"))
+```
+
+`al182012` now contains two dataframes for Hurricane Sandy; `fstadv` and `wndprb`.
+
+```{r}
+dim(al182012$fstadv)
+```
+
+```{r}
+dim(al182012$wndprb)
+```
+
+## Forecast/Advisory Product (`fstadv`)
+
+The core of a storm's dataset is located in the Forecast/Advisory product, `fstadv`. This product contains current location, forecast position, movement and structural details of the cyclone. 
+
+To access only this product, we can use `get_fstadv`:
+
+```{r}
+al182012_fstadv <- al.2012 %>% 
+    filter(Name == "Hurricane Sandy") %>% 
+    .$Link %>% 
+    get_fstadv()
+```
+
+As you may have noticed above, the dataframe is very wide at 149 variables. There are four groups of variables in this dataset: current details, current wind radii, forecast positions, and forecast wind radii.
+
+### Current Details
+
+Let's look at an example of the current details.
+
+```{r}
+str(al182012_fstadv %>% select(Status:Eye, SeasNE:SeasNW))
+```
+
+The most important variable in this dataset is `Key`. `Key` is a unique identifier for each storm that develops in either basin. It is formatted such as "AABBCCCC" where "AA" is the basin abbreviation (AL or EP), "BB" is the year number of the storm left-padded, and "CC" is the year of the storm.
+
+`Adv` is the second-most important variable here. You'll notice it is in character format. For regularly-scheduled advisories, advisory numbers are always numeric. However, when watches and warnings are in effect, intermediate advisories are issued which are given alpha suffixes; i.e., 1, 2, 3, 3A, 4, 4A, 4B, 5, etc.
+
+Only the Public Advisory (`public`) will be issued more frequently. All other regular products (`discus`, `fstadv`, `prblty`, `wndprb`) are generally issued every six hours.
+
+`Status` lists the current designation of the cyclone, i.e., Tropical Depression, Tropical Storm, etc. A `Name` is given once a storm crosses the threshold of Tropical Storm; that is, winds greater than 33kts. 
+
+`Lat` and `Lon` are the current position of the storm within `PosAcc` nautical miles. All distance measurements are in nautical miles.
+
+`Wind` and `Gust` are current one-minute sustained wind speeds in knots (kts). You can use the function `knots_to_mph` to convert this. All wind speed values are in knots.
+
+`Pressure` is the lowest atmospheric pressure of the cyclone either measured or estimated. It's value is in millibars but you can use `mb_to_in()` to convert to inches.
+
+`FwdDir` and `FwdSpeed` show the compass direction of the forward movement of the cyclone. NA values indicate the storm is stationary or drifting. `FwdSpeed` is measured in knots.
+
+In some cases, where hurricanes have an identifiable `Eye`, it's diameter in nautical miles will also be listed. 
+
+Lastly, the `Seas` variables will exist for a storm of at least tropical storm-strength. This is the distance from the center of circulation that 12ft seas can be found in each quadrant. The measurement is in nautical miles.
+
+Helper function `tidy_fstadv` will subset this data to a narrow dataframe.
+
+```{r}
+tidy_fstadv(al182012_fstadv)
+```
+
+### Wind Radius
+
+Any cyclone of at least tropical storm-strength will have associated wind radius values. This is the distance from the center of circulation that a specified wind speed (34kts, 50kts, 64kts) can be found in each quadrant. Measurement is in nautical miles.
+
+```{r}
+str(al182012_fstadv %>% select(NE64:NW34))
+```
+
+A helper function, `tidy_wr` will reorganize this data into a narrow format and tidied up. Complete wind radius values that are NA are removed for efficiency.
+
+```{r}
+tidy_wr(al182012_fstadv)
+```
+
+### Forecast
+
+Most Forecast/Advisory products will have forecast data associated with it unless the storm has dissipated or is no longer tropical. There may be up to seven forecast positions. These positions are issued by 12-hour intervals through 48 hours where they are then at 24-hour intervals; 12, 24, 36, 48, 72, 96 and 120 hours.
+
+```{r, eval = FALSE}
+str(al182012_fstadv %>% select(Hr12FcstDate:Hr12Gust))
+```
+
+Notice each variable begins with the prefix "Hrn" where n is the forecast period as noted above. Only Date, Lat, Lon, Wind, Gust and wind radius (will discuss shortly) are given for forecast periods.
+
+Use `tidy_fcst` to tidy forecast data.
+
+```{r}
+tidy_fcst(al182012_fstadv)
+```
+
+#### Forecast Dates/Times
+
+A note about forecast times. 
+
+```{r}
+al182012_fstadv %>% select(Date, Hr12FcstDate) %>% slice(1)
+```
+
+Notice the `Date` of this advisory is Oct 22 at 15:00 UTC. The `Hr12FcstDate` is Oct 23, 00:00 UTC. This difference, obviously, is not 12 hours. What gives? Forecast/Advisory products are issued with two "current" positions: one that is current (and provided in the dataset) and a position from three hours prior. So, in this specific advisory the text would contain the position of the storm for Oct 22, 12:00 UTC. It is from this position the forecast points are based. I do not know why.
+
+Therefore, while officially the forecast periods are 12, 24, 36, ... hours, in reality they are 9, 21, 33, ... hours from the issuance time of the product. 
+
+### Forecast Wind Radius
+
+Some forecast positions may also contain wind radius information (only up to 72 hours). 
+
+```{r, eval = FALSE}
+str(al182012_fstadv %>% select(Hr12NE64:Hr12NW34))
+```
+
+Again, these variables are prepended with the prefix prefix "Hrn" where n notes the forecast period. 
+
+`tidy_fcst_wr` will tidy this subset of data.
+
+```{r}
+tidy_fcst_wr(al182012_fstadv)
+```
+
+Please see the National Hurricane Center's website for more information on understanding the [Forecast/Advisory product](http://www.nhc.noaa.gov/help/tcm.shtml?).
+
+## Strike Probabilities (`prblty`)
+
+Strike probabilities were discontinued after the 2005 hurricane season (replaced by Wind Speed Probabilities; `wndprb`). For this example, we'll look at Hurricane Katrina. For this we use the function `get_prblty`.
+
+```{r}
+al122005_prblty <- get_storms(year = 2005, basin = "AL") %>% 
+    filter(Name == "Hurricane Katrina") %>% 
+    .$Link %>% 
+    get_prblty()
+```
+
+```{r}
+str(al122005_prblty)
+```
+
+This dataframe contains the possibility of a cyclone passing within 65 nautical miles of `Location`. The variables `A`, `B`, `C`, `D`, and `E` are as they appear in the products and were left as-is to avoid confusion. They're definition is as follows:
+
+* `A` - current through 12 hours.
+* `B` - within the next 12-24 hours
+* `C` - within the next 24-36 hours
+* `D` - within the next 36-48 hours
+* `E` - Total probability from current through 48 hours. 
+
+Many values in the text product may be "X" for less than 1% chance of a strike. These values are converted to 0 as the fields are numeric. 
+
+The strike probability products did not contain `Key` which is the unique identifier for every cyclone. So the best way to do any joins will be by `Name`, `Adv` and `Date`.
+
+Strike Probabilities may not exist for most Pacific cyclones.
+
+## Wind Speed Probabilities (`wndprb`)
+
+```{r}
+al122005_wndprb <- al.2012 %>% 
+    filter(Name == "Hurricane Sandy") %>% 
+    .$Link %>% 
+    get_wndprb()
+```
+
+```{r}
+str(al122005_wndprb)
+```
+
+Wind Speed Probabilities are a bit more advanced than their predecessor. The `Wind` variable is for 34kt, 50kt and 64kt winds expected within a specific time period. 
+
+Each consecutive variable is within a specific time-frame (12, 24, 36, 48, 72, 96 and 120 hours) for both that time frame and cumulative.
+
+For example, `Wind24` is the chance of `Wind` between 12-24 hours. `Wind24Cum` is the cumulative probability from `Date` through 24 hours. 
+
+As with strike probabilities, an "X" in the original text product meant less than 0.5% chance for the specified wind in the specified time period. "X" has been replaced by 0 in this package.
+
+Wind Speed Probabilities may not exist for most Pacific cyclones.
+
+See [Tropical Cyclone Wind Speed Probabilities Products](http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf) for more information.
+
+## Other products
+
+Other products are available:
+
+* `get_public` for Public Advisory statements. Think general information for the public audience. May not exist for some Pacific cyclones. Additionally, when watches and warnings are issued, these are issued every 3 hours (and, in some cases, every two).
+
+* `get_discus` for Storm Discussions. These are more technical statements on the structure of a storm, forecast model tendencies and satellite presentation.
+
+* `get_update` These are brief update statements when something considerable has changed in the cyclone or if the cyclone is making landfall.
+
+* `get_posest`. Position estimates are generally issued when a storm is making landfall and may be issued hourly. 
+
+Hurricane Ike, 2008, has both updates and position estimates. 
+
+At this time none of these products are parsed. Only the content of the product is returned.
