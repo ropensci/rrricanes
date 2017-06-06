@@ -14,19 +14,18 @@ Getting Started
 Please view the vignette 'Getting Started':
 
 ``` r
-vignette("getting-started", package = "rrricanes")
+vignette("getting_started", package = "rrricanes")
+```
+
+To obtain and view GIS data, see vignette:
+
+``` r
+vignette("gis_data", package = "rrricanes")
 ```
 
 ### Prerequisites
 
-`rrricanes` does require an active internet connection as data is extracted from online archives.
-
-The following R packages are also currently used for data processing:
-
--   data.table (&gt;= 1.9.6),
--   tidyverse (&gt;= 1.0.0)
-
-On future revisions I will work on minimizing package dependencies if it helps increase processing speed.
+`rrricanes` only requires an active internet connection as data is extracted from online archives.
 
 ### Installing
 
@@ -39,7 +38,7 @@ devtools::install_github("timtrice/rrricanes")
 Built With
 ----------
 
--   [R 3.2.3](https://www.r-project.org/) - The R Project for Statistical Computing
+-   [R 3.3.3](https://www.r-project.org/) - The R Project for Statistical Computing
 
 Contributing
 ------------
