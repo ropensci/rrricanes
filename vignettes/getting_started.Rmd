@@ -236,3 +236,39 @@ Other products are available:
 Hurricane Ike, 2008, has both updates and position estimates. 
 
 At this time none of these products are parsed. Only the content of the product is returned.
+
+## A Faster Alternative
+
+Scraping the data from the NHC archives may be time-consuming for those with "slow" internet connections. Additionally, sometimes the NHC archives [just aren't available for some reason](https://github.com/timtrice/rrricanes/issues/66). 
+
+An alternative method of getting data is by the use of `load_storm_data`. This function accesses the `rrricanesdata` repository and returns post-scraped datasets. 
+
+Do not assume this data is complete. `discus`, `public` and many `prblty` or `wndprb` products are not available. However, most `fstadv` products do exist. 
+
+Additionally, please do not assume it will be up-to-date. I will make every effort to keep it as up-to-date as possible. Use the above-mentioned functions for more timely data, if need be.
+
+Let's load the annual data for both Atlantic and Pacific storms for 2016.
+
+```{r}
+load_storm_data(years = 2016, basins = "AL")
+```
+
+There are now two datasets in your global environment: `AL2016` and `EP2016`.
+
+```{r}
+str(AL2016)
+```
+
+This summary data is a little bit different than that obtained through `get_storms` in that it already has `Key`, maximum `Wind` value, `StartDate` and `EndDate`. 
+
+You can load `fstadv` products for 2016 as well by passing the `products` parameter:
+
+```{r}
+load_storm_data(years = 2016, basins = "AL", products = "fstadv")
+```
+
+```{r}
+str(AL2016_fstadv)
+```
+
+This dataset is the exact same as that returned by `get_fstadv`. The difference is that it contains all storms for 2017. Use `dplyr::filter()` if you wish to isolate a specific storm. 
