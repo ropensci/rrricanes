@@ -517,6 +517,7 @@ fstadv_winds_gusts <- function(contents, what = NULL) {
 
 #' @title tidy_fstadv
 #' @description Tidy current details of a fstadv dataframe object.
+#' @param df fstadv dataframe object
 #' @details Use Key, Adv and Date to join with other tidy dataframes.
 #' @export
 tidy_fstadv <- function(df) {
@@ -529,6 +530,7 @@ tidy_fstadv <- function(df) {
 
 #' @title tidy_wr
 #' @description Tidy current wind radius of a fstadv dataframe object.
+#' @param df fstadv dataframe object
 #' @details Takes current wind radius variables in a fstadv dataframe object,
 #' tidys the data and removes rows where all values are NA. Use Key, Adv and
 #' Date to join with other tidy dataframes.
@@ -571,6 +573,7 @@ tidy_wr <- function(df) {
 
 #' @title tidy_fcst
 #' @description Tidy forecasts of a fstadv dataframe object.
+#' @param df fstadv dataframe object
 #' @details Gathers all forecast points, converts to narrow dataframe and
 #' removes rows that are NA. Use Key, Adv and Date to join with other tidy
 #' dataframes.
@@ -606,6 +609,7 @@ tidy_fcst <- function(df) {
 
 #' @title tidy_fcst_wr
 #' @description Tidy forecast wind radii of a fstadv dataframe object
+#' @param df fstadv dataframe object
 #' @details Converts forecast wind radii fields to narrow, tidy dataframe. Use
 #' Key, Adv and Date to join with other tidy dataframes.
 #' @export
