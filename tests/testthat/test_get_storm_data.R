@@ -17,7 +17,7 @@ test_that("get_storm_data()", {
                      dplyr::slice(1) %>%
                      .$Link %>%
                      get_storm_data(products = "test"),
-                 "Invalid products included.")
+                 "'arg' should be one of “discus”, “fstadv”, “posest”, “public”, “prblty”, “update”, “wndprb”")
     expect_error(get_storm_data(), "argument \"link\" is missing, with no default")
 })
 
