@@ -76,11 +76,8 @@ extract_storms <- function(basin, link) {
 
     df <- create_df_archives()
 
-    s <- link %>%
+    col <- link %>%
         xml2::read_html() %>%
-        rvest::html_nodes(css = "table")
-
-    col <- s %>%
         rvest::html_nodes(xpath = xp)
 
     col.links <- paste0(
