@@ -104,16 +104,13 @@ get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
                                               "public", "prblty", "update",
                                               "wndprb")) {
 
-    if (!(all(products %in% c("discus", "fstadv", "posest", "public", "prblty",
-                              "update", "wndprb"))) | length(products) == 0)
-        stop(paste0("Invalid products included. Only discus, fstadv, posest, ",
-                    "public, prblty, update, wndprb are valid options.",
-                    "See ?get_storm_data for more info."))
+    products <- match.arg(products, several.ok = TRUE)
 
     ds <- purrr::map(products, .f = function(x) {
         sprintf("get_%s", x) %>%
             purrr::invoke_map(.x = list(link = link)) %>%
             purrr::flatten_df()})
+    names(ds) <- products
     return(ds)
 }
 
