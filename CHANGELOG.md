@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Changed
   - `get_storm_data` now takes link as first parameter for chaining. Returns a list of dataframes for each product.
+  - `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr` have been added to replaced now-removed `fstadv_split()`.
 
 ### Removed
   - `fstadv_split`. Dataframe can be split if desired by user. 

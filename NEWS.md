@@ -22,6 +22,7 @@ rrricanes 0.2.0 (yyyy-mm-dd)
 ### BUG FIXES
 
 * Too many to recall. Apologies. 
+* `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr` have been added to replaced now-removed `fstadv_split()`.
 
 ### DEPRECATED AND DEFUNCT
 

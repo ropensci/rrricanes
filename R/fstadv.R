@@ -514,3 +514,134 @@ fstadv_winds_gusts <- function(contents, what = NULL) {
     }
 
 }
+
+#' @title tidy_fstadv
+#' @description Tidy current details of a fstadv dataframe object.
+#' @details Use Key, Adv and Date to join with other tidy dataframes.
+#' @export
+tidy_fstadv <- function(df) {
+    if (!is.data.frame(df))
+        stop("Expecting a dataframe.")
+    df <- dplyr::select_(df, "Key", "Status:Date", "Lat:Eye", "SeasNE:SeasNW")
+    return(df)
+}
+
+#' @title tidy_wr
+#' @description Tidy current wind radius of a fstadv dataframe object.
+#' @details Takes current wind radius variables in a fstadv dataframe object,
+#' tidys the data and removes rows where all values are NA. Use Key, Adv and
+#' Date to join with other tidy dataframes.
+#' @export
+tidy_wr <- function(df) {
+    if (!is.data.frame(df))
+        stop("Expecting a dataframe.")
+
+    # Collapse wind radius fields to narrow dataframe then expand on the four
+    # quadrants, keeping WindField as a variable.
+    v <- c("NE", "SE", "SW", "NW")
+
+    df <- purrr::map_df(
+        .x = c(34, 50, 64),
+        .f = function(y) {
+            dplyr::select_(df,
+                           .dots = c("Key",
+                                     "Adv",
+                                     "Date",
+                                     paste0(v, y))) %>%
+                dplyr::rename_(
+                    .dots = list("Key" = "Key",
+                                 "Adv" = "Adv",
+                                 "Date" = "Date",
+                                 "NE" = paste0("NE", y),
+                                 "SE" = paste0("SE", y),
+                                 "SW" = paste0("SW", y),
+                                 "NW" = paste0("NW", y))) %>%
+                dplyr::mutate_("WindField" = y)
+        }) %>%
+        dplyr::select_(.dots = c("Key", "Adv", "Date", "WindField","NE:NW")) %>%
+        # Order by Date then Adv since Adv is character. Results as expected.
+        dplyr::arrange_("Key", "Date", "Adv", "WindField")
+
+    # Remove NA rows for windfield quadrants
+    df <- df[complete.cases(df$NE, df$SE, df$SW, df$NW),]
+
+    return(df)
+}
+
+#' @title tidy_fcst
+#' @description Tidy forecasts of a fstadv dataframe object.
+#' @details Gathers all forecast points, converts to narrow dataframe and
+#' removes rows that are NA. Use Key, Adv and Date to join with other tidy
+#' dataframes.
+#' @export
+tidy_fcst <- function(df) {
+    if (!is.data.frame(df))
+        stop("Expecting a dataframe.")
+
+    # Build forecasts dataframe with base data for each forecast position. This
+    # does not include wind radius data; that comes next. This will be similar
+    # to fstadv (without seas and some other data points which are never
+    # forecast).
+
+    # Extract child dataframe for forecasts date, position, wind and gust
+    v <- c("FcstDate", "Lat", "Lon", "Wind", "Gust")
+
+    df <- purrr::map_df(.x = c(12, 24, 36, 48, 72, 96, 120),
+                                .f = function(y) {
+                                    dplyr::select_(df,
+                                                   .dots = c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
+                                        dplyr::rename_("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
+                                                       "FcstDate" = paste0("Hr", y, "FcstDate"),
+                                                       "Lat" = paste0("Hr", y, "Lat"),
+                                                       "Lon" = paste0("Hr", y, "Lon"),
+                                                       "Wind" = paste0("Hr", y, "Wind"),
+                                                       "Gust" = paste0("Hr", y, "Gust"))}) %>%
+        dplyr::arrange_("Key", "Date", "Adv", "FcstDate")
+
+    # Remove NA rows
+    df <- df[complete.cases(df$FcstDate, df$Lat, df$Lon, df$Wind, df$Gust),]
+    return(df)
+}
+
+#' @title tidy_fcst_wr
+#' @description Tidy forecast wind radii of a fstadv dataframe object
+#' @details Converts forecast wind radii fields to narrow, tidy dataframe. Use
+#' Key, Adv and Date to join with other tidy dataframes.
+#' @export
+tidy_fcst_wr <- function(df) {
+    if (!is.data.frame(df))
+        stop("Expecting a dataframe.")
+
+    # Build wind radius dataframe for each forecast position (12:72 hours; 96
+    # and 120 hours are never forecasted). This dataframe will be similar to
+    # fstadv.wr with the exception of FcstDate.
+
+    v <- c("NE", "SE", "SW", "NW")
+
+    df <- purrr::map_df(.x = c(12, 24, 36, 48, 72),
+                                   .f = function(x) {
+                                       y <- purrr::map_df(.x = c(34, 50, 64), .f = function(z) {
+                                           dplyr::select_(df, .dots = c("Key", "Adv", "Date",
+                                                                          paste0("Hr", x, "FcstDate"),
+                                                                          paste0("Hr", x, v, z))) %>%
+                                               dplyr::rename_(.dots = list("Key" = "Key",
+                                                                           "Adv" = "Adv",
+                                                                           "Date" = "Date",
+                                                                           "FcstDate" = paste0("Hr", x,
+                                                                                               "FcstDate"),
+                                                                           "NE" = paste0("Hr", x, "NE", z),
+                                                                           "SE" = paste0("Hr", x, "SE", z),
+                                                                           "SW" = paste0("Hr", x, "SW", z),
+                                                                           "NW" = paste0("Hr", x, "NW", z))) %>%
+                                               dplyr::mutate_("WindField" = z) %>%
+                                               dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
+                                                                        "WindField", "NE:NW"))})
+                                       return(y)
+                                   })
+
+    df <- df %>% dplyr::arrange_("Key", "Date", "Adv",
+                                                       "FcstDate", "WindField")
+
+    df <- df[complete.cases(df$NE, df$SE, df$SW, df$NW),]
+    return(df)
+}
