@@ -99,9 +99,11 @@ wndprb <- function(link, p) {
     if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP", "PWS"))))
         stop(sprintf("Invalid Wind Probability link. %s", link))
 
+    status <- scrape_header(contents, ret = "status")
     key <- scrape_header(contents, ret = "key")
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
+    name <- scrape_header(contents, ret = "name")
 
     if (getOption("rrricanes.working_msg"))
         message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
