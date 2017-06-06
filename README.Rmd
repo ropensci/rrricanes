@@ -7,7 +7,7 @@ output: github_document
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes) 
 [![Build Status](https://travis-ci.org/timtrice/rrricanes.svg?branch=issue-47)](https://travis-ci.org/timtrice/rrricanes) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/timtrice/rrricanes?branch=issue-47&svg=true)](https://ci.appveyor.com/project/timtrice/rrricanes) 
-[![codecov](https://codecov.io/gh/timtrice/rrricanes/branch/issue-47/graph/badge.svg)](https://codecov.io/gh/timtrice/rrricanes) 
+[![codecov](https://codecov.io/gh/timtrice/rrricanes/branch/issue-47/graph/badge.svg)](https://codecov.io/gh/timtrice/rrricanes) [![Stories in Ready](https://badge.waffle.io/timtrice/rrricanes.png?label=ready&title=Ready)](http://waffle.io/timtrice/rrricanes)
  
 
 ```{r, echo = FALSE}
