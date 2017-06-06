@@ -522,7 +522,8 @@ fstadv_winds_gusts <- function(contents, what = NULL) {
 tidy_fstadv <- function(df) {
     if (!is.data.frame(df))
         stop("Expecting a dataframe.")
-    df <- dplyr::select_(df, "Key", "Status:Date", "Lat:Eye", "SeasNE:SeasNW")
+    df <- dplyr::select_(df, "Key", "Adv:Date", "Status:Name", "Lat:Eye",
+                         "SeasNE:SeasNW")
     return(df)
 }
 
