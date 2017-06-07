@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Fixed
   - Fix call to `get_storms` on some Linux distros which generated xpath_element fun error. (#67)
+  - Fix call to `get_storm_data`. Issue similar to #67. (#68)
 
 ### Security
   - NA
