@@ -19,35 +19,18 @@ scrape_adv_num <- function(header) {
 #' @keywords internal
 scrape_contents <- function(link) {
 
-    pre.1999 <- function(l) {
-        contents <- l %>%
-            xml2::read_html() %>%
-            rvest::html_text()
-
-        return(contents)
-    }
-
-    general <- function(l) {
-        contents <- l %>%
-            xml2::read_html() %>%
-            rvest::html_nodes("pre") %>%
-            rvest::html_text()
-
-        return(contents)
-    }
-
-    year <- extract_year_archive_link(link)
-
     link <- na.omit(sapply(link, status))
 
     if (length(link) == 0)
         stop("No valid links.")
 
-    if (year == 1998) {
-        return(pre.1999(link))
-    } else {
-        return(general(link))
-    }
+    contents <- link %>%
+        xml2::read_html() %>%
+        rvest::html_nodes(xpath = "//pre") %>%
+        rvest::html_text()
+
+    return(contents)
+
 }
 
 #' @title scrape_date
