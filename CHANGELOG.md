@@ -30,7 +30,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - NA
 
 ### Fixed
-  - NA
+  - Fix call to `get_storms` on some Linux distros which generated xpath_element fun error. (#67)
 
 ### Security
   - NA
