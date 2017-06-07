@@ -566,7 +566,7 @@ tidy_wr <- function(df) {
         dplyr::arrange_("Key", "Date", "Adv", "WindField")
 
     # Remove NA rows for windfield quadrants
-    df <- df[complete.cases(df$NE, df$SE, df$SW, df$NW),]
+    df <- df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
 
     return(df)
 }
@@ -603,7 +603,7 @@ tidy_fcst <- function(df) {
         dplyr::arrange_("Key", "Date", "Adv", "FcstDate")
 
     # Remove NA rows
-    df <- df[complete.cases(df$FcstDate, df$Lat, df$Lon, df$Wind, df$Gust),]
+    df <- df[stats::complete.cases(df$FcstDate, df$Lat, df$Lon, df$Wind, df$Gust),]
     return(df)
 }
 
@@ -647,6 +647,6 @@ tidy_fcst_wr <- function(df) {
     df <- df %>% dplyr::arrange_("Key", "Date", "Adv",
                                                        "FcstDate", "WindField")
 
-    df <- df[complete.cases(df$NE, df$SE, df$SW, df$NW),]
+    df <- df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
     return(df)
 }
