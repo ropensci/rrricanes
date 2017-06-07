@@ -23,6 +23,7 @@ rrricanes 0.2.0 (yyyy-mm-dd)
 
 * Too many to recall. Apologies. 
 * `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr` have been added to replaced now-removed `fstadv_split()`.
+* Call to `get_storms` on some linux distros generated xpath_element error. Corrected. (#67)
 
 ### DEPRECATED AND DEFUNCT
 
