@@ -365,7 +365,12 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
     request <- httr::POST("http://www.nhc.noaa.gov/gis/archive_wsp.php",
                       body = list(year = year), encode = "form")
     contents <- httr::content(request, as = "parsed", encoding = "UTF-8")
-    ds <- rvest::html_nodes(contents, "a[href*='zip']") %>% rvest::html_attr("href")
+
+    ds <- rvest::html_nodes(contents, xpath = "//a") %>%
+        rvest::html_attr("href") %>%
+        stringr::str_extract(".+\\.zip$") %>%
+        .[stats::complete.cases(.)]
+
     if (nchar(datetime) < 10) {
         ptn_datetime <- paste0(datetime, "[:digit:]+")
     } else {

@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Fixed
   - Fix call to `get_storms` on some Linux distros which generated xpath_element fun error. (#67)
   - Fix call to `get_storm_data`. Issue similar to #67. (#68)
+  - Fix call to `gis_wsp`. Call in `rvest::html_nodes` generated "xpath_attrib" error. Add test for `gis_wsp`. (#70)
 
 ### Security
   - NA
