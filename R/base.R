@@ -25,10 +25,6 @@ NULL
 
 #' @importFrom magrittr %>%
 
-#' @importFrom stats na.omit
-#' @export
-stats::na.omit
-
 .onLoad <- function(libname, pkgname) {
     op <- options()
     op.rrricanes <- list(rrricanes.working_msg = FALSE)

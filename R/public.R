@@ -31,7 +31,7 @@ get_public <- function(link) {
 
     # Check status of link(s)
     valid.link <- sapply(link, status)
-    valid.link <- na.omit(valid.link)
+    valid.link <- stats::na.omit(valid.link)
 
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 

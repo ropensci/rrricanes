@@ -9,7 +9,7 @@ get_products <- function(link) {
 
     products <- get_storm_content(link) %>%
         rvest::html_attr("href") %>%
-        na.omit()
+        stats::na.omit()
 
     nhc_url <- get_nhc_link(withTrailingSlash = FALSE)
 
