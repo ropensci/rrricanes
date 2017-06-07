@@ -369,7 +369,7 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
     ds <- rvest::html_nodes(contents, xpath = "//a") %>%
         rvest::html_attr("href") %>%
         stringr::str_extract(".+\\.zip$") %>%
-        .[complete.cases(.)]
+        .[stats::complete.cases(.)]
 
     if (nchar(datetime) < 10) {
         ptn_datetime <- paste0(datetime, "[:digit:]+")
