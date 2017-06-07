@@ -29,6 +29,9 @@ scrape_contents <- function(link) {
         rvest::html_nodes(xpath = "//pre") %>%
         rvest::html_text()
 
+    if (purrr::is_empty(contents))
+        contents <- link %>% xml2::read_html() %>% rvest::html_text()
+
     return(contents)
 
 }
