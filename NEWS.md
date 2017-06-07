@@ -24,6 +24,7 @@ rrricanes 0.2.0 (yyyy-mm-dd)
 * Too many to recall. Apologies. 
 * `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr` have been added to replaced now-removed `fstadv_split()`.
 * Call to `get_storms` on some linux distros generated xpath_element error. Corrected. (#67)
+* Modify call to `get_storm_data`. Replaced css parameter in `rvest::html_nodes` calls with xpath parameter. Some products (notably, `get_prblty`) do not have a "pre" tag but are text documents (not HTML). Modified `scrape_contents` to return full contents if "pre" tag doesn't exist. Tested `get_discus` and `get_public`; no errors generated. (#68)
 
 ### DEPRECATED AND DEFUNCT
 
