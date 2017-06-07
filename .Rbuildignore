@@ -11,3 +11,4 @@
 ^appveyor\.yml$
 ^datasets/
 ^reports/
+^\.github$

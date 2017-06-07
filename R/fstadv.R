@@ -10,7 +10,7 @@ get_fstadv <- function(link) {
 
     # Check status of link(s)
     valid.link <- sapply(link, status)
-    valid.link <- na.omit(valid.link)
+    valid.link <- stats::na.omit(valid.link)
 
     # Get all products for the current storm
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()

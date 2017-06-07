@@ -19,7 +19,7 @@ scrape_adv_num <- function(header) {
 #' @keywords internal
 scrape_contents <- function(link) {
 
-    link <- na.omit(sapply(link, status))
+    link <- stats::na.omit(sapply(link, status))
 
     if (length(link) == 0)
         stop("No valid links.")
