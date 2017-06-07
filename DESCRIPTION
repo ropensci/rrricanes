@@ -16,7 +16,6 @@ License: MIT + file LICENSE
 LazyData: TRUE
 Imports:
   broom (>= 0.4.2), 
-  data.table (>= 1.9.6), 
   dplyr (>= 0.5.0), 
   ggplot2 (>= 2.2.1), 
   httr (>= 1.2.1), 

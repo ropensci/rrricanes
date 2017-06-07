@@ -123,7 +123,6 @@ extract_storms <- function(basin, link) {
 #' @param year numeric or vector, four digits (\%Y format)
 #' @param basin One or both of c("AL", "EP")
 #' @return Dataframe of storms.
-#' @importFrom data.table rbindlist
 #' @examples
 #' # Default. Get all storms, both basins, for last year.
 #' \dontrun{
