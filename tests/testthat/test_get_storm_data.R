@@ -16,8 +16,7 @@ test_that("get_storm_data()", {
     expect_error(get_storms(year = 2017, basin = "AL") %>%
                      dplyr::slice(1) %>%
                      .$Link %>%
-                     get_storm_data(products = "test"),
-                 "'arg' should be one of “discus”, “fstadv”, “posest”, “public”, “prblty”, “update”, “wndprb”")
+                     get_storm_data(products = "test"))
     expect_error(get_storm_data(), "argument \"link\" is missing, with no default")
 })
 
