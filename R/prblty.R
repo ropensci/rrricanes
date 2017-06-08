@@ -14,8 +14,7 @@
 get_prblty <- function(link) {
 
     # Check status of link(s)
-    valid.link <- sapply(link, status)
-    valid.link <- stats::na.omit(valid.link)
+    valid.link <- purrr::map_chr(link, status) %>% stats::na.omit()
 
     # Get all products for the current storm
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
@@ -53,7 +52,8 @@ prblty <- function(link, p) {
     contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a strike probability product
-    if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP", "SPFAT", "MIAWRKSP"))))
+    if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP", "SPFAT",
+                                            "MIAWRKSP"))))
         stop(sprintf("Invalid Strike Probability link. %s", link))
 
     status <- scrape_header(contents, ret = "status")

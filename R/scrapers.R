@@ -19,7 +19,7 @@ scrape_adv_num <- function(header) {
 #' @keywords internal
 scrape_contents <- function(link) {
 
-    link <- stats::na.omit(sapply(link, status))
+    link <- purrr::map_chr(link, status) %>% stats::na.omit()
 
     if (length(link) == 0)
         stop("No valid links.")
@@ -78,8 +78,17 @@ scrape_date <- function(header) {
     # In some instances the time value in the header may be listed as "NOON"
     # rather than "12 PM". This is documented in Issue #59. In these cases,
     # correct header.
-    if (stringr::str_count(header, pattern = "\nNOON [:upper:]{3} [:upper:]{3} [:upper:]{3} [:digit:]{2} [:digit:]{4}\n"))
-        header <- stringr::str_replace(header, "\n(NOON)( [:upper:]{3} [:upper:]{3} [:upper:]{3} [:digit:]{2} [:digit:]{4})\n", "\n12 PM\\2\n")
+    if (stringr::str_count(header,
+                           pattern = paste0("\nNOON [:upper:]{3} [:upper:]{3} ",
+                                            "[:upper:]{3} [:digit:]{2} ",
+                                            "[:digit:]{4}\n")))
+        header <- stringr::str_replace(header,
+                                       pattern = paste0("\n(NOON)( [:upper:]{3}",
+                                                        " [:upper:]{3} ",
+                                                        "[:upper:]{3} ",
+                                                        "[:digit:]{2} ",
+                                                        "[:digit:]{4})\n",
+                                                        "\n12 PM\\2\n"))
 
     ptn <- paste0("(?<=(?:\n|\r))",
                   "([:digit:]{1,2})", # Hour
@@ -197,7 +206,7 @@ scrape_header <- function(contents, ret = NULL) {
     # There may be additional line breaks inside the header. Must account for.
     # Use day, month, date and year which seems to be consistent across all
     # products.
-    ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]\n\r]*?", # most of header
+    ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]\n\r]*?",
                          "[:alpha:]{3}", # Day of week
                          "[:blank:]*",
                          "[:alpha:]{3}", # Month, abbreviated
@@ -263,7 +272,8 @@ scrape_key <- function(header) {
     # If year is 1999 and Key is "EP9099", send warning.
     # This is a temp correction for Issue #55 in GitHub repo.
     if (all(y == 1999, x == "EP9099"))
-        warning("Known data quality error. Key for Advisory 1 is incorrect. See GitHub Issue #55",
+        warning(paste0("Known data quality error. Key for Advisory 1 ",
+                       "is incorrect. See GitHub Issue #55"),
                 call. = FALSE)
 
     # In some instances x is NA. Stop and research.

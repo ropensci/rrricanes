@@ -17,7 +17,8 @@ test_that("get_storm_data()", {
                      dplyr::slice(1) %>%
                      .$Link %>%
                      get_storm_data(products = "test"))
-    expect_error(get_storm_data(), "argument \"link\" is missing, with no default")
+    expect_error(get_storm_data(),
+                 "argument \"link\" is missing, with no default")
 })
 
 ## ---- load_storm_data() ------------------------------------------------------
@@ -27,5 +28,6 @@ test_that("load_storm_data()", {
     expect_error(load_storm_data(years = 2017, basins = "CP"),
                  "basins must be one or both of AL, EP")
     expect_error(load_storm_data(years = 2017, products = "test"),
-                 "products must either be NULL or have at least one valid product")
+                 paste0("products must either be NULL or have ",
+                        "at least one valid product"))
 })

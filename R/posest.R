@@ -6,7 +6,8 @@
 create_df_posest <- function() {
     df <- tibble::data_frame("Status" = character(),
                              "Name" = character(),
-                             # Allow for intermediate advisories, i.e., "1A", "2", "2A"...
+                             # Allow for intermediate advisories,
+                             # i.e., "1A", "2", "2A"...
                              "Adv" = character(),
                              "Date" = as.POSIXct(character(), tz = "UTC"),
                              "Contents" = character())
@@ -30,8 +31,7 @@ create_df_posest <- function() {
 get_posest <- function(link) {
 
     # Check status of link(s)
-    valid.link <- sapply(link, status)
-    valid.link <- stats::na.omit(valid.link)
+    valid.link <- purrr::map_chr(link, status) %>% stats::na.omit()
 
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 

@@ -127,7 +127,9 @@ get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
 #' @export
 load_storm_data <- function(years, basins = c("AL", "EP"), products = NULL) {
 
-    if (!(all(dplyr::between(years, 1998, as.numeric(strftime(Sys.Date(), "%Y"))))))
+    if (!(all(dplyr::between(years,
+                             1998,
+                             as.numeric(strftime(Sys.Date(), "%Y"))))))
         stop("years must be between 1998 and current year")
 
     if (!(all(basins %in% c("AL", "EP"))))

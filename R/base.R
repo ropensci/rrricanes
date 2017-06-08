@@ -37,9 +37,6 @@ NULL
     packageStartupMessage("rrricanes is not intended for use in emergency situations.")
 }
 
-# This "hack" is to avoid NOTES on R CMD check. These are names that are
-# assigned to various dataframes.
-# https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
 utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
                          "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
                          "WindField34", "WindField50", "WindField64", "lat",
@@ -57,7 +54,7 @@ utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
 #' @keywords internal
 convert_lat_lon <- function(x, y) {
     if (!is.numeric(x)) {stop("x is not numeric!")}
-    if (!(y %in% c('N', 'S', 'E', 'W'))) { stop("y must be c('N','S','E','W')") }
+    if (!(y %in% c('N', 'S', 'E', 'W'))) {stop("y must be c('N','S','E','W')")}
     ifelse(y == 'S' | y == 'W', return(x * -1), return(x))
 }
 
@@ -130,7 +127,7 @@ saffir <- function(x) {
 #' @return URL if result is 'OK', otherwise, NA.
 #' @keywords internal
 status <- function(u) {
-    stat = httr::http_status(httr::GET(u))
+    stat <- httr::http_status(httr::GET(u))
     if (stat$reason == 'OK') {
         return(u)
     } else {

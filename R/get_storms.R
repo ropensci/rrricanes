@@ -67,9 +67,9 @@ extract_storms <- function(basin, link) {
     year <- extract_year_archive_link(link)
 
     if (basin == "AL") {
-        xp = "//td[(((count(preceding-sibling::*) + 1) = 1) and parent::*)]//a"
+        xp <- "//td[(((count(preceding-sibling::*) + 1) = 1) and parent::*)]//a"
     } else if (basin == "EP") {
-        xp = "//td[(((count(preceding-sibling::*) + 1) = 2) and parent::*)]//a"
+        xp <- "//td[(((count(preceding-sibling::*) + 1) = 2) and parent::*)]//a"
     } else {
         stop("No basin given.")
     }

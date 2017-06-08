@@ -9,8 +9,7 @@
 get_fstadv <- function(link) {
 
     # Check status of link(s)
-    valid.link <- sapply(link, status)
-    valid.link <- stats::na.omit(valid.link)
+    valid.link <- purrr::map_chr(link, status) %>% stats::na.omit()
 
     # Get all products for the current storm
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
@@ -232,11 +231,10 @@ fstadv_forecasts <- function(content, date) {
 
     # Build FcstDate variable
     df <- df %>%
-        dplyr::mutate(FcstDate = lubridate::ymd_hm(paste(paste(Year, Month, Date,
-                                                               sep = '-'),
-                                                         paste(Hour, Minute,
-                                                               sep = ':'),
-                                                         sep = ' ')))
+        dplyr::mutate(FcstDate = lubridate::ymd_hm(
+            paste(paste(Year, Month, Date, sep = '-'),
+                  paste(Hour, Minute, sep = ':'),
+                  sep = ' ')))
 
     # Clean up Latitude, Longitude
     df <- df %>%
@@ -251,11 +249,11 @@ fstadv_forecasts <- function(content, date) {
 
     fcst_periods <- paste0("Hr", c(12, 24, 36, 48, 72, 96, 120))
     # Modify fcst_periods to lengt of df
-    fcst_periods <- fcst_periods[1:nrow(df)]
+    fcst_periods <- fcst_periods[seq_len(nrow(df))]
 
     df <- df %>% split(.$FcstDate)
 
-    df <- purrr::map2(1:length(df),
+    df <- purrr::map2(seq_along(df),
                       fcst_periods,
                       function(a, b) {
                           stats::setNames(df[[a]], paste0(b, names(df[[a]])))
@@ -344,7 +342,8 @@ fstadv_pos_accuracy <- function(contents) {
 #' @return numeric
 #' @keywords internal
 fstadv_pressure <- function(contents) {
-    ptn <- paste0('MINIMUM CENTRAL PRESSURE[:blank:]+([:digit:]{3,4})[:blank:]*MB')
+    ptn <- paste0("MINIMUM CENTRAL PRESSURE[:blank:]+",
+                  "([:digit:]{3,4})[:blank:]*MB")
     pressure <- stringr::str_match(contents, ptn)[,2]
     return(as.numeric(pressure))
 }
@@ -407,8 +406,8 @@ fstadv_lon <- function(contents) {
 }
 
 #' @title fstadv_seas
-#' @description There is only one line of sea data, 12FT seas in each quadrant. So this
-#'   should go easier than the wind fields
+#' @description There is only one line of sea data, 12FT seas in each quadrant.
+#' So this should go easier than the wind fields
 #' @param content text of product
 #' @param wind Wind value of current forecast/advisory product.
 #' @return boolean
@@ -435,11 +434,12 @@ fstadv_seas <- function(content, wind) {
 }
 
 #' @title fstadv_wind_radius
-#' @description Parse wind radius data from product, if exists. This is somewhat tricky as the
-#'   wind fields are 64KT, 50KT and 34KT and are listed in descending order. So,
-#'   the first line will not always be 64KT, 50KT or even 34KT depending on
-#'   strength of storm. What I do here is just extract the entire blob and work
-#'   through it. I'll continue to look for ways to improve it.
+#' @description Parse wind radius data from product, if exists. This is somewhat
+#' tricky as the wind fields are 64KT, 50KT and 34KT and are listed in
+#' descending order. So the first line will not always be 64KT, 50KT or even
+#' 34KT depending on strength of storm. What I do here is just extract the
+#' entire blob and work through it. I'll continue to look for ways to improve
+#' it.
 #'
 #' Complimentary to fstadv_get_wind_radius
 #'
@@ -470,10 +470,23 @@ fstadv_wind_radius <- function(content, wind) {
 #' @keywords internal
 fstadv_wind_radius_regex <- function(content) {
     ptn <- paste0("MAX SUSTAINED WINDS[:blank:]+[:digit:]{1,3} KT ",
-                  "WITH GUSTS TO[:blank:]+[:digit:]{1,3} KT[[:punct:][:space:][:upper:]]+",
-                  "(?:(64) KT[[:blank:][:punct:]]+([:digit:]{1,3})NE[:blank:]+([:digit:]{1,3})SE[:blank:]+([:digit:]{1,3})SW[:blank:]+([:digit:]{1,3})NW[[:punct:][:space:]]+)?",
-                  "(?:(50) KT[[:blank:][:punct:]]+([:digit:]{1,3})NE[:blank:]+([:digit:]{1,3})SE[:blank:]+([:digit:]{1,3})SW[:blank:]+([:digit:]{1,3})NW[[:punct:][:space:]]+)?",
-                  "(?:(34) KT[[:blank:][:punct:]]+([:digit:]{1,3})NE[:blank:]+([:digit:]{1,3})SE[:blank:]+([:digit:]{1,3})SW[:blank:]+([:digit:]{1,3})NW[[:punct:][:space:]]+)?")
+                  "WITH GUSTS TO[:blank:]+[:digit:]{1,3} ",
+                  "KT[[:punct:][:space:][:upper:]]+",
+                  "(?:(64) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                  "NE[:blank:]+([:digit:]{1,3})",
+                  "SE[:blank:]+([:digit:]{1,3})",
+                  "SW[:blank:]+([:digit:]{1,3})",
+                  "NW[[:punct:][:space:]]+)?",
+                  "(?:(50) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                  "NE[:blank:]+([:digit:]{1,3})",
+                  "SE[:blank:]+([:digit:]{1,3})",
+                  "SW[:blank:]+([:digit:]{1,3})",
+                  "NW[[:punct:][:space:]]+)?",
+                  "(?:(34) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                  "NE[:blank:]+([:digit:]{1,3})",
+                  "SE[:blank:]+([:digit:]{1,3})",
+                  "SW[:blank:]+([:digit:]{1,3})",
+                  "NW[[:punct:][:space:]]+)?")
     x <- stringr::str_match_all(content, ptn)
     return(as.numeric(x[[1]][,2:16]))
 }
@@ -561,7 +574,8 @@ tidy_wr <- function(df) {
                                  "NW" = paste0("NW", y))) %>%
                 dplyr::mutate_("WindField" = y)
         }) %>%
-        dplyr::select_(.dots = c("Key", "Adv", "Date", "WindField","NE:NW")) %>%
+        dplyr::select_(.dots = c("Key", "Adv", "Date",
+                                 "WindField","NE:NW")) %>%
         # Order by Date then Adv since Adv is character. Results as expected.
         dplyr::arrange_("Key", "Date", "Adv", "WindField")
 
@@ -590,20 +604,23 @@ tidy_fcst <- function(df) {
     # Extract child dataframe for forecasts date, position, wind and gust
     v <- c("FcstDate", "Lat", "Lon", "Wind", "Gust")
 
-    df <- purrr::map_df(.x = c(12, 24, 36, 48, 72, 96, 120),
-                                .f = function(y) {
-                                    dplyr::select_(df,
-                                                   .dots = c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
-                                        dplyr::rename_("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
-                                                       "FcstDate" = paste0("Hr", y, "FcstDate"),
-                                                       "Lat" = paste0("Hr", y, "Lat"),
-                                                       "Lon" = paste0("Hr", y, "Lon"),
-                                                       "Wind" = paste0("Hr", y, "Wind"),
-                                                       "Gust" = paste0("Hr", y, "Gust"))}) %>%
+    df <- purrr::map_df(
+        .x = c(12, 24, 36, 48, 72, 96, 120),
+        .f = function(y) {
+            dplyr::select_(
+                df,
+                .dots = c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
+                dplyr::rename_("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
+                               "FcstDate" = paste0("Hr", y, "FcstDate"),
+                               "Lat" = paste0("Hr", y, "Lat"),
+                               "Lon" = paste0("Hr", y, "Lon"),
+                               "Wind" = paste0("Hr", y, "Wind"),
+                               "Gust" = paste0("Hr", y, "Gust"))}) %>%
         dplyr::arrange_("Key", "Date", "Adv", "FcstDate")
 
     # Remove NA rows
-    df <- df[stats::complete.cases(df$FcstDate, df$Lat, df$Lon, df$Wind, df$Gust),]
+    df <- df[stats::complete.cases(df$FcstDate, df$Lat, df$Lon, df$Wind,
+                                   df$Gust),]
     return(df)
 }
 
@@ -623,26 +640,28 @@ tidy_fcst_wr <- function(df) {
 
     v <- c("NE", "SE", "SW", "NW")
 
-    df <- purrr::map_df(.x = c(12, 24, 36, 48, 72),
-                                   .f = function(x) {
-                                       y <- purrr::map_df(.x = c(34, 50, 64), .f = function(z) {
-                                           dplyr::select_(df, .dots = c("Key", "Adv", "Date",
-                                                                          paste0("Hr", x, "FcstDate"),
-                                                                          paste0("Hr", x, v, z))) %>%
-                                               dplyr::rename_(.dots = list("Key" = "Key",
-                                                                           "Adv" = "Adv",
-                                                                           "Date" = "Date",
-                                                                           "FcstDate" = paste0("Hr", x,
-                                                                                               "FcstDate"),
-                                                                           "NE" = paste0("Hr", x, "NE", z),
-                                                                           "SE" = paste0("Hr", x, "SE", z),
-                                                                           "SW" = paste0("Hr", x, "SW", z),
-                                                                           "NW" = paste0("Hr", x, "NW", z))) %>%
-                                               dplyr::mutate_("WindField" = z) %>%
-                                               dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
-                                                                        "WindField", "NE:NW"))})
-                                       return(y)
-                                   })
+    df <- purrr::map_df(
+        .x = c(12, 24, 36, 48, 72),
+        .f = function(x) {
+            y <- purrr::map_df(.x = c(34, 50, 64), .f = function(z) {
+                dplyr::select_(df, .dots = c("Key", "Adv", "Date",
+                                             paste0("Hr", x, "FcstDate"),
+                                             paste0("Hr", x, v, z))) %>%
+                    dplyr::rename_(
+                        .dots = list("Key" = "Key",
+                                     "Adv" = "Adv",
+                                     "Date" = "Date",
+                                     "FcstDate" = paste0("Hr", x,
+                                                         "FcstDate"),
+                                     "NE" = paste0("Hr", x, "NE", z),
+                                     "SE" = paste0("Hr", x, "SE", z),
+                                     "SW" = paste0("Hr", x, "SW", z),
+                                     "NW" = paste0("Hr", x, "NW", z))) %>%
+                    dplyr::mutate_("WindField" = z) %>%
+                    dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
+                                             "WindField", "NE:NW"))})
+            return(y)
+        })
 
     df <- df %>% dplyr::arrange_("Key", "Date", "Adv",
                                                        "FcstDate", "WindField")

@@ -58,8 +58,7 @@ ep_prblty_stations <- function() {
 get_wndprb <- function(link) {
 
     # Check status of link(s)
-    valid.link <- sapply(link, status)
-    valid.link <- stats::na.omit(valid.link)
+    valid.link <- purrr::map_chr(link, status) %>% stats::na.omit()
 
     # Get all products for the current storm
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
