@@ -40,7 +40,7 @@ matrix:
   fast_finish: true
 
 build_script:
-  - travis-tool.sh install_github ropenscilabs/rnaturalearthhires
+#  - travis-tool.sh install_github ropenscilabs/rnaturalearthhires
   - travis-tool.sh r_binary_install proto rgdal
   - travis-tool.sh install_deps
 
