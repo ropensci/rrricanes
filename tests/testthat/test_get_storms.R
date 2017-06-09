@@ -1,5 +1,11 @@
 context("Get Storms")
 
+# Set timeout options
+opt.timeout <- getOption("rrricanes.http_timeout")
+opt.attempts <- getOption("rrricanes.http_attempts")
+options("rrricanes.http_timeout" = 1)
+options("rrricanes.http_attempts" = 5)
+
 ## ---- URL Status -------------------------------------------------------------
 #' Test that annual archive links work. All results should return 'OK'.
 test_that("URL Status", {
@@ -87,3 +93,7 @@ test_that("Errors", {
     expect_error(get_storms(1997),
                  'Archives currently only available for 1998 to current year.')
 })
+
+# Reset options
+options("rrricanes.http_timeout" = opt.timeout)
+options("rrricanes.http_attempts" = opt.attempts)

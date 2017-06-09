@@ -1,5 +1,11 @@
 context("Forecast/Advisory Products (fstadv)")
 
+# Set timeout options
+opt.timeout <- getOption("rrricanes.http_timeout")
+opt.attempts <- getOption("rrricanes.http_attempts")
+options("rrricanes.http_timeout" = 1)
+options("rrricanes.http_attempts" = 5)
+
 ## ---- 2008, AL ---------------------------------------------------------------
 al2008 <- get_storms(year = 2008, basin = "AL") %>% dplyr::select(Link)
 
@@ -54,3 +60,7 @@ test_that("Test tidy_fcst_wr()", {
                      c("Key", "Adv", "Date", "FcstDate", "WindField", "NE",
                        "SE", "SW", "NW"))
 })
+
+# Reset options
+options("rrricanes.http_timeout" = opt.timeout)
+options("rrricanes.http_attempts" = opt.attempts)

@@ -116,6 +116,27 @@ extract_year_archive_link <- function(link) {
     return(year)
 }
 
+#' @title get_url_contents
+#' @description Get contents from URL
+#' @details This function primarily is reserved for extracting the contents of
+#' the individual products \(thought it can be used in other instances\). Often,
+#' there are timeout issues. This is an attempt to try to work around that.
+#' @param link URL to download
+#' @keywords internal
+get_url_contents <- function(link) {
+    # Try to establish connection three times with timeout of 3 seconds
+    max_attempts <- getOption("rrricanes.http_attempts")
+    if (max_attempts > 5) max_attempts <- 5
+    for (i in seq(1, max_attempts)) {
+        safe_GET <- purrr::safely(httr::GET)
+        contents <- safe_GET(url = link,
+                             httr::timeout(getOption("rrricanes.http_timeout")))
+        if (!is.null(contents$result))
+            return(xml2::read_html(x = contents$result))
+    }
+    stop(contents$error$message, call. = TRUE)
+}
+
 #' @title get_nhc_link
 #' @description Return root link of NHC archive pages.
 #' @param withTrailingSlash True, by default. False returns URL without
@@ -176,23 +197,6 @@ saffir <- function(x) {
     return(y)
 }
 
-#' @title status
-#' @description Test URL status.
-#' @details Return URL if status is 'OK'. Otherwise, return NA and print
-#' failed URL.
-#' @param u URL to test
-#' @return URL if result is 'OK', otherwise, NA.
-#' @keywords internal
-status <- function(u) {
-    stat <- httr::http_status(httr::GET(u))
-    if (stat$reason == 'OK') {
-        return(u)
-    } else {
-        warning(sprintf("URL unavailable. %s", u))
-        return(NA)
-    }
-}
-
 #' @title status_abbr_to_str
 #' @description Convert Status abbreviation to string
 #' @param x character vector of status abbreviations
@@ -201,9 +205,12 @@ status <- function(u) {
 #'     \item{DB}{Disturbance (of any intensity)}
 #'     \item{EX}{Extratropical cyclone (of any intensity)}
 #'     \item{HU}{Tropical cyclone of hurricane intensity (> 64 knots)}
-#'     \item{LO}{A low that is neither a tropical cyclone, a subtropical cyclone, nor an extratropical cyclone (of any intensity)}
-#'     \item{SD}{Subtropical cyclone of subtropical depression intensity (< 34 knots)}
-#'     \item{SS}{Subtropical cyclone of subtropical storm intensity (> 34 knots)}
+#'     \item{LO}{A low that is neither a tropical cyclone, a subtropical
+#'               cyclone, nor an extratropical cyclone (of any intensity)}
+#'     \item{SD}{Subtropical cyclone of subtropical depression intensity
+#'               (< 34 knots)}
+#'     \item{SS}{Subtropical cyclone of subtropical storm intensity
+#'               (> 34 knots)}
 #'     \item{TD}{Tropical cyclone of tropical depression intensity (< 34 knots)}
 #'     \item{TS}{Tropical cyclone of tropical storm intensity (34-63 knots)}
 #'     \item{WV}{Tropical Wave (of any intensity)}

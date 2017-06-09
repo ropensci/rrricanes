@@ -42,6 +42,17 @@ test_that("Lat/Lon is not numeric", {
     expect_error(convert_lat_lon("93.1N", "N"), "x is not numeric")
 })
 
+## ---- get_url_contents() -----------------------------------------------------
+test_that("Test get_url_contents()", {
+    expect_error(get_url_contents("http://httpbin.org/delay/1"),
+                 "Timeout was reached")
+    # Test expected return
+    load(system.file("extdata", "df.get_url_contents.Rda",
+                     package = "rrricanes"))
+    expect_equal(get_url_contents("http://httpbin.org/delay/0"),
+                     df.get_url_contents)
+})
+
 ## ---- knots_to_mph() ---------------------------------------------------------
 test_that("Knots to Miles per Hour", {
     expect_equal(knots_to_mph(91), 104.72093)
@@ -58,14 +69,6 @@ test_that("Millibars to Inches", {
 test_that("test saffir()", {
     expect_identical(saffir(c(32, 45, 70, 90, 110, 125, 140)),
                      c("TD", "TS", "HU1", "HU2", "HU3", "HU4", "HU5"))
-})
-
-## ---- status() ---------------------------------------------------------------
-y <- lubridate::year(Sys.Date()) + 1
-test_that("URL Status", {
-    expect_warning(
-        status(u = sprintf("http://www.nhc.noaa.gov/archive/%d/", y)),
-        sprintf("URL unavailable. http://www.nhc.noaa.gov/archive/%d/", y))
 })
 
 ## ---- status_abbr_to_str() ---------------------------------------------------

@@ -1,5 +1,11 @@
 context("Get Storm Data")
 
+# Set timeout options
+opt.timeout <- getOption("rrricanes.http_timeout")
+opt.attempts <- getOption("rrricanes.http_attempts")
+options("rrricanes.http_timeout" = 1)
+options("rrricanes.http_attempts" = 5)
+
 ## ---- Base Data --------------------------------------------------------------
 ## ---- * 2008, AL -------------------------------------------------------------
 df.al_2017_storm_data <- get_storms(year = 2017, basin = "AL") %>%
@@ -77,3 +83,7 @@ test_that("load_storm_data()", {
                        "Hr120SE50", "Hr120SW50", "Hr120NW50", "Hr120NE34",
                        "Hr120SE34", "Hr120SW34", "Hr120NW34"))
 })
+
+# Reset options
+options("rrricanes.http_timeout" = opt.timeout)
+options("rrricanes.http_attempts" = opt.attempts)

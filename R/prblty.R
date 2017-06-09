@@ -13,11 +13,8 @@
 #' @export
 get_prblty <- function(link) {
 
-    # Check status of link(s)
-    valid.link <- purrr::map_chr(link, status) %>% stats::na.omit()
-
     # Get all products for the current storm
-    products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
+    products <- purrr::map(link, get_products) %>% purrr::flatten_chr()
 
     # Filter out prblty products
     products <- filter_prblty(products)

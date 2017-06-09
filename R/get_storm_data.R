@@ -29,7 +29,8 @@ get_products <- function(link) {
 #' @return page content of archive page
 #' @keywords internal
 get_storm_content <- function(link) {
-    return(xml2::read_html(link) %>% rvest::html_nodes(xpath = "//td//a"))
+    contents <- get_url_contents(link) %>% rvest::html_nodes(xpath = "//td//a")
+    return(contents)
 }
 
 #' @title get_storm_data

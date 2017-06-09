@@ -14,11 +14,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - `status_abbr_to_str` converts storm status abbreviations (i.e., TD, TS, HU) to string.
   - `saffir` returns Saffir-Simpson classification of tropical cyclones; abbreviated.
   - `twoal` and `twoep` for Atlantic and east Pacific tropical weather outlooks.
+  - Added options `rrricanes.http_timeout` and `rrricanes.http_attempts` to give user more control over failures.
 
 ### Changed
   - `get_storm_data` now takes link as first parameter for chaining. Returns a list of dataframes for each product.
   - `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr` have been added to replaced now-removed `fstadv_split()`.
   - Completed package top-level documentation.
+  
 
 ### Removed
   - `fstadv_split`. Dataframe can be split if desired by user. 

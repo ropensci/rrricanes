@@ -1,5 +1,11 @@
 context("Scrapers")
 
+# Set timeout options
+opt.timeout <- getOption("rrricanes.http_timeout")
+opt.attempts <- getOption("rrricanes.http_attempts")
+options("rrricanes.http_timeout" = 1)
+options("rrricanes.http_attempts" = 5)
+
 ## ---- Status -----------------------------------------------------------------
 test_that("Status", {
     ## ---- * Tropical Storm Alex, Forecast/Advisory 1
@@ -100,3 +106,7 @@ test_that("Key", {
     expect_identical(scrape_header(scrape_contents(link = url), ret = "key"),
                      "AL151999")
 })
+
+# Reset options
+options("rrricanes.http_timeout" = opt.timeout)
+options("rrricanes.http_attempts" = opt.attempts)
