@@ -42,6 +42,28 @@
 #' exist. As of this writing it is up-to-date but caution is advised for active
 #' cyclones. Use the above functions for the most up-to-date data as a fallback.
 #'
+#' @section Package Options:
+#'
+#' \code{dplyr.show_progress} displays the dplyr progress bar when scraping raw
+#' product datasets. In \code{\link{get_storms}}, it is based on the number of
+#' years being requested. In the product functions (i.e.,
+#' \code{\link{get_fstadv}}) it is based on the number of advisories. It can be
+#' misleading when calling \code{\link{get_storm_data}} because it shows the
+#' progress of working through a storm's product advisories but will reset on
+#' new products/storms.
+#'
+#' \code{rrricanes.working_msg} is set to FALSE by default. When TRUE, it will
+#' list the current storm, advisory and date being worked.
+#'
+#' \code{rrricanes.http_timeout} will set a timeout value in seconds. Often
+#' when scraping raw datasets the connection may time out. Use this option if
+#' this becomes an issue.
+#'
+#' \code{rrricanes.http_attempts} will control the maximum number of attempts to
+#' get a dataset. Default is 3 but no more than 5 attempts are permitted. If
+#' \code{rrricanes.http_timeout} is reached, `rrricanes` will reattempt until
+#' the value of \code{rrricanes.http_attempts} is reached.
+#'
 #' @docType package
 #' @name rrricanes
 NULL
@@ -50,7 +72,9 @@ NULL
 
 .onLoad <- function(libname, pkgname) {
     op <- options()
-    op.rrricanes <- list(rrricanes.working_msg = FALSE)
+    op.rrricanes <- list(rrricanes.working_msg = FALSE,
+                         rrricanes.http_timeout = 1,
+                         rrricanes.http_attempts = 3)
     toset <- !(names(op.rrricanes) %in% names(op))
     if (any(toset)) options(op.rrricanes[toset])
     invisible()
