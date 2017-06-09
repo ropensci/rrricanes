@@ -27,6 +27,53 @@ of Atlantic ("AL") or East Pacific ("EP").
 
 \section{Getting Storm Data}{
 
-To be written...
+
+\code{\link{get_storm_data}} can be used to select multiple products,
+multiple storms and from multiple basins. You can also use
+\code{\link{get_fstadv}} for Forecast/Advisory products,
+\code{\link{get_wndprb}} for Wind Speed Probabilities (cyclones >= 2006; for
+cyclones <= 2005 use \code{\link{get_prblty}}).
+
+Additional text products are:
+\describe{
+  \item{\code{\link{get_discus}}}{Storm Discussions}
+  \item{\code{\link{get_posest}}}{Position Estimates. Rare and used generally
+    for threatening cyclones.}
+  \item{\code{\link{get_public}}}{Public Advisory. General non-structured
+    information exists in these products.}
+  \item{\code{\link{get_update}}}{Updates. Generally issued when a cyclone
+    undergoes a sudden change that requires immediate notice.}
+}
+
+The products above may take some time to load if the NHC website is slow (as
+is often the case, unfortunately). You can access post-scraped datasets with
+\code{\link{load_storm_data}}. Currently only annual summaries,
+forecast/advisory, strike probabilities and wind speed probability products
+exist. As of this writing it is up-to-date but caution is advised for active
+cyclones. Use the above functions for the most up-to-date data as a fallback.
+}
+
+\section{Package Options}{
+
+
+\code{dplyr.show_progress} displays the dplyr progress bar when scraping raw
+product datasets. In \code{\link{get_storms}}, it is based on the number of
+years being requested. In the product functions (i.e.,
+\code{\link{get_fstadv}}) it is based on the number of advisories. It can be
+misleading when calling \code{\link{get_storm_data}} because it shows the
+progress of working through a storm's product advisories but will reset on
+new products/storms.
+
+\code{rrricanes.working_msg} is set to FALSE by default. When TRUE, it will
+list the current storm, advisory and date being worked.
+
+\code{rrricanes.http_timeout} will set a timeout value in seconds. Often
+when scraping raw datasets the connection may time out. Use this option if
+this becomes an issue.
+
+\code{rrricanes.http_attempts} will control the maximum number of attempts to
+get a dataset. Default is 3 but no more than 5 attempts are permitted. If
+\code{rrricanes.http_timeout} is reached, `rrricanes` will reattempt until
+the value of \code{rrricanes.http_attempts} is reached.
 }
 

@@ -23,12 +23,6 @@ build_archive_df <- function(link, basin = c("AL", "EP"), p) {
         archive_link <- year_link
     }
 
-    # Test link
-    valid.link <- status(archive_link)
-    valid.link <- stats::na.omit(valid.link)
-    if (length(valid.link) == 0)
-        stop(sprintf("Invalid URL. %s", archive_link))
-
     l <- purrr::map(basin, extract_storms, link = archive_link)
 
     df <- purrr::map_df(l, dplyr::bind_rows)
@@ -66,6 +60,8 @@ extract_storms <- function(basin, link) {
     # Get year
     year <- extract_year_archive_link(link)
 
+    contents <- get_url_contents(link)
+
     if (basin == "AL") {
         xp <- "//td[(((count(preceding-sibling::*) + 1) = 1) and parent::*)]//a"
     } else if (basin == "EP") {
@@ -76,8 +72,7 @@ extract_storms <- function(basin, link) {
 
     df <- create_df_archives()
 
-    col <- link %>%
-        xml2::read_html() %>%
+    col <- contents %>%
         rvest::html_nodes(xpath = xp)
 
     col.links <- paste0(

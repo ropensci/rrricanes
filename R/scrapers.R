@@ -19,18 +19,15 @@ scrape_adv_num <- function(header) {
 #' @keywords internal
 scrape_contents <- function(link) {
 
-    link <- purrr::map_chr(link, status) %>% stats::na.omit()
-
     if (length(link) == 0)
         stop("No valid links.")
 
-    contents <- link %>%
-        xml2::read_html() %>%
+    contents <- get_url_contents(link) %>%
         rvest::html_nodes(xpath = "//pre") %>%
         rvest::html_text()
 
     if (purrr::is_empty(contents))
-        contents <- link %>% xml2::read_html() %>% rvest::html_text()
+        contents <- get_url_contents(link) %>% rvest::html_text()
 
     return(contents)
 

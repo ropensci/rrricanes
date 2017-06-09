@@ -1,4 +1,4 @@
-rrricanes 0.1.1 (yyyy-mm-dd)
+rrricanes 0.1.2 (2017-06-08)
 ============================
 
 ### NEW FEATURES
@@ -9,10 +9,17 @@ rrricanes 0.1.1 (yyyy-mm-dd)
 
 * `load_storm_data` accesses pre-scraped datasets and returns requested products through the github repo `rrricanesdata`. This was done to make it quicker to get data. It should not be relied on to get the most immediate data for current storms. However, it should be fairly up-to-date. Original functions can be used if for some reason immediate data access is needed.
 
+* `saffir` returns Saffir-Simpson classification of tropical cyclones; abbreviated.
+
+* `status_abbr_to_str` converts storm status abbreviations (i.e., TD, TS, HU) to string.
+
+* `twoal` and `twoep` parse tropical weather outlook XML files. Gives current status, if any, of areas of interest in either basin.
+
 ### MINOR IMPROVEMENTS
 
 * Modified numerous regex patterns to ensure data quality.
 * `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr` have been added to replaced now-removed `fstadv_split()`.
+* Added loop to make multiple attempts at extracting contents from NHC archives. Options `rrricanes.http_timeout` and `rrricanes.http_attempts` added to give user more control over this. Default is 3 attempts with no more than 5 permitted.
 
 ### BUG FIXES
 
