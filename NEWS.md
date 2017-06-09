@@ -1,4 +1,4 @@
-rrricanes 0.1.1 (yyyy-mm-dd)
+rrricanes 0.1.1 (2017-06-08)
 ============================
 
 ### NEW FEATURES
@@ -8,6 +8,12 @@ rrricanes 0.1.1 (yyyy-mm-dd)
 * `get_storm_data` can now be chained to other commands and returns a list of dataframes.
 
 * `load_storm_data` accesses pre-scraped datasets and returns requested products through the github repo `rrricanesdata`. This was done to make it quicker to get data. It should not be relied on to get the most immediate data for current storms. However, it should be fairly up-to-date. Original functions can be used if for some reason immediate data access is needed.
+
+* `saffir` returns Saffir-Simpson classification of tropical cyclones; abbreviated.
+
+* `status_abbr_to_str` converts storm status abbreviations (i.e., TD, TS, HU) to string.
+
+* `twoal` and `twoep` parse tropical weather outlook XML files. Gives current status, if any, of areas of interest in either basin.
 
 ### MINOR IMPROVEMENTS
 

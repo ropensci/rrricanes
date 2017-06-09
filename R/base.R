@@ -17,7 +17,30 @@
 #' }
 #'
 #' @section Getting Storm Data:
-#' To be written...
+#'
+#' \code{\link{get_storm_data}} can be used to select multiple products,
+#' multiple storms and from multiple basins. You can also use
+#' \code{\link{get_fstadv}} for Forecast/Advisory products,
+#' \code{\link{get_wndprb}} for Wind Speed Probabilities (cyclones >= 2006; for
+#' cyclones <= 2005 use \code{\link{get_prblty}}).
+#'
+#' Additional text products are:
+#' \describe{
+#'   \item{\code{\link{get_discus}}}{Storm Discussions}
+#'   \item{\code{\link{get_posest}}}{Position Estimates. Rare and used generally
+#'     for threatening cyclones.}
+#'   \item{\code{\link{get_public}}}{Public Advisory. General non-structured
+#'     information exists in these products.}
+#'   \item{\code{\link{get_update}}}{Updates. Generally issued when a cyclone
+#'     undergoes a sudden change that requires immediate notice.}
+#' }
+#'
+#' The products above may take some time to load if the NHC website is slow (as
+#' is often the case, unfortunately). You can access post-scraped datasets with
+#' \code{\link{load_storm_data}}. Currently only annual summaries,
+#' forecast/advisory, strike probabilities and wind speed probability products
+#' exist. As of this writing it is up-to-date but caution is advised for active
+#' cyclones. Use the above functions for the most up-to-date data as a fallback.
 #'
 #' @docType package
 #' @name rrricanes
@@ -111,12 +134,22 @@ month_str_to_num <- function(m) {
 }
 
 #' @title saffir
-#' @description Return category of storm based on wind. Assumes storm is a
-#' cyclone. Saffir-Simpson Hurricane Scale does not apply to non-tropical storms.
+#' @description Return category of tropical cyclone based on wind. Saffir-
+#' Simpson Hurricane Scale does not apply to non-tropical cyclones.
 #' @param x Vector of wind speed values.
-#' @keywords internal
+#' @examples
+#' saffir(c(32, 45, 70, 90, 110, 125, 140))
+#' @export
 saffir <- function(x) {
-    return(NULL)
+    y <- character(length = length(x))
+    y[x <= 33] <- "TD"
+    y[dplyr::between(x, 34, 64)] <- "TS"
+    y[dplyr::between(x, 65, 83)] <- "HU1"
+    y[dplyr::between(x, 84, 95)] <- "HU2"
+    y[dplyr::between(x, 96, 113)] <- "HU3"
+    y[dplyr::between(x, 114, 134)] <- "HU4"
+    y[x >= 135] <- "HU5"
+    return(y)
 }
 
 #' @title status
