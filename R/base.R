@@ -17,7 +17,52 @@
 #' }
 #'
 #' @section Getting Storm Data:
-#' To be written...
+#'
+#' \code{\link{get_storm_data}} can be used to select multiple products,
+#' multiple storms and from multiple basins. You can also use
+#' \code{\link{get_fstadv}} for Forecast/Advisory products,
+#' \code{\link{get_wndprb}} for Wind Speed Probabilities (cyclones >= 2006; for
+#' cyclones <= 2005 use \code{\link{get_prblty}}).
+#'
+#' Additional text products are:
+#' \describe{
+#'   \item{\code{\link{get_discus}}}{Storm Discussions}
+#'   \item{\code{\link{get_posest}}}{Position Estimates. Rare and used generally
+#'     for threatening cyclones.}
+#'   \item{\code{\link{get_public}}}{Public Advisory. General non-structured
+#'     information exists in these products.}
+#'   \item{\code{\link{get_update}}}{Updates. Generally issued when a cyclone
+#'     undergoes a sudden change that requires immediate notice.}
+#' }
+#'
+#' The products above may take some time to load if the NHC website is slow (as
+#' is often the case, unfortunately). You can access post-scraped datasets with
+#' \code{\link{load_storm_data}}. Currently only annual summaries,
+#' forecast/advisory, strike probabilities and wind speed probability products
+#' exist. As of this writing it is up-to-date but caution is advised for active
+#' cyclones. Use the above functions for the most up-to-date data as a fallback.
+#'
+#' @section Package Options:
+#'
+#' \code{dplyr.show_progress} displays the dplyr progress bar when scraping raw
+#' product datasets. In \code{\link{get_storms}}, it is based on the number of
+#' years being requested. In the product functions (i.e.,
+#' \code{\link{get_fstadv}}) it is based on the number of advisories. It can be
+#' misleading when calling \code{\link{get_storm_data}} because it shows the
+#' progress of working through a storm's product advisories but will reset on
+#' new products/storms.
+#'
+#' \code{rrricanes.working_msg} is set to FALSE by default. When TRUE, it will
+#' list the current storm, advisory and date being worked.
+#'
+#' \code{rrricanes.http_timeout} will set a timeout value in seconds. Often
+#' when scraping raw datasets the connection may time out. Use this option if
+#' this becomes an issue.
+#'
+#' \code{rrricanes.http_attempts} will control the maximum number of attempts to
+#' get a dataset. Default is 3 but no more than 5 attempts are permitted. If
+#' \code{rrricanes.http_timeout} is reached, `rrricanes` will reattempt until
+#' the value of \code{rrricanes.http_attempts} is reached.
 #'
 #' @docType package
 #' @name rrricanes
@@ -27,7 +72,9 @@ NULL
 
 .onLoad <- function(libname, pkgname) {
     op <- options()
-    op.rrricanes <- list(rrricanes.working_msg = FALSE)
+    op.rrricanes <- list(rrricanes.working_msg = FALSE,
+                         rrricanes.http_timeout = 1,
+                         rrricanes.http_attempts = 3)
     toset <- !(names(op.rrricanes) %in% names(op))
     if (any(toset)) options(op.rrricanes[toset])
     invisible()
@@ -67,6 +114,27 @@ extract_year_archive_link <- function(link) {
     # Year is listed in link towards the end surrounded by slashes.
     year <- as.numeric(stringr::str_match(link, '/([:digit:]{4})/')[,2])
     return(year)
+}
+
+#' @title get_url_contents
+#' @description Get contents from URL
+#' @details This function primarily is reserved for extracting the contents of
+#' the individual products \(thought it can be used in other instances\). Often,
+#' there are timeout issues. This is an attempt to try to work around that.
+#' @param link URL to download
+#' @keywords internal
+get_url_contents <- function(link) {
+    # Try to establish connection three times with timeout of 3 seconds
+    max_attempts <- getOption("rrricanes.http_attempts")
+    if (max_attempts > 5) max_attempts <- 5
+    for (i in seq(1, max_attempts)) {
+        safe_GET <- purrr::safely(httr::GET)
+        contents <- safe_GET(url = link,
+                             httr::timeout(getOption("rrricanes.http_timeout")))
+        if (!is.null(contents$result))
+            return(xml2::read_html(x = contents$result))
+    }
+    stop(contents$error$message, call. = TRUE)
 }
 
 #' @title get_nhc_link
@@ -111,29 +179,22 @@ month_str_to_num <- function(m) {
 }
 
 #' @title saffir
-#' @description Return category of storm based on wind. Assumes storm is a
-#' cyclone. Saffir-Simpson Hurricane Scale does not apply to non-tropical storms.
+#' @description Return category of tropical cyclone based on wind. Saffir-
+#' Simpson Hurricane Scale does not apply to non-tropical cyclones.
 #' @param x Vector of wind speed values.
-#' @keywords internal
+#' @examples
+#' saffir(c(32, 45, 70, 90, 110, 125, 140))
+#' @export
 saffir <- function(x) {
-    return(NULL)
-}
-
-#' @title status
-#' @description Test URL status.
-#' @details Return URL if status is 'OK'. Otherwise, return NA and print
-#' failed URL.
-#' @param u URL to test
-#' @return URL if result is 'OK', otherwise, NA.
-#' @keywords internal
-status <- function(u) {
-    stat <- httr::http_status(httr::GET(u))
-    if (stat$reason == 'OK') {
-        return(u)
-    } else {
-        warning(sprintf("URL unavailable. %s", u))
-        return(NA)
-    }
+    y <- character(length = length(x))
+    y[x <= 33] <- "TD"
+    y[dplyr::between(x, 34, 64)] <- "TS"
+    y[dplyr::between(x, 65, 83)] <- "HU1"
+    y[dplyr::between(x, 84, 95)] <- "HU2"
+    y[dplyr::between(x, 96, 113)] <- "HU3"
+    y[dplyr::between(x, 114, 134)] <- "HU4"
+    y[x >= 135] <- "HU5"
+    return(y)
 }
 
 #' @title status_abbr_to_str
@@ -144,9 +205,12 @@ status <- function(u) {
 #'     \item{DB}{Disturbance (of any intensity)}
 #'     \item{EX}{Extratropical cyclone (of any intensity)}
 #'     \item{HU}{Tropical cyclone of hurricane intensity (> 64 knots)}
-#'     \item{LO}{A low that is neither a tropical cyclone, a subtropical cyclone, nor an extratropical cyclone (of any intensity)}
-#'     \item{SD}{Subtropical cyclone of subtropical depression intensity (< 34 knots)}
-#'     \item{SS}{Subtropical cyclone of subtropical storm intensity (> 34 knots)}
+#'     \item{LO}{A low that is neither a tropical cyclone, a subtropical
+#'               cyclone, nor an extratropical cyclone (of any intensity)}
+#'     \item{SD}{Subtropical cyclone of subtropical depression intensity
+#'               (< 34 knots)}
+#'     \item{SS}{Subtropical cyclone of subtropical storm intensity
+#'               (> 34 knots)}
 #'     \item{TD}{Tropical cyclone of tropical depression intensity (< 34 knots)}
 #'     \item{TS}{Tropical cyclone of tropical storm intensity (34-63 knots)}
 #'     \item{WV}{Tropical Wave (of any intensity)}

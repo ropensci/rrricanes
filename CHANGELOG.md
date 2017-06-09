@@ -11,10 +11,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - rrricanes.working_msg option to show current working advisory.
   - `tracking_chart()` for a base world plot. `al_tracking_chart()` for chart centered on Atlantic basin. `ep_tracking_chart()` for chart centered on northeast Pacific.
   - `load_storm_data()` helps get datasets that have already been scraped and processed. Designed to make it more efficient to get data faster.
+  - `status_abbr_to_str` converts storm status abbreviations (i.e., TD, TS, HU) to string.
+  - `saffir` returns Saffir-Simpson classification of tropical cyclones; abbreviated.
+  - `twoal` and `twoep` for Atlantic and east Pacific tropical weather outlooks.
+  - Added options `rrricanes.http_timeout` and `rrricanes.http_attempts` to give user more control over failures.
 
 ### Changed
   - `get_storm_data` now takes link as first parameter for chaining. Returns a list of dataframes for each product.
   - `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr` have been added to replaced now-removed `fstadv_split()`.
+  - Completed package top-level documentation.
+  
 
 ### Removed
   - `fstadv_split`. Dataframe can be split if desired by user. 

@@ -30,10 +30,7 @@ create_df_public <- function() {
 #' @export
 get_public <- function(link) {
 
-    # Check status of link(s)
-    valid.link <- purrr::map_chr(link, status) %>% stats::na.omit()
-
-    products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
+    products <- purrr::map(link, get_products) %>% purrr::flatten_chr()
 
     products <- filter_public(products)
 

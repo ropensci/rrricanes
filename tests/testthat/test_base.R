@@ -34,11 +34,23 @@ test_that("Convert Latitude, Longitude", {
     expect_identical(convert_lat_lon(93.1, "S"), as.numeric(-93.1))
     expect_identical(convert_lat_lon(179.0, "E"), as.numeric(179.0))
     expect_identical(convert_lat_lon(179, "W"), as.numeric(-179))
+    expect_error(convert_lat_lon(179, "X"), "y must be")
 })
 
 ## ---- * Errors ---------------------------------------------------------------
 test_that("Lat/Lon is not numeric", {
     expect_error(convert_lat_lon("93.1N", "N"), "x is not numeric")
+})
+
+## ---- get_url_contents() -----------------------------------------------------
+test_that("Test get_url_contents()", {
+    expect_error(get_url_contents("http://httpbin.org/delay/1"),
+                 "Timeout was reached")
+    # Test expected return
+    load(system.file("extdata", "df.get_url_contents.Rda",
+                     package = "rrricanes"))
+    expect_equal(get_url_contents("http://httpbin.org/delay/0"),
+                     df.get_url_contents)
 })
 
 ## ---- knots_to_mph() ---------------------------------------------------------
@@ -53,10 +65,21 @@ test_that("Millibars to Inches", {
     expect_equal(mb_to_in(888), 26.222624967048)
 })
 
-## ---- status() ---------------------------------------------------------------
-y <- lubridate::year(Sys.Date()) + 1
-test_that("URL Status", {
-    expect_warning(
-        status(u = sprintf("http://www.nhc.noaa.gov/archive/%d/", y)),
-        sprintf("URL unavailable. http://www.nhc.noaa.gov/archive/%d/", y))
+## ---- saffir() ---------------------------------------------------------------
+test_that("test saffir()", {
+    expect_identical(saffir(c(32, 45, 70, 90, 110, 125, 140)),
+                     c("TD", "TS", "HU1", "HU2", "HU3", "HU4", "HU5"))
+})
+
+## ---- status_abbr_to_str() ---------------------------------------------------
+test_that("test status_abbr_to_str()", {
+    expect_identical(status_abbr_to_str("TD"), "Tropical Depression")
+    expect_identical(status_abbr_to_str("TS"), "Tropical Storm")
+    expect_identical(status_abbr_to_str("HU"), "Hurricane")
+    expect_identical(status_abbr_to_str("EX"), "Extratropical Cyclone")
+    expect_identical(status_abbr_to_str("SD"), "Subtropical Depression")
+    expect_identical(status_abbr_to_str("SS"), "Subtropical Storm")
+    expect_identical(status_abbr_to_str("LO"), "Low")
+    expect_identical(status_abbr_to_str("WV"), "Tropical Wave")
+    expect_identical(status_abbr_to_str("DB"), "Disturbance")
 })

@@ -1,5 +1,11 @@
 context("Position Estimates (posest)")
 
+# Set timeout options
+opt.timeout <- getOption("rrricanes.http_timeout")
+opt.attempts <- getOption("rrricanes.http_attempts")
+options("rrricanes.http_timeout" = 1)
+options("rrricanes.http_attempts" = 5)
+
 ## ---- 2008, AL ---------------------------------------------------------------
 al2008 <- get_storms(year = 2008, basin = "AL") %>% dplyr::select(Link)
 
@@ -25,3 +31,7 @@ test_that("Dataframe Skeleton", {
 test_that("Test get_posest()", {
     expect_identical(al092008.posest, df.al092008.posest)
 })
+
+# Reset options
+options("rrricanes.http_timeout" = opt.timeout)
+options("rrricanes.http_attempts" = opt.attempts)

@@ -10,7 +10,9 @@ saffir(x)
 \item{x}{Vector of wind speed values.}
 }
 \description{
-Return category of storm based on wind. Assumes storm is a
-cyclone. Saffir-Simpson Hurricane Scale does not apply to non-tropical storms.
+Return category of tropical cyclone based on wind. Saffir-
+Simpson Hurricane Scale does not apply to non-tropical cyclones.
 }
-\keyword{internal}
+\examples{
+saffir(c(32, 45, 70, 90, 110, 125, 140))
+}
