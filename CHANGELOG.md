@@ -4,14 +4,31 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.1.0.1] - 2017-05-31
+## Unreleased
 
 ### Added
-  - NA
+  - dplyr.progress_bar for all products
+  - rrricanes.working_msg option to show current working advisory.
+  - `tracking_chart()` for a base world plot. `al_tracking_chart()` for chart centered on Atlantic basin. `ep_tracking_chart()` for chart centered on northeast Pacific.
+  - `load_storm_data()` helps get datasets that have already been scraped and processed. Designed to make it more efficient to get data faster.
 
 ### Changed
-  - Update package renamed to `rrricanes`
-  - `purrr::dmap` functions replaced with `purrr::map_df`
+  - `get_storm_data` now takes link as first parameter for chaining. Returns a list of dataframes for each product.
+  - `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr` have been added to replaced now-removed `fstadv_split()`.
+
+### Removed
+  - `fstadv_split`. Dataframe can be split if desired by user. 
+
+### Deprecated
+  - NA
+
+### Fixed
+  - Fix call to `get_storms` on some Linux distros which generated xpath_element fun error. (#67)
+  - Fix call to `get_storm_data`. Issue similar to #67. (#68)
+  - Fix call to `gis_wsp`. Call in `rvest::html_nodes` generated "xpath_attrib" error. Add test for `gis_wsp`. (#70)
+
+### Security
+  - NA
 
 ## [0.1.0] - 2017-05-12
 

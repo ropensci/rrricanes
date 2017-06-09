@@ -1,6 +1,10 @@
 rrricanes.Rproj
-rrricanes.Rcheck
 .RData
 .Rhistory
 .Rproj.user
 rrricanes.wiki/
+packrat/lib*/
+..Rcheck
+rrricanes.Rcheck
+datasets
+inst/doc

@@ -9,7 +9,7 @@ get_products <- function(link) {
 
     products <- get_storm_content(link) %>%
         rvest::html_attr("href") %>%
-        na.omit()
+        stats::na.omit()
 
     nhc_url <- get_nhc_link(withTrailingSlash = FALSE)
 
@@ -29,34 +29,13 @@ get_products <- function(link) {
 #' @return page content of archive page
 #' @keywords internal
 get_storm_content <- function(link) {
-
-    # Get year
-    year <- extract_year_archive_link(link)
-
-    # There are different layouts for various years. Have to work through it...
-    if (year <= 2001) {
-        page <- xml2::read_html(link) %>%
-            rvest::html_nodes('body') %>%
-            rvest::html_nodes('table') %>%
-            rvest::html_nodes('td') %>%
-            rvest::html_children()
-
-    } else {
-        page <- xml2::read_html(link) %>%
-            rvest::html_nodes('.center') %>%
-            rvest::html_nodes('.content') %>%
-            rvest::html_nodes('table') %>%
-            rvest::html_nodes('td') %>%
-            rvest::html_children()
-    }
-
-    return(page)
+    return(xml2::read_html(link) %>% rvest::html_nodes(xpath = "//td//a"))
 }
 
 #' @title get_storm_data
 #' @description Retrieve data from products.
 #' @details \code{get_storm_data} is a wrapper function to make it more
-#' convenient to access the various storm products.
+#'     convenient to access the various storm products.
 #'
 #' Types of products:
 #' \describe{
@@ -77,56 +56,109 @@ get_storm_content <- function(link) {
 #'   \item{windprb}{Wind Probability. Replace strike probabilities beginning in
 #'     the 2006 season. Nearly identical.}
 #' }
-#' @param ... Products to retrieve. c("discus", "fstadv", "posest", "public",
-#' "prblty", "update", "windprb")
-#' @param names By default product dataframes will be returned as shown in
-#' \code{...}. The names parameter gives a way to provide alternative names for
-#' the returned dataframes. Pass a named list where the name of each element
-#' is that of the product. See examples for more information.
-#' @param link to storm's archive page.
-#' @param msg Show link currently being worked. Default, FALSE.
-#' @return Dataframes for each of the products.
-#' @examples
-#' ## Get public advisories for Tropical Storm Charley, 1998
-#' \dontrun{
-#' get_storm_data("public",
-#'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
 #'
-#' ## Same as above but give alternate name.
-#' get_storm_data("public",
-#'                names = list("public" = "al.1998.charley.public"),
-#'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
-#' ## Get forecast/advisory and storm discussion
-#' get_storm_data("fstadv", "discus",
-#'                names = list("fstadv" = "al.1998.charley.fstadv",
-#'                             "discus" = "al.1998.charley.discus"),
-#'                link = "http://www.nhc.noaa.gov/archive/1998/1998CHARLEYadv.html")
+#' Progress bars are displayed by default. These can be turned off by setting
+#' the dplyr.show_progress to FALSE. Additionally, you can display messages for
+#' each advisory being worked by setting the rrricanes.working_msg to TRUE.
+#'
+#' @param link to storm's archive page.
+#' @param products Products to retrieve; discus, fstadv, posest, public,
+#'     prblty, update, and windprb.
+#' @return list of dataframes for each of the products.
+#' @examples
+#' \dontrun{
+#' ## Get public advisories for first storm of 2016 Atlantic season.
+#' get_storms(year = 2016, basin = "AL") %>%
+#'     slice(1) %>%
+#'     .$Link %>%
+#'     get_storm_data(products = "public")
+#' ## Get public advisories and storm discussions for first storm of 2017 Atlantic season.
+#' get_storms(year = 2017, basin = "AL") %>%
+#'     slice(1) %>%
+#'     .$Link %>%
+#'     get_storm_data(products = c("discus", "public"))
 #' }
 #' @export
-get_storm_data <- function(..., names = list(), link, msg = FALSE) {
+get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
+                                              "public", "prblty", "update",
+                                              "wndprb")) {
 
-    x <- list(...)
-    if (!(all(x %in% c("discus", "fstadv", "posest", "public",
-                       "prblty", "update", "wndprb"))) | length(x) == 0)
-        stop(paste0("Invalid products included. Only discus, fstadv, posest, ",
-                    "public, prblty, update, wndprb are valid options.",
-                    "See ?get_storm_data for more info."))
+    products <- match.arg(products, several.ok = TRUE)
 
-    if (is.null(link))
-        stop("No link provided.")
+    ds <- purrr::map(products, .f = function(x) {
+        sprintf("get_%s", x) %>%
+            purrr::invoke_map(.x = list(link = link)) %>%
+            purrr::flatten_df()})
+    names(ds) <- products
+    return(ds)
+}
 
-    x <- unlist(x)
+#' @title load_storm_data
+#' @description Load storm and year data from data repository.
+#' @details This function is designed to give quicker access to storm data.
+#' Using any of the product functions scrapes data from the NHC archives.
+#' However, this can be somewhat time-consuming. Using this function just takes
+#' a different route to datasets that have already been scraped. So obtaining
+#' data is significantly faster.
+#'
+#' I will not guarantee current storms will be up-to-date. But I will work on a
+#' setup that does so as quickly as possible.
+#'
+#' @param years Numeric vector of one or multiple years between 1998 and current
+#' year.
+#' @param basins One or both of AL and EP.
+#' @param products NULL, one or many of discus, fstadv, posest, prblty, public, update
+#' and wndprb. See \link{get_storm_data} for a description of each of the
+#' products. If products is NULL then a summary table of the year's storms is
+#' returned. If a product is requested but not returned then the product does
+#' not exist. For example, prblty does not exist for storms after 2005. And
+#' short-lived storms may not have wndprb products.
+#' @examples
+#' \dontrun{
+#' # Load year summary data for 2017, both basins
+#' load_storm_data(years = 2017)
+#'
+#' # Load multiple years, forecast/advisory data for AL storms.
+#' load_storm_data(years = 2015:2016, basins = "AL", products = "fstadv")
+#'
+#' # Load fstadv and wndprb for 2015 Atlantic storms.
+#' load_storm_data(years = 2015, basins = "AL", products = c("fstadv", "wndprb"))
+#' }
+#' @export
+load_storm_data <- function(years, basins = c("AL", "EP"), products = NULL) {
 
-    s <- sapply(x, function(z, n = names, l = link, m = msg){
-        f <- paste("get", z, sep = "_")
-        res <- do.call(f, args = list("link" = l, "msg" = m))
-        if (!is.null(n[[z]])) {
-            assign(n[z][[1]], res, envir = .GlobalEnv)
-        } else {
-            assign(z, res, envir = .GlobalEnv)
-        }
+    if (!(all(dplyr::between(years,
+                             1998,
+                             as.numeric(strftime(Sys.Date(), "%Y"))))))
+        stop("years must be between 1998 and current year")
+
+    if (!(all(basins %in% c("AL", "EP"))))
+        stop("basins must be one or both of AL, EP")
+
+    if (!is.null(products) & !(all(products %in% c("discus", "fstadv", "posest",
+                                               "prblty", "public", "update",
+                                               "wndprb"))))
+        stop("products must either be NULL or have at least one valid product")
+
+    base_url <- "https://github.com/timtrice/rrricanesdata/blob/master/"
+    purrr::map(.x = years, .f = function(year) {
+        purrr::map(.x = basins, .f = function(basin) {
+            if (purrr::is_empty(products)) {
+                # Load year summary data
+                data_url <- sprintf("%s/%s/%s%s.Rda", year, basin, basin, year)
+                link <- paste0(base_url, data_url, "?raw=true")
+                if (!httr::http_error(link))
+                    load(url(link), envir = .GlobalEnv)
+            } else {
+                purrr::map(.x = products, .f = function(product) {
+                    data_url <- sprintf("%s/%s/%s%s_%s.Rda", year, basin,
+                                        basin, year, product)
+                    link <- paste0(base_url, data_url, "?raw=true")
+                    if (!httr::http_error(link))
+                        load(url(link), envir = .GlobalEnv)
+                })
+            }
+        })
     })
-
     return(TRUE)
-
 }

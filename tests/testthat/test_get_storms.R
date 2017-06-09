@@ -1,4 +1,4 @@
-context("Getting Annual Archives")
+context("Get Storms")
 
 ## ---- URL Status -------------------------------------------------------------
 #' Test that annual archive links work. All results should return 'OK'.
@@ -15,7 +15,7 @@ test_that("URL Status", {
 })
 
 ## ---- HTML format ------------------------------------------------------------
-#' Test that annual archive page formats haven't changed. Spot check only.
+#' Test that annual archive page formats haven't changed.
 test_that("HTML format", {
 
     #' Extract text value in row(r), column(c) at link. Cell count goes left to

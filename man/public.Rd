@@ -4,12 +4,12 @@
 \alias{public}
 \title{public}
 \usage{
-public(link, msg = FALSE)
+public(link, p)
 }
 \arguments{
 \item{link}{Link to a storm's specific public advisory product.}
 
-\item{msg}{Display each link as being worked; default is FALSE}
+\item{p}{dplyr::progress_estimate.}
 }
 \value{
 Dataframe

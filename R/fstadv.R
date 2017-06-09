@@ -1,164 +1,32 @@
-#' @title create_df_fstadv
-#' @description Template for public advisory dataframe
-#' @return empty dataframe
-#' @seealso \code{\link{get_fstadv}}
-#' @keywords internal
-create_df_fstadv <- function() {
-    df <- tibble::data_frame(
-        "Key" = character(),
-        # Allow for intermediate advisories,
-        # i.e., "1A", "2", "2A"...
-        "Adv" = character(),
-        "Date" = as.POSIXct(character(), tz = "UTC"),
-        "Name" = character(),
-        "Status" = character(),
-        'Lat' = numeric(),
-        'Lon' = numeric(),
-        'Wind' = numeric(),
-        'Gust' = numeric(),
-        'Pressure' = numeric(),
-        'PosAcc' = numeric(),
-        'FwdDir' = numeric(),
-        'FwdSpeed' = numeric(),
-        'Eye' = numeric(),
-        "NE34" = numeric(),
-        "SE34" = numeric(),
-        "SW34" = numeric(),
-        "NW34" = numeric(),
-        "NE50" = numeric(),
-        "SE50" = numeric(),
-        "SW50" = numeric(),
-        "NW50" = numeric(),
-        "NE64" = numeric(),
-        "SE64" = numeric(),
-        "SW64" = numeric(),
-        "NW64" = numeric(),
-        "SeasNE" = numeric(),
-        "SeasSE" = numeric(),
-        "SeasSW" = numeric(),
-        "SeasNW" = numeric(),
-        "Hr12FcstDate" = as.POSIXct(character(), tz = "UTC"),
-        "Hr12Lat" = numeric(),
-        "Hr12Lon" = numeric(),
-        "Hr12Wind" = numeric(),
-        "Hr12Gust" = numeric(),
-        "Hr12NE34"  = numeric(),
-        "Hr12SE34"  = numeric(),
-        "Hr12SW34"  = numeric(),
-        "Hr12NW34"  = numeric(),
-        "Hr12NE50"  = numeric(),
-        "Hr12SE50"  = numeric(),
-        "Hr12SW50"  = numeric(),
-        "Hr12NW50"  = numeric(),
-        "Hr12NE64"  = numeric(),
-        "Hr12SE64"  = numeric(),
-        "Hr12SW64"  = numeric(),
-        "Hr12NW64"  = numeric(),
-        "Hr24FcstDate" = as.POSIXct(character(), tz = "UTC"),
-        "Hr24Lat" = numeric(),
-        "Hr24Lon" = numeric(),
-        "Hr24Wind" = numeric(),
-        "Hr24Gust" = numeric(),
-        "Hr24NE34"  = numeric(),
-        "Hr24SE34"  = numeric(),
-        "Hr24SW34"  = numeric(),
-        "Hr24NW34"  = numeric(),
-        "Hr24NE50"  = numeric(),
-        "Hr24SE50"  = numeric(),
-        "Hr24SW50"  = numeric(),
-        "Hr24NW50"  = numeric(),
-        "Hr24NE64"  = numeric(),
-        "Hr24SE64"  = numeric(),
-        "Hr24SW64"  = numeric(),
-        "Hr24NW64"  = numeric(),
-        "Hr36FcstDate" = as.POSIXct(character(), tz = "UTC"),
-        "Hr36Lat" = numeric(),
-        "Hr36Lon" = numeric(),
-        "Hr36Wind" = numeric(),
-        "Hr36Gust" = numeric(),
-        "Hr36NE34"  = numeric(),
-        "Hr36SE34"  = numeric(),
-        "Hr36SW34"  = numeric(),
-        "Hr36NW34"  = numeric(),
-        "Hr36NE50"  = numeric(),
-        "Hr36SE50"  = numeric(),
-        "Hr36SW50"  = numeric(),
-        "Hr36NW50"  = numeric(),
-        "Hr36NE64"  = numeric(),
-        "Hr36SE64"  = numeric(),
-        "Hr36SW64"  = numeric(),
-        "Hr36NW64"  = numeric(),
-        "Hr48FcstDate" = as.POSIXct(character(), tz = "UTC"),
-        "Hr48Lat" = numeric(),
-        "Hr48Lon" = numeric(),
-        "Hr48Wind" = numeric(),
-        "Hr48Gust" = numeric(),
-        "Hr48NE34"  = numeric(),
-        "Hr48SE34"  = numeric(),
-        "Hr48SW34"  = numeric(),
-        "Hr48NW34"  = numeric(),
-        "Hr48NE50"  = numeric(),
-        "Hr48SE50"  = numeric(),
-        "Hr48SW50"  = numeric(),
-        "Hr48NW50"  = numeric(),
-        "Hr48NE64"  = numeric(),
-        "Hr48SE64"  = numeric(),
-        "Hr48SW64"  = numeric(),
-        "Hr48NW64"  = numeric(),
-        "Hr72FcstDate" = as.POSIXct(character(), tz = "UTC"),
-        "Hr72Lat" = numeric(),
-        "Hr72Lon" = numeric(),
-        "Hr72Wind" = numeric(),
-        "Hr72Gust" = numeric(),
-        "Hr72NE34"  = numeric(),
-        "Hr72SE34"  = numeric(),
-        "Hr72SW34"  = numeric(),
-        "Hr72NW34"  = numeric(),
-        "Hr72NE50"  = numeric(),
-        "Hr72SE50"  = numeric(),
-        "Hr72SW50"  = numeric(),
-        "Hr72NW50"  = numeric(),
-        "Hr72NE64"  = numeric(),
-        "Hr72SE64"  = numeric(),
-        "Hr72SW64"  = numeric(),
-        "Hr72NW64"  = numeric(),
-        # No wind radius for 96 hours
-        "Hr96FcstDate" = as.POSIXct(character(), tz = "UTC"),
-        "Hr96Lat" = numeric(),
-        "Hr96Lon" = numeric(),
-        "Hr96Wind" = numeric(),
-        "Hr96Gust" = numeric(),
-        # No wind radius for 120 hours
-        "Hr120FcstDate" = as.POSIXct(character(), tz = "UTC"),
-        "Hr120Lat" = numeric(),
-        "Hr120Lon" = numeric(),
-        "Hr120Wind" = numeric(),
-        "Hr120Gust" = numeric())
-
-    return(df)
-}
-
 #' @title get_fstadv
 #' @description Return dataframe of forecast/advisory data.
+#' @details To disable the progress bar set option dplyr.show_progress to
+#'     FALSE. You can also enable messages to show the storm and advisory
+#'     currentlby being worked by setting the rrricanes.working_msg to TRUE.
 #' @param link URL to storm's archive page.
-#' @param msg Show link currently being worked. Default, FALSE.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
-get_fstadv <- function(link, msg = FALSE) {
+get_fstadv <- function(link) {
 
     # Check status of link(s)
-    valid.link <- sapply(link, status)
-    valid.link <- na.omit(valid.link)
-    if (length(valid.link) == 0)
-        stop("No valid links.")
+    valid.link <- purrr::map_chr(link, status) %>% stats::na.omit()
 
+    # Get all products for the current storm
     products <- purrr::map(valid.link, get_products) %>% purrr::flatten_chr()
 
-    products.fstadv <- purrr::map(filter_fstadv(products), fstadv)
+    # Filter out fstadv products
+    products <- filter_fstadv(products)
 
-    fstadv <- purrr::map_df(products.fstadv, dplyr::bind_rows)
+    # Set progress bar
+    p <- dplyr::progress_estimated(n = length(products))
 
-    return(fstadv)
+    # Work products
+    products.fstadv <- purrr::map(products, fstadv, p)
+
+    # Build final dataframe
+    df <- purrr::map_df(products.fstadv, dplyr::bind_rows)
+
+    return(df)
 
 }
 
@@ -190,24 +58,34 @@ get_fstadv <- function(link, msg = FALSE) {
 #'   \item{Eye}{Size of the eye in nautical miles, if available, or NA.}
 #' }
 #' @param link URL of a specific FORECAST/ADVISORY product
-#' @param msg Display each link as being worked; default is FALSE
+#' @param p dplyr::progress_estimate.
 #' @return Dataframe
 #' @seealso \code{\link{get_fstadv}}
 #' @keywords internal
-fstadv <- function(link, msg = FALSE) {
+fstadv <- function(link, p) {
 
-    contents <- scrape_contents(link, msg = msg)
+    p$pause(0.5)$tick()$print()
+
+    contents <- scrape_contents(link)
+
+    # Replace all carriage returns with empty string.
+    contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a public advisory product
-    if (!any(stringr::str_count(contents, c("MIATCMAT", "MIATCMEP"))))
+    if (!any(stringr::str_count(contents,
+                                c("MIATCMAT", "MIATCMEP", "[W]*TPA", "TCMAT",
+                                  "WTPZ", "HFOTCMEP", "HFOTCMCP"))))
         stop(sprintf("Invalid Forecast/Advisory link. %s", link))
-
-    df <- create_df_fstadv()
 
     status <- scrape_header(contents, ret = "status")
     name <- scrape_header(contents, ret = "name")
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
+
+    if (getOption("rrricanes.working_msg"))
+        message(sprintf("Working %s %s Forecast/Advisory #%s (%s)",
+                        status, name, adv, date))
+
     key <- scrape_header(contents, ret = "key")
     lat <- fstadv_lat(contents)
     lon <- fstadv_lon(contents)
@@ -219,21 +97,12 @@ fstadv <- function(link, msg = FALSE) {
     wind <- fstadv_winds(contents)
     gust <- fstadv_gusts(contents)
 
-    df <- df %>%
-        tibble::add_row("Status" = status,
-                        "Name" = name,
-                        "Adv" = adv,
-                        "Date" = date,
-                        "Key" = key,
-                        'Lat' = lat,
-                        'Lon' = lon,
-                        'Wind' = wind,
-                        'Gust' = gust,
-                        'Pressure' = pressure,
-                        'PosAcc' = posacc,
-                        'FwdDir' = fwd_dir,
-                        'FwdSpeed' = fwd_speed,
-                        'Eye' = eye)
+    df <- tibble::data_frame("Status" = status, "Name" = name, "Adv" = adv,
+                             "Date" = date, "Key" = key, "Lat" = lat,
+                             "Lon" = lon, "Wind" = wind, "Gust" = gust,
+                             "Pressure" = pressure, "PosAcc" = posacc,
+                             "FwdDir" = fwd_dir, "FwdSpeed" = fwd_speed,
+                             "Eye" = eye)
 
     # Add current wind radius
     wind_radius <- fstadv_wind_radius(contents, wind)
@@ -242,6 +111,15 @@ fstadv <- function(link, msg = FALSE) {
 
     # Add current sea radius
     seas <- fstadv_seas(contents, wind)
+    # AL161999 has two rows of Seas data for advisory 5. The second row is
+    # within the forecast area where typically does not exist. Assumption is a
+    # typo. Would like to save this into attributes or something...
+    if (all(!is.null(seas), nrow(seas) > 1)) {
+        warning(sprintf("Too many rows of sea data for %s %s #%s.\n%s",
+                        status, name, adv, seas[2:nrow(seas),]),
+                call.= FALSE)
+        seas <- seas[1,]
+    }
 
     df[, names(seas)] <- seas[, names(seas)]
 
@@ -267,227 +145,123 @@ fstadv_eye <- function(contents) {
     return(as.numeric(eye))
 }
 
-#' @title fstadv_extract_forecasts
-#' @description Extract all forecast data from FORECAST/ADVISORY product#'
-#' @param content text of FORECAST/ADVISORY product
-#' @return list of forecasts
-#' @keywords internal
-fstadv_extract_forecasts <- function(content) {
-
-    # First I want to get the groups of each FORECAST or OUTLOOK. I'll do some
-    # text manipulations to make pattern-finding easier.
-
-    # In some texts there is a space character between the returns. In others,
-    # none.
-    a <- stringr::str_replace_all(content, '\n[:blank:]*?\n', '\t')
-
-    # Now any newline characters I'll replace with a simple space
-    b <- stringr::str_replace_all(a, '[\n]{1}', ' ')
-
-    # Put the tab character back to newline
-    c <- stringr::str_replace_all(b, '\t', '\n')
-
-    # Remove any ellipses
-    d <- stringr::str_replace_all(c, '\\.\\.\\.', ' ')
-
-    # Some products have periods in them after KT or NW. Some don't. To be
-    # consistent, I'll remove them, too. But have to be careful not to remove
-    # those in Lat and Lon
-    e <- stringr::str_replace_all(d, 'KT\\.', 'KT')
-    f <- stringr::str_replace_all(e, 'NW\\.', 'NW')
-
-    # Extract all lines that begin with FORECAST VALID or OUTLOOK VALID and end
-    # with newline character
-    g <- stringr::str_match_all(f, (paste0('[:space:]*(?:FORECAST|OUTLOOK) VALID ',
-                                           '[[:alnum:] /\\.-]+')))
-
-    # at this point we *should* have all of our forecasts.
-    h <- unlist(g)
-
-    # Replace any extra verbiage like INLAND or EXTRATROPICAL
-    i <- stringr::str_replace_all(h, '([E|W])[A-Z ]+(MAX WIND)', '\\1 \\2')
-
-    return(i)
-
-}
-
 #' @title fstadv_fcst
-#' @description Retrieve forecast data from FORECAST/ADVISORY products. Loads into
-#'   respective dataframes (df_forecasts, df_forecast_winds)
+#' @description Retrieve forecast data from FORECAST/ADVISORY products. Loads
+#'   into respective dataframes (df_forecasts, df_forecast_winds)
 #' @param content text content of FORECAST/ADVISORY
 #' @param date Date value of current forecast/advisory product.
 #' @return boolean
 #' @keywords internal
 fstadv_forecasts <- function(content, date) {
 
-    # At this point all I'm doing is extracting every subset that begins with
-    # either FORECAST VALID or OUTLOOK VALID
-    ds <- fstadv_extract_forecasts(content)
+    ptn <- paste0("([:digit:]{2})/([:digit:]{2})([:digit:]{2})Z",
+                  "[:blank:]+([:digit:]{1,2}\\.[:digit:])([N|S])",
+                  "[:blank:]+([:digit:]{1,3}\\.[:digit:]{1})([E|W])",
+                  "[[:space:][:punct:][:alpha:]]+",
+                  "MAX WIND[:blank:]+([:digit:]{1,3})[:blank:]*KT",
+                  "[[:blank:][:punct:]]+GUSTS[:blank:]+",
+                  "([:digit:]{1,3})[:blank:]*KT[[:space:][:punct:]]+",
+                  "(?:64 KT[[:blank:][:punct:]]+",
+                  "([:digit:]{1,3})NE",
+                  "[:blank:]+([:digit:]{1,3})SE",
+                  "[:blank:]+([:digit:]{1,3})SW",
+                  "[:blank:]+([:digit:]{1,3})NW",
+                  "[[:punct:][:space:]]+)?",
+                  "(?:50 KT[[:blank:][:punct:]]+",
+                  "([:digit:]{1,3})NE",
+                  "[:blank:]+([:digit:]{1,3})SE",
+                  "[:blank:]+([:digit:]{1,3})SW",
+                  "[:blank:]+([:digit:]{1,3})NW",
+                  "[[:punct:][:space:]]+)?",
+                  "(?:34 KT[[:blank:][:punct:]]+",
+                  "([:digit:]{1,3})NE",
+                  "[:blank:]+([:digit:]{1,3})SE",
+                  "[:blank:]+([:digit:]{1,3})SW",
+                  "[:blank:]+([:digit:]{1,3})NW",
+                  "[[:punct:][:space:]]+)?")
 
-    # Break forecasts into a list by observation time; Extracts date/time to
-    # gusts (keys 2:9) and then wind fields, if avail (key 10)
-    ds <- fstadv_parse_forecasts(ds)
+    ds <- stringr::str_match_all(content, pattern = ptn)
 
     # If no forecasts, exit gracefully
-    if (length(ds) == 0)
+    if (all(purrr::map_lgl(ds, purrr::is_empty)))
         return(NULL)
 
-    # Reformat to load into dataframe
-    ds <- lapply(ds, data.frame, stringsAsFactors = FALSE)
+    df <- purrr::map_df(ds, tibble::as_data_frame)
 
-    # Load only from X2 (Date) to X10 (Gust)
-    df <- data.table::rbindlist(ds)[,2:11]
-    # Rename
-    data.table::setattr(df,
-                        'names',
-                        c('d', 'h', 'mi', 'lat', 'lath', 'lon', 'lonh', 'w',
-                          'g', 'wf'))
+    df$V1 <- NULL
 
-    # Start cleaning up
-    # ObDate
-    # Get current observation date. Will need month
+    quads <- c("NE", "SE", "SW", "NW")
+
+    df_names <- c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon", "LonHemi",
+                  "Wind", "Gust", paste0(quads, "64"), paste0(quads, "50"),
+                  paste0(quads, "34"))
+
+    names(df) <- df_names
+
+    df <- df %>%
+        dplyr::mutate_at(.cols = dplyr::vars(Date:Lat, Lon, Wind:NW34),
+                         .funs = as.numeric)
+
+    # Since we have no month or year must do some calculations. If forecast day
+    # is lower than current day then advance month by 1. If forecast month is
+    # less than current month, then advance year by one **and subtract 12 from
+    # month**. Otherwise, month will be number 13 which of course is invalid.
+
+    # Get current observation date
     ob_year <- lubridate::year(date)
     ob_month <- lubridate::month(date)
     ob_day <- lubridate::day(date)
 
-    df$d <- as.numeric(df$d) # Day
-    df$h <- as.numeric(df$h) # Hour
-    df$mi <- as.numeric(df$mi) # Minute
-    df$lat <- as.numeric(df$lat) # Latitude
-    df$lon <- as.numeric(df$lon) # Longitude
-    df$w <- as.numeric(df$w) # Wind
-    df$g <- as.numeric(df$g) # Gust
-
     # Here I account for the possibility of the forecast date crossing months
     # or even years
     df <- df %>%
-        dplyr::mutate(mo = ifelse(d < ob_day, ob_month + 1, ob_month),
-                      y = ifelse(mo < ob_month, ob_year + 1, ob_year),
-                      FcstDate = lubridate::ymd_hm(paste(paste(y, mo, d, sep = '-'),
-                                                         paste(h, mi, sep = ':'),
-                                                         sep = ' ')))
+        dplyr::mutate(Month = dplyr::if_else(Date < ob_day,
+                                             ob_month + 1,
+                                             ob_month),
+                      Year = dplyr::if_else(Month < ob_month,
+                                            ob_year + 1,
+                                            ob_year))
 
-    # Clean up lat, lath, lon, lonh. Though no storms should exist in southern
-    # hemisphere there will be some crossing from western hemi to east.
-    # Southern/Western hemi lat/lon are negative. Northern/Eastern are positive.
+    # In case of storms like Zeta (AL302005) where storm existed across multiple
+    # years, make sure the calculation above does not give a month greater than
+    # 12. If so, substract 12. In otherwords, going from December to January.
+    df <- df %>% dplyr::mutate(Month = dplyr::if_else(Month > 12,
+                                                      Month - 12,
+                                                      Month))
+
+    # Build FcstDate variable
     df <- df %>%
-        dplyr::mutate(Lat = ifelse(lath == 'S', lat * -1, lat), # Lat reformatted
-                      Lon = ifelse(lonh == 'W', lon * -1, lon)) # Lon reformatted
+        dplyr::mutate(FcstDate = lubridate::ymd_hm(
+            paste(paste(Year, Month, Date, sep = '-'),
+                  paste(Hour, Minute, sep = ':'),
+                  sep = ' ')))
 
-    # Finish renaming/reclassifying vars Wind and Gust, add Key, Adv, ObDate
+    # Clean up Latitude, Longitude
     df <- df %>%
-        dplyr::mutate(Wind = as.numeric(w), # reformatted
-                      Gust = as.numeric(g)) # reformatted
+        dplyr::mutate(Lat = ifelse(LatHemi == 'S', Lat * -1, Lat),
+                      Lon = ifelse(LonHemi == 'W', Lon * -1, Lon))
 
-    # Build forecasts dataframe into wide format
-    tmp <- df %>%
-        dplyr::select(FcstDate, Lat, Lon, Wind, Gust, wf)
+    # Rearrange, drop some vars
+    df <- df %>%
+        dplyr::select_(.dots = dplyr::vars(FcstDate, Lat, Lon, Wind:NW34))
 
-    n <- nrow(tmp)
+    df_names <- names(df)
 
-    tmp <- tmp %>% split(.$FcstDate)
+    fcst_periods <- paste0("Hr", c(12, 24, 36, 48, 72, 96, 120))
+    # Modify fcst_periods to lengt of df
+    fcst_periods <- fcst_periods[seq_len(nrow(df))]
 
-    tmp <- tmp %>% purrr::map2(1:n, function(a, b) {
-        # Here, send variable `wf` to function to spread across multiple cols.
-        if (tmp[[b]]$wf != "") {
-            wf <- fstadv_forecast_wind_radius(tmp[[b]]$wf)
-            tmp[[b]] <- dplyr::bind_cols(tmp[[b]], wf)
-        }
-        tmp[[b]]$wf <- NULL
-        if (b <= 4) {
-            newnames <- paste0("Hr", b * 12, names(tmp[[b]]))
-        } else if (b == 5) {
-            newnames <- paste0("Hr72", names(tmp[[b]]))
-        } else if (b == 6) {
-            newnames <- paste0("Hr96", names(tmp[[b]]))
-        } else if (b == 7) {
-            newnames <- paste0("Hr120", names(tmp[[b]]))
-        }
-        stats::setNames(tmp[[b]], newnames)
-    })
+    df <- df %>% split(.$FcstDate)
 
-    df_forecasts <- dplyr::bind_cols(tmp)
+    df <- purrr::map2(seq_along(df),
+                      fcst_periods,
+                      function(a, b) {
+                          stats::setNames(df[[a]], paste0(b, names(df[[a]])))
+                          })
 
+    df <- dplyr::bind_cols(df)
 
-    return(df_forecasts)
-
-}
-
-#' @title fstadv_forecast_wind_radius
-#' @description Separate wind field columns to columns by quadrant.
-#' @keywords internal
-fstadv_forecast_wind_radius <- function(df) {
-    # There are three fields of four quadrants each: 34KT, 50KT, and 64KT. The
-    # maximum wind field will always be listed first. For example, this may be
-    # in one product:
-    #
-    # 34 KT...60NE  60SE  60SW  60NW.
-    #
-    # And this may be in another:
-    #
-    # 50 KT...30NE  30SE  20SW  30NW.
-    # 34 KT...70NE  70SE  60SW  70NW.
-    #
-    # There will also be a 64KT field for hurricanes.
-    #
-    # The quadrants will be consistent.
-    #
-    # When we get to this function we expect a dataframe of 1x1 with a
-    # character value, using the examples above, of:
-    #
-    # 34 KT...60NE  60SE  60SW  60NW.
-    #
-    # 50 KT...30NE  30SE  20SW  30NW. 34 KT...70NE  70SE  60SW  70NW.
-    #
-    # Each quadrant value must be it's own variable with the name of the
-    # variable identifying the field it is for:
-    #
-    # NE34 SE34 SW34 NW34 NE50 SE50 SW50 NW50 NE64 SE64 SW64 NW64
-
-    # Example: 34 KT 60NE  60SE  60SW  60NW
-    ptn <- paste0("([:digit:]{2})",                   # "34"
-                  "[[:alpha:][:blank:][:punct:]]+",   # " KT "
-                  "([:digit:]{1,3})",                 # "60"
-                  "[[:alpha:][:blank:]]+",            # "NE "
-                  "([:digit:]{1,3})",                 # "60"
-                  "[[:alpha:][:blank:]]+",            # "SE "
-                  "([:digit:]{1,3})",                 # "60"
-                  "[[:alpha:][:blank:]]+",            # "SW"
-                  "([:digit:]{1,3})",                 # "60"
-                  "[[:alpha:][:blank:][:punct]]+")    # "NW"
-
-    x <- stringr::str_match_all(df, ptn)
-
-    # [[1]]
-    # [,1]                            [,2] [,3] [,4] [,5] [,6]
-    # [1,] "50 KT 30NE  30SE  20SW  30NW " "50" "30" "30" "20" "30"
-    # [2,] "34 KT 70NE  70SE  60SW  70NW"  "34" "70" "70" "60" "70"
-
-    # Convert to dataframe, making values numeric
-    y <- tibble::data_frame("V1" = x[[1]][,2],
-                            "V2" = x[[1]][,3],
-                            "V3" = x[[1]][,4],
-                            "V4" = x[[1]][,5],
-                            "V5" = x[[1]][,6]) %>%
-        purrr::map_df(as.numeric) %>%
-        dplyr::rename_("WF" = "V1",
-                       "NE" = "V2",
-                       "SE" = "V3",
-                       "SW" = "V4",
-                       "NW" = "V5")
-
-    # Split by column
-    z <- y %>% split(.$WF)
-
-    # Assign names to columns
-    a <- z %>% purrr::map2(1:length(z), function(a, b) {
-        newnames <- paste0(names(z[[b]]), z[[b]][[1]])
-        stats::setNames(z[[b]], newnames)
-    })
-
-    b <- dplyr::bind_cols(a) %>% dplyr::select(-dplyr::starts_with("WF"))
-
-    return(b)
+    return(df)
 }
 
 #' @title fstadv_fwd_dir
@@ -516,11 +290,9 @@ fstadv_fwd_mvmt <- function(contents, what = NULL) {
     if (!is.character(what))
         stop('\'what\' must contain \'fwd_dir\' or \'fwd_speed\'')
 
-    ptn <- paste0('PRESENT MOVEMENT TOWARD[A-Z- ]+',
-                  '([0-9]{1,3})', # Forward direction
-                  '[ ]+DEGREES AT[ ]+',
-                  '([0-9]{1,3})', # Forward speed
-                  ' KT')
+    ptn <- paste0("PRESENT MOVEMENT TOWARD[[:alpha:][:punct:][:space:]]+",
+                  "([:digit:]{1,3})[:blank:]+DEGREES AT[:blank:]+",
+                  "([:digit:]{1,3})[:blank:]KT")
 
     if (what == 'fwd_dir') {
         return(as.numeric(stringr::str_match(contents, ptn)[,2]))
@@ -552,81 +324,15 @@ fstadv_gusts <- function(contents) {
     return(gust)
 }
 
-#' @title fstadv_parse_forecasts
-#' @description Breaks forecast field strings into multidimensional list.
-#' @details Expects input like:
-#'
-#'   [1] "FORECAST VALID 10/1200Z 22.6N  85.0W MAX WIND  40 KT GUSTS  50 KT 34 KT 110NE   0SE   0SW   0NW"
-#'
-#'   [2] "FORECAST VALID 11/0000Z 25.0N  86.3W MAX WIND  45 KT GUSTS  55 KT 34 KT 120NE  70SE   0SW  70NW"
-#'
-#'   [3] "FORECAST VALID 11/1200Z 27.7N  87.9W MAX WIND  50 KT GUSTS  60 KT 50 KT  25NE  25SE   0SW  25NW 34 KT 130NE  80SE   0SW  80NW"
-#'
-#'   [4] "FORECAST VALID 12/0000Z 30.5N  88.6W NEAR MS/AL COAST MAX WIND  55 KT GUSTS  65 KT 50 KT  35NE  35SE   0SW  25NW 34 KT 130NE 100SE  50SW  80NW"
-#'
-#'   [5] "FORECAST VALID 13/0000Z 36.0N  87.0W MAX WIND  20 KT GUSTS  25 KT"
-#'
-#'   [6] "OUTLOOK VALID 14/0000Z 41.0N  82.5W MAX WIND  15 KT GUSTS  20 KT"
-#'
-#'   [7] "OUTLOOK VALID 15/0000Z DISSIPATED INLAND"
-#'
-#' The date, time, lat, lat hemi, lon, lon hemi, max wind, gusts and wind field,
-#' if avialable, will be grouped. This function will return a list with each
-#' field as it's own variable; for example:
-#'
-#' [[1]]
-#'
-#' [,1]                                                                                                [,2] [,3]   [,4]   [,5] [,6]
-#'
-#' [1,] "FORECAST VALID 10/1200Z 22.6N  85.0W MAX WIND  40 KT GUSTS  50 KT 34 KT 110NE   0SE   0SW   0NW" "10" "1200" "22.6" "N"  "85.0"
-#'
-#' [,7] [,8] [,9] [,10]
-#'
-#' [1,] "W"  "40" "50" " 34 KT 110NE   0SE   0SW   0NW"
-#'
-#' So you can access date in x[[1]][,2], time in x[[1]][,2], etc.
-#'
-#' There are some cases such as AL051999, Adv 1 that has a 50KT wind field but
-#' not a 34KT wind field which is unusual.
-#'
-#' @param content is a list of forecasts/outlooks extracted from the advisory
-#' product.
-#' @keywords internal
-fstadv_parse_forecasts <- function(content) {
-
-    ptn <- paste0('^[:blank:]*[\n[:alpha:]]+[ ]+VALID[ ]+',
-                  '([:digit:]{2})/([:digit:]{2})([:digit:]{2})Z', # Date/Hour/Minute
-                  '[ ]+([[:digit:]\\.]{3,4})([N|S])', # Lat
-                  '[ ]+([[:digit:]\\.]{3,5})([E|W])', # Lon
-                  # Following is option text; don't collect, e.g.:
-                  # POST-TROP/EXTRATROP
-                  '[:blank:]*(?:[[:alpha:]-/]+)*[:blank:]*',
-                  '[:blank:]MAX WIND[ ]+([:digit:]{2,3})[ ]+KT', # Winds
-                  '[:blank:]+GUSTS[ ]+([:digit:]{2,3})[ ]+KT', # Gusts
-                  '[:blank:]*(?:EXTRATROPICAL)*[:blank:]*', # Optional text; don't collect
-                  '[:blank:]*((?:[[:digit:]{2}[ ]+KT[ ]+[:alnum:][:blank:]]+)?$)') # Wind field, if avail
-
-    x <- stringr::str_match_all(content, ptn)
-
-    # Some data has forward and trailing blanks. Remove them
-    x <- lapply(x, trimws)
-
-    return(x)
-
-}
-
 #' @title fstadv_pos_accuracy()
 #' @description Get position accuracy
 #' @param contents text contents of FORECAST/ADVISORY
 #' @return numeric
 #' @keywords internal
 fstadv_pos_accuracy <- function(contents) {
-    ptn <- paste0('POSITION ACCURATE WITHIN[ ]+',
-                  '([0-9]{2,3})',
-                  '[ ]+NM')
+    ptn <- paste0("POSITION ACCURATE WITHIN[:blank:]+([0-9]{2,3})[:blank:]+NM")
     pos_acc <- stringr::str_match(contents, ptn)[,2]
     return(as.numeric(pos_acc))
-
 }
 
 #' @title fstadv_pressure
@@ -636,13 +342,10 @@ fstadv_pos_accuracy <- function(contents) {
 #' @return numeric
 #' @keywords internal
 fstadv_pressure <- function(contents) {
-
-    ptn <- paste0('MINIMUM CENTRAL PRESSURE[ ]+',
-                  '([0-9]{3,4})', # Pressure
-                  '[ ]+MB')
+    ptn <- paste0("MINIMUM CENTRAL PRESSURE[:blank:]+",
+                  "([:digit:]{3,4})[:blank:]*MB")
     pressure <- stringr::str_match(contents, ptn)[,2]
     return(as.numeric(pressure))
-
 }
 
 #' @title fstadv_lat
@@ -669,12 +372,12 @@ fstadv_lat_lon <- function(contents, what = NULL) {
 
     if (!is.character(what)) {stop('\'what\' must contain \'lat\' or \'lon\'')}
 
-    ptn <- paste0('[CENTER LOCATED | DISSIPATING] NEAR[ ]+',
-                  '([0-9\\.]{3,4})', # Latitude can be 9.9N or 99.9N
-                  '([N | S]{1})', # Norhtern meisphere
-                  '[ ]+([0-9\\.]{4,5})', #Longitude can be 0 to 180
-                  '([E | W]){1}', # Hemisphere
-                  '[ ]+')
+    ptn <- paste0("[CENTER LOCATED | DISSIPATING] NEAR[:blank:]+",
+                  "([0-9\\.]{3,4})", # Latitude can be 9.9N or 99.9N
+                  "([N|S]{1})", # Northern meisphere
+                  "[:blank:]+([0-9\\.]{4,5})", #Longitude can be 0 to 180
+                  "([E|W]){1}", # Hemisphere
+                  "[:blank:]+")
 
     x <- stringr::str_match(contents, ptn)
 
@@ -703,8 +406,8 @@ fstadv_lon <- function(contents) {
 }
 
 #' @title fstadv_seas
-#' @description There is only one line of sea data, 12FT seas in each quadrant. So this
-#'   should go easier than the wind fields
+#' @description There is only one line of sea data, 12FT seas in each quadrant.
+#' So this should go easier than the wind fields
 #' @param content text of product
 #' @param wind Wind value of current forecast/advisory product.
 #' @return boolean
@@ -712,179 +415,31 @@ fstadv_lon <- function(contents) {
 fstadv_seas <- function(content, wind) {
 
     # 12 FT SEAS..125NE  90SE  90SW 175NW.
-    ptn <- paste0('12 FT SEAS[\\.[:blank:]]+',
-                  '([0-9]{1,3})NE',
-                  '[ ]+([0-9]{1,3})SE',
-                  '[ ]+([0-9]{1,3})SW',
-                  '[ ]+([0-9]{1,3})NW')
+    ptn <- paste0("12 FT SEAS",
+                  "[[:punct:][:blank:]]+([0-9]{1,3})NE",
+                  "[:blank:]+([0-9]{1,3})SE",
+                  "[:blank:]+([0-9]{1,3})SW",
+                  "[:blank:]+([0-9]{1,3})NW")
 
     x <- stringr::str_match_all(content, ptn)
-
     # If there is Seas data, continue, otherwise ignore
-    if (length(x[[1]]) > 0) {
-
-        # Load into dataframe and get advisory's Key, Adv and ObDate
-        #    tmp <- as.data.frame(x[[1]][,2:5])
-        df_seas <- tibble::as_data_frame(x[[1]])
-
-        # Rename V2:V5
-        df_seas <- df_seas %>%
-            dplyr::rename(SeasNE = V2,
-                          SeasSE = V3,
-                          SeasSW = V4,
-                          SeasNW = V5)
-
-        df_seas <- df_seas %>%
-            dplyr::select(SeasNE, SeasSE, SeasSW, SeasNW)
-
-        # Reclass vars
-        df_seas$SeasNE <- as.numeric(df_seas$SeasNE)
-        df_seas$SeasSE <- as.numeric(df_seas$SeasSE)
-        df_seas$SeasSW <- as.numeric(df_seas$SeasSW)
-        df_seas$SeasNW <- as.numeric(df_seas$SeasNW)
-
-    } else {
-        df_seas <- tibble::tibble("SeasNE" = NA,
-                                  "SeasSE" = NA,
-                                  "SeasSW" = NA,
-                                  "SeasNW" = NA)
-    }
-
-    return(df_seas)
-
-}
-
-#' @title fstadv_split
-#' @description Takes the fstadv dataframe and splits into four relational
-#'     dataframes; one for base data, one for wind radius data for the current
-#'     product, one dataframe for each forecast position and one dataframe for
-#'     wind radius data for each forecast position (within 72 hours).
-#' @details The default dataframe for the \code{\link{get_fstadv}} contains 125
-#'     columns. This function will take that dataframe and split it out to four
-#'     narrow dataframes.
-#' @param df Name (character) of dataframe holding default forecast/advisory
-#'     data.
-#' @param remove Remove original dataframe after cleanup. Default TRUE.
-#' @export
-fstadv_split <- function(df, remove = TRUE) {
-
-    data <- get(df)
-
-    if (!is.data.frame(data))
-        stop("Expecting a dataframe.")
-
-    # Start with extracting base data for forecast/advisory product
-    fstadv <- dplyr::select_(data, "Key:Eye", "SeasNE:SeasNW")
-
-    # Collapse wind radius fields to narrow dataframe then expand on the four
-    # quadrants, keeping WindField as a variable.
-    v <- c("NE", "SE", "SW", "NW")
-
-    fstadv.wr <- purrr::map_df(
-        .x = c(34, 50, 64),
-        .f = function(y) {
-            dplyr::select_(data,
-                           .dots = c("Key",
-                                     "Adv",
-                                     "Date",
-                                     paste0(v, y))) %>%
-                dplyr::rename_(
-                    .dots = list("Key" = "Key",
-                                 "Adv" = "Adv",
-                                 "Date" = "Date",
-                                 "NE" = paste0("NE", y),
-                                 "SE" = paste0("SE", y),
-                                 "SW" = paste0("SW", y),
-                                 "NW" = paste0("NW", y))) %>%
-                dplyr::mutate_("WindField" = y)
-        }) %>%
-        dplyr::select_(.dots = c("Key", "Adv", "Date", "WindField","NE:NW")) %>%
-        # Order by Date then Adv since Adv is character. Results as expected.
-        dplyr::arrange_("Key", "Date", "Adv", "WindField")
-
-    # Remove NA rows for windfield quadrants
-    fstadv.wr <- fstadv.wr[complete.cases(fstadv.wr$NE,
-                                          fstadv.wr$SE,
-                                          fstadv.wr$SW,
-                                          fstadv.wr$NW),]
-
-    # Build forecasts dataframe with base data for each forecast position. This
-    # does not include wind radius data; that comes next. This will be similar
-    # to fstadv (without seas and some other data points which are never
-    # forecast).
-
-    # Extract child dataframe for forecasts date, position, wind and gust
-    v <- c("FcstDate", "Lat", "Lon", "Wind", "Gust")
-
-    fstadv.fst <- purrr::map_df(.x = c(12, 24, 36, 48, 72, 96, 120),
-                                .f = function(y) {
-        dplyr::select_(data,
-                       .dots = c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
-            dplyr::rename_("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
-                           "FcstDate" = paste0("Hr", y, "FcstDate"),
-                           "Lat" = paste0("Hr", y, "Lat"),
-                           "Lon" = paste0("Hr", y, "Lon"),
-                           "Wind" = paste0("Hr", y, "Wind"),
-                           "Gust" = paste0("Hr", y, "Gust"))}) %>%
-        dplyr::arrange_("Key", "Date", "Adv", "FcstDate")
-
-    # Remove NA rows
-    fstadv.fst <- fstadv.fst[complete.cases(fstadv.fst$FcstDate, fstadv.fst$Lat,
-                                            fstadv.fst$Lon, fstadv.fst$Wind,
-                                            fstadv.fst$Gust),]
-
-    # Build wind radius dataframe for each forecast position (12:72 hours; 96
-    # and 120 hours are never forecasted). This dataframe will be similar to
-    # fstadv.wr with the exception of FcstDate.
-
-    v <- c("NE", "SE", "SW", "NW")
-
-    fstadv.fst.wr <- purrr::map_df(.x = c(12, 24, 36, 48, 72),
-                                   .f = function(x) {
-        y <- purrr::map_df(.x = c(34, 50, 64), .f = function(z) {
-            dplyr::select_(data, .dots = c("Key", "Adv", "Date",
-                                        paste0("Hr", x, "FcstDate"),
-                                        paste0("Hr", x, v, z))) %>%
-                dplyr::rename_(.dots = list("Key" = "Key",
-                                            "Adv" = "Adv",
-                                            "Date" = "Date",
-                                            "FcstDate" = paste0("Hr", x,
-                                                                "FcstDate"),
-                                            "NE" = paste0("Hr", x, "NE", z),
-                                            "SE" = paste0("Hr", x, "SE", z),
-                                            "SW" = paste0("Hr", x, "SW", z),
-                                            "NW" = paste0("Hr", x, "NW", z))) %>%
-                dplyr::mutate_("WindField" = z) %>%
-                dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
-                                         "WindField", "NE:NW"))})
-        return(y)
-    })
-
-    fstadv.fst.wr <- fstadv.fst.wr %>% dplyr::arrange_("Key", "Date", "Adv",
-                                                       "FcstDate", "WindField")
-
-    fstadv.fst.wr <- fstadv.fst.wr[complete.cases(fstadv.fst.wr$NE,
-                                                  fstadv.fst.wr$SE,
-                                                  fstadv.fst.wr$SW,
-                                                  fstadv.fst.wr$NW),]
-
-    # At this point have all dataframes. Want to return them to global
-    # environment while keeping name of original dataframe. So prefix "fstadv"
-    # will be replaced by value of df.
-    assign(df, fstadv, envir = .GlobalEnv)
-    assign(paste0(df, ".fst"), fstadv.fst, envir = .GlobalEnv)
-    assign(paste0(df, ".fst.wr"), fstadv.fst.wr, envir = .GlobalEnv)
-    assign(paste0(df, ".wr"), fstadv.wr, envir = .GlobalEnv)
-
-    return(TRUE)
+    if (purrr::is_empty(x[[1]])) return(NULL)
+    df <- tibble::as_data_frame(x[[1]])
+    df_names <- paste0("Seas", c("NE", "SE", "SW", "NW"))
+    names(df)[2:5] <- df_names
+    df <- df %>%
+        dplyr::mutate_at(df_names, .funs = as.numeric) %>%
+        dplyr::select_(.dots = df_names)
+    return(df)
 }
 
 #' @title fstadv_wind_radius
-#' @description Parse wind radius data from product, if exists. This is somewhat tricky as the
-#'   wind fields are 64KT, 50KT and 34KT and are listed in descending order. So,
-#'   the first line will not always be 64KT, 50KT or even 34KT depending on
-#'   strength of storm. What I do here is just extract the entire blob and work
-#'   through it. I'll continue to look for ways to improve it.
+#' @description Parse wind radius data from product, if exists. This is somewhat
+#' tricky as the wind fields are 64KT, 50KT and 34KT and are listed in
+#' descending order. So the first line will not always be 64KT, 50KT or even
+#' 34KT depending on strength of storm. What I do here is just extract the
+#' entire blob and work through it. I'll continue to look for ways to improve
+#' it.
 #'
 #' Complimentary to fstadv_get_wind_radius
 #'
@@ -895,35 +450,14 @@ fstadv_wind_radius <- function(content, wind) {
 
     text <- fstadv_wind_radius_regex(content)
 
-    # move to dataframe
-    df <- data.frame("text" = text)
+    # Bail if no wind data
+    if (purrr::is_empty(text)) return(NULL)
 
-    # split out df$text with generic cols for now.
-    df <- df %>%
-        tidyr::separate(text, into = c(paste0('x', c(1:15))), sep = '\t',
-                        fill = 'right') # Suppress warnings
+    df <- tibble::as_tibble(t(text))
 
-    df[,1:15] <- as.numeric(df[,1:15])
-
-    # The wind fields vary in order with the strongest always being listed
-    # first. So 64kt wind field will always be above the 50kt wind field. But
-    # if a storm does not have 64 kt winds then 50 kt will be listed first. The
-    # easiest way I can think to do this is with if/else statements. This whole
-    # function needs to be written anyway. Consider it all brute-force for now.
-    # Keep 64kt winds on the left, 50kt in the middle, 34kt on the right.
-    if (is.na(wind)) {
-        df <- df
-    } else if (wind >= 64) {
-        df <- df[,c(11:15, 6:10, 1:5)]
-    } else if (wind >= 50) {
-        df <- df[,c(6:10, 1:5, 11:15)]
-    } else if (wind >= 34) {
-        df <- df[,c(1:5, 11:15, 6:10)]
-    }
-
-    names(df) <- c("WindField34", "NE34", "SE34", "SW34", "NW34",
+    names(df) <- c("WindField64", "NE64", "SE64", "SW64", "NW64",
                    "WindField50", "NE50", "SE50", "SW50", "NW50",
-                   "WindField64", "NE64", "SE64", "SW64", "NW64")
+                   "WindField34", "NE34", "SE34", "SW34", "NW34")
 
     df <- df %>% dplyr::select(-WindField34, -WindField50, -WindField64)
 
@@ -935,22 +469,26 @@ fstadv_wind_radius <- function(content, wind) {
 #' @description Extra current wind radius from Forecast/Advisory product.
 #' @keywords internal
 fstadv_wind_radius_regex <- function(content) {
-    ptn <- paste0("MAX SUSTAINED WINDS",
-                  "[[:blank:][:digit:]]+KT ",
-                  "WITH GUSTS TO[[:blank:][:digit:]]+KT",
-                  "[\\.[:space:]]*([A-Z0-9\\. \n]+)12 FT SEAS")
-
-    # Do some reformatting to make extraction easier
-    a <- stringr::str_replace_all(content, '\n \n', '\t')
-    b <- stringr::str_replace_all(a, '\n', ' ')
-    c <- stringr::str_replace_all(b, '\t', '\n')
-    d <- stringr::str_replace_all(c, '\\.\\.\\.', ' ')
-    e <- unlist(stringr::str_match_all(d, ptn))
-    # Isolate on key 2
-    f <- stringr::str_replace_all(e[2], '\\.', '')
-    g <- stringr::str_replace_all(f, '[KT|NE|SE|SW|NW]', '')
-    h <- stringr::str_replace_all(trimws(g), '[ ]+', '\t')
-    return(h)
+    ptn <- paste0("MAX SUSTAINED WINDS[:blank:]+[:digit:]{1,3} KT ",
+                  "WITH GUSTS TO[:blank:]+[:digit:]{1,3} ",
+                  "KT[[:punct:][:space:][:upper:]]+",
+                  "(?:(64) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                  "NE[:blank:]+([:digit:]{1,3})",
+                  "SE[:blank:]+([:digit:]{1,3})",
+                  "SW[:blank:]+([:digit:]{1,3})",
+                  "NW[[:punct:][:space:]]+)?",
+                  "(?:(50) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                  "NE[:blank:]+([:digit:]{1,3})",
+                  "SE[:blank:]+([:digit:]{1,3})",
+                  "SW[:blank:]+([:digit:]{1,3})",
+                  "NW[[:punct:][:space:]]+)?",
+                  "(?:(34) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                  "NE[:blank:]+([:digit:]{1,3})",
+                  "SE[:blank:]+([:digit:]{1,3})",
+                  "SW[:blank:]+([:digit:]{1,3})",
+                  "NW[[:punct:][:space:]]+)?")
+    x <- stringr::str_match_all(content, ptn)
+    return(as.numeric(x[[1]][,2:16]))
 }
 
 #' @title fstadv_winds
@@ -988,4 +526,146 @@ fstadv_winds_gusts <- function(contents, what = NULL) {
         return(NA)
     }
 
+}
+
+#' @title tidy_fstadv
+#' @description Tidy current details of a fstadv dataframe object.
+#' @param df fstadv dataframe object
+#' @details Use Key, Adv and Date to join with other tidy dataframes.
+#' @export
+tidy_fstadv <- function(df) {
+    if (!is.data.frame(df))
+        stop("Expecting a dataframe.")
+    df <- dplyr::select_(df, "Key", "Adv:Date", "Status:Name", "Lat:Eye",
+                         "SeasNE:SeasNW")
+    return(df)
+}
+
+#' @title tidy_wr
+#' @description Tidy current wind radius of a fstadv dataframe object.
+#' @param df fstadv dataframe object
+#' @details Takes current wind radius variables in a fstadv dataframe object,
+#' tidys the data and removes rows where all values are NA. Use Key, Adv and
+#' Date to join with other tidy dataframes.
+#' @export
+tidy_wr <- function(df) {
+    if (!is.data.frame(df))
+        stop("Expecting a dataframe.")
+
+    # Collapse wind radius fields to narrow dataframe then expand on the four
+    # quadrants, keeping WindField as a variable.
+    v <- c("NE", "SE", "SW", "NW")
+
+    df <- purrr::map_df(
+        .x = c(34, 50, 64),
+        .f = function(y) {
+            dplyr::select_(df,
+                           .dots = c("Key",
+                                     "Adv",
+                                     "Date",
+                                     paste0(v, y))) %>%
+                dplyr::rename_(
+                    .dots = list("Key" = "Key",
+                                 "Adv" = "Adv",
+                                 "Date" = "Date",
+                                 "NE" = paste0("NE", y),
+                                 "SE" = paste0("SE", y),
+                                 "SW" = paste0("SW", y),
+                                 "NW" = paste0("NW", y))) %>%
+                dplyr::mutate_("WindField" = y)
+        }) %>%
+        dplyr::select_(.dots = c("Key", "Adv", "Date",
+                                 "WindField","NE:NW")) %>%
+        # Order by Date then Adv since Adv is character. Results as expected.
+        dplyr::arrange_("Key", "Date", "Adv", "WindField")
+
+    # Remove NA rows for windfield quadrants
+    df <- df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
+
+    return(df)
+}
+
+#' @title tidy_fcst
+#' @description Tidy forecasts of a fstadv dataframe object.
+#' @param df fstadv dataframe object
+#' @details Gathers all forecast points, converts to narrow dataframe and
+#' removes rows that are NA. Use Key, Adv and Date to join with other tidy
+#' dataframes.
+#' @export
+tidy_fcst <- function(df) {
+    if (!is.data.frame(df))
+        stop("Expecting a dataframe.")
+
+    # Build forecasts dataframe with base data for each forecast position. This
+    # does not include wind radius data; that comes next. This will be similar
+    # to fstadv (without seas and some other data points which are never
+    # forecast).
+
+    # Extract child dataframe for forecasts date, position, wind and gust
+    v <- c("FcstDate", "Lat", "Lon", "Wind", "Gust")
+
+    df <- purrr::map_df(
+        .x = c(12, 24, 36, 48, 72, 96, 120),
+        .f = function(y) {
+            dplyr::select_(
+                df,
+                .dots = c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
+                dplyr::rename_("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
+                               "FcstDate" = paste0("Hr", y, "FcstDate"),
+                               "Lat" = paste0("Hr", y, "Lat"),
+                               "Lon" = paste0("Hr", y, "Lon"),
+                               "Wind" = paste0("Hr", y, "Wind"),
+                               "Gust" = paste0("Hr", y, "Gust"))}) %>%
+        dplyr::arrange_("Key", "Date", "Adv", "FcstDate")
+
+    # Remove NA rows
+    df <- df[stats::complete.cases(df$FcstDate, df$Lat, df$Lon, df$Wind,
+                                   df$Gust),]
+    return(df)
+}
+
+#' @title tidy_fcst_wr
+#' @description Tidy forecast wind radii of a fstadv dataframe object
+#' @param df fstadv dataframe object
+#' @details Converts forecast wind radii fields to narrow, tidy dataframe. Use
+#' Key, Adv and Date to join with other tidy dataframes.
+#' @export
+tidy_fcst_wr <- function(df) {
+    if (!is.data.frame(df))
+        stop("Expecting a dataframe.")
+
+    # Build wind radius dataframe for each forecast position (12:72 hours; 96
+    # and 120 hours are never forecasted). This dataframe will be similar to
+    # fstadv.wr with the exception of FcstDate.
+
+    v <- c("NE", "SE", "SW", "NW")
+
+    df <- purrr::map_df(
+        .x = c(12, 24, 36, 48, 72),
+        .f = function(x) {
+            y <- purrr::map_df(.x = c(34, 50, 64), .f = function(z) {
+                dplyr::select_(df, .dots = c("Key", "Adv", "Date",
+                                             paste0("Hr", x, "FcstDate"),
+                                             paste0("Hr", x, v, z))) %>%
+                    dplyr::rename_(
+                        .dots = list("Key" = "Key",
+                                     "Adv" = "Adv",
+                                     "Date" = "Date",
+                                     "FcstDate" = paste0("Hr", x,
+                                                         "FcstDate"),
+                                     "NE" = paste0("Hr", x, "NE", z),
+                                     "SE" = paste0("Hr", x, "SE", z),
+                                     "SW" = paste0("Hr", x, "SW", z),
+                                     "NW" = paste0("Hr", x, "NW", z))) %>%
+                    dplyr::mutate_("WindField" = z) %>%
+                    dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
+                                             "WindField", "NE:NW"))})
+            return(y)
+        })
+
+    df <- df %>% dplyr::arrange_("Key", "Date", "Adv",
+                                                       "FcstDate", "WindField")
+
+    df <- df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
+    return(df)
 }

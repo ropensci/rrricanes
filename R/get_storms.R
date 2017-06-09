@@ -67,20 +67,17 @@ extract_storms <- function(basin, link) {
     year <- extract_year_archive_link(link)
 
     if (basin == "AL") {
-        xp = "//td[(((count(preceding-sibling::*) + 1) = 1) and parent::*)]//a"
+        xp <- "//td[(((count(preceding-sibling::*) + 1) = 1) and parent::*)]//a"
     } else if (basin == "EP") {
-        xp = "//td[(((count(preceding-sibling::*) + 1) = 2) and parent::*)]//a"
+        xp <- "//td[(((count(preceding-sibling::*) + 1) = 2) and parent::*)]//a"
     } else {
         stop("No basin given.")
     }
 
     df <- create_df_archives()
 
-    s <- link %>%
+    col <- link %>%
         xml2::read_html() %>%
-        rvest::html_nodes(css = "table")
-
-    col <- s %>%
         rvest::html_nodes(xpath = xp)
 
     col.links <- paste0(
@@ -126,7 +123,6 @@ extract_storms <- function(basin, link) {
 #' @param year numeric or vector, four digits (\%Y format)
 #' @param basin One or both of c("AL", "EP")
 #' @return Dataframe of storms.
-#' @importFrom data.table rbindlist
 #' @examples
 #' # Default. Get all storms, both basins, for last year.
 #' \dontrun{

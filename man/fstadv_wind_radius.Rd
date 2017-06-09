@@ -13,11 +13,12 @@ fstadv_wind_radius(content, wind)
 dataframe
 }
 \description{
-Parse wind radius data from product, if exists. This is somewhat tricky as the
-  wind fields are 64KT, 50KT and 34KT and are listed in descending order. So,
-  the first line will not always be 64KT, 50KT or even 34KT depending on
-  strength of storm. What I do here is just extract the entire blob and work
-  through it. I'll continue to look for ways to improve it.
+Parse wind radius data from product, if exists. This is somewhat
+tricky as the wind fields are 64KT, 50KT and 34KT and are listed in
+descending order. So the first line will not always be 64KT, 50KT or even
+34KT depending on strength of storm. What I do here is just extract the
+entire blob and work through it. I'll continue to look for ways to improve
+it.
 
 Complimentary to fstadv_get_wind_radius
 }

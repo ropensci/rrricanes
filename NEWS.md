@@ -1,22 +1,31 @@
-# rrricanes 0.1.0.1
+rrricanes 0.1.1 (yyyy-mm-dd)
+============================
 
-## NEW FEATURES
+### NEW FEATURES
 
-Package renamed from `Hurricanes` to `rrricanes`. Apologies for any issues this creates.
+* Changed name from `Hurricanes` to `rrricanes`.
 
-## MINOR IMPROVEMENTS
+* `get_storm_data` can now be chained to other commands and returns a list of dataframes.
 
-NA
+* `load_storm_data` accesses pre-scraped datasets and returns requested products through the github repo `rrricanesdata`. This was done to make it quicker to get data. It should not be relied on to get the most immediate data for current storms. However, it should be fairly up-to-date. Original functions can be used if for some reason immediate data access is needed.
 
-## BUG FIXES
+### MINOR IMPROVEMENTS
 
-NA
+* Modified numerous regex patterns to ensure data quality.
+* `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr` have been added to replaced now-removed `fstadv_split()`.
 
-## DEPRECATED AND DEFUNCT
+### BUG FIXES
 
-NA
+* Too many to recall. Apologies. 
+* Call to `get_storms` on some linux distros generated xpath_element error. Corrected. (#67)
+* Modify call to `get_storm_data`. Replaced css parameter in `rvest::html_nodes` calls with xpath parameter. Some products (notably, `get_prblty`) do not have a "pre" tag but are text documents (not HTML). Modified `scrape_contents` to return full contents if "pre" tag doesn't exist. Tested `get_discus` and `get_public`; no errors generated. (#68)
 
-# Hurricanes 0.1.0
+### DEPRECATED AND DEFUNCT
+
+* `fstadv_split`. See MINOR IMPROVEMENTS for alternatives.
+
+Hurricanes 0.1.0 (2017-05-12)
+================
 
 ## Major new features
 

@@ -15,7 +15,7 @@ fstadv_seas(content, wind)
 boolean
 }
 \description{
-There is only one line of sea data, 12FT seas in each quadrant. So this
-  should go easier than the wind fields
+There is only one line of sea data, 12FT seas in each quadrant.
+So this should go easier than the wind fields
 }
 \keyword{internal}

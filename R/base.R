@@ -25,9 +25,25 @@ NULL
 
 #' @importFrom magrittr %>%
 
-#' @importFrom stats na.omit
-#' @export
-stats::na.omit
+.onLoad <- function(libname, pkgname) {
+    op <- options()
+    op.rrricanes <- list(rrricanes.working_msg = FALSE)
+    toset <- !(names(op.rrricanes) %in% names(op))
+    if (any(toset)) options(op.rrricanes[toset])
+    invisible()
+}
+
+.onAttach <- function(libname, pkgname) {
+    packageStartupMessage("rrricanes is not intended for use in emergency situations.")
+}
+
+utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
+                         "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
+                         "WindField34", "WindField50", "WindField64", "lat",
+                         "long", "group", ".", "NW34", "name", "data",
+                         paste0(c("NE", "SE", "SW", "NW", "64")),
+                         paste0(c("NE", "SE", "SW", "NW", "50")),
+                         paste0(c("NE", "SE", "SW", "NW", "34"))))
 
 #' @title convert_lat_lon
 #' @description Converts lat, lon to negative if in southern, western
@@ -38,7 +54,7 @@ stats::na.omit
 #' @keywords internal
 convert_lat_lon <- function(x, y) {
     if (!is.numeric(x)) {stop("x is not numeric!")}
-    if (!(y %in% c('N', 'S', 'E', 'W'))) { stop("y must be c('N','S','E','W')") }
+    if (!(y %in% c('N', 'S', 'E', 'W'))) {stop("y must be c('N','S','E','W')")}
     ifelse(y == 'S' | y == 'W', return(x * -1), return(x))
 }
 
@@ -94,6 +110,15 @@ month_str_to_num <- function(m) {
     return(abbr)
 }
 
+#' @title saffir
+#' @description Return category of storm based on wind. Assumes storm is a
+#' cyclone. Saffir-Simpson Hurricane Scale does not apply to non-tropical storms.
+#' @param x Vector of wind speed values.
+#' @keywords internal
+saffir <- function(x) {
+    return(NULL)
+}
+
 #' @title status
 #' @description Test URL status.
 #' @details Return URL if status is 'OK'. Otherwise, return NA and print
@@ -102,13 +127,45 @@ month_str_to_num <- function(m) {
 #' @return URL if result is 'OK', otherwise, NA.
 #' @keywords internal
 status <- function(u) {
-    stat = httr::http_status(httr::GET(u))
+    stat <- httr::http_status(httr::GET(u))
     if (stat$reason == 'OK') {
         return(u)
     } else {
         warning(sprintf("URL unavailable. %s", u))
         return(NA)
     }
+}
+
+#' @title status_abbr_to_str
+#' @description Convert Status abbreviation to string
+#' @param x character vector of status abbreviations
+#' @details Status abbreviations
+#' \describe{
+#'     \item{DB}{Disturbance (of any intensity)}
+#'     \item{EX}{Extratropical cyclone (of any intensity)}
+#'     \item{HU}{Tropical cyclone of hurricane intensity (> 64 knots)}
+#'     \item{LO}{A low that is neither a tropical cyclone, a subtropical cyclone, nor an extratropical cyclone (of any intensity)}
+#'     \item{SD}{Subtropical cyclone of subtropical depression intensity (< 34 knots)}
+#'     \item{SS}{Subtropical cyclone of subtropical storm intensity (> 34 knots)}
+#'     \item{TD}{Tropical cyclone of tropical depression intensity (< 34 knots)}
+#'     \item{TS}{Tropical cyclone of tropical storm intensity (34-63 knots)}
+#'     \item{WV}{Tropical Wave (of any intensity)}
+#' }
+#' @return character vector of strings
+#' @seealso \url{http://www.aoml.noaa.gov/hrd/hurdat/newhurdat-format.pdf}
+#' @export
+status_abbr_to_str <- function(x) {
+    y <- character(length = 0)
+    y[x == "TD"] <- "Tropical Depression"
+    y[x == "TS"] <- "Tropical Storm"
+    y[x == "HU"] <- "Hurricane"
+    y[x == "EX"] <- "Extratropical Cyclone"
+    y[x == "SD"] <- "Subtropical Depression"
+    y[x == "SS"] <- "Subtropical Storm"
+    y[x == "LO"] <- "Low"
+    y[x == "WV"] <- "Tropical Wave"
+    y[x == "DB"] <- "Disturbance"
+    return(y)
 }
 
 #' @title validate_year
