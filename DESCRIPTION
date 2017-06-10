@@ -19,7 +19,6 @@ Imports:
   dplyr (>= 0.5.0), 
   ggplot2 (>= 2.2.1), 
   httr (>= 1.2.1), 
-  lazyeval (>= 0.2.0), 
   lubridate (>= 1.6.0),
   magrittr (>= 1.5), 
   maptools (>= 0.9-2), 
