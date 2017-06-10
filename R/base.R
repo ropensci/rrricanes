@@ -76,9 +76,9 @@ NULL
 .onLoad <- function(libname, pkgname) {
     op <- options()
     op.rrricanes <- list(rrricanes.working_msg = FALSE,
-                         rrricanes.http_timeout = 1,
-                         rrricanes.http_attempts = 3,
-                         rrricanes.http_sleep = 3)
+                         rrricanes.http_timeout = 1L,
+                         rrricanes.http_attempts = 3L,
+                         rrricanes.http_sleep = 3L)
     toset <- !(names(op.rrricanes) %in% names(op))
     if (any(toset)) options(op.rrricanes[toset])
     invisible()
