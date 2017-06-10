@@ -7,7 +7,7 @@ rrricanes 0.2.0 (yyyy-mm-dd)
 
 ### MINOR IMPROVEMENTS
 
-* NA
+* `rrricanes.http_sleep` to control time to sleep between multiple HTTP requests.
 
 ### BUG FIXES
 

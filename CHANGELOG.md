@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 ### Added
-  - NA
+  - `rrricanes.http_sleep` to control time to sleep between multiple HTTP requests.
 
 ### Changed
   - NA
