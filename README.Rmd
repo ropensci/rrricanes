@@ -3,11 +3,11 @@ output: github_document
 ---
 
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-3.3.3-6666ff.svg)](https://cran.r-project.org/) 
-[![packageversion](https://img.shields.io/badge/Package%20version-0.1.3-orange.svg?style=flat-square)](commits/develop)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.1.3-orange.svg?style=flat-square)](commits/develop-0.2.0)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes) 
-[![Build Status](https://travis-ci.org/timtrice/rrricanes.svg?branch=develop)](https://travis-ci.org/timtrice/rrricanes) 
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/timtrice/rrricanes?branch=develop&svg=true)](https://ci.appveyor.com/project/timtrice/rrricanes) 
-[![codecov](https://codecov.io/gh/timtrice/rrricanes/branch/develop/graph/badge.svg)](https://codecov.io/gh/timtrice/rrricanes) 
+[![Build Status](https://travis-ci.org/timtrice/rrricanes.svg?branch=develop-0.2.0)](https://travis-ci.org/timtrice/rrricanes) 
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/timtrice/rrricanes?branch=develop-0.2.0&svg=true)](https://ci.appveyor.com/project/timtrice/rrricanes) 
+[![codecov](https://codecov.io/gh/timtrice/rrricanes/branch/develop-0.2.0/graph/badge.svg)](https://codecov.io/gh/timtrice/rrricanes) 
 
 
 ```{r, echo = FALSE}
