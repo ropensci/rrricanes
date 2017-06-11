@@ -60,4 +60,4 @@ Acknowledgments
 ---------------
 
 -   [Molyneux, James](https://github.com/jimmylovestea)
--   [Rudis, BobRudis](https://github.com/hrbrmstr)
+-   [Rudis, Bob](https://github.com/hrbrmstr)
