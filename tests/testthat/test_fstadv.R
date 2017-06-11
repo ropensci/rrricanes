@@ -46,7 +46,7 @@ test_that("Test tidy_wr()", {
 ## ---- Test tidy_fcst() -----------------------------------------------------
 test_that("Test tidy_fcst()", {
     x <- tidy_fcst(AL2016_fstadv)
-    expect_identical(dim(x), c(2523L, 8L))
+    expect_identical(dim(x), c(2268L, 8L))
     expect_identical(names(x),
                      c("Key", "Adv", "Date", "FcstDate", "Lat", "Lon", "Wind",
                        "Gust"))
