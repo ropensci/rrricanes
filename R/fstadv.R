@@ -1,5 +1,6 @@
 #' @title get_fstadv
 #' @description Return dataframe of forecast/advisory data.
+#' @param link URL to storms' archive page.
 #' @details Returns a wide dataframe of most the data available in a cyclones
 #' forecast/advisory product (watches and warnings are not included at this
 #' time).

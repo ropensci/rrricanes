@@ -6,6 +6,9 @@
 \usage{
 get_fstadv(link)
 }
+\arguments{
+\item{link}{URL to storms' archive page.}
+}
 \description{
 Return dataframe of forecast/advisory data.
 }
