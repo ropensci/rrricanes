@@ -13,3 +13,4 @@
 ^reports/
 ^\.github$
 ^vignettes/articles$
+^_pkgdown.yml$
