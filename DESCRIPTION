@@ -8,7 +8,7 @@ Version: 0.1.3
 Authors@R: c(person("Tim", "Trice", email = "tim.trice@gmail.com", role = c("aut", "cre")))
 Depends:
   R (>= 3.3.3)
-URL: http://www.timtrice.net
+URL: https://github.com/timtrice/rrricanes
 BugReports: https://github.com/timtrice/rrricanes/issues
 Additional_repositories: http://packages.ropensci.org
 License: MIT + file LICENSE
