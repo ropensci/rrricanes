@@ -132,7 +132,7 @@ get_url_contents <- function(link) {
     max_attempts <- getOption("rrricanes.http_attempts")
     if (max_attempts > 5) max_attempts <- 5
     for (i in seq(1, max_attempts)) {
-        if (i >= 1) {
+        if (i > 1) {
             sleep <- as.integer(getOption("rrricanes.http_sleep"))
             Sys.sleep(sleep)
             if (getOption("rrricanes.working_msg") == TRUE)
