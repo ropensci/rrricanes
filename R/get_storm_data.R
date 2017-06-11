@@ -1,7 +1,7 @@
 #' @title get_products
 #' @description Get list of all products from a storm's archive page
 #' @param link URL to storm's archive page.
-#' @export
+#' @keywords internal
 get_products <- function(link) {
 
     # Get year

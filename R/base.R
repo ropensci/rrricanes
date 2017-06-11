@@ -151,7 +151,7 @@ get_url_contents <- function(link) {
 #' @description Return root link of NHC archive pages.
 #' @param withTrailingSlash True, by default. False returns URL without
 #' trailing slash.
-#' @export
+#' @keywords internal
 get_nhc_link <- function(withTrailingSlash = TRUE) {
     if (withTrailingSlash)
         return('http://www.nhc.noaa.gov/')
