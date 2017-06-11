@@ -12,7 +12,7 @@ rrricanes 0.2.0 (yyyy-mm-dd)
 
 ### BUG FIXES
 
-* NA
+* `tidy_fcst` and `tidy_fcst_wr` would err if all forecast periods were not available for a cyclone. Functions now analyze dataframe to determine what forecast fields exist, then tidies based on the result.
 
 ### DEPRECATED AND DEFUNCT
 

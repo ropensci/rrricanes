@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - NA
 
 ### Fixed
-  - NA
+  - Correct `tidy_fcst` and `tidy_fcst_wr` when all forecast periods do not exist. Previously, was expected that all forecast fields would exist. This may not always be the case. Now works only available forecast periods.
 
 ### Security
   - NA

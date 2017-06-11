@@ -683,8 +683,15 @@ tidy_fcst <- function(df) {
     # Extract child dataframe for forecasts date, position, wind and gust
     v <- c("FcstDate", "Lat", "Lon", "Wind", "Gust")
 
+    # What forecast periods are in the current dataset?
+    fcst_periods <- as.list(names(df)) %>%
+        stringr::str_match(pattern = "Hr([:digit:]{2})FcstDate") %>%
+        .[,2] %>%
+        .[!rlang::are_na(.)] %>%
+        as.numeric()
+
     df <- purrr::map_df(
-        .x = c(12, 24, 36, 48, 72, 96, 120),
+        .x = fcst_periods,
         .f = function(y) {
             dplyr::select_(
                 df,
@@ -733,8 +740,15 @@ tidy_fcst_wr <- function(df) {
 
     v <- c("NE", "SE", "SW", "NW")
 
+    # What forecast periods are in the current dataset?
+    fcst_periods <- as.list(names(df)) %>%
+        stringr::str_match(pattern = "Hr([:digit:]{2})FcstDate") %>%
+        .[,2] %>%
+        .[!rlang::are_na(.)] %>%
+        as.numeric()
+
     df <- purrr::map_df(
-        .x = c(12, 24, 36, 48, 72),
+        .x = fcst_periods,
         .f = function(x) {
             y <- purrr::map_df(.x = c(34, 50, 64), .f = function(z) {
                 dplyr::select_(df, .dots = c("Key", "Adv", "Date",
