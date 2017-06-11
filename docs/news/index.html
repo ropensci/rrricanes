@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>All news • Hurricanes</title>
+<title>All news • rrricanes</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -46,7 +46,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">Hurricanes</a>
+      <a class="navbar-brand" href="../index.html">rrricanes</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -62,7 +62,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/timtrice/rrricanes">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -79,25 +84,87 @@
     </div>
 
     <div class="contents">
-    <div id="hurricanes-0-1-1" class="section level1">
+    <div id="rrricanes-0-1-3-2017-06-11" class="section level1">
 <h1 class="hasAnchor">
-<a href="#hurricanes-0-1-1" class="anchor"></a>Hurricanes 0.1.1</h1>
-<div id="major-changes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#major-changes" class="anchor"></a>Major Changes</h2>
+<a href="#rrricanes-0-1-3-2017-06-11" class="anchor"></a>rrricanes 0.1.3 (2017-06-11)</h1>
+<div id="new-features" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>NEW FEATURES</h3>
+<ul>
+<li>NA</li>
+</ul>
 </div>
-<div id="minor-changes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#minor-changes" class="anchor"></a>Minor Changes</h2>
+<div id="minor-improvements" class="section level3">
+<h3 class="hasAnchor">
+<a href="#minor-improvements" class="anchor"></a>MINOR IMPROVEMENTS</h3>
+<ul>
+<li>
+<code>rrricanes.http_sleep</code> to control time to sleep between multiple HTTP requests.</li>
+<li>Clarified documentation for <code>get_fstadv</code>, <code>get_prblty</code>, <code>get_wndprb</code>, <code>tidy_fstadv</code>, <code>tidy_wr</code>, <code>tidy_fcst</code> and <code>tidy_fcst_wr</code>.</li>
+</ul>
 </div>
-<div id="deprecated" class="section level2">
-<h2 class="hasAnchor">
-<a href="#deprecated" class="anchor"></a>Deprecated</h2>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>BUG FIXES</h3>
+<ul>
+<li>
+<code>tidy_fcst</code> and <code>tidy_fcst_wr</code> would err if all forecast periods were not available for a cyclone. Functions now analyze dataframe to determine what forecast fields exist, then tidies based on the result. (#73)</li>
+</ul>
+</div>
+<div id="deprecated-and-defunct" class="section level3">
+<h3 class="hasAnchor">
+<a href="#deprecated-and-defunct" class="anchor"></a>DEPRECATED AND DEFUNCT</h3>
+<ul>
+<li>NA</li>
+</ul>
 </div>
 </div>
-    <div id="hurricanes-0-1-0" class="section level1">
+    <div id="rrricanes-0-1-2-2017-06-08" class="section level1">
 <h1 class="hasAnchor">
-<a href="#hurricanes-0-1-0" class="anchor"></a>Hurricanes 0.1.0</h1>
+<a href="#rrricanes-0-1-2-2017-06-08" class="anchor"></a>rrricanes 0.1.2 (2017-06-08)</h1>
+<div id="new-features-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h3>
+<ul>
+<li><p>Changed name from <code>Hurricanes</code> to <code>rrricanes</code>.</p></li>
+<li><p><code>get_storm_data</code> can now be chained to other commands and returns a list of dataframes.</p></li>
+<li><p><code>load_storm_data</code> accesses pre-scraped datasets and returns requested products through the github repo <code>rrricanesdata</code>. This was done to make it quicker to get data. It should not be relied on to get the most immediate data for current storms. However, it should be fairly up-to-date. Original functions can be used if for some reason immediate data access is needed.</p></li>
+<li><p><code>saffir</code> returns Saffir-Simpson classification of tropical cyclones; abbreviated.</p></li>
+<li><p><code>status_abbr_to_str</code> converts storm status abbreviations (i.e., TD, TS, HU) to string.</p></li>
+<li><p><code>twoal</code> and <code>twoep</code> parse tropical weather outlook XML files. Gives current status, if any, of areas of interest in either basin.</p></li>
+</ul>
+</div>
+<div id="minor-improvements-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#minor-improvements-1" class="anchor"></a>MINOR IMPROVEMENTS</h3>
+<ul>
+<li>Modified numerous regex patterns to ensure data quality.</li>
+<li>
+<code>tidy_fstadv</code>, <code>tidy_wr</code>, <code>tidy_fcst</code> and <code>tidy_fcst_wr</code> have been added to replaced now-removed <code>fstadv_split()</code>.</li>
+<li>Added loop to make multiple attempts at extracting contents from NHC archives. Options <code>rrricanes.http_timeout</code> and <code>rrricanes.http_attempts</code> added to give user more control over this. Default is 3 attempts with no more than 5 permitted.</li>
+</ul>
+</div>
+<div id="bug-fixes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h3>
+<ul>
+<li>Too many to recall. Apologies.</li>
+<li>Call to <code>get_storms</code> on some linux distros generated xpath_element error. Corrected. (#67)</li>
+<li>Modify call to <code>get_storm_data</code>. Replaced css parameter in <code>rvest::html_nodes</code> calls with xpath parameter. Some products (notably, <code>get_prblty</code>) do not have a “pre” tag but are text documents (not HTML). Modified <code>scrape_contents</code> to return full contents if “pre” tag doesn’t exist. Tested <code>get_discus</code> and <code>get_public</code>; no errors generated. (#68)</li>
+</ul>
+</div>
+<div id="deprecated-and-defunct-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#deprecated-and-defunct-1" class="anchor"></a>DEPRECATED AND DEFUNCT</h3>
+<ul>
+<li>
+<code>fstadv_split</code>. See MINOR IMPROVEMENTS for alternatives.</li>
+</ul>
+</div>
+</div>
+    <div id="hurricanes-0-1-0-2017-05-12" class="section level1">
+<h1 class="hasAnchor">
+<a href="#hurricanes-0-1-0-2017-05-12" class="anchor"></a>Hurricanes 0.1.0 (2017-05-12)</h1>
 <div id="major-new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#major-new-features" class="anchor"></a>Major new features</h2>
@@ -121,7 +188,7 @@
 <div id="forecastadvisory-fstadv" class="section level4">
 <h4 class="hasAnchor">
 <a href="#forecastadvisory-fstadv" class="anchor"></a>Forecast/Advisory (fstadv)</h4>
-<p>Contains the meat of data. Current storm information, forecast information, wind and sea data. Can use <code><a href="../reference/fstadv_split.html">fstadv_split()</a></code> to break the wide dataframe to multiple, relational dataframes.</p>
+<p>Contains the meat of data. Current storm information, forecast information, wind and sea data. Can use <code>fstadv_split()</code> to break the wide dataframe to multiple, relational dataframes.</p>
 </div>
 <div id="position-estimate-posest" class="section level4">
 <h4 class="hasAnchor">
@@ -158,8 +225,9 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#hurricanes-0-1-1">0.1.1</a></li>
-        <li><a href="#hurricanes-0-1-0">0.1.0</a></li>
+        <li><a href="#rrricanes-0-1-3-2017-06-11">0.1.3</a></li>
+        <li><a href="#rrricanes-0-1-2-2017-06-08">0.1.2</a></li>
+        <li><a href="#hurricanes-0-1-0-2017-05-12">0.1.0</a></li>
       </ul>
     </div>
   </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>fstadv — fstadv • Hurricanes</title>
+<title>fstadv — fstadv • rrricanes</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -46,7 +46,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">Hurricanes</a>
+      <a class="navbar-brand" href="../index.html">rrricanes</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -62,7 +62,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/timtrice/rrricanes">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -81,7 +86,7 @@
     <p>Extrapolate data from FORECAST/ADVISORY products.</p>
     
 
-    <pre class="usage"><span class='fu'>fstadv</span>(<span class='no'>link</span>, <span class='kw'>msg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>fstadv</span>(<span class='no'>link</span>, <span class='no'>p</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -91,41 +96,15 @@
       <td><p>URL of a specific FORECAST/ADVISORY product</p></td>
     </tr>
     <tr>
-      <th>msg</th>
-      <td><p>Display each link as being worked; default is FALSE</p></td>
+      <th>p</th>
+      <td><p>dplyr::progress_estimate.</p></td>
     </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Dataframe</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Given a direct link to a forecast/advisory product, parse and
-return dataframe of values.</p><dl class='dl-horizontal'>
-  <dt>Status</dt><dd><p>Classification of storm, e.g., Tropical Storm, Hurricane,
-    etc.</p></dd>
-  <dt>Name</dt><dd><p>Name of storm</p></dd>
-  <dt>Adv</dt><dd><p>Advisory Number</p></dd>
-  <dt>Date</dt><dd><p>Date of advisory issuance</p></dd>
-  <dt>Key</dt><dd><p>Unique identifier for the storm</p></dd>
-  <dt>Lat</dt><dd><p>Latitude, location of the storm. Positive is northern
-    hemisphere. Negative is southern hemisphere.</p></dd>
-  <dt>Lon</dt><dd><p>Longitude, location of the storm. Positive is eastern
-    hemisphere. Negative is western hemisphere.</p></dd>
-  <dt>Wind</dt><dd><p>Current wind speed in knots.</p></dd>
-  <dt>Gust</dt><dd><p>Current maximum wind gusts in knots.</p></dd>
-  <dt>Pressure</dt><dd><p>Central barometric pressure in millibars.</p></dd>
-  <dt>PosAcc</dt><dd><p>Position accuracy of storm in nautical miles.</p></dd>
-  <dt>FwdDir</dt><dd><p>Forward direction of storm on a compass scale (0-359 or NA).</p></dd>
-  <dt>FwdSpeed</dt><dd><p>Forward speed of storm in knots or NA if stationary/drifting.</p></dd>
-  <dt>Eye</dt><dd><p>Size of the eye in nautical miles, if available, or NA.</p></dd>
-</dl>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p><code><a href='get_fstadv.html'>get_fstadv</a></code></p>
+return dataframe of values.</p>
     
 
   </div>
@@ -134,11 +113,7 @@ return dataframe of values.</p><dl class='dl-horizontal'>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

@@ -12,3 +12,4 @@
 ^datasets/
 ^reports/
 ^\.github$
+^vignettes/articles$

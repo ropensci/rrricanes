@@ -1,0 +1,33 @@
+reference:
+  - title: About `rrricanes`
+    contents:
+    - rrricanes
+  - title: Getting Storm Data
+    contents:
+    - starts_with("get_")
+    - load_storm_data
+  - title: Daily Discussions
+    contents:
+    - twoal
+    - twoep
+  - title: Tracking charts
+    contents:
+    - al_tracking_chart
+    - ep_tracking_chart
+    - tracking_chart
+  - title: Helpers
+    contents:
+    - al_prblty_stations
+    - cp_prblty_stations
+    - knots_to_mph
+    - mb_to_in
+    - saffir
+    - status_abbr_to_str
+    - starts_with("tidy_")
+
+articles:
+  - title: Vignettes
+    desc: >
+      Using `rrricanes` to get current and past cyclone advisory products.
+    contents:
+    - getting_started

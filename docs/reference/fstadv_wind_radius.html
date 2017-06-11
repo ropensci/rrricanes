@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>fstadv_wind_radius — fstadv_wind_radius • Hurricanes</title>
+<title>fstadv_wind_radius — fstadv_wind_radius • rrricanes</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -46,7 +46,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">Hurricanes</a>
+      <a class="navbar-brand" href="../index.html">rrricanes</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -62,7 +62,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/timtrice/rrricanes">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -78,11 +83,12 @@
     </div>
 
     
-    <p>Parse wind radius data from product, if exists. This is somewhat tricky as the
-  wind fields are 64KT, 50KT and 34KT and are listed in descending order. So,
-  the first line will not always be 64KT, 50KT or even 34KT depending on
-  strength of storm. What I do here is just extract the entire blob and work
-  through it. I'll continue to look for ways to improve it.</p>
+    <p>Parse wind radius data from product, if exists. This is somewhat
+tricky as the wind fields are 64KT, 50KT and 34KT and are listed in
+descending order. So the first line will not always be 64KT, 50KT or even
+34KT depending on strength of storm. What I do here is just extract the
+entire blob and work through it. I'll continue to look for ways to improve
+it.</p>
 <p>Complimentary to fstadv_get_wind_radius</p>
     
 

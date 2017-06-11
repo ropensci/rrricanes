@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>get_wndprb — get_wndprb • Hurricanes</title>
+<title>get_wndprb — get_wndprb • rrricanes</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -46,7 +46,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">Hurricanes</a>
+      <a class="navbar-brand" href="../index.html">rrricanes</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -62,7 +62,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/timtrice/rrricanes">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -78,17 +83,10 @@
     </div>
 
     
-    <p>Return dataframe of wind probability data.</p><dl class='dl-horizontal'>
-  <dt>Status</dt><dd><p>Classification of storm, e.g., Tropical Storm, Hurricane,
-    etc.</p></dd>
-  <dt>Name</dt><dd><p>Name of storm</p></dd>
-  <dt>Adv</dt><dd><p>Advisory Number</p></dd>
-  <dt>Date</dt><dd><p>Date of advisory issuance</p></dd>
-  <dt>Contents</dt><dd><p>Text content of product</p></dd>
-</dl>
+    <p>Return dataframe of wind speed probability data.</p>
     
 
-    <pre class="usage"><span class='fu'>get_wndprb</span>(<span class='no'>link</span>, <span class='kw'>msg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_wndprb</span>(<span class='no'>link</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -97,21 +95,37 @@
       <th>link</th>
       <td><p>URL to storm's archive page.</p></td>
     </tr>
-    <tr>
-      <th>msg</th>
-      <td><p>Show link being worked. Default, FALSE.</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
     <p><a href = 'http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf'>http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf</a></p>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code><a href='get_storms.html'>get_storms</a></code>, <code><a href='wndprb.html'>wndprb</a></code>,
-    <code><a href='al_prblty_stations.html'>al_prblty_stations</a></code>, <code><a href='ep_prblty_stations.html'>ep_prblty_stations</a></code>,
-    <code><a href='cp_prblty_stations.html'>cp_prblty_stations</a></code></p>
+    <p>Wind Speed Probability product replaced Strike Probabilities product
+    after the 2005 hurricane season. These products may not be issued for
+    every advisory/cyclone.</p><dl class='dl-horizontal'>
+  <dt>Status</dt><dd><p>Classification of storm, e.g., Tropical Storm, Hurricane,
+    etc.</p></dd>
+  <dt>Name</dt><dd><p>Name of storm</p></dd>
+  <dt>Adv</dt><dd><p>Advisory Number</p></dd>
+  <dt>Date</dt><dd><p>Date of advisory issuance</p></dd>
+  <dt>Wind</dt><dd><p>Minium wind speed for which probabilities reference</p></dd>
+  <dt>Wind12</dt><dd><p>Probability of sustained `Wind` within 12 hours</p></dd>
+  <dt>Wind24</dt><dd><p>Probability of sustained `Wind` within 24 hours</p></dd>
+  <dt>Wind24Cum</dt><dd><p>Cumulative probability through 24 hours</p></dd>
+  <dt>Wind36</dt><dd><p>Probability of sustained `Wind` within 36 hours</p></dd>
+  <dt>Wind36Cum</dt><dd><p>Cumulative probability through 36 hours</p></dd>
+  <dt>Wind48</dt><dd><p>Probability of sustained `Wind` within 48 hours</p></dd>
+  <dt>Wind48Cum</dt><dd><p>Cumulative probability through 48 hours</p></dd>
+  <dt>Wind72</dt><dd><p>Probability of sustained `Wind` within 72 hours</p></dd>
+  <dt>Wind72Cum</dt><dd><p>Cumulative probability through 72 hours</p></dd>
+  <dt>Wind96</dt><dd><p>Probability of sustained `Wind` within 96 hours</p></dd>
+  <dt>Wind96Cum</dt><dd><p>Cumulative probability through 96 hours</p></dd>
+  <dt>Wind120</dt><dd><p>Probability of sustained `Wind` within 120 hours</p></dd>
+  <dt>Wind120Cum</dt><dd><p>Cumulative probability through 120 hours</p></dd>
+</dl>
     
 
   </div>
@@ -122,7 +136,7 @@
       
       <li><a href="#source">Source</a></li>
 
-      <li><a href="#see-also">See also</a></li>
+      <li><a href="#details">Details</a></li>
           </ul>
 
   </div>

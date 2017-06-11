@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>get_fstadv — get_fstadv • Hurricanes</title>
+<title>get_fstadv — get_fstadv • rrricanes</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -46,7 +46,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">Hurricanes</a>
+      <a class="navbar-brand" href="../index.html">rrricanes</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -62,7 +62,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/timtrice/rrricanes">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -81,24 +86,89 @@
     <p>Return dataframe of forecast/advisory data.</p>
     
 
-    <pre class="usage"><span class='fu'>get_fstadv</span>(<span class='no'>link</span>, <span class='kw'>msg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_fstadv</span>(<span class='no'>link</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>link</th>
-      <td><p>URL to storm's archive page.</p></td>
-    </tr>
-    <tr>
-      <th>msg</th>
-      <td><p>Show link currently being worked. Default, FALSE.</p></td>
+      <td><p>URL to storms' archive page.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Returns a wide dataframe of most the data available in a cyclones
+forecast/advisory product (watches and warnings are not included at this
+time).</p>
+<p>Overall structure of the dataframe is listed below. Note the following
+clarifications:</p><ol>
+<li><p>The value of `n` in `Hr{n}` variables is the forecast period.
+        Up to 2002, forecast periods are 12, 24, 36, 48 and 72 hours. After
+        2002, forecast periods were extended to 96 and 120 hours. Not all
+        forecast periods will be avialable for every cyclone advisory (e.g.,
+        if it is dissipating or expected to dissipate.)</p></li>
+<li><p>Wind radius data is not included 96 and 120 hour forecast periods.</p></li>
+<li><p>Forecast dates are not truly 12, 24, ..., 120 hours from the
+        date/time of the advisory. The NHC issues two positions in these
+        products; one for current and one for three hours prior. It is the
+        latter position the forecast date/times are based.</p></li>
+</ol>
+    <dl class='dl-horizontal'>
+   <dt>Status</dt><dd><p>Classification of cyclone</p></dd>
+   <dt>Name</dt><dd><p>Name of cyclone</p></dd>
+   <dt>Adv</dt><dd><p>Advisory number</p></dd>
+   <dt>Date</dt><dd><p>Date and time of advisory</p></dd>
+   <dt>Key</dt><dd><p>Unique identifier of cyclone</p></dd>
+   <dt>Lat</dt><dd><p>Latitude of cyclone center</p></dd>
+   <dt>Lon</dt><dd><p>Longitude of cyclone center</p></dd>
+   <dt>Wind</dt><dd><p>Maximum sustained one-minute winds in knots</p></dd>
+   <dt>Gust</dt><dd><p>Maximum sustained one-minute gusts in knots</p></dd>
+   <dt>Pressure</dt><dd><p>Minimum central pressure in millibars</p></dd>
+   <dt>PosAcc</dt><dd><p>Position accuracy of cyclone in nautical miles</p></dd>
+   <dt>FwdDir</dt><dd><p>Compass angle of forward motion</p></dd>
+   <dt>FwdSpeed</dt><dd><p>Forward speed in miles per hour</p></dd>
+   <dt>Eye</dt><dd><p>Size of eye in nautical miles</p></dd>
+   <dt>NE64</dt><dd><p>Radius of &gt;=64kt winds in northeast quadrant</p></dd>
+   <dt>SE64</dt><dd><p>Radius of &gt;=64kt winds in southeast quadrant</p></dd>
+   <dt>SW64</dt><dd><p>Radius of &gt;=64kt winds in southwest quadrant</p></dd>
+   <dt>NW64</dt><dd><p>Radius of &gt;=64kt winds in northwest quadrant</p></dd>
+   <dt>NE50</dt><dd><p>Radius of &gt;=50kt winds in northeast quadrant</p></dd>
+   <dt>SE50</dt><dd><p>Radius of &gt;=50kt winds in southeast quadrant</p></dd>
+   <dt>SW50</dt><dd><p>Radius of &gt;=50kt winds in southwest quadrant</p></dd>
+   <dt>NW50</dt><dd><p>Radius of &gt;=50kt winds in northwest quadrant</p></dd>
+   <dt>NE34</dt><dd><p>Radius of &gt;=34kt winds in northwest quadrant</p></dd>
+   <dt>SE34</dt><dd><p>Radius of &gt;=34kt winds in southeast quadrant</p></dd>
+   <dt>SW34</dt><dd><p>Radius of &gt;=34kt winds in southwest quadrant</p></dd>
+   <dt>NW34</dt><dd><p>Radius of &gt;=34kt winds in northwest quadrant</p></dd>
+   <dt>Hr{n}FcstDate</dt><dd><p>Forecast valid date</p></dd>
+   <dt>Hr{n}Lat</dt><dd><p>Forecast latitude in `n` hours</p></dd>
+   <dt>Hr{n}Lon</dt><dd><p>Forecast longitude in `n` hours</p></dd>
+   <dt>Hr{n}Wind</dt><dd><p>Forecast maximum wind in `n` hours</p></dd>
+   <dt>Hr{n}Gust</dt><dd><p>Forecast maximum gust in `n` hours</p></dd>
+   <dt>Hr{n}NE64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}SE64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}SW64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}NW64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}NE50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}SE50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}SW50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}NW50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}NE34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}SE34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}SW34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>Hr{n}NW34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+   <dt>SeasNE</dt><dd><p>Radius of 12ft seas in northeast qaudrant</p></dd>
+   <dt>SeasSE</dt><dd><p>Radius of 12ft seas in southeast qaudrant</p></dd>
+   <dt>SeasSW</dt><dd><p>Radius of 12ft seas in southwest qaudrant</p></dd>
+   <dt>SeasNW</dt><dd><p>Radius of 12ft seas in northwest qaudrant</p></dd>
+</dl>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='get_storms.html'>get_storms</a></code>, <code><a href='public.html'>public</a></code></p>
+    <p><code><a href='tidy_fstadv.html'>tidy_fstadv</a></code>, <code><a href='tidy_wr.html'>tidy_wr</a></code>,
+<code><a href='tidy_fcst.html'>tidy_fcst</a></code>, <code><a href='tidy_fcst_wr.html'>tidy_fcst_wr</a></code></p>
     
 
   </div>
@@ -107,6 +177,8 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#details">Details</a></li>
+
       <li><a href="#see-also">See also</a></li>
           </ul>
 
