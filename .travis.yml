@@ -8,14 +8,6 @@ addons:
       - libgdal-dev
       - libproj-dev
 
-# r_check_args: --no-tests --no-build-vignettes --no-manual
-
-addons:
-  apt:
-    packages:
-      - libgdal-dev
-      - libproj-dev
-
 # Test package on multiple platforms
 matrix:
   include:
