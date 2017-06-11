@@ -11,9 +11,6 @@ wndprb(link, p)
 
 \item{p}{dplyr::progress_estimate.}
 }
-\value{
-Dataframe
-}
 \description{
 Parse wind probability products
 }
@@ -21,6 +18,4 @@ Parse wind probability products
 Given a direct link to a wind probability product, parse and return
 dataframe of values.
 }
-\seealso{
-\code{\link{get_wndprb}}
-}
+\keyword{internal}

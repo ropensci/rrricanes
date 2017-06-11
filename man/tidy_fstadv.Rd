@@ -13,5 +13,26 @@ tidy_fstadv(df)
 Tidy current details of a fstadv dataframe object.
 }
 \details{
-Use Key, Adv and Date to join with other tidy dataframes.
+Returns current data only of a fstadv dataframe. Use Key, Adv and
+Date to join with other tidy dataframes.
+\describe{
+   \item{Key}{Unique identifier of cyclone}
+   \item{Adv}{Advisory number}
+   \item{Date}{Date and time of advisory}
+   \item{Status}{Classification of cyclone}
+   \item{Name}{Name of cyclone}
+   \item{Lat}{Latitude of cyclone center}
+   \item{Lon}{Longitude of cyclone center}
+   \item{Wind}{Maximum sustained one-minute winds in knots}
+   \item{Gust}{Maximum sustained one-minute gusts in knots}
+   \item{Pressure}{Minimum central pressure in millibars}
+   \item{PosAcc}{Position accuracy of cyclone in nautical miles}
+   \item{FwdDir}{Compass angle of forward motion}
+   \item{FwdSpeed}{Forward speed in miles per hour}
+   \item{Eye}{Size of eye in nautical miles}
+   \item{SeasNE}{Radius of 12ft seas in northeast qaudrant}
+   \item{SeasSE}{Radius of 12ft seas in southeast qaudrant}
+   \item{SeasSW}{Radius of 12ft seas in southwest qaudrant}
+   \item{SeasNW}{Radius of 12ft seas in northwest qaudrant}
+}
 }

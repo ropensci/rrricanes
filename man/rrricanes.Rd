@@ -75,5 +75,8 @@ this becomes an issue.
 get a dataset. Default is 3 but no more than 5 attempts are permitted. If
 \code{rrricanes.http_timeout} is reached, `rrricanes` will reattempt until
 the value of \code{rrricanes.http_attempts} is reached.
+
+\code{rrricanes.http_sleep} controls how long to wait between multiple
+attempts. Default is 3 seconds.
 }
 

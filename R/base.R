@@ -64,6 +64,9 @@
 #' \code{rrricanes.http_timeout} is reached, `rrricanes` will reattempt until
 #' the value of \code{rrricanes.http_attempts} is reached.
 #'
+#' \code{rrricanes.http_sleep} controls how long to wait between multiple
+#' attempts. Default is 3 seconds.
+#'
 #' @docType package
 #' @name rrricanes
 NULL
@@ -73,8 +76,9 @@ NULL
 .onLoad <- function(libname, pkgname) {
     op <- options()
     op.rrricanes <- list(rrricanes.working_msg = FALSE,
-                         rrricanes.http_timeout = 1,
-                         rrricanes.http_attempts = 3)
+                         rrricanes.http_timeout = 1L,
+                         rrricanes.http_attempts = 3L,
+                         rrricanes.http_sleep = 3L)
     toset <- !(names(op.rrricanes) %in% names(op))
     if (any(toset)) options(op.rrricanes[toset])
     invisible()
@@ -128,6 +132,12 @@ get_url_contents <- function(link) {
     max_attempts <- getOption("rrricanes.http_attempts")
     if (max_attempts > 5) max_attempts <- 5
     for (i in seq(1, max_attempts)) {
+        if (i > 1) {
+            sleep <- as.integer(getOption("rrricanes.http_sleep"))
+            Sys.sleep(sleep)
+            if (getOption("rrricanes.working_msg") == TRUE)
+                message(sprintf("Waiting %s seconds to retry URL.", sleep))
+        }
         safe_GET <- purrr::safely(httr::GET)
         contents <- safe_GET(url = link,
                              httr::timeout(getOption("rrricanes.http_timeout")))

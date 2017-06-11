@@ -1,3 +1,23 @@
+rrricanes 0.1.3 (2017-06-11)
+============================
+
+### NEW FEATURES
+
+* NA
+
+### MINOR IMPROVEMENTS
+
+* `rrricanes.http_sleep` to control time to sleep between multiple HTTP requests.
+* Clarified documentation for `get_fstadv`, `get_prblty`, `get_wndprb`, `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr`.
+
+### BUG FIXES
+
+* `tidy_fcst` and `tidy_fcst_wr` would err if all forecast periods were not available for a cyclone. Functions now analyze dataframe to determine what forecast fields exist, then tidies based on the result. (#73)
+
+### DEPRECATED AND DEFUNCT
+
+* NA
+
 rrricanes 0.1.2 (2017-06-08)
 ============================
 

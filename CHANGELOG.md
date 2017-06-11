@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.1.3] 2017-06-11
+
+### Added
+  - `rrricanes.http_sleep` to control time to sleep between multiple HTTP requests.
+
+### Changed
+  - Update documentation for `get_fstadv`, `get_prblty`, `get_wndprb`, `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr`.
+
+### Removed
+  - NA
+
+### Deprecated
+  - NA
+
+### Fixed
+  - Correct `tidy_fcst` and `tidy_fcst_wr` when all forecast periods do not exist. Previously, was expected that all forecast fields would exist. This may not always be the case. Now works only available forecast periods. (#73)
+
+### Security
+  - NA
+
 ## [0.1.2] - 2017-06-08
 
 ### Added

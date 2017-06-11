@@ -17,6 +17,6 @@ build_archive_df(link, basin = c("AL", "EP"), p)
 dataframe
 }
 \description{
-Add storms for the given link, basin into dataframej.
+Add storms for the given link, basin into dataframe.
 }
 \keyword{internal}

@@ -40,19 +40,33 @@ ep_prblty_stations <- function() {
 }
 
 #' @title get_wndprb
-#' @description Return dataframe of wind probability data.
+#' @description Return dataframe of wind speed probability data.
+#' @details Wind Speed Probability product replaced Strike Probabilities product
+#'     after the 2005 hurricane season. These products may not be issued for
+#'     every advisory/cyclone.
+#'
 #' \describe{
 #'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
 #'     etc.}
 #'   \item{Name}{Name of storm}
 #'   \item{Adv}{Advisory Number}
 #'   \item{Date}{Date of advisory issuance}
-#'   \item{Contents}{Text content of product}
+#'   \item{Wind}{Minium wind speed for which probabilities reference}
+#'   \item{Wind12}{Probability of sustained `Wind` within 12 hours}
+#'   \item{Wind24}{Probability of sustained `Wind` within 24 hours}
+#'   \item{Wind24Cum}{Cumulative probability through 24 hours}
+#'   \item{Wind36}{Probability of sustained `Wind` within 36 hours}
+#'   \item{Wind36Cum}{Cumulative probability through 36 hours}
+#'   \item{Wind48}{Probability of sustained `Wind` within 48 hours}
+#'   \item{Wind48Cum}{Cumulative probability through 48 hours}
+#'   \item{Wind72}{Probability of sustained `Wind` within 72 hours}
+#'   \item{Wind72Cum}{Cumulative probability through 72 hours}
+#'   \item{Wind96}{Probability of sustained `Wind` within 96 hours}
+#'   \item{Wind96Cum}{Cumulative probability through 96 hours}
+#'   \item{Wind120}{Probability of sustained `Wind` within 120 hours}
+#'   \item{Wind120Cum}{Cumulative probability through 120 hours}
 #' }
 #' @param link URL to storm's archive page.
-#' @seealso \code{\link{get_storms}}, \code{\link{wndprb}},
-#'     \code{\link{al_prblty_stations}}, \code{\link{ep_prblty_stations}},
-#'     \code{\link{cp_prblty_stations}}
 #' @source \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 #' @export
 get_wndprb <- function(link) {
@@ -79,9 +93,7 @@ get_wndprb <- function(link) {
 #' dataframe of values.
 #' @param link Link to a storm's specific wind probability product.
 #' @param p dplyr::progress_estimate.
-#' @return Dataframe
-#' @seealso \code{\link{get_wndprb}}
-#' @export
+#' @keywords internal
 wndprb <- function(link, p) {
 
     p$pause(0.5)$tick()$print()
@@ -104,8 +116,6 @@ wndprb <- function(link, p) {
     if (getOption("rrricanes.working_msg"))
         message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
                         status, name, adv, date))
-
-    ## ---- * Wind Speed Probabilities for Selected Locations ------------------
 
     ptn <- paste0("(?<=\n)", # Look-behind
                   # Location - first value must be capital letter.

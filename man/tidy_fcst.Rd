@@ -13,7 +13,18 @@ tidy_fcst(df)
 Tidy forecasts of a fstadv dataframe object.
 }
 \details{
-Gathers all forecast points, converts to narrow dataframe and
-removes rows that are NA. Use Key, Adv and Date to join with other tidy
-dataframes.
+Gathers all forecast points, tidies dataframe to make one row per
+forecast position. Complete cases only. Use Key, Adv and Date to join with
+other tidy dataframes.
+
+\describe{
+   \item{Key}{Unique identifier of cyclone}
+   \item{Adv}{Advisory number}
+   \item{Date}{Date and time of advisory}
+   \item{FcstDate}{Forecast date and time in UTC}
+   \item{Lat}{Forecast latitude}
+   \item{Lon}{Forecast Longitude}
+   \item{Wind}{Forecast wind in knots}
+   \item{Gust}{Forecast gust in knots}
+}
 }

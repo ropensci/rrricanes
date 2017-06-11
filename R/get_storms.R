@@ -1,5 +1,5 @@
 #' @title build_archive_df
-#' @description Add storms for the given link, basin into dataframej.
+#' @description Add storms for the given link, basin into dataframe.
 #' @param page contents of page being parsed
 #' @param basin c("AL", "EP")
 #' @param p dplyr::progress_estimate.
