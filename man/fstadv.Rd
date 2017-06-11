@@ -11,40 +11,11 @@ fstadv(link, p)
 
 \item{p}{dplyr::progress_estimate.}
 }
-\value{
-Dataframe
-}
 \description{
 Extrapolate data from FORECAST/ADVISORY products.
 }
 \details{
 Given a direct link to a forecast/advisory product, parse and
 return dataframe of values.
-\describe{
-  \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
-    etc.}
-  \item{Name}{Name of storm}
-  \item{Adv}{Advisory Number}
-  \item{Date}{Date of advisory issuance}
-  \item{Key}{Unique identifier for the storm}
-  \item{Lat}{Latitude, location of the storm. Positive is northern
-    hemisphere. Negative is southern hemisphere.}
-  \item{Lon}{Longitude, location of the storm. Positive is eastern
-    hemisphere. Negative is western hemisphere.}
-  \item{Wind}{Current wind speed in knots.}
-  \item{Gust}{Current maximum wind gusts in knots.}
-  \item{Pressure}{Central barometric pressure in millibars.}
-  \item{PosAcc}{Position accuracy of storm in nautical miles.}
-  \item{FwdDir}{
-      Forward direction of storm on a compass scale (0-359 or NA).
-  }
-  \item{FwdSpeed}{
-      Forward speed of storm in knots or NA if stationary/drifting.
-  }
-  \item{Eye}{Size of the eye in nautical miles, if available, or NA.}
-}
-}
-\seealso{
-\code{\link{get_fstadv}}
 }
 \keyword{internal}

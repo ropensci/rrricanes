@@ -6,17 +6,81 @@
 \usage{
 get_fstadv(link)
 }
-\arguments{
-\item{link}{URL to storm's archive page.}
-}
 \description{
 Return dataframe of forecast/advisory data.
 }
 \details{
-To disable the progress bar set option dplyr.show_progress to
-    FALSE. You can also enable messages to show the storm and advisory
-    currentl by being worked by setting the rrricanes.working_msg to TRUE.
+Returns a wide dataframe of most the data available in a cyclones
+forecast/advisory product (watches and warnings are not included at this
+time).
+
+Overall structure of the dataframe is listed below. Note the following
+clarifications:
+
+\enumerate{
+    \item The value of `n` in `Hr\{n\}` variables is the forecast period.
+        Up to 2002, forecast periods are 12, 24, 36, 48 and 72 hours. After
+        2002, forecast periods were extended to 96 and 120 hours. Not all
+        forecast periods will be avialable for every cyclone advisory (e.g.,
+        if it is dissipating or expected to dissipate.)
+    \item Wind radius data is not included 96 and 120 hour forecast periods.
+    \item Forecast dates are not truly 12, 24, ..., 120 hours from the
+        date/time of the advisory. The NHC issues two positions in these
+        products; one for current and one for three hours prior. It is the
+        latter position the forecast date/times are based.
+}
+
+\describe{
+   \item{Status}{Classification of cyclone}
+   \item{Name}{Name of cyclone}
+   \item{Adv}{Advisory number}
+   \item{Date}{Date and time of advisory}
+   \item{Key}{Unique identifier of cyclone}
+   \item{Lat}{Latitude of cyclone center}
+   \item{Lon}{Longitude of cyclone center}
+   \item{Wind}{Maximum sustained one-minute winds in knots}
+   \item{Gust}{Maximum sustained one-minute gusts in knots}
+   \item{Pressure}{Minimum central pressure in millibars}
+   \item{PosAcc}{Position accuracy of cyclone in nautical miles}
+   \item{FwdDir}{Compass angle of forward motion}
+   \item{FwdSpeed}{Forward speed in miles per hour}
+   \item{Eye}{Size of eye in nautical miles}
+   \item{NE64}{Radius of >=64kt winds in northeast quadrant}
+   \item{SE64}{Radius of >=64kt winds in southeast quadrant}
+   \item{SW64}{Radius of >=64kt winds in southwest quadrant}
+   \item{NW64}{Radius of >=64kt winds in northwest quadrant}
+   \item{NE50}{Radius of >=50kt winds in northeast quadrant}
+   \item{SE50}{Radius of >=50kt winds in southeast quadrant}
+   \item{SW50}{Radius of >=50kt winds in southwest quadrant}
+   \item{NW50}{Radius of >=50kt winds in northwest quadrant}
+   \item{NE34}{Radius of >=34kt winds in northwest quadrant}
+   \item{SE34}{Radius of >=34kt winds in southeast quadrant}
+   \item{SW34}{Radius of >=34kt winds in southwest quadrant}
+   \item{NW34}{Radius of >=34kt winds in northwest quadrant}
+   \item{Hr\{n\}FcstDate}{Forecast valid date}
+   \item{Hr\{n\}Lat}{Forecast latitude in `n` hours}
+   \item{Hr\{n\}Lon}{Forecast longitude in `n` hours}
+   \item{Hr\{n\}Wind}{Forecast maximum wind in `n` hours}
+   \item{Hr\{n\}Gust}{Forecast maximum gust in `n` hours}
+   \item{Hr\{n\}NE64}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}SE64}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}SW64}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}NW64}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}NE50}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}SE50}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}SW50}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}NW50}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}NE34}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}SE34}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}SW34}{Forecast wind radius in `n` hours}
+   \item{Hr\{n\}NW34}{Forecast wind radius in `n` hours}
+   \item{SeasNE}{Radius of 12ft seas in northeast qaudrant}
+   \item{SeasSE}{Radius of 12ft seas in southeast qaudrant}
+   \item{SeasSW}{Radius of 12ft seas in southwest qaudrant}
+   \item{SeasNW}{Radius of 12ft seas in northwest qaudrant}
+}
 }
 \seealso{
-\code{\link{get_storms}}, \code{\link{public}}
+\code{\link{tidy_fstadv}}, \code{\link{tidy_wr}},
+\code{\link{tidy_fcst}}, \code{\link{tidy_fcst_wr}}
 }
