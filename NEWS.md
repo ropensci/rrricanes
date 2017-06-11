@@ -8,6 +8,7 @@ rrricanes 0.2.0 (yyyy-mm-dd)
 ### MINOR IMPROVEMENTS
 
 * `rrricanes.http_sleep` to control time to sleep between multiple HTTP requests.
+* Clarified documentation for `get_fstadv`, `get_prblty`, `get_wndprb`, `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr`.
 
 ### BUG FIXES
 

@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - `rrricanes.http_sleep` to control time to sleep between multiple HTTP requests.
 
 ### Changed
-  - NA
+  - Update documentation for `get_fstadv`, `get_prblty`, `get_wndprb`, `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr`.
 
 ### Removed
   - NA

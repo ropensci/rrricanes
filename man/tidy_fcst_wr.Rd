@@ -13,6 +13,19 @@ tidy_fcst_wr(df)
 Tidy forecast wind radii of a fstadv dataframe object
 }
 \details{
-Converts forecast wind radii fields to narrow, tidy dataframe. Use
-Key, Adv and Date to join with other tidy dataframes.
+Tidies forecast wind radius for each forecast position. Complete
+cases only (by quadrants). Use Key, Adv and Date to join with other tidy
+dataframes.
+
+\describe{
+   \item{Key}{Unique identifier of cyclone}
+   \item{Adv}{Advisory number}
+   \item{Date}{Date and time of advisory}
+   \item{FcstDate}{Forecast date and time in UTC}
+   \item{WindField}{Minimum sustained wind field for quadrants}
+   \item{NE}{Radius in nautical miles for northeast quadrant}
+   \item{SE}{Radius in nautical miles for southeast quadrant}
+   \item{SW}{Radius in nautical miles for southwest quadrant}
+   \item{NW}{Radius in nautical miles for northwest quadrant}
+}
 }

@@ -569,7 +569,28 @@ fstadv_winds_gusts <- function(contents, what = NULL) {
 #' @title tidy_fstadv
 #' @description Tidy current details of a fstadv dataframe object.
 #' @param df fstadv dataframe object
-#' @details Use Key, Adv and Date to join with other tidy dataframes.
+#' @details Returns current data only of a fstadv dataframe. Use Key, Adv and
+#' Date to join with other tidy dataframes.
+#' \describe{
+#'    \item{Key}{Unique identifier of cyclone}
+#'    \item{Adv}{Advisory number}
+#'    \item{Date}{Date and time of advisory}
+#'    \item{Status}{Classification of cyclone}
+#'    \item{Name}{Name of cyclone}
+#'    \item{Lat}{Latitude of cyclone center}
+#'    \item{Lon}{Longitude of cyclone center}
+#'    \item{Wind}{Maximum sustained one-minute winds in knots}
+#'    \item{Gust}{Maximum sustained one-minute gusts in knots}
+#'    \item{Pressure}{Minimum central pressure in millibars}
+#'    \item{PosAcc}{Position accuracy of cyclone in nautical miles}
+#'    \item{FwdDir}{Compass angle of forward motion}
+#'    \item{FwdSpeed}{Forward speed in miles per hour}
+#'    \item{Eye}{Size of eye in nautical miles}
+#'    \item{SeasNE}{Radius of 12ft seas in northeast qaudrant}
+#'    \item{SeasSE}{Radius of 12ft seas in southeast qaudrant}
+#'    \item{SeasSW}{Radius of 12ft seas in southwest qaudrant}
+#'    \item{SeasNW}{Radius of 12ft seas in northwest qaudrant}
+#' }
 #' @export
 tidy_fstadv <- function(df) {
     if (!is.data.frame(df))
@@ -582,9 +603,18 @@ tidy_fstadv <- function(df) {
 #' @title tidy_wr
 #' @description Tidy current wind radius of a fstadv dataframe object.
 #' @param df fstadv dataframe object
-#' @details Takes current wind radius variables in a fstadv dataframe object,
-#' tidys the data and removes rows where all values are NA. Use Key, Adv and
-#' Date to join with other tidy dataframes.
+#' @details Returns tidy dataframe of current wind radius values for a cyclone.
+#' Returns only complete.cases (based on quadrants).
+#' \describe{
+#'    \item{Key}{Unique identifier of cyclone}
+#'    \item{Adv}{Advisory number}
+#'    \item{Date}{Date and time of advisory}
+#'    \item{Windfield}{Minimum wind speed expected}
+#'    \item{NE}{Radius of `Windfield` in the northeast quadrant}
+#'    \item{SE}{Radius of `Windfield` in the southeast quadrant}
+#'    \item{SW}{Radius of `Windfield` in the southwest quadrant}
+#'    \item{NW}{Radius of `Windfield` in the northwest quadrant}
+#' }
 #' @export
 tidy_wr <- function(df) {
     if (!is.data.frame(df))
@@ -626,9 +656,20 @@ tidy_wr <- function(df) {
 #' @title tidy_fcst
 #' @description Tidy forecasts of a fstadv dataframe object.
 #' @param df fstadv dataframe object
-#' @details Gathers all forecast points, converts to narrow dataframe and
-#' removes rows that are NA. Use Key, Adv and Date to join with other tidy
-#' dataframes.
+#' @details Gathers all forecast points, tidies dataframe to make one row per
+#' forecast position. Complete cases only. Use Key, Adv and Date to join with
+#' other tidy dataframes.
+#'
+#' \describe{
+#'    \item{Key}{Unique identifier of cyclone}
+#'    \item{Adv}{Advisory number}
+#'    \item{Date}{Date and time of advisory}
+#'    \item{FcstDate}{Forecast date and time in UTC}
+#'    \item{Lat}{Forecast latitude}
+#'    \item{Lon}{Forecast Longitude}
+#'    \item{Wind}{Forecast wind in knots}
+#'    \item{Gust}{Forecast gust in knots}
+#' }
 #' @export
 tidy_fcst <- function(df) {
     if (!is.data.frame(df))
@@ -665,8 +706,22 @@ tidy_fcst <- function(df) {
 #' @title tidy_fcst_wr
 #' @description Tidy forecast wind radii of a fstadv dataframe object
 #' @param df fstadv dataframe object
-#' @details Converts forecast wind radii fields to narrow, tidy dataframe. Use
-#' Key, Adv and Date to join with other tidy dataframes.
+#' @details Tidies forecast wind radius for each forecast position. Complete
+#' cases only (by quadrants). Use Key, Adv and Date to join with other tidy
+#' dataframes.
+#'
+#' \describe{
+#'    \item{Key}{Unique identifier of cyclone}
+#'    \item{Adv}{Advisory number}
+#'    \item{Date}{Date and time of advisory}
+#'    \item{FcstDate}{Forecast date and time in UTC}
+#'    \item{WindField}{Minimum sustained wind field for quadrants}
+#'    \item{NE}{Radius in nautical miles for northeast quadrant}
+#'    \item{SE}{Radius in nautical miles for southeast quadrant}
+#'    \item{SW}{Radius in nautical miles for southwest quadrant}
+#'    \item{NW}{Radius in nautical miles for northwest quadrant}
+#' }
+#'
 #' @export
 tidy_fcst_wr <- function(df) {
     if (!is.data.frame(df))
