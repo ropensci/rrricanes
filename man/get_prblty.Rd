@@ -10,16 +10,19 @@ get_prblty(link)
 \item{link}{URL to storm's archive page.}
 }
 \description{
-Return dataframe of strike probability data.
+Strike probabilities; the chances of the center of a cyclone
+passing within 65 nautical miles of a location.
 \describe{
   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
     etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}
-  \item{Contents}{Text content of product}
+  \item{Location}{Location for which the probablity statistics rely}
+  \item{A}{Probability of a strike within the next 12 hours}
+  \item{B}{Probability of a strike between 12 and 24 hours}
+  \item{C}{Probability of a strike between 24 and 36 hours}
+  \item{D}{Probability of a strike between 36 and 48 hours}
+  \item{E}{Probability of a strike between 48 and 72 hours}
 }
-}
-\seealso{
-\code{\link{get_storms}}, \code{\link{prblty}}
 }
