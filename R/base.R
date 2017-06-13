@@ -138,11 +138,11 @@ get_url_contents <- function(link) {
             if (getOption("rrricanes.working_msg") == TRUE)
                 message(sprintf("Waiting %s seconds to retry URL.", sleep))
         }
-        safe_GET <- purrr::safely(httr::GET)
-        contents <- safe_GET(url = link,
-                             httr::timeout(getOption("rrricanes.http_timeout")))
-        if (!is.null(contents$result))
-            return(xml2::read_html(x = contents$result))
+        #safe_GET <- purrr::safely(httr::GET)
+        contents <- httr::GET(url = link,
+                              httr::timeout(getOption("rrricanes.http_timeout")))
+        if (!is.null(contents$content))
+            return(xml2::read_html(x = contents$content))
     }
     stop(contents$error$message, call. = TRUE)
 }
