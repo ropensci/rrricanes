@@ -25,7 +25,7 @@ Imports:
   readr (>= 1.1.0), 
   rgdal (>= 1.2-7),
   rgeos (>= 0.3-23),
-  rlang (>= 0.1.1.9000),
+  rlang (>= 0.1.1),
   rnaturalearthdata (>= 0.1.0),
   rvest (>= 0.3.2), 
   stringr (>= 1.2.0), 
