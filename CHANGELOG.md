@@ -20,7 +20,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - Not yet deprecated but a warning that `al_prblty_stations`, `cp_prblty_stations` and `ep_prblty_stations` may be removed on a future release. (#46)
 
 ### Fixed
-  - NA
+  - dplyr 0.6.0 has renamed the .cols parameter of `mutate_at` to .vars. Have modified pkg to accept both dplyr 0.5.0 and >= 0.6.0. This will be removed in future releases. (#74)
 
 ### Security
   - NA

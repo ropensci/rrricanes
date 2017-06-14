@@ -25,6 +25,7 @@ rrricanes 0.2.0-1 (yyyy-mm-dd)
 ### DEPRECATED AND DEFUNCT
 
 * Not yet deprecated but a warning that `al_prblty_stations`, `cp_prblty_stations` and `ep_prblty_stations` may be removed on a future release. (#46)
+* Support for dplyr 0.5.0 will be removed in future releases in favor of dplyr 0.7.0.
 
 rrricanes 0.1.3 (2017-06-11)
 ============================
