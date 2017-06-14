@@ -58,6 +58,11 @@ Version: 1.4.1
 Hash: 3310ba24c8436b297d1fb60ac4324ff2
 Requires: png
 
+Package: animation
+Source: CRAN
+Version: 2.5
+Hash: 2db95e150a4835a0c203686c934b0369
+
 Package: assertthat
 Source: CRAN
 Version: 0.2.0
@@ -188,6 +193,16 @@ Version: 1.5-5
 Hash: 6772bef0f3f3aaa58b475479c03ff596
 Requires: sp
 
+Package: gganimate
+Source: github
+Version: 0.1.0.9000
+Hash: 3958891c87a2dc00eebd1a5177080be8
+Requires: animation, base64enc, ggplot2, htmltools, plyr, withr
+GithubRepo: gganimate
+GithubUsername: dgrtwo
+GithubRef: master
+GithubSha1: bf82002063a7d7e83085722102d80d5643a1e0c5
+
 Package: ggmap
 Source: CRAN
 Version: 2.6.1
@@ -252,6 +267,12 @@ Source: CRAN
 Version: 0.3.6
 Hash: eeba9fb36d4cb6cc66f060187102be41
 Requires: Rcpp, digest
+
+Package: httpuv
+Source: CRAN
+Version: 1.3.3
+Hash: 81cab0e82a62025f180863eb4ddeeb20
+Requires: Rcpp
 
 Package: httr
 Source: CRAN
@@ -567,6 +588,12 @@ Source: CRAN
 Version: 0.3-1
 Hash: 367275e3dcdd208339e131c7a41bec56
 Requires: stringr
+
+Package: servr
+Source: CRAN
+Version: 0.6
+Hash: 83c5d4eee110a61b1062b4692a22bd91
+Requires: httpuv, jsonlite, mime
 
 Package: sp
 Source: CRAN
