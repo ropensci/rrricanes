@@ -597,7 +597,7 @@ tidy_fstadv <- function(df) {
     if (!is.data.frame(df))
         stop("Expecting a dataframe.")
     df <- dplyr::select_(df, "Key", "Adv:Date", "Status:Name", "Lat:Eye",
-                         "SeasNE:SeasNW")
+                         ~dplyr::starts_with("Seas"))
     return(df)
 }
 

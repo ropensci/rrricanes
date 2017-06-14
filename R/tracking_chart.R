@@ -54,7 +54,7 @@ al_tracking_chart <- function(...) {
 #' @export
 ep_tracking_chart <- function(...) {
     p <- tracking_chart(...)
-    p <- p + ggplot2::coord_equal(xlim = c(-180, -80), ylim = c(0, 35))
+    p <- p + ggplot2::coord_equal(xlim = c(-140, -80), ylim = c(0, 35))
     return(p)
 }
 

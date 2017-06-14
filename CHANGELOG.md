@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.2.0-alpha] yyyy-mm-dd
+## [0.2.0-1] yyyy-mm-dd
 
 ### Added
-  - NA
+  - GIS functions `gis_advisory`, `gis_breakpoints`, `gis_latest`, `gis_outlook`, `gis_prob_storm_surge`, `gis_windfield` and `gis_wsp` added. These functions return one or more URLs to datasets that can be downloaded with `gis_download`.
+  - `shp_to_df` added to convert lines and polygons spatial dataframes to dataframes. Points dataframes can be converted using `tibble::as_dataframe` (target the @data object).
 
 ### Changed
   - NA

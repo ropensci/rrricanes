@@ -1,13 +1,22 @@
-rrricanes 0.2.0-alpha (yyyy-mm-dd)
+rrricanes 0.2.0-1 (yyyy-mm-dd)
 ==================================
 
 ### NEW FEATURES
 
-* NA
+* GIS functions now available. Please note some of these products may not exist for every available cyclone/advisory.
+ + `gis_advisory` Typically will include current and past track data, forecast track data, forecast cone (margin of error) and wind radius data. 
+ + `gis_breakpoints` List of breakpoints typically used for watch/warning areas but is not a requirement.
+ + `gis_latest` Retrieves the latest GIS products for all active storms. 
+ + `gis_outlook` Retrives the latest tropical weather outlook in shapefile format.
+ + `gis_prob_storm_surge` Probabilistic storm surge; a polygon dataset for psurge and esurge products with various criteria.
+ + `gis_windfield` Wind radius datasets.
+ + `gis_wsp` Wind speed probabilities
+ + `gis_download` Use this function to download the URLs returned from the above functions.
+ + `shp_to_df` added to convert lines and polygons spatial dataframes to dataframes. Points dataframes can be converted using `tibble::as_dataframe` (target the @data object).
 
 ### MINOR IMPROVEMENTS
 
-* NA
+* [Enhanced documentation](https://timtrice.github.io/rrricanes/) added online using `pkgdown`. 
 
 ### BUG FIXES
 
