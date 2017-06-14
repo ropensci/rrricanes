@@ -84,14 +84,32 @@
     </div>
 
     <div class="contents">
-    <div id="rrricanes-0-1-3-2017-06-11" class="section level1">
+    <div id="rrricanes-0-2-0-1-yyyy-mm-dd" class="section level1">
 <h1 class="hasAnchor">
-<a href="#rrricanes-0-1-3-2017-06-11" class="anchor"></a>rrricanes 0.1.3 (2017-06-11)</h1>
+<a href="#rrricanes-0-2-0-1-yyyy-mm-dd" class="anchor"></a>rrricanes 0.2.0-1 (yyyy-mm-dd)</h1>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>NEW FEATURES</h3>
 <ul>
-<li>NA</li>
+<li>GIS functions now available. Please note some of these products may not exist for every available cyclone/advisory.</li>
+<li>
+<code>gis_advisory</code> Typically will include current and past track data, forecast track data, forecast cone (margin of error) and wind radius data.</li>
+<li>
+<code>gis_breakpoints</code> List of breakpoints typically used for watch/warning areas but is not a requirement.</li>
+<li>
+<code>gis_latest</code> Retrieves the latest GIS products for all active storms.</li>
+<li>
+<code>gis_outlook</code> Retrives the latest tropical weather outlook in shapefile format.</li>
+<li>
+<code>gis_prob_storm_surge</code> Probabilistic storm surge; a polygon dataset for psurge and esurge products with various criteria.</li>
+<li>
+<code>gis_windfield</code> Wind radius datasets.</li>
+<li>
+<code>gis_wsp</code> Wind speed probabilities</li>
+<li>
+<code>gis_download</code> Use this function to download the URLs returned from the above functions.</li>
+<li>
+<code>shp_to_df</code> added to convert lines and polygons spatial dataframes to dataframes. Points dataframes can be converted using <code>tibble::as_dataframe</code> (target the @data object).</li>
 </ul>
 </div>
 <div id="minor-improvements" class="section level3">
@@ -99,21 +117,54 @@
 <a href="#minor-improvements" class="anchor"></a>MINOR IMPROVEMENTS</h3>
 <ul>
 <li>
-<code>rrricanes.http_sleep</code> to control time to sleep between multiple HTTP requests.</li>
-<li>Clarified documentation for <code>get_fstadv</code>, <code>get_prblty</code>, <code>get_wndprb</code>, <code>tidy_fstadv</code>, <code>tidy_wr</code>, <code>tidy_fcst</code> and <code>tidy_fcst_wr</code>.</li>
+<a href="https://timtrice.github.io/rrricanes/">Enhanced documentation</a> added online using <code>pkgdown</code>.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>BUG FIXES</h3>
 <ul>
-<li>
-<code>tidy_fcst</code> and <code>tidy_fcst_wr</code> would err if all forecast periods were not available for a cyclone. Functions now analyze dataframe to determine what forecast fields exist, then tidies based on the result. (#73)</li>
+<li>NA</li>
 </ul>
 </div>
 <div id="deprecated-and-defunct" class="section level3">
 <h3 class="hasAnchor">
 <a href="#deprecated-and-defunct" class="anchor"></a>DEPRECATED AND DEFUNCT</h3>
+<ul>
+<li>Not yet deprecated but a warning that <code>al_prblty_stations</code>, <code>cp_prblty_stations</code> and <code>ep_prblty_stations</code> may be removed on a future release. (#46)</li>
+</ul>
+</div>
+</div>
+    <div id="rrricanes-0-1-3-2017-06-11" class="section level1">
+<h1 class="hasAnchor">
+<a href="#rrricanes-0-1-3-2017-06-11" class="anchor"></a>rrricanes 0.1.3 (2017-06-11)</h1>
+<div id="new-features-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h3>
+<ul>
+<li>NA</li>
+</ul>
+</div>
+<div id="minor-improvements-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#minor-improvements-1" class="anchor"></a>MINOR IMPROVEMENTS</h3>
+<ul>
+<li>
+<code>rrricanes.http_sleep</code> to control time to sleep between multiple HTTP requests.</li>
+<li>Clarified documentation for <code>get_fstadv</code>, <code>get_prblty</code>, <code>get_wndprb</code>, <code>tidy_fstadv</code>, <code>tidy_wr</code>, <code>tidy_fcst</code> and <code>tidy_fcst_wr</code>.</li>
+</ul>
+</div>
+<div id="bug-fixes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h3>
+<ul>
+<li>
+<code>tidy_fcst</code> and <code>tidy_fcst_wr</code> would err if all forecast periods were not available for a cyclone. Functions now analyze dataframe to determine what forecast fields exist, then tidies based on the result. (#73)</li>
+</ul>
+</div>
+<div id="deprecated-and-defunct-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#deprecated-and-defunct-1" class="anchor"></a>DEPRECATED AND DEFUNCT</h3>
 <ul>
 <li>NA</li>
 </ul>
@@ -122,9 +173,9 @@
     <div id="rrricanes-0-1-2-2017-06-08" class="section level1">
 <h1 class="hasAnchor">
 <a href="#rrricanes-0-1-2-2017-06-08" class="anchor"></a>rrricanes 0.1.2 (2017-06-08)</h1>
-<div id="new-features-1" class="section level3">
+<div id="new-features-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h3>
+<a href="#new-features-2" class="anchor"></a>NEW FEATURES</h3>
 <ul>
 <li><p>Changed name from <code>Hurricanes</code> to <code>rrricanes</code>.</p></li>
 <li><p><code>get_storm_data</code> can now be chained to other commands and returns a list of dataframes.</p></li>
@@ -134,9 +185,9 @@
 <li><p><code>twoal</code> and <code>twoep</code> parse tropical weather outlook XML files. Gives current status, if any, of areas of interest in either basin.</p></li>
 </ul>
 </div>
-<div id="minor-improvements-1" class="section level3">
+<div id="minor-improvements-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#minor-improvements-1" class="anchor"></a>MINOR IMPROVEMENTS</h3>
+<a href="#minor-improvements-2" class="anchor"></a>MINOR IMPROVEMENTS</h3>
 <ul>
 <li>Modified numerous regex patterns to ensure data quality.</li>
 <li>
@@ -144,18 +195,18 @@
 <li>Added loop to make multiple attempts at extracting contents from NHC archives. Options <code>rrricanes.http_timeout</code> and <code>rrricanes.http_attempts</code> added to give user more control over this. Default is 3 attempts with no more than 5 permitted.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level3">
+<div id="bug-fixes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h3>
+<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h3>
 <ul>
 <li>Too many to recall. Apologies.</li>
 <li>Call to <code>get_storms</code> on some linux distros generated xpath_element error. Corrected. (#67)</li>
 <li>Modify call to <code>get_storm_data</code>. Replaced css parameter in <code>rvest::html_nodes</code> calls with xpath parameter. Some products (notably, <code>get_prblty</code>) do not have a “pre” tag but are text documents (not HTML). Modified <code>scrape_contents</code> to return full contents if “pre” tag doesn’t exist. Tested <code>get_discus</code> and <code>get_public</code>; no errors generated. (#68)</li>
 </ul>
 </div>
-<div id="deprecated-and-defunct-1" class="section level3">
+<div id="deprecated-and-defunct-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#deprecated-and-defunct-1" class="anchor"></a>DEPRECATED AND DEFUNCT</h3>
+<a href="#deprecated-and-defunct-2" class="anchor"></a>DEPRECATED AND DEFUNCT</h3>
 <ul>
 <li>
 <code>fstadv_split</code>. See MINOR IMPROVEMENTS for alternatives.</li>
@@ -225,6 +276,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#rrricanes-0-2-0-1-yyyy-mm-dd">0.2.0-1</a></li>
         <li><a href="#rrricanes-0-1-3-2017-06-11">0.1.3</a></li>
         <li><a href="#rrricanes-0-1-2-2017-06-08">0.1.2</a></li>
         <li><a href="#hurricanes-0-1-0-2017-05-12">0.1.0</a></li>
