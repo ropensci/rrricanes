@@ -15,7 +15,7 @@ rrricanes 0.2.0-alpha (yyyy-mm-dd)
 
 ### DEPRECATED AND DEFUNCT
 
-* NA
+* Not yet deprecated but a warning that `al_prblty_stations`, `cp_prblty_stations` and `ep_prblty_stations` may be removed on a future release. (#46)
 
 rrricanes 0.1.3 (2017-06-11)
 ============================

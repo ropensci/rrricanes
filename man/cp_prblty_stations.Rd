@@ -8,5 +8,9 @@ cp_prblty_stations()
 }
 \description{
 Retrieve list of probability stations based in the central
-    Pacific from the NHC. To be used in tandem with `wndprb` products.
+Pacific from the NHC. To be used in tandem with `wndprb` products.
+}
+\details{
+This function may be deprecated soon as the data sources may be
+removed from the National Hurricane Center.
 }

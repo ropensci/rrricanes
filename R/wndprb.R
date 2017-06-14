@@ -1,6 +1,8 @@
 #' @title al_prblty_stations
 #' @description Retrieve list of probability stations based in the Atlantic
-#'     basin from the NHC. To be used in tandem with `wndprb` products.
+#' basin from the NHC. To be used in tandem with `wndprb` products.
+#' @details This function may be deprecated soon as the data sources may be
+#' removed from the National Hurricane Center.
 #' @export
 al_prblty_stations <- function() {
     url <- "http://www.nhc.noaa.gov/data/wsp/al_prblty_station.lst.csv.txt"
@@ -15,7 +17,9 @@ al_prblty_stations <- function() {
 
 #' @title cp_prblty_stations
 #' @description Retrieve list of probability stations based in the central
-#'     Pacific from the NHC. To be used in tandem with `wndprb` products.
+#' Pacific from the NHC. To be used in tandem with `wndprb` products.
+#' @details This function may be deprecated soon as the data sources may be
+#' removed from the National Hurricane Center.
 #' @export
 cp_prblty_stations <- function() {
     url <- "http://www.nhc.noaa.gov/data/wsp/cp_prblty_station.lst.csv.txt"
@@ -30,9 +34,12 @@ cp_prblty_stations <- function() {
 
 #' @title ep_prblty_stations
 #' @description Retrieve list of probability stations based in the eastern
-#'     Pacific from the NHC. To be used in tandem with `wndprb` products.
+#' Pacific from the NHC. To be used in tandem with `wndprb` products.
 #' @details This is a placeholder function. The current listing does not match
-#'     the format for Atlantic and central Pacific stations.
+#' the format for Atlantic and central Pacific stations.
+#'
+#' This function may be deprecated soon as the data sources may be
+#' removed from the National Hurricane Center.
 #' @export
 ep_prblty_stations <- function() {
     url <- "http://www.nhc.noaa.gov/data/wsp/ep_prblty_station.lst.csv.txt"
