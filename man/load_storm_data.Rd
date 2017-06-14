@@ -23,7 +23,9 @@ short-lived storms may not have wndprb products.}
 Load storm and year data from data repository.
 }
 \details{
-This function is designed to give quicker access to storm data.
+This function is designed to give quicker access to storm data and
+may be modified in future releases.
+
 Using any of the product functions scrapes data from the NHC archives.
 However, this can be somewhat time-consuming. Using this function just takes
 a different route to datasets that have already been scraped. So obtaining
