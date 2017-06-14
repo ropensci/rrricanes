@@ -1,3 +1,22 @@
+rrricanes 0.2.0-alpha (yyyy-mm-dd)
+==================================
+
+### NEW FEATURES
+
+* NA
+
+### MINOR IMPROVEMENTS
+
+* NA
+
+### BUG FIXES
+
+* NA
+
+### DEPRECATED AND DEFUNCT
+
+* NA
+
 rrricanes 0.1.3 (2017-06-11)
 ============================
 
