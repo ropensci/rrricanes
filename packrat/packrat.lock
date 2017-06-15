@@ -63,6 +63,12 @@ Source: CRAN
 Version: 2.5
 Hash: 2db95e150a4835a0c203686c934b0369
 
+Package: assertr
+Source: CRAN
+Version: 2.0.2.2
+Hash: 71a89e4ff4f93ad94ac05af2d96e9e01
+Requires: dplyr, lazyeval
+
 Package: assertthat
 Source: CRAN
 Version: 0.2.0
