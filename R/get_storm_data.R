@@ -96,72 +96,49 @@ get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
 
 #' @title load_storm_data
 #' @description Load storm and year data from data repository.
-#' @details This function is designed to give quicker access to storm data and
-#' may be modified in future releases.
-#'
-#' Using any of the product functions scrapes data from the NHC archives.
-#' However, this can be somewhat time-consuming. Using this function just takes
-#' a different route to datasets that have already been scraped. So obtaining
-#' data is significantly faster.
-#'
-#' I will not guarantee current storms will be up-to-date. But I will work on a
-#' setup that does so as quickly as possible.
-#'
-#' @param years Numeric vector of one or multiple years between 1998 and current
-#' year.
-#' @param basins One or both of AL and EP.
-#' @param products NULL, one or many of discus, fstadv, posest, prblty, public, update
-#' and wndprb. See \link{get_storm_data} for a description of each of the
-#' products. If products is NULL then a summary table of the year's storms is
-#' returned. If a product is requested but not returned then the product does
-#' not exist. For example, prblty does not exist for storms after 2005. And
-#' short-lived storms may not have wndprb products.
-#' @examples
-#' \dontrun{
-#' # Load year summary data for 2017, both basins
-#' load_storm_data(years = 2017)
-#'
-#' # Load multiple years, forecast/advisory data for AL storms.
-#' load_storm_data(years = 2015:2016, basins = "AL", products = "fstadv")
-#'
-#' # Load fstadv and wndprb for 2015 Atlantic storms.
-#' load_storm_data(years = 2015, basins = "AL", products = c("fstadv", "wndprb"))
+#' @param dataset A dataset to return
+#' @details This function is designed to give quicker access to post-scraped
+#' storm data and may be modified in future releases.
+#' \describe{
+#'     \item{adv}{This data file contains base information for every storm
+#'     advisory issued by the National Hurricane Center for the Atlantic and
+#'     northeast Pacific oceans.}
+#'     \item{discus}{Storm discussion text}
+#'     \item{fcst}{Forecast positions of tropical cyclones}
+#'     \item{fcst_wr}{Forecast wind radii data for each forecast observation in
+#'     `fcst`}
+#'     \item{posest}{Position estimates}
+#'     \item{prblty}{Strike probabilities for a given location. This product was
+#'     deprecated after the 2005 hurricane season.}
+#'     \item{public}{Public advisory text}
+#'     \item{storms}{Summary for all storms in this dataset.}
+#'     \item{update}{Update text}
+#'     \item{wndprb}{Wind Speed Probabilities. Probability of a location
+#'     experiencing minimum wind-speed values within a given forecast period.
+#'     This product replaces Strike Probabilities after the 2005 hurricane
+#'     season. May not exist for all cyclones.}
+#'     \item{wr}{Current wind radius, if available, for a cyclone.}
 #' }
+#'
+#' Datasets 'discus', 'posest', 'public' and 'update' are not included as of
+#' this writing but will be added as soon as possible.
+#'
+#' 'adv', 'fcst', 'fcst_wr', and 'wr' are tidied data of
+#' \code{\link{get_fstadv}} using functions \code{\link{tidy_fcst}},
+#' \code{\link{tidy_fcst_wr}}, \code{\link{tidy_fstadv}} and
+#' \code{\link{tidy_wr}}.
+#'
+#' See \url{https://timtrice.github.io/rrricanes/articles/articles/data_world.html}
+#' for a third alternative to access datasets with the ability to filter data
+#' without loading entire datasets into your environment.
+#' @seealso \url{https://timtrice.github.io/rrricanes/articles/articles/data_world.html}
 #' @export
-load_storm_data <- function(years, basins = c("AL", "EP"), products = NULL) {
-
-    if (!(all(dplyr::between(years,
-                             1998,
-                             as.numeric(strftime(Sys.Date(), "%Y"))))))
-        stop("years must be between 1998 and current year")
-
-    if (!(all(basins %in% c("AL", "EP"))))
-        stop("basins must be one or both of AL, EP")
-
-    if (!is.null(products) & !(all(products %in% c("discus", "fstadv", "posest",
-                                               "prblty", "public", "update",
-                                               "wndprb"))))
-        stop("products must either be NULL or have at least one valid product")
-
+load_storm_data <- function(dataset = c("adv", "discus", "fcst", "fcst_wr",
+                                        "posest", "prblty", "public", "storms",
+                                        "update", "wndprb", "wr")) {
+    dataset <- match.arg(dataset)
     base_url <- "https://github.com/timtrice/rrricanesdata/blob/master/"
-    purrr::map(.x = years, .f = function(year) {
-        purrr::map(.x = basins, .f = function(basin) {
-            if (purrr::is_empty(products)) {
-                # Load year summary data
-                data_url <- sprintf("%s/%s/%s%s.Rda", year, basin, basin, year)
-                link <- paste0(base_url, data_url, "?raw=true")
-                if (!httr::http_error(link))
-                    load(url(link), envir = .GlobalEnv)
-            } else {
-                purrr::map(.x = products, .f = function(product) {
-                    data_url <- sprintf("%s/%s/%s%s_%s.Rda", year, basin,
-                                        basin, year, product)
-                    link <- paste0(base_url, data_url, "?raw=true")
-                    if (!httr::http_error(link))
-                        load(url(link), envir = .GlobalEnv)
-                })
-            }
-        })
-    })
-    return(TRUE)
+    link <- paste0(base_url, dataset, ".csv?raw=true")
+    df <- readr::read_csv(link)
+    return(df)
 }

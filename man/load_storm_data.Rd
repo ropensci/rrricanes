@@ -4,45 +4,51 @@
 \alias{load_storm_data}
 \title{load_storm_data}
 \usage{
-load_storm_data(years, basins = c("AL", "EP"), products = NULL)
+load_storm_data(dataset = c("adv", "discus", "fcst", "fcst_wr", "posest",
+  "prblty", "public", "storms", "update", "wndprb", "wr"))
 }
 \arguments{
-\item{years}{Numeric vector of one or multiple years between 1998 and current
-year.}
-
-\item{basins}{One or both of AL and EP.}
-
-\item{products}{NULL, one or many of discus, fstadv, posest, prblty, public, update
-and wndprb. See \link{get_storm_data} for a description of each of the
-products. If products is NULL then a summary table of the year's storms is
-returned. If a product is requested but not returned then the product does
-not exist. For example, prblty does not exist for storms after 2005. And
-short-lived storms may not have wndprb products.}
+\item{dataset}{A dataset to return}
 }
 \description{
 Load storm and year data from data repository.
 }
 \details{
-This function is designed to give quicker access to storm data and
-may be modified in future releases.
-
-Using any of the product functions scrapes data from the NHC archives.
-However, this can be somewhat time-consuming. Using this function just takes
-a different route to datasets that have already been scraped. So obtaining
-data is significantly faster.
-
-I will not guarantee current storms will be up-to-date. But I will work on a
-setup that does so as quickly as possible.
+This function is designed to give quicker access to post-scraped
+storm data and may be modified in future releases.
+\describe{
+    \item{adv}{This data file contains base information for every storm
+    advisory issued by the National Hurricane Center for the Atlantic and
+    northeast Pacific oceans.}
+    \item{discus}{Storm discussion text}
+    \item{fcst}{Forecast positions of tropical cyclones}
+    \item{fcst_wr}{Forecast wind radii data for each forecast observation in
+    `fcst`}
+    \item{posest}{Position estimates}
+    \item{prblty}{Strike probabilities for a given location. This product was
+    deprecated after the 2005 hurricane season.}
+    \item{public}{Public advisory text}
+    \item{storms}{Summary for all storms in this dataset.}
+    \item{update}{Update text}
+    \item{wndprb}{Wind Speed Probabilities. Probability of a location
+    experiencing minimum wind-speed values within a given forecast period.
+    This product replaces Strike Probabilities after the 2005 hurricane
+    season. May not exist for all cyclones.}
+    \item{wr}{Current wind radius, if available, for a cyclone.}
 }
-\examples{
-\dontrun{
-# Load year summary data for 2017, both basins
-load_storm_data(years = 2017)
 
-# Load multiple years, forecast/advisory data for AL storms.
-load_storm_data(years = 2015:2016, basins = "AL", products = "fstadv")
+Datasets 'discus', 'posest', 'public' and 'update' are not included as of
+this writing but will be added as soon as possible.
 
-# Load fstadv and wndprb for 2015 Atlantic storms.
-load_storm_data(years = 2015, basins = "AL", products = c("fstadv", "wndprb"))
+'adv', 'fcst', 'fcst_wr', and 'wr' are tidied data of
+\code{\link{get_fstadv}} using functions \code{\link{tidy_fcst}},
+\code{\link{tidy_fcst_wr}}, \code{\link{tidy_fstadv}} and
+\code{\link{tidy_wr}}.
+
+See \url{https://timtrice.github.io/rrricanes/articles/articles/data_world.html}
+for a third alternative to access datasets with the ability to filter data
+without loading entire datasets into your environment.
 }
+\seealso{
+\url{https://timtrice.github.io/rrricanes/articles/articles/data_world.html}
 }

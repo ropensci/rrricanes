@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - `shp_to_df` added to convert lines and polygons spatial dataframes to dataframes. Points dataframes can be converted using `tibble::as_dataframe` (target the @data object).
 
 ### Changed
-  - NA
+  - `load_storm_data` now returns full datasets from the `rrricanesdata` repo including tidied `fstadv` data. See documentation for notes on other products. (#76)
 
 ### Removed
   - NA

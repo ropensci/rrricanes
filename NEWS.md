@@ -17,6 +17,7 @@ rrricanes 0.2.0-1 (yyyy-mm-dd)
 ### MINOR IMPROVEMENTS
 
 * [Enhanced documentation](https://timtrice.github.io/rrricanes/) added online using `pkgdown`. 
+* `load_storm_data` directly returns dataframes. Additionally, retrieval by basin and years removed in favor of importing complete product datasets. Additionally, documentation has been added to the website on [using data.world](https://timtrice.github.io/rrricanes/articles/articles/data_world.html) as a third option. The difference between these two options is `load_storm_data` will return complete datasets. Using data.world will allow users to write custom queries to retrieve data.  (#76)
 
 ### BUG FIXES
 
