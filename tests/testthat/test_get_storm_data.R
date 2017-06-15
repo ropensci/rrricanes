@@ -14,12 +14,6 @@ df.al_2017_storm_data <- get_storms(year = 2017, basin = "AL") %>%
     get_storm_data(products = c("discus", "fstadv"))
 load(system.file("extdata", "al_2017_storm_data.Rda", package = "rrricanes"))
 
-## ---- * 2016, AL -------------------------------------------------------------
-load_storm_data(years = 2016, basins = "AL")
-
-## ---- * 2016, AL, fstadv -----------------------------------------------------
-load_storm_data(years = 2016, basins = "AL", products = "fstadv")
-
 ## ---- get_storm_data() -------------------------------------------------------
 test_that("get_storm_data()", {
     ## ---- * 2017, AL, 01 -----------------------------------------------------
