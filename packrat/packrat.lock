@@ -182,6 +182,12 @@ Hash: cc5586f018f942d4c85f3be9b112563d
 Requires: BH, R6, Rcpp, assertthat, bindrcpp, glue, magrittr,
     pkgconfig, plogr, rlang, tibble
 
+Package: dwapi
+Source: CRAN
+Version: 0.1.1
+Hash: 5e9e5e05fdb5b136d5e7fe1d672f94dc
+Requires: httr, readr, rjson, xml2
+
 Package: evaluate
 Source: CRAN
 Version: 0.10
