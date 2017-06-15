@@ -1,0 +1,142 @@
+---
+title: "rrricanes in Data World"
+author: "Tim Trice"
+date: "June 15, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Methods of loading storm data in `rrricanes` includes parsing the National Hurricane Center archives which can be time-consuming and unreliable (consistent timeout issues). The function `load_storm_data` returns post-scraped datasets from the `rrricanesdata` and is much faster. However, you have to load the entire dataset and this may not be convenient for some users.
+
+A third option is [data.world](https://data.world/) which is automatically updated from the `rrricanesdata` repository. The benefit of data.world is that you can custom build queries to extract only the data you need. 
+
+Using data.world requires the `dwapi` package which can be installed from CRAN.
+
+```{r, eval = FALSE}
+install.packages("dwapi")
+```
+
+You will also need to get [your API key](https://data.world/settings/advanced) in order to access the datasets. See the "quickstart" vignette for help using `dwapi`.
+
+```{r, eval = FALSE}
+vignette("quickstart", package = "dwapi")
+```
+
+This article will focus on building SQL queries to retrieve data from data.world. There are some limitations to the functionality. See [SQL on data.world](https://docs.data.world/tutorials/dwsql/) for more information.
+
+```{r, message = FALSE}
+library(dplyr)
+library(dwapi)
+library(rrricanes)
+```
+
+Configure `dwapi` to use your own API key. Then set the `ds` parameter to the `rrricanes` dataset at "timtrice/rrricanes".
+
+```{r}
+configure(auth_token = Sys.getenv("dwapi_visitor_key"))
+ds <- "timtrice/rrricanes"
+```
+
+## storms
+
+The `storms` dataframe is a summary table of all storms that exist in the dataset. 
+
+```{r}
+ds %>% sql(query = "SELECT * FROM storms LIMIT 5")
+```
+
+### Find a storm by name
+
+```{r}
+ds %>% sql(query = "SELECT * FROM storms WHERE Name = 'Katrina'")
+```
+
+### Aggregate storms by month
+
+```{r}
+ds %>% sql(query = "SELECT COUNT(Key) AS `n`,
+        MONTH(CAST(storms.StartDate AS STRING)) AS `Mth`
+    FROM `storms`
+    GROUP BY MONTH(CAST(storms.StartDate AS STRING))
+    ORDER BY `Mth`;")
+```
+
+## adv
+
+The `adv` dataframe lists the core data of every advisory for every storm. This excludes forecast points and all wind radii.
+
+```{r}
+ds %>% sql(query = "SELECT * FROM adv LIMIT 5")
+```
+
+Earlier we saw there were two storms named Katrina. Let's build a query and return all the `adv` observations we have for Katrina (Key "AL122005").
+
+```{r}
+ds %>% sql(query = 
+"SELECT * 
+FROM adv
+WHERE Key = 'AL122005';")
+```
+
+## wr
+
+```{r}
+ds %>% sql(query = "SELECT * FROM wr LIMIT 5")
+```
+
+```{r}
+ds %>% sql(query = 
+"SELECT * 
+FROM wr
+WHERE Key = 'AL122005';")
+```
+
+## fcst
+
+```{r}
+ds %>% sql(query = "SELECT * FROM fcst LIMIT 5")
+```
+
+```{r}
+ds %>% sql(query = 
+"SELECT * 
+FROM fcst
+WHERE Key = 'AL122005';")
+```
+
+## fcst_wr
+
+```{r}
+ds %>% sql(query = "SELECT * FROM fcst_wr LIMIT 5")
+```
+
+```{r}
+ds %>% sql(query = 
+"SELECT * 
+FROM fcst_wr
+WHERE Key = 'AL122005';")
+```
+
+## wndprb
+
+```{r}
+ds %>% sql(query = "SELECT * FROM wndprb LIMIT 5")
+```
+
+```{r}
+ds %>% sql(query = 
+"SELECT * 
+FROM wndprb
+WHERE Key = 'AL012006';")
+```
+
+## prblty
+
+```{r}
+ds %>% sql(query = "SELECT * FROM prblty LIMIT 5")
+```
+
+There was no `Key` value in strike probabilities. Therefore, must use a combination of `Status`, `Name` and, if necessary, `Adv` and `Date`.

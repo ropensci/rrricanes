@@ -12,5 +12,5 @@
 ^datasets/
 ^reports/
 ^\.github$
-^vignettes/articles$
 ^_pkgdown.yml$
+^vignettes/data_world\.Rmd$

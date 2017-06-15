@@ -1,0 +1,50 @@
+reference:
+  - title: About `rrricanes`
+    contents:
+    - rrricanes
+  - title: Getting Storm Data
+    desc: >
+      Gather current and archived storm data.
+    contents:
+    - starts_with("get_")
+    - load_storm_data
+  - title: Daily Discussions
+    desc: Daily statements issued by the National Hurricane Center on current conditions.
+    contents:
+    - twoal
+    - twoep
+  - title: Tracking charts
+    desc: Helper functions to plot storm data through `ggplot2`.
+    contents:
+    - al_tracking_chart
+    - ep_tracking_chart
+    - tracking_chart
+  - title: GIS Data
+    desc: Gathering GIS data from the National Hurricane Center.
+    contents:
+    - starts_with("gis_")
+    - shp_to_df
+  - title: Helpers
+    desc: >
+      Helper functions. Please note `al_prblty_stations` and
+      `cp_prblty_stations` may be deprecated soon.
+    contents:
+    - al_prblty_stations
+    - cp_prblty_stations
+    - knots_to_mph
+    - mb_to_in
+    - saffir
+    - status_abbr_to_str
+    - starts_with("tidy_")
+
+articles:
+  - title: Vignettes
+    desc: >
+      Using `rrricanes` to get current and past cyclone advisory products.
+    contents:
+    - getting_started
+    - gis_data
+  - title: Using Data World
+    desc: Accessing data through data.world
+    contents:
+    - data_world
