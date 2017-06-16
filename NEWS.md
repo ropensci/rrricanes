@@ -1,3 +1,33 @@
+rrricanes 0.2.0-1 (2017-06-16)
+==================================
+
+### NEW FEATURES
+
+* GIS functions now available. Please note some of these products may not exist for every available cyclone/advisory.
+ + `gis_advisory` Typically will include current and past track data, forecast track data, forecast cone (margin of error) and wind radius data. 
+ + `gis_breakpoints` List of breakpoints typically used for watch/warning areas but is not a requirement.
+ + `gis_latest` Retrieves the latest GIS products for all active storms. 
+ + `gis_outlook` Retrives the latest tropical weather outlook in shapefile format.
+ + `gis_prob_storm_surge` Probabilistic storm surge; a polygon dataset for psurge and esurge products with various criteria.
+ + `gis_windfield` Wind radius datasets.
+ + `gis_wsp` Wind speed probabilities
+ + `gis_download` Use this function to download the URLs returned from the above functions.
+ + `shp_to_df` added to convert lines and polygons spatial dataframes to dataframes. Points dataframes can be converted using `tibble::as_dataframe` (target the @data object).
+
+### MINOR IMPROVEMENTS
+
+* [Enhanced documentation](https://timtrice.github.io/rrricanes/) added online using `pkgdown`. 
+* `load_storm_data` directly returns dataframes. Additionally, retrieval by basin and years removed in favor of importing complete product datasets. Additionally, documentation has been added to the website on [using data.world](https://timtrice.github.io/rrricanes/articles/articles/data_world.html) as a third option. The difference between these two options is `load_storm_data` will return complete datasets. Using data.world will allow users to write custom queries to retrieve data.  (#76)
+
+### BUG FIXES
+
+* NA
+
+### DEPRECATED AND DEFUNCT
+
+* Not yet deprecated but a warning that `al_prblty_stations`, `cp_prblty_stations` and `ep_prblty_stations` may be removed on a future release. (#46)
+* Support for dplyr 0.5.0 will be removed in future releases in favor of dplyr 0.7.0.
+
 rrricanes 0.1.3 (2017-06-11)
 ============================
 

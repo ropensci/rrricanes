@@ -1,6 +1,8 @@
 #' @title al_prblty_stations
 #' @description Retrieve list of probability stations based in the Atlantic
-#'     basin from the NHC. To be used in tandem with `wndprb` products.
+#' basin from the NHC. To be used in tandem with `wndprb` products.
+#' @details This function may be deprecated soon as the data sources may be
+#' removed from the National Hurricane Center.
 #' @export
 al_prblty_stations <- function() {
     url <- "http://www.nhc.noaa.gov/data/wsp/al_prblty_station.lst.csv.txt"
@@ -15,7 +17,9 @@ al_prblty_stations <- function() {
 
 #' @title cp_prblty_stations
 #' @description Retrieve list of probability stations based in the central
-#'     Pacific from the NHC. To be used in tandem with `wndprb` products.
+#' Pacific from the NHC. To be used in tandem with `wndprb` products.
+#' @details This function may be deprecated soon as the data sources may be
+#' removed from the National Hurricane Center.
 #' @export
 cp_prblty_stations <- function() {
     url <- "http://www.nhc.noaa.gov/data/wsp/cp_prblty_station.lst.csv.txt"
@@ -30,9 +34,12 @@ cp_prblty_stations <- function() {
 
 #' @title ep_prblty_stations
 #' @description Retrieve list of probability stations based in the eastern
-#'     Pacific from the NHC. To be used in tandem with `wndprb` products.
+#' Pacific from the NHC. To be used in tandem with `wndprb` products.
 #' @details This is a placeholder function. The current listing does not match
-#'     the format for Atlantic and central Pacific stations.
+#' the format for Atlantic and central Pacific stations.
+#'
+#' This function may be deprecated soon as the data sources may be
+#' removed from the National Hurricane Center.
 #' @export
 ep_prblty_stations <- function() {
     url <- "http://www.nhc.noaa.gov/data/wsp/ep_prblty_station.lst.csv.txt"
@@ -189,9 +196,17 @@ wndprb <- function(link, p) {
     wndprb[wndprb == "X"] <- 0
 
     # Make Wind:Wind120Cum numeric
-    wndprb <- dplyr::mutate_at(.tbl = wndprb,
-                               .cols = c(2:15),
-                               .funs = "as.numeric")
+    # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
+    # accomodate usage of both 0.5.0 and >= 0.6.0.
+    if (packageVersion("dplyr") > "0.5.0") {
+        wndprb <- dplyr::mutate_at(.tbl = wndprb,
+                                   .vars = c(2:15),
+                                   .funs = "as.numeric")
+    } else {
+        wndprb <- dplyr::mutate_at(.tbl = wndprb,
+                                   .cols = c(2:15),
+                                   .funs = "as.numeric")
+    }
 
     # Add Key, Adv, Date and rearrange.
     wndprb <- wndprb %>%

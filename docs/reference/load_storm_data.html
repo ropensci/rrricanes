@@ -86,53 +86,56 @@
     <p>Load storm and year data from data repository.</p>
     
 
-    <pre class="usage"><span class='fu'>load_storm_data</span>(<span class='no'>years</span>, <span class='kw'>basins</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"AL"</span>, <span class='st'>"EP"</span>), <span class='kw'>products</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>load_storm_data</span>(<span class='kw'>dataset</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"adv"</span>, <span class='st'>"discus"</span>, <span class='st'>"fcst"</span>, <span class='st'>"fcst_wr"</span>, <span class='st'>"posest"</span>,
+  <span class='st'>"prblty"</span>, <span class='st'>"public"</span>, <span class='st'>"storms"</span>, <span class='st'>"update"</span>, <span class='st'>"wndprb"</span>, <span class='st'>"wr"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>years</th>
-      <td><p>Numeric vector of one or multiple years between 1998 and current
-year.</p></td>
-    </tr>
-    <tr>
-      <th>basins</th>
-      <td><p>One or both of AL and EP.</p></td>
-    </tr>
-    <tr>
-      <th>products</th>
-      <td><p>NULL, one or many of discus, fstadv, posest, prblty, public, update
-and wndprb. See <a href='get_storm_data.html'>get_storm_data</a> for a description of each of the
-products. If products is NULL then a summary table of the year's storms is
-returned. If a product is requested but not returned then the product does
-not exist. For example, prblty does not exist for storms after 2005. And
-short-lived storms may not have wndprb products.</p></td>
+      <th>dataset</th>
+      <td><p>A dataset to return</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is designed to give quicker access to storm data.
-Using any of the product functions scrapes data from the NHC archives.
-However, this can be somewhat time-consuming. Using this function just takes
-a different route to datasets that have already been scraped. So obtaining
-data is significantly faster.</p>
-<p>I will not guarantee current storms will be up-to-date. But I will work on a
-setup that does so as quickly as possible.</p>
+    <p>This function is designed to give quicker access to post-scraped
+storm data and may be modified in future releases.</p><dl class='dl-horizontal'>
+    <dt>adv</dt><dd><p>This data file contains base information for every storm
+    advisory issued by the National Hurricane Center for the Atlantic and
+    northeast Pacific oceans.</p></dd>
+    <dt>discus</dt><dd><p>Storm discussion text</p></dd>
+    <dt>fcst</dt><dd><p>Forecast positions of tropical cyclones</p></dd>
+    <dt>fcst_wr</dt><dd><p>Forecast wind radii data for each forecast observation in
+    `fcst`</p></dd>
+    <dt>posest</dt><dd><p>Position estimates</p></dd>
+    <dt>prblty</dt><dd><p>Strike probabilities for a given location. This product was
+    deprecated after the 2005 hurricane season.</p></dd>
+    <dt>public</dt><dd><p>Public advisory text</p></dd>
+    <dt>storms</dt><dd><p>Summary for all storms in this dataset.</p></dd>
+    <dt>update</dt><dd><p>Update text</p></dd>
+    <dt>wndprb</dt><dd><p>Wind Speed Probabilities. Probability of a location
+    experiencing minimum wind-speed values within a given forecast period.
+    This product replaces Strike Probabilities after the 2005 hurricane
+    season. May not exist for all cyclones.</p></dd>
+    <dt>wr</dt><dd><p>Current wind radius, if available, for a cyclone.</p></dd>
+</dl>
+    <p>Datasets 'discus', 'posest', 'public' and 'update' are not included as of
+this writing but will be added as soon as possible.</p>
+<p>'adv', 'fcst', 'fcst_wr', and 'wr' are tidied data of
+<code><a href='get_fstadv.html'>get_fstadv</a></code> using functions <code><a href='tidy_fcst.html'>tidy_fcst</a></code>,
+<code><a href='tidy_fcst_wr.html'>tidy_fcst_wr</a></code>, <code><a href='tidy_fstadv.html'>tidy_fstadv</a></code> and
+<code><a href='tidy_wr.html'>tidy_wr</a></code>.</p>
+<p>See <a href = 'https://timtrice.github.io/rrricanes/articles/articles/data_world.html'>https://timtrice.github.io/rrricanes/articles/articles/data_world.html</a>
+for a third alternative to access datasets with the ability to filter data
+without loading entire datasets into your environment.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><a href = 'https://timtrice.github.io/rrricanes/articles/articles/data_world.html'>https://timtrice.github.io/rrricanes/articles/articles/data_world.html</a></p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
-  <span class='co'># Load year summary data for 2017, both basins</span>
-  <span class='fu'>load_storm_data</span>(<span class='kw'>years</span> <span class='kw'>=</span> <span class='fl'>2017</span>)
-
-  <span class='co'># Load multiple years, forecast/advisory data for AL storms.</span>
-  <span class='fu'>load_storm_data</span>(<span class='kw'>years</span> <span class='kw'>=</span> <span class='fl'>2015</span>:<span class='fl'>2016</span>, <span class='kw'>basins</span> <span class='kw'>=</span> <span class='st'>"AL"</span>, <span class='kw'>products</span> <span class='kw'>=</span> <span class='st'>"fstadv"</span>)
-
-  <span class='co'># Load fstadv and wndprb for 2015 Atlantic storms.</span>
-  <span class='fu'>load_storm_data</span>(<span class='kw'>years</span> <span class='kw'>=</span> <span class='fl'>2015</span>, <span class='kw'>basins</span> <span class='kw'>=</span> <span class='st'>"AL"</span>, <span class='kw'>products</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"fstadv"</span>, <span class='st'>"wndprb"</span>))
-})</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -140,9 +143,9 @@ setup that does so as quickly as possible.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
   </div>
 </div>

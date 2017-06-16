@@ -243,32 +243,27 @@ Scraping the data from the NHC archives may be time-consuming for those with "sl
 
 An alternative method of getting data is by the use of `load_storm_data`. This function accesses the `rrricanesdata` repository and returns post-scraped datasets. 
 
-Do not assume this data is complete. `discus`, `public` and many `prblty` or `wndprb` products are not available. However, most `fstadv` products do exist. 
+The repository is incomplete at this point of time with the exception of `fstadv`, `prblty` and `wndprb` products which are up-to-date as of this writing.
 
-Additionally, please do not assume it will be up-to-date. I will make every effort to keep it as up-to-date as possible. Use the above-mentioned functions for more timely data, if need be.
+`load_storm_data` returns full datasets that can then be filtered down using `tidyverse` packages as need be.
 
-Let's load the annual data for both Atlantic and Pacific storms for 2016.
-
-```{r}
-load_storm_data(years = 2016, basins = "AL")
-```
-
-There are now two datasets in your global environment: `AL2016` and `EP2016`.
+Return a summary table of all storms in the dataset.
 
 ```{r}
-str(AL2016)
+load_storm_data("storms")
 ```
 
-This summary data is a little bit different than that obtained through `get_storms` in that it already has `Key`, maximum `Wind` value, `StartDate` and `EndDate`. 
+The `fstadv` dataset is already tidied into smaller dataframes: 
 
-You can load `fstadv` products for 2016 as well by passing the `products` parameter:
+* `adv`, which contains the core data for every advisory
+* `wr` contains the wind radii data for each advisory
+* `fcst` contains the forecast observations per advisory
+* `fcst_wr` contains the wind radii data per forecast position
 
 ```{r}
-load_storm_data(years = 2016, basins = "AL", products = "fstadv")
+load_storm_data("adv")
 ```
 
-```{r}
-str(AL2016_fstadv)
-```
+These dataframes stick to the tidy properties of "each column is a variable and each row is an observation" (with the exception of `Key`, of course). 
 
-This dataset is the exact same as that returned by `get_fstadv`. The difference is that it contains all storms for 2017. Use `dplyr::filter()` if you wish to isolate a specific storm. 
+These same datasets are also available on data.world. [An introductory article](https://timtrice.github.io/rrricanes/articles/articles/data_world.html) to using data.world with SQL is available. The advantage of using data.world over `load_storm_data` is that you can manipulate your data as necessary before loading it into your environment, giving you much more freedom to view only what you need.
