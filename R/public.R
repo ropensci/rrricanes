@@ -53,7 +53,7 @@ get_public <- function(link) {
 #' @return Dataframe
 #' @seealso \code{\link{get_public}}
 #' @keywords internal
-public <- function(link, p) {
+public <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 

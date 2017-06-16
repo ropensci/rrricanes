@@ -101,7 +101,7 @@ get_fstadv <- function(link) {
 #' @param link URL of a specific FORECAST/ADVISORY product
 #' @param p dplyr::progress_estimate.
 #' @keywords internal
-fstadv <- function(link, p) {
+fstadv <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 

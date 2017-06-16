@@ -53,7 +53,7 @@ get_update <- function(link) {
 #' @return Dataframe
 #' @seealso \code{\link{get_update}}
 #' @keywords internal
-update <- function(link, p) {
+update <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 

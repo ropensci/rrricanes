@@ -4,7 +4,7 @@
 \alias{fstadv}
 \title{fstadv}
 \usage{
-fstadv(link, p)
+fstadv(link, p = dplyr::progress_estimated(n = 1))
 }
 \arguments{
 \item{link}{URL of a specific FORECAST/ADVISORY product}

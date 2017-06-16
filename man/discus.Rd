@@ -4,7 +4,7 @@
 \alias{discus}
 \title{discus}
 \usage{
-discus(link, p)
+discus(link, p = dplyr::progress_estimated(n = 1))
 }
 \arguments{
 \item{link}{Link to a storm's specific discussion product.}

@@ -56,7 +56,7 @@ get_posest <- function(link) {
 #' @return Dataframe
 #' @seealso \code{\link{get_posest}}
 #' @keywords internal
-posest <- function(link, p) {
+posest <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 

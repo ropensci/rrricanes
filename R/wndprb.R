@@ -101,7 +101,7 @@ get_wndprb <- function(link) {
 #' @param link Link to a storm's specific wind probability product.
 #' @param p dplyr::progress_estimate.
 #' @keywords internal
-wndprb <- function(link, p) {
+wndprb <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 
