@@ -17,6 +17,8 @@ create_df_posest <- function() {
 
 #' @title get_posest
 #' @description Return dataframe of position estimate data.
+#' @details This product was discontinued after the 2013 hurricane season and is
+#' now included in the Tropical Cyclone Update product (\code{\link{update}}).
 #' \describe{
 #'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
 #'     etc.}
