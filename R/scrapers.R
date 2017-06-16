@@ -152,6 +152,10 @@ scrape_date <- function(header) {
         dt <- as.POSIXct(x, tz = "Etc/GMT+4")
     } else if (tz %in% c("EST")) {
         dt <- as.POSIXct(x, tz = "Etc/GMT+5")
+    } else if (tz %in% c("HDT")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+9")
+    } else if (tz %in% c("HST")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+10")
     } else if (tz %in% c("PDT")) {
         dt <- as.POSIXct(x, tz = "Etc/GMT+7")
     } else if (tz %in% c("PST")) {
