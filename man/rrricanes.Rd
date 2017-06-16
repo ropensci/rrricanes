@@ -11,6 +11,9 @@ hurricane data (past and current) into well-organized datasets. With these
 datasets you can explore past hurricane tracks, forecasts and structure
 elements.
 
+This documentation and additional help articles
+\href{https://timtrice.github.io/rrricanes/}{can be found online}.
+
 Text products (Forecast/Advisory, Public Advisory, Discussions and
 Probabilities) are only available from 1998 to current. An effort will be
 made to add prior data as available.
@@ -51,6 +54,32 @@ is often the case, unfortunately). You can access post-scraped datasets with
 forecast/advisory, strike probabilities and wind speed probability products
 exist. As of this writing it is up-to-date but caution is advised for active
 cyclones. Use the above functions for the most up-to-date data as a fallback.
+}
+
+\section{GIS Data}{
+
+
+For enhanced plotting of storm data, several GIS datasets are available. The
+core GIS functions return URLs to help you refine the data you wish to view.
+(Some products will not exist for all storms/advisories). These products are:
+
+\describe{
+  \item{\code{\link{gis_advisory}}}{Past track, current position, forecast and wind radii}
+  \item{\code{\link{gis_breakpoints}}}{Breakpoints for watches and warnings}
+  \item{\code{\link{gis_latest}}}{All available GIS products for active cyclones}
+  \item{\code{\link{gis_outlook}}}{Tropical Weather Outlook}
+  \item{\code{\link{gis_prob_storm_surge}}}{Probabilistic Storm Surge}
+  \item{\code{\link{gis_windfield}}}{Wind Radii}
+  \item{\code{\link{gis_wsp}}}{Wind Speed Probabilities}
+}
+
+\code{\link{gis_download}} will download the datasets from the above
+functions.
+
+Some GIS datasets will need to be converted to dataframes to plot geoms. Use
+\code{\link{shp_to_df}} to convert SpatialLinesDataFrames and
+SpatialPolygonsDataFrames. SpatialPointsDataFrames can be converted using
+\code{tibble::as_data_frame} targeting the @data object.
 }
 
 \section{Package Options}{
