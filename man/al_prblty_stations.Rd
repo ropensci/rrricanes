@@ -8,5 +8,9 @@ al_prblty_stations()
 }
 \description{
 Retrieve list of probability stations based in the Atlantic
-    basin from the NHC. To be used in tandem with `wndprb` products.
+basin from the NHC. To be used in tandem with `wndprb` products.
+}
+\details{
+This function may be deprecated soon as the data sources may be
+removed from the National Hurricane Center.
 }

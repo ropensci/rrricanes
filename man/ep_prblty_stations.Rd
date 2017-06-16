@@ -8,9 +8,12 @@ ep_prblty_stations()
 }
 \description{
 Retrieve list of probability stations based in the eastern
-    Pacific from the NHC. To be used in tandem with `wndprb` products.
+Pacific from the NHC. To be used in tandem with `wndprb` products.
 }
 \details{
 This is a placeholder function. The current listing does not match
-    the format for Atlantic and central Pacific stations.
+the format for Atlantic and central Pacific stations.
+
+This function may be deprecated soon as the data sources may be
+removed from the National Hurricane Center.
 }

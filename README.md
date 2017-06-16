@@ -1,5 +1,5 @@
 
-[![minimal R version](https://img.shields.io/badge/R%3E%3D-3.3.3-6666ff.svg)](https://cran.r-project.org/) [![packageversion](https://img.shields.io/badge/Package%20version-0.1.3-orange.svg?style=flat-square)](commits/master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes) [![Build Status](https://travis-ci.org/timtrice/rrricanes.svg?branch=master)](https://travis-ci.org/timtrice/rrricanes) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/timtrice/rrricanes?branch=master&svg=true)](https://ci.appveyor.com/project/timtrice/rrricanes) [![codecov](https://codecov.io/gh/timtrice/rrricanes/branch/master/graph/badge.svg)](https://codecov.io/gh/timtrice/rrricanes)
+[![minimal R version](https://img.shields.io/badge/R%3E%3D-3.3.3-6666ff.svg)](https://cran.r-project.org/) [![GitHub (pre-)release](https://img.shields.io/github/release/timtrice/rrricanes/all.svg)](https://github.com/timtrice/rrricanes/tags) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes) [![Build Status](https://img.shields.io/travis/timtrice/rrricanes/master.svg)](https://travis-ci.org/timtrice/rrricanes) [![AppVeyor Build Status](https://img.shields.io/appveyor/ci/timtrice/rrricanes/master.svg)](https://ci.appveyor.com/project/timtrice/rrricanes) [![codecov](https://codecov.io/gh/timtrice/rrricanes/branch/master/graph/badge.svg)](https://codecov.io/gh/timtrice/rrricanes)
 
 rrricanes
 =========
@@ -17,9 +17,19 @@ Please view the vignette 'Getting Started':
 vignette("getting-started", package = "rrricanes")
 ```
 
+[Online documentation](https://timtrice.github.io/rrricanes/) is also available.
+
 ### Prerequisites
 
-`rrricanes` only require an active internet connection as data is extracted from online archives.
+`rrricanes` requires an active internet connection as data is extracted from online sources.
+
+Additionally, to use high resolution tracking maps you must install the `rnaturalearthhires` package:
+
+``` r
+install.packages("rnaturalearthhires",
+                 repos = "http://packages.ropensci.org",
+                 type = "source")
+```
 
 ### Installing
 
@@ -60,4 +70,5 @@ Acknowledgments
 ---------------
 
 -   [Molyneux, James](https://github.com/jimmylovestea)
+-   [Padgham, Mark](https://github.com/mpadge)
 -   [Rudis, Bob](https://github.com/hrbrmstr)

@@ -8,3 +8,4 @@ packrat/lib*/
 rrricanes.Rcheck
 datasets
 inst/doc
+.Renviron

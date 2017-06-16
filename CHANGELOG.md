@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.0-1] 2017-06-16
+
+### Added
+  - GIS functions `gis_advisory`, `gis_breakpoints`, `gis_latest`, `gis_outlook`, `gis_prob_storm_surge`, `gis_windfield` and `gis_wsp` added. These functions return one or more URLs to datasets that can be downloaded with `gis_download`.
+  - `shp_to_df` added to convert lines and polygons spatial dataframes to dataframes. Points dataframes can be converted using `tibble::as_dataframe` (target the @data object).
+
+### Changed
+  - `load_storm_data` now returns full datasets from the `rrricanesdata` repo including tidied `fstadv` data. See documentation for notes on other products. (#76)
+
+### Removed
+  - NA
+
+### Deprecated
+  - Not yet deprecated but a warning that `al_prblty_stations`, `cp_prblty_stations` and `ep_prblty_stations` may be removed on a future release. (#46)
+
+### Fixed
+  - dplyr 0.6.0 has renamed the .cols parameter of `mutate_at` to .vars. Have modified pkg to accept both dplyr 0.5.0 and >= 0.6.0. This will be removed in future releases. (#74)
+
+### Security
+  - NA
+
 ## [0.1.3] 2017-06-11
 
 ### Added

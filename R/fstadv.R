@@ -237,9 +237,17 @@ fstadv_forecasts <- function(content, date) {
 
     names(df) <- df_names
 
-    df <- df %>%
-        dplyr::mutate_at(.cols = dplyr::vars(Date:Lat, Lon, Wind:NW34),
-                         .funs = as.numeric)
+    # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
+    # accomodate usage of both 0.5.0 and >= 0.6.0.
+    if (packageVersion("dplyr") > "0.5.0") {
+        df <- df %>%
+            dplyr::mutate_at(.vars = dplyr::vars(Date:Lat, Lon, Wind:NW34),
+                             .funs = as.numeric)
+    } else {
+        df <- df %>%
+            dplyr::mutate_at(.cols = dplyr::vars(Date:Lat, Lon, Wind:NW34),
+                             .funs = as.numeric)
+    }
 
     # Since we have no month or year must do some calculations. If forecast day
     # is lower than current day then advance month by 1. If forecast month is
@@ -597,7 +605,7 @@ tidy_fstadv <- function(df) {
     if (!is.data.frame(df))
         stop("Expecting a dataframe.")
     df <- dplyr::select_(df, "Key", "Adv:Date", "Status:Name", "Lat:Eye",
-                         "SeasNE:SeasNW")
+                         ~dplyr::starts_with("Seas"))
     return(df)
 }
 
