@@ -63,7 +63,7 @@ update <- function(link, p = dplyr::progress_estimated(n = 1)) {
     contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a update advisory product
-    if (!any(stringr::str_count(contents, c("MIATCUAT", "MIATCUEP"))))
+    if (!any(stringr::str_count(contents, c("MIATCU", "TCU"))))
         stop(sprintf("Invalid Cyclone Update link. %s", link))
 
     df <- create_df_update()

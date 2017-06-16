@@ -111,7 +111,7 @@ wndprb <- function(link, p = dplyr::progress_estimated(n = 1)) {
     contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a wndprb advisory product
-    if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP", "PWS"))))
+    if (!any(stringr::str_count(contents, c("MIAPWS", "PWS"))))
         stop(sprintf("Invalid Wind Probability link. %s", link))
 
     status <- scrape_header(contents, ret = "status")
