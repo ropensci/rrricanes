@@ -64,7 +64,8 @@ discus <- function(link, p = dplyr::progress_estimated(n = 1)) {
     contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a discussion product
-    if (!any(stringr::str_count(contents, c("MIATCD", "TCD", "WTPA"))))
+    if (!any(stringr::str_count(contents,
+                                c("MIATCD", "MIATCM", "TCD", "WTPA"))))
         stop(sprintf("Invalid Discussion link. %s", link))
 
     df <- create_df_discus()
