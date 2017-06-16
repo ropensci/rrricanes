@@ -251,9 +251,13 @@ GithubRef: master
 GithubSha1: 110bef22c44928fc3e3a2bc22bbda4d01fdab553
 
 Package: git2r
-Source: CRAN
-Version: 0.18.0
-Hash: 9dfaafbcca68be29b89ef7783dc1dac0
+Source: github
+Version: 0.18.0.9000
+Hash: 4ef9a974f4d36f7fec9eb4af6e71e9b9
+GithubRepo: git2r
+GithubUsername: ropensci
+GithubRef: master
+GithubSha1: 35469bcce18b3098c3adfa96a259ca469e98586f
 
 Package: glue
 Source: CRAN
