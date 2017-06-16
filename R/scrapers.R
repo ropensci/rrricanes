@@ -6,7 +6,7 @@
 scrape_adv_num <- function(header) {
     ptn <- paste0("(?:ADVISORY|DISCUSSION|PROBABILITIES)[:blank:]+NUMBER",
                   # Advisory number. Could alphanum; i.e., 1, 1A, 2, 2A, 2B
-                  "[:blank:]+([:digit:]{1,3}[:alpha:]*?)",
+                  "[:blank:]+([:digit:]{1,3}[:alpha:]*)",
                   "(?:[[:space:][:punct:][:alpha:]]*)+")
     adv <- trimws(stringr::str_match(header, ptn)[,2])
     return(adv)
