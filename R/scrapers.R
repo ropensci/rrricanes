@@ -84,8 +84,8 @@ scrape_date <- function(header) {
                                                         " [:upper:]{3} ",
                                                         "[:upper:]{3} ",
                                                         "[:digit:]{2} ",
-                                                        "[:digit:]{4})\n",
-                                                        "\n12 PM\\2\n"))
+                                                        "[:digit:]{4})\n"),
+                                                        "\n12 PM\\2\n")
 
     ptn <- paste0("(?<=(?:\n|\r))",
                   "([:digit:]{1,2})", # Hour
