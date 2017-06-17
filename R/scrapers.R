@@ -101,6 +101,21 @@ scrape_date <- function(header) {
                                                         "[:digit:]{4})\n"),
                                        "\n12 AM\\2\n")
 
+    # And yes there is actually an entry of 12 NOON (see AL132002 public adv 49A)
+    if (stringr::str_count(header,
+                           pattern = paste0("\n12 NOON [:upper:]{3} [:upper:]{3} ",
+                                            "[:upper:]{3} [:digit:]{2} ",
+                                            "[:digit:]{4}\n")))
+        header <- stringr::str_replace(header,
+                                       pattern = paste0("\n(12 NOON)( ",
+                                                        "[:upper:]{3}",
+                                                        " [:upper:]{3} ",
+                                                        "[:upper:]{3} ",
+                                                        "[:digit:]{2} ",
+                                                        "[:digit:]{4})\n"),
+                                       "\n12 PM\\2\n")
+    # I'll clean all that up later. Too tired right now...
+
     ptn <- paste0("(?<=(?:\n|\r))",
                   "([:digit:]{1,2})", # Hour
                   "(?<=[:digit:]{1})([:digit:]{2})?", # Minute
