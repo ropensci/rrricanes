@@ -63,7 +63,8 @@ public <- function(link, p = dplyr::progress_estimated(n = 1)) {
     contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a public advisory product
-    if (!any(stringr::str_count(contents, c("MIATCP", "TCP", "WTPA"))))
+    if (!any(stringr::str_count(contents, c("MIATCP", "TCP", "WTPA",
+                                            "MIAWRKAP"))))
         stop(sprintf("Invalid Public Advisory link. %s", link))
 
     df <- create_df_public()
