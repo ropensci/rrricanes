@@ -65,9 +65,12 @@ discus <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     # Make sure this is a discussion product
     if (!any(stringr::str_count(contents,
-                                c("MIATCD", "MIATCM", "TCD", "WTPA",
-                                  "MIAWRKAD1"))))
-        stop(sprintf("Invalid Discussion link. %s", link))
+                                c("MIATCD", "MIATCM", "TCD", "WTPA", "WTPZ",
+                                  "MIAWRKAD1")))) {
+        # Check if the term "DISCUSSION" appears in header
+        if (!stringr::str_detect(scrape_header(contents), "DISCUSSION"))
+            stop(sprintf("Invalid Discussion link. %s", link))
+    }
 
     df <- create_df_discus()
 
