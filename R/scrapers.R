@@ -199,10 +199,6 @@ scrape_date <- function(header) {
 #' @keywords internal
 scrape_header <- function(contents, ret = NULL) {
 
-    if (!(ret %in% c("status", "name", "adv", "date", "key"))) {
-        stop('\"ret\" must be one of status, name, adv, date or key.')
-    }
-
     # Extract header. Use the format of the date/time line to close out header.
     # There may be additional line breaks inside the header. Must account for.
     # Use day, month, date and year which seems to be consistent across all
@@ -221,7 +217,9 @@ scrape_header <- function(contents, ret = NULL) {
     # Convert header to upper as some products may use proper/lower case
     header <- stringr::str_to_upper(header)
 
-    if (ret == "status") {
+    if (is.null(ret)) {
+        return(header)
+    } else if (ret == "status") {
         status <- scrape_status(header)
         return(status)
     } else if (ret == "name") {
@@ -236,9 +234,6 @@ scrape_header <- function(contents, ret = NULL) {
     } else if (ret == "key") {
         key <- scrape_key(header)
         return(key)
-    } else {
-        stop('NA values in name header.')
-        return(FALSE)
     }
 
 }
