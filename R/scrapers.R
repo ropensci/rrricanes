@@ -99,7 +99,7 @@ scrape_date <- function(header) {
                   "[:blank:]",
                   "([:alpha:]{3})", # Month, abbreviated uppercase
                   "[:blank:]",
-                  "([:digit:]{2})", # Date
+                  "([:digit:]{1,2})", # Date
                   "[:blank:]",
                   "([:digit:]{4})",  # Year
                   "[[:blank:]\n\r]*")
@@ -212,7 +212,7 @@ scrape_header <- function(contents, ret = NULL) {
                          "[:blank:]*",
                          "[:alpha:]{3}", # Month, abbreviated
                          "[:blank:]*",
-                         "[:digit:]{2}", # Date
+                         "[:digit:]{1,2}", # Date
                          "[:blank:]*",
                          "[:digit:]{4}", # Year
                          "[[:blank:]\n\r]*") # Close off date/time line
