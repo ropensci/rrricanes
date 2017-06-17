@@ -236,7 +236,8 @@ scrape_header <- function(contents, ret = NULL) {
     # There may be additional line breaks inside the header. Must account for.
     # Use day, month, date and year which seems to be consistent across all
     # products.
-    ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]\n\r]*?",
+    # (timtrice): Added backtick for AL162005 public #18
+    ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]`\n\r]*?",
                          "[:alpha:]{3}", # Day of week
                          "[:blank:]*",
                          "[:alpha:]{3}", # Month, abbreviated
