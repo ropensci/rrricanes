@@ -88,7 +88,7 @@ parse_products <- function(x, y) {
         col_types = "cccTc"
     } else if (str_detect(title, "Wind Speed Probabilities")) {
         product = "wndprb"
-        col_types = "ciTciiiiiiiiiiiiii"
+        col_types = "ccTciiiiiiiiiiiiii"
     } else if (str_detect(title, "Tropical Cyclone Update")) {
         product = "update"
         col_types = "cccTc"
@@ -158,11 +158,8 @@ parse_products <- function(x, y) {
     status$unstaged
     if (!is_empty(status$unstaged)) {
         add(repo, status$unstaged %>% flatten() %>% sprintf("./datasets/%s", .))
-        commit(repo, sprintf("(%s) %s %s updated as of %s",
-                             product,
-                             ret$result %>% .$Status,
-                             ret$result %>% .$Name,
-                             pd))
+        commit(repo, sprintf("%s updated as of %s", product, pd))
+        push(repo)
     }
 }
 
@@ -219,9 +216,6 @@ items <- map2(items, item_matches, keep)
 
 # Begin parsing products
 walk2(wallets, items, walk2, parse_products)
-
-# Push changes to git
-# push(repo)
 
 ## ---- Reset Options ----------------------------------------------------------
 options("rrricanes.working_msg" = opts.working_msg)
