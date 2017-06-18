@@ -632,6 +632,12 @@ Version: 0.3-1
 Hash: 367275e3dcdd208339e131c7a41bec56
 Requires: stringr
 
+Package: sendmailR
+Source: CRAN
+Version: 1.2-1
+Hash: 26561ceb5871f3983b40c2bfdf90ed09
+Requires: base64enc
+
 Package: servr
 Source: CRAN
 Version: 0.6
