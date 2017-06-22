@@ -4,7 +4,7 @@
 \alias{public}
 \title{public}
 \usage{
-public(link, p)
+public(link, p = dplyr::progress_estimated(n = 1))
 }
 \arguments{
 \item{link}{Link to a storm's specific public advisory product.}

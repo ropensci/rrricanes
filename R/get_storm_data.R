@@ -107,6 +107,7 @@ get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
 #'     \item{fcst}{Forecast positions of tropical cyclones}
 #'     \item{fcst_wr}{Forecast wind radii data for each forecast observation in
 #'     `fcst`}
+#'     \item{fstadv}{Complete Forecast/Advisory data}
 #'     \item{posest}{Position estimates}
 #'     \item{prblty}{Strike probabilities for a given location. This product was
 #'     deprecated after the 2005 hurricane season.}
@@ -134,8 +135,8 @@ get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
 #' @seealso \url{https://timtrice.github.io/rrricanes/articles/articles/data_world.html}
 #' @export
 load_storm_data <- function(dataset = c("adv", "discus", "fcst", "fcst_wr",
-                                        "posest", "prblty", "public", "storms",
-                                        "update", "wndprb", "wr")) {
+                                        "fstadv", "posest", "prblty", "public",
+                                        "storms", "update", "wndprb", "wr")) {
     dataset <- match.arg(dataset)
     base_url <- "https://github.com/timtrice/rrricanesdata/blob/master/"
     link <- paste0(base_url, dataset, ".csv?raw=true")

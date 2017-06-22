@@ -101,7 +101,7 @@ get_wndprb <- function(link) {
 #' @param link Link to a storm's specific wind probability product.
 #' @param p dplyr::progress_estimate.
 #' @keywords internal
-wndprb <- function(link, p) {
+wndprb <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 
@@ -111,7 +111,7 @@ wndprb <- function(link, p) {
     contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a wndprb advisory product
-    if (!any(stringr::str_count(contents, c("MIAPWSAT", "MIAPWSEP", "PWS"))))
+    if (!any(stringr::str_count(contents, c("MIAPWS", "PWS"))))
         stop(sprintf("Invalid Wind Probability link. %s", link))
 
     status <- scrape_header(contents, ret = "status")

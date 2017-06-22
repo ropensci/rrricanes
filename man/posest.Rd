@@ -4,7 +4,7 @@
 \alias{posest}
 \title{posest}
 \usage{
-posest(link, p)
+posest(link, p = dplyr::progress_estimated(n = 1))
 }
 \arguments{
 \item{link}{URL of a specific position estimate product}

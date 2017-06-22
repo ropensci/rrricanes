@@ -1,156 +1,232 @@
-#' Fetch Products
+#'----------------------------------------------------------------------------'#
+#'                                                                            '#
+#' Fetch Products                                                             '#
+#'                                                                            '#
+#'----------------------------------------------------------------------------'#
 #'
-#' This script is designed to run the latest version of rrricanes and grab
-#' every product available for every storm, each basin. If the product dataframe
-#' is not empty, the dataframe is saved as a CSV to the directory assigned in
-#' `d`. If `s` is TRUE, the dataframe is also returned to the global
-#' environment.
+#' Scrape basin index xml files for active storms. If no storms are present,
+#' exit script.
 #'
-#' Each product output file and dataframe is named to make identification as
-#' easy as possible. It is formatted as AB_C where A is the basin, B is the
-#' year, and C is the product. For example, AL1998_fstadv means all data is
-#' related to the fstadv prodcut for the Atlantic basin, 1998.
+#' If storms do exist, extract wallet ID for each storm.
 #'
-#' If the product being worked is "fstadv", a summary dataframe is built as
-#' well. This summary dataframe contains the Key, Name, StartDate and EndDate
-#' for each storm.
+#' In file pub_dates.csv exists each wallet id for each basin along with the
+#' last published date processed. If each product in each active wallet has a
+#' pubDate greater than the value in pub_dates.csv, parse product, add to
+#' product dataframe and push to GitHub repo.
 #'
-#' The summary dataframe and csv file is named similar to the product files with
-#' only the basin and year. For example, EP2017 is the summary dataframe/file
-#' for all storms in the East Pacific for the year 2017.
+#' This script need not run on a consistent basis but, for the time being, will
+#' have to be micromanaged somewhat. If there is no possibility of a storm
+#' developing within the next 24-48 hours, then no need to run.
 #'
-#' This script can take some time to run; especially for fstadv products. This
-#' time is amplified significantly the more years it is gathered. The biggest
-#' issue is a connection timeout; if internet connection breaks or if the NHC
-#' archive site experiences a brief disruption. Each yearly file is written
-#' on completion. So if you run 1998:2017 and the script is interrupted, review
-#' the directory (or your global environment if `s` is TRUE) for the last
-#' object built or saved. Then modify all variables in section "Variables"
-#' accordingly.
+#' However, if there is, say, >50% chance of development then the script should
+#' probably run every 10-15 minutes.
 #'
-#' For example, if the script stopped executing and the last dataframe (by year)
-#' is AL2014, modify the years variable to 2015:2017.
-#'
-#' Same goes for the products. The products variable is loaded in alphabetical
-#' order. So, if the script is interruped and the last dataframe saved is
-#' AL2014_fstadv, the products variable must be modified with discus and fstadv
-#' removed. Otherwise, you're just being redundant.
+#' Execution:
+#' R CMD BATCH R/fetch_products.R
 
 ## ---- Libraries --------------------------------------------------------------
-library(assertr)
 library(dplyr)
-library(magrittr)
+library(git2r)
 library(purrr)
 library(readr)
 library(rrricanes)
+library(rvest)
+library(sendmailR)
+library(stringr)
 library(tibble)
+library(xml2)
 
-## ---- Variables --------------------------------------------------------------
-# Save dataframe to global env?
-s <- TRUE
-# Where is data being saved? Add trailing slash
-d <- "./datasets/"
-# Basins to retrieve
-basins <- c("AL", "EP")
-# Years to retrieve
-years <- 1998:as.numeric(strftime(Sys.Date(), "%Y"))
-# All products to obtain
-products <- c("discus", "fstadv", "posest", "prblty", "public", "update",
-              "wndprb")
-# Get specific storm (by storm number for the year). Either handles all storms
-# with a NULL setting or one storm at a time (n <- 1 or n <- 2. n <- 1:2 will
-# not work).
-n <- NULL
-# Set rrricanes.working_msg
-opt.msg <- getOption("rrricanes.working_msg")
-options(rrricanes.working_msg = TRUE)
+## ---- Options ----------------------------------------------------------------
+opts.working_msg <- getOption("rrricanes.working_msg")
+options("rrricanes.working_msg" = TRUE)
 
-## ---- Functionality ----------------------------------------------------------
-# Walk through years
-walk(years, .f = function(x) {
-    # Check if year directory exists; if not, create it
-    if (!dir.exists(sprintf("%s%s", d, x)))
-        dir.create(sprintf("%s%s", d, x))
-    # Walk through each basin for current year
-    walk2(.x = x, .y = basins, .f = function(x, y) {
-        # Check if basin directory exists; if not, create it
-        if (!dir.exists(sprintf("%s%s/%s", d, x, y)))
-            dir.create(sprintf("%s%s/%s", d, x, y))
-        # Load dataframe of storms for current year
-        storms <- get_storms(year = x, basin = y)
-        # Walk through each product for current basin, current year
-        pwalk(.l = list(year = x, basin = y, product = products),
-              .f = function(basin, year, product) {
-                  # If requesting a specific storm, get data and save.
-                  if (!is.null(n)) {
-                      df <- sprintf("get_%s", product) %>%
-                          invoke_map_df(.x = storms %>% slice(n) %>% .$Link)
-                      if (nrow(df) > 0) {
-                          # Storm key. Strike probabilities products did not
-                          # have a Key value; only name. So, if the product is
-                          # `prblty`, build Key based off basin, n, and year. It
-                          # is possible this may be wrong (it shouldn't be). And
-                          # the only way to verify would be pulling another
-                          # product or pulling the storm summary which sort of
-                          # negates the purpose of what we're doing here. Any
-                          # discrepancies that are created because of this will
-                          # just have to be dealt with another way.
-                          if (product == "prblty") {
-                              k <- sprintf("%s%s%s", basin,
-                                           # Pad to two digits, if necessary
-                                           stringr::str_pad(n, 2, side = "left",
-                                                            pad = 0),
-                                           year)
-                          } else {
-                              # Otherwise, we can just select Key from the first row
-                              k <- df %>% slice(1) %>% .$Key
-                          }
-                          df.name <- sprintf("%s_%s", k, product)
-                          # Bring to global if s is TRUE
-                          if (s) assign(df.name, df, envir = .GlobalEnv)
-                          key_dir <- sprintf("%s/%s/%s/%s", d, year, basin, k)
-                          if (!dir.exists(key_dir)) dir.create(key_dir)
-                          if (s) assign(df.name, df, envir = .GlobalEnv)
-                          write_csv(df, path = sprintf("%s/%s.csv", key_dir, df.name))
-                      }
-                  } else {
-                      # Otherwise, get all storms for current year
-                      df <- sprintf("get_%s", product) %>%
-                          invoke_map_df(.x = storms %>% .$Link)
-                      # Ignore if no product data available
-                      if (nrow(df) > 0) {
-                          # If product is fstadv, build a summary dataframe and
-                          # save/bring to global env
-                          if (product == "fstadv") {
-                              summary <- df %>%
-                                  group_by(Key) %>%
-                                  mutate(StartDate = min(Date),
-                                         EndDate = max(Date)) %>%
-                                  select(Key, Name, Wind, StartDate, EndDate) %>%
-                                  arrange(desc(Wind)) %>%
-                                  filter(row_number() == 1) %>%
-                                  arrange(Key)
-                              # Name of summary dataframe (i.e., AL1998)
-                              df.name <- sprintf("%s%s", basin, year)
-                              # Bring to global environment, if TRUE
-                              if (s) assign(df.name, summary, envir = .GlobalEnv)
-                              # Write summary dataframe
-                              write_csv(summary,
-                                        path = sprintf("%s/%s/%s/%s.csv",
-                                                       d, year, basin, df.name))
-                          }
-                          # Name of product dataframe (i.e., AL1998_fstadv)
-                          df.name <- sprintf("%s%s_%s", basin, year, product)
-                          # Bring to global environment, if TRUE
-                          if (s) assign(df.name, df, envir = .GlobalEnv)
-                          # Save product dataframe
-                          write_csv(df, path = sprintf("%s/%s/%s/%s.csv",
-                                                       d, year, basin, df.name))
-                      }
-                  }
-              })
-        })
-    })
+# Change working directory
+wd <- getwd()
+setwd("~/Projects/rrricanes")
 
-# Reset rrricanes.working_msg
-options(rrricanes.working_msg = opt.msg)
+# GitHub
+repo <- repository("./datasets")
+
+## ---- Functions --------------------------------------------------------------
+parse_products <- function(x, y) {
+
+    # Load last published dates
+    pub_dates <- read_csv("./datasets/pub_dates.csv", col_types = cols())
+
+    # Get title of product
+    title <- xml_find_all(y, "title") %>% xml_text()
+
+    # Get pubdate of products
+    pd <- xml_find_all(y, "pubDate") %>% xml_text() %>%
+        strptime(format = "%a, %d %b %Y %T", tz = "UTC")
+
+    # Set product and column types of existing dataset. Remember Adv is char.
+    if (str_detect(title, "Public Advisory")) {
+        product = "public"
+        col_types = "cccTc"
+    } else if (str_detect(title, "Forecast Advisory")) {
+        product = "fstadv"
+        col_types = paste0("cccTcddiiniiiiiiiiiiiiiiii",
+                           # 12 hrs
+                           "Tddiiiiiiiiiiiiii",
+                           # 24 hrs
+                           "Tddiiiiiiiiiiiiii",
+                           # 36 hrs
+                           "Tddiiiiiiiiiiiiii",
+                           # 48 hrs
+                           "Tddiiiiiiiiiiiiii",
+                           # 72 hrs
+                           "Tddiiiiiiiiiiiiii",
+                           # Seas
+                           "iiii",
+                           # 96 hrs
+                           "Tddiiiiiiiiiiiiii",
+                           #120 hrs
+                           "Tddiiiiiiiiiiiiii")
+    } else if (str_detect(title, "Forecast Discussion")) {
+        product = "discus"
+        col_types = "cccTc"
+    } else if (str_detect(title, "Wind Speed Probabilities")) {
+        product = "wndprb"
+        col_types = "ccTciiiiiiiiiiiiii"
+    } else if (str_detect(title, "Tropical Cyclone Update")) {
+        product = "update"
+        col_types = "cccTc"
+    }
+
+    last_update <- pub_dates %>%
+        filter(Product == product) %>%
+        .[[x]] %>%
+        as.POSIXct()
+
+    if (pd <= last_update) return(NULL)
+
+    # At this point we have a new product. Get URL to product and scrape
+    link <- xml_find_all(y, "link") %>% xml_text()
+
+    func <- getAnywhere(product)$objs[[1]]
+
+    func_call <- safely(func)
+
+    ret <- func_call(link)
+
+    if (!is.null(ret$error)) {
+        warning(sprintf("%s\n%s", ret$error, link))
+        return(NULL)
+    }
+
+    if (is.null(ret$result)) {
+        # wndprb product may not contain any probabilities making the dataframe
+        # empty. Return NULL in this instance.
+
+        # Update pub_dates dataframe and save
+        pub_dates[pub_dates$Product == product,][x] <- as.POSIXct(pd)
+        write_csv(pub_dates, path = "./datasets/pub_dates.csv")
+
+        add(repo, "./datasets/pub_dates.csv")
+        commit(repo, sprintf("pub_dates updated as of %s", pd))
+        return(NULL)
+    }
+
+    # Import and update latest product datafile
+    df <- read_csv(sprintf("./datasets/%s.csv", product), col_types = col_types)
+
+    updated_df <- bind_rows(df, ret$result)
+    write_csv(updated_df, path = sprintf("./datasets/%s.csv", product))
+
+    if (product == "fstadv") {
+        ## ---- Tidy fstadv ----------------------------------------------------
+        adv <- tidy_fstadv(updated_df)
+        write_csv(adv, path = "./datasets/adv.csv")
+
+        fcst <- tidy_fcst(updated_df)
+        write_csv(fcst, path = "./datasets/fcst.csv")
+
+        fcst_wr <- tidy_fcst_wr(updated_df)
+        write_csv(fcst_wr, path = "./datasets/fcst_wr.csv")
+
+        wr <- tidy_wr(updated_df)
+        write_csv(wr, path = "./datasets/wr.csv")
+    }
+
+    # Update pub_dates dataframe and save
+    pub_dates[pub_dates$Product == product,][x] <- as.POSIXct(pd)
+    write_csv(pub_dates, path = "./datasets/pub_dates.csv")
+
+    ## ---- Stage Changes ------------------------------------------------------
+    status <- status(repo)
+    status$unstaged
+    if (!is_empty(status$unstaged)) {
+        add(repo, status$unstaged %>% flatten() %>% sprintf("./datasets/%s", .))
+        commit(repo, sprintf("%s updated as of %s", product, pd))
+        push(repo)
+    }
+}
+
+## ---- Scrape Index -----------------------------------------------------------
+# Index URLs to scrape for active cyclones
+index_urls <- c("http://www.nhc.noaa.gov/index-at.xml",
+                "http://www.nhc.noaa.gov/index-ep.xml")
+
+# Load XML as list
+indices <- index_urls %>% map(read_xml)
+
+# Go through each index output and check for active cyclones. If no storms are
+# active then do nothing.
+
+# AL example (active cyclone):
+# http://www.nhc.noaa.gov/rss_examples/index-at-20130605.xml
+# EP example (active cyclone):
+# http://www.nhc.noaa.gov/rss_examples/index-ep.xml
+
+# Based on the examples provided and current indexes (with no active cyclones
+# in either basin), there is a nhc:wallet element as a child of nhc::Cyclone.
+# The nhc:wallet element contains a string (e.g., AT1) which indicates the basin
+# (Atlantic) and wallet number (1). This should tell us there is an active
+# cyclone.
+wallets <- indices %>%
+    map(xml_find_all, xpath = ".//nhc:wallet") %>%
+    map(xml_text) %>%
+    flatten_chr()
+
+if (is_empty(wallets))
+    stop("No active cyclones.")
+
+## ---- Scrape Products --------------------------------------------------------
+# At this point we have a vector of wallets that need to be parsed. Inside each
+# wallet is an overall pubDate for each product. This pubDate needs to be
+# checked against the value in pub_dates.csv to ensure that we do not write
+# existing data.
+urls <- map_chr(wallets, str_to_lower) %>%
+    sprintf("http://www.nhc.noaa.gov/nhc_%s.xml", .)
+
+# Extract all items
+items <- map(urls, read_xml) %>% map(xml_find_all, xpath = ".//item")
+
+# Match the products we need
+item_matches <- map(items, str_detect,
+                    pattern = paste0("(Public Advisory|Forecast Advisory|",
+                                     "Forecast Discussion|",
+                                     "Wind Speed Probabilities|",
+                                     "Tropical Cyclone Update) ",
+                                     "Number"))
+
+# Keep only those matches
+items <- map2(items, item_matches, keep)
+
+# Begin parsing products
+walk2(wallets, items, walk2, parse_products)
+
+## ---- Reset Options ----------------------------------------------------------
+options("rrricanes.working_msg" = opts.working_msg)
+# Reset working directory
+setwd(wd)
+
+## ---- Send Email -------------------------------------------------------------
+from <- "<rrricanes@gmail.com>"
+to <- "<rrricanes@gmail.com>"
+subject <- "rrricanes fetch products"
+body <- read_file("fetch_products.Rout")
+mailControl = list(smtpServer = "ASPMX.L.GOOGLE.COM")
+sendmail(from = from, to = to, subject = subject, msg = body,
+         control = mailControl)
