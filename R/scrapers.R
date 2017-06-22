@@ -125,7 +125,7 @@ scrape_date <- function(header) {
     # immeidately followed by Z which is not captured. Z is military code for
     # Zulu time which is equivalent of Z.
 
-    # That should be the reason... ¯\_(ツ)_/¯
+    # That should be the reason...
     tz <- datetime.extracted[,4]
     if (is.na(tz))
         tz <- "UTC"
