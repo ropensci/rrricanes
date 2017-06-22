@@ -6,11 +6,11 @@ Description: Get archived data of past and current hurricanes and tropical
   storms since 1998.
 Version: 0.2.0-2
 Authors@R: c(person("Tim", "Trice", email = "tim.trice@gmail.com", role = c("aut", "cre")))
+Maintainer: Tim Trice <tim.trice@gmail.com>
 Depends:
   R (>= 3.3.3)
 URL: https://github.com/timtrice/rrricanes
 BugReports: https://github.com/timtrice/rrricanes/issues
-Additional_repositories: http://packages.ropensci.org
 License: MIT + file LICENSE
 LazyData: TRUE
 Imports:
