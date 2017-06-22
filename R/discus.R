@@ -54,7 +54,7 @@ get_discus <- function(link) {
 #' @return Dataframe
 #' @seealso \code{\link{get_discus}}
 #' @keywords internal
-discus <- function(link, p) {
+discus <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 
@@ -64,8 +64,13 @@ discus <- function(link, p) {
     contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a discussion product
-    if (!any(stringr::str_count(contents, c("MIATCDAT", "MIATCDEP"))))
-        stop(sprintf("Invalid Discussion link. %s", link))
+    if (!any(stringr::str_count(contents,
+                                c("MIATCD", "MIATCM", "TCD", "WTPA", "WTPZ",
+                                  "MIAWRKAD1")))) {
+        # Check if the term "DISCUSSION" appears in header
+        if (!stringr::str_detect(scrape_header(contents), "DISCUSSION"))
+            stop(sprintf("Invalid Discussion link. %s", link))
+    }
 
     df <- create_df_discus()
 

@@ -44,7 +44,7 @@ get_prblty <- function(link) {
 #' @return Dataframe
 #' @seealso \code{\link{get_prblty}}
 #' @keywords internal
-prblty <- function(link, p) {
+prblty <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 

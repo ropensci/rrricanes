@@ -53,7 +53,7 @@ get_update <- function(link) {
 #' @return Dataframe
 #' @seealso \code{\link{get_update}}
 #' @keywords internal
-update <- function(link, p) {
+update <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 
@@ -63,7 +63,7 @@ update <- function(link, p) {
     contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a update advisory product
-    if (!any(stringr::str_count(contents, c("MIATCUAT", "MIATCUEP"))))
+    if (!any(stringr::str_count(contents, c("MIATCU", "TCU", "WTNT"))))
         stop(sprintf("Invalid Cyclone Update link. %s", link))
 
     df <- create_df_update()

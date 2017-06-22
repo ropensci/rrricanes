@@ -6,7 +6,7 @@
 scrape_adv_num <- function(header) {
     ptn <- paste0("(?:ADVISORY|DISCUSSION|PROBABILITIES)[:blank:]+NUMBER",
                   # Advisory number. Could alphanum; i.e., 1, 1A, 2, 2A, 2B
-                  "[:blank:]+([:digit:]{1,3}[:alpha:]*?)",
+                  "[:blank:]+([:digit:]{1,3}[:alpha:]*)",
                   "(?:[[:space:][:punct:][:alpha:]]*)+")
     adv <- trimws(stringr::str_match(header, ptn)[,2])
     return(adv)
@@ -84,8 +84,37 @@ scrape_date <- function(header) {
                                                         " [:upper:]{3} ",
                                                         "[:upper:]{3} ",
                                                         "[:digit:]{2} ",
-                                                        "[:digit:]{4})\n",
-                                                        "\n12 PM\\2\n"))
+                                                        "[:digit:]{4})\n"),
+                                                        "\n12 PM\\2\n")
+
+    # Same thing for "MIDNIGHT"
+    if (stringr::str_count(header,
+                           pattern = paste0("\nMIDNIGHT [:upper:]{3} [:upper:]{3} ",
+                                            "[:upper:]{3} [:digit:]{2} ",
+                                            "[:digit:]{4}\n")))
+        header <- stringr::str_replace(header,
+                                       pattern = paste0("\n(MIDNIGHT)( ",
+                                                        "[:upper:]{3}",
+                                                        " [:upper:]{3} ",
+                                                        "[:upper:]{3} ",
+                                                        "[:digit:]{2} ",
+                                                        "[:digit:]{4})\n"),
+                                       "\n12 AM\\2\n")
+
+    # And yes there is actually an entry of 12 NOON (see AL132002 public adv 49A)
+    if (stringr::str_count(header,
+                           pattern = paste0("\n12 NOON [:upper:]{3} [:upper:]{3} ",
+                                            "[:upper:]{3} [:digit:]{2} ",
+                                            "[:digit:]{4}\n")))
+        header <- stringr::str_replace(header,
+                                       pattern = paste0("\n(12 NOON)( ",
+                                                        "[:upper:]{3}",
+                                                        " [:upper:]{3} ",
+                                                        "[:upper:]{3} ",
+                                                        "[:digit:]{2} ",
+                                                        "[:digit:]{4})\n"),
+                                       "\n12 PM\\2\n")
+    # I'll clean all that up later. Too tired right now...
 
     ptn <- paste0("(?<=(?:\n|\r))",
                   "([:digit:]{1,2})", # Hour
@@ -99,7 +128,7 @@ scrape_date <- function(header) {
                   "[:blank:]",
                   "([:alpha:]{3})", # Month, abbreviated uppercase
                   "[:blank:]",
-                  "([:digit:]{2})", # Date
+                  "([:digit:]{1,2})", # Date
                   "[:blank:]",
                   "([:digit:]{4})",  # Year
                   "[[:blank:]\n\r]*")
@@ -152,6 +181,14 @@ scrape_date <- function(header) {
         dt <- as.POSIXct(x, tz = "Etc/GMT+4")
     } else if (tz %in% c("EST")) {
         dt <- as.POSIXct(x, tz = "Etc/GMT+5")
+    } else if (tz %in% c("HDT")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+9")
+    } else if (tz %in% c("HST")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+10")
+    } else if (tz %in% c("MDT")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+6")
+    } else if (tz %in% c("MST")) {
+        dt <- as.POSIXct(x, tz = "Etc/GMT+7")
     } else if (tz %in% c("PDT")) {
         dt <- as.POSIXct(x, tz = "Etc/GMT+7")
     } else if (tz %in% c("PST")) {
@@ -195,20 +232,17 @@ scrape_date <- function(header) {
 #' @keywords internal
 scrape_header <- function(contents, ret = NULL) {
 
-    if (!(ret %in% c("status", "name", "adv", "date", "key"))) {
-        stop('\"ret\" must be one of status, name, adv, date or key.')
-    }
-
     # Extract header. Use the format of the date/time line to close out header.
     # There may be additional line breaks inside the header. Must account for.
     # Use day, month, date and year which seems to be consistent across all
     # products.
-    ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]\n\r]*?",
+    # (timtrice): Added backtick for AL162005 public #18
+    ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]`\n\r]*?",
                          "[:alpha:]{3}", # Day of week
                          "[:blank:]*",
                          "[:alpha:]{3}", # Month, abbreviated
                          "[:blank:]*",
-                         "[:digit:]{2}", # Date
+                         "[:digit:]{1,2}", # Date
                          "[:blank:]*",
                          "[:digit:]{4}", # Year
                          "[[:blank:]\n\r]*") # Close off date/time line
@@ -217,7 +251,9 @@ scrape_header <- function(contents, ret = NULL) {
     # Convert header to upper as some products may use proper/lower case
     header <- stringr::str_to_upper(header)
 
-    if (ret == "status") {
+    if (is.null(ret)) {
+        return(header)
+    } else if (ret == "status") {
         status <- scrape_status(header)
         return(status)
     } else if (ret == "name") {
@@ -232,9 +268,6 @@ scrape_header <- function(contents, ret = NULL) {
     } else if (ret == "key") {
         key <- scrape_key(header)
         return(key)
-    } else {
-        stop('NA values in name header.')
-        return(FALSE)
     }
 
 }
@@ -310,7 +343,8 @@ scrape_status <- function(header) {
                  "TROPICAL DEPRESSION",
                  "TROPICAL STORM",
                  "HURRICANE",
-                 "POST-TROPICAL CYCLONE")
+                 "POST-TROPICAL CYCLONE",
+                 "POTENTIAL TROPICAL CYCLONE")
     if (!any(stringr::str_count(header, paste(options, sep = "|"))))
         stop(sprintf("Options not in header. %s", header))
     ptn <- paste(options, collapse = "|")

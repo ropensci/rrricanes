@@ -17,6 +17,8 @@ create_df_posest <- function() {
 
 #' @title get_posest
 #' @description Return dataframe of position estimate data.
+#' @details This product was discontinued after the 2013 hurricane season and is
+#' now included in the Tropical Cyclone Update product (\code{\link{update}}).
 #' \describe{
 #'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
 #'     etc.}
@@ -54,7 +56,7 @@ get_posest <- function(link) {
 #' @return Dataframe
 #' @seealso \code{\link{get_posest}}
 #' @keywords internal
-posest <- function(link, p) {
+posest <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 
@@ -65,7 +67,7 @@ posest <- function(link, p) {
 
     # Make sure this is a public advisory product
     if (!any(stringr::str_count(contents,
-                                c("MIATCEAT", "MIATCEEP", "MEATIEST"))))
+                                c("MIATCE", "MEATIEST", "WTNT"))))
         stop(sprintf("Invalid Position Estimate link. %s", link))
 
     df <- create_df_posest()

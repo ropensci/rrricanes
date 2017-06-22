@@ -53,7 +53,7 @@ get_public <- function(link) {
 #' @return Dataframe
 #' @seealso \code{\link{get_public}}
 #' @keywords internal
-public <- function(link, p) {
+public <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 
@@ -63,7 +63,8 @@ public <- function(link, p) {
     contents <- stringr::str_replace_all(contents, "\r", "")
 
     # Make sure this is a public advisory product
-    if (!any(stringr::str_count(contents, c("MIATCPAT", "MIATCPEP"))))
+    if (!any(stringr::str_count(contents, c("MIATCP", "TCP", "WTPA",
+                                            "MIAWRKAP"))))
         stop(sprintf("Invalid Public Advisory link. %s", link))
 
     df <- create_df_public()

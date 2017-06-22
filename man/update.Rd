@@ -4,7 +4,7 @@
 \alias{update}
 \title{update}
 \usage{
-update(link, p)
+update(link, p = dplyr::progress_estimated(n = 1))
 }
 \arguments{
 \item{link}{Link to a storm's specific update advisory product.}

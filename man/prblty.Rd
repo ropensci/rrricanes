@@ -4,7 +4,7 @@
 \alias{prblty}
 \title{prblty}
 \usage{
-prblty(link, p)
+prblty(link, p = dplyr::progress_estimated(n = 1))
 }
 \arguments{
 \item{link}{Link to a storm's specific strike probability advisory product.}

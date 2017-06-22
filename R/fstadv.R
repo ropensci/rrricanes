@@ -101,7 +101,7 @@ get_fstadv <- function(link) {
 #' @param link URL of a specific FORECAST/ADVISORY product
 #' @param p dplyr::progress_estimate.
 #' @keywords internal
-fstadv <- function(link, p) {
+fstadv <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     p$pause(0.5)$tick()$print()
 
@@ -112,8 +112,8 @@ fstadv <- function(link, p) {
 
     # Make sure this is a public advisory product
     if (!any(stringr::str_count(contents,
-                                c("MIATCMAT", "MIATCMEP", "[W]*TPA", "TCMAT",
-                                  "WTPZ", "HFOTCMEP", "HFOTCMCP"))))
+                                c("MIATCM", "[W]*TPA", "TCMAT", "WTPZ",
+                                  "HFOTCMEP", "HFOTCMCP"))))
         stop(sprintf("Invalid Forecast/Advisory link. %s", link))
 
     status <- scrape_header(contents, ret = "status")

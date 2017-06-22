@@ -4,7 +4,7 @@
 \alias{wndprb}
 \title{wndprb}
 \usage{
-wndprb(link, p)
+wndprb(link, p = dplyr::progress_estimated(n = 1))
 }
 \arguments{
 \item{link}{Link to a storm's specific wind probability product.}
