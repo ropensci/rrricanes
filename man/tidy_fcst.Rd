@@ -28,3 +28,9 @@ other tidy dataframes.
    \item{Gust}{Forecast gust in knots}
 }
 }
+\examples{
+\dontrun{
+get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") \%>\%
+    tidy_fcst()
+}
+}

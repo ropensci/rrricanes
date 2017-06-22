@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [0.2.0-3] yyyy-mm-dd
 
 ### Added
-  - NA
+  - Examples for functions `knots_to_mph`, `mb_to_in`, `status_abbr_to_str`, `get_discus`, `get_fstadv`, `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr`.
 
 ### Changed
   - NA

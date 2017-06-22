@@ -36,3 +36,9 @@ Date to join with other tidy dataframes.
    \item{SeasNW}{Radius of 12ft seas in northwest qaudrant}
 }
 }
+\examples{
+\dontrun{
+get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") \%>\%
+    tidy_fstadv()
+}
+}

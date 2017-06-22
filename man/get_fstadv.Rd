@@ -83,6 +83,12 @@ clarifications:
    \item{SeasNW}{Radius of 12ft seas in northwest qaudrant}
 }
 }
+\examples{
+\dontrun{
+# Return dataframe of forecast/advisories for Tropical Storm Alex (AL011998)
+get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html")
+}
+}
 \seealso{
 \code{\link{tidy_fstadv}}, \code{\link{tidy_wr}},
 \code{\link{tidy_fcst}}, \code{\link{tidy_fcst_wr}}

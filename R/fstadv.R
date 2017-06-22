@@ -72,6 +72,11 @@
 #' }
 #' @seealso \code{\link{tidy_fstadv}}, \code{\link{tidy_wr}},
 #' \code{\link{tidy_fcst}}, \code{\link{tidy_fcst_wr}}
+#' @examples
+#' \dontrun{
+#' # Return dataframe of forecast/advisories for Tropical Storm Alex (AL011998)
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html")
+#' }
 #' @export
 get_fstadv <- function(link) {
 
@@ -600,6 +605,11 @@ fstadv_winds_gusts <- function(contents, what = NULL) {
 #'    \item{SeasSW}{Radius of 12ft seas in southwest qaudrant}
 #'    \item{SeasNW}{Radius of 12ft seas in northwest qaudrant}
 #' }
+#' @examples
+#' \dontrun{
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#'     tidy_fstadv()
+#' }
 #' @export
 tidy_fstadv <- function(df) {
     if (!is.data.frame(df))
@@ -623,6 +633,11 @@ tidy_fstadv <- function(df) {
 #'    \item{SE}{Radius of `Windfield` in the southeast quadrant}
 #'    \item{SW}{Radius of `Windfield` in the southwest quadrant}
 #'    \item{NW}{Radius of `Windfield` in the northwest quadrant}
+#' }
+#' @examples
+#' \dontrun{
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#'     tidy_wr()
 #' }
 #' @export
 tidy_wr <- function(df) {
@@ -678,6 +693,11 @@ tidy_wr <- function(df) {
 #'    \item{Lon}{Forecast Longitude}
 #'    \item{Wind}{Forecast wind in knots}
 #'    \item{Gust}{Forecast gust in knots}
+#' }
+#' @examples
+#' \dontrun{
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#'     tidy_fcst()
 #' }
 #' @export
 tidy_fcst <- function(df) {
@@ -737,7 +757,11 @@ tidy_fcst <- function(df) {
 #'    \item{SW}{Radius in nautical miles for southwest quadrant}
 #'    \item{NW}{Radius in nautical miles for northwest quadrant}
 #' }
-#'
+#' @examples
+#' \dontrun{
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#'     tidy_fcst_wr()
+#' }
 #' @export
 tidy_fcst_wr <- function(df) {
     if (!is.data.frame(df))

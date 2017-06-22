@@ -32,6 +32,13 @@ Status abbreviations
     \item{WV}{Tropical Wave (of any intensity)}
 }
 }
+\examples{
+# Extratropical Cyclone
+status_abbr_to_str("EX")
+
+# Hurricane
+status_abbr_to_str("HU")
+}
 \seealso{
 \url{http://www.aoml.noaa.gov/hrd/hurdat/newhurdat-format.pdf}
 }

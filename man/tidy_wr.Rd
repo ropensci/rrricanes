@@ -26,3 +26,9 @@ Returns only complete.cases (based on quadrants).
    \item{NW}{Radius of `Windfield` in the northwest quadrant}
 }
 }
+\examples{
+\dontrun{
+get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") \%>\%
+    tidy_wr()
+}
+}
