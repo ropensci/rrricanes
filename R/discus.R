@@ -27,6 +27,11 @@ create_df_discus <- function() {
 #' }
 #' @param link URL to storm's archive page.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
+#' @examples
+#' \dontrun{
+#' # Return dataframe of storm discussions for Tropical Storm Alex (AL011998)
+#' get_discus("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html")
+#' }
 #' @export
 get_discus <- function(link) {
 

@@ -20,6 +20,12 @@ Return dataframe of discussion data.
   \item{Contents}{Text content of product}
 }
 }
+\examples{
+\dontrun{
+# Return dataframe of storm discussions for Tropical Storm Alex (AL011998)
+get_discus("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html")
+}
+}
 \seealso{
 \code{\link{get_storms}}, \code{\link{public}}
 }

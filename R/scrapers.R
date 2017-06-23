@@ -344,7 +344,8 @@ scrape_status <- function(header) {
                  "TROPICAL STORM",
                  "HURRICANE",
                  "POST-TROPICAL CYCLONE",
-                 "POTENTIAL TROPICAL CYCLONE")
+                 "POTENTIAL TROPICAL CYCLONE",
+                 "REMNANTS OF")
     if (!any(stringr::str_count(header, paste(options, sep = "|"))))
         stop(sprintf("Options not in header. %s", header))
     ptn <- paste(options, collapse = "|")

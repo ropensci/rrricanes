@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
+```{r, message = FALSE}
 library(dplyr)
 library(rrricanes)
 ```
@@ -24,7 +24,7 @@ There are two basins which data is available: north Atlantic ("AL") and northeas
 
 By default, `get_storms` will return all storms that have developed for the current year in both basins. If no storms have developed, an error will be generated. For this example, we'll use 2012.
 
-```{r get.storms}
+```{r get.storms, eval = FALSE}
 al.2012 <- get_storms(year = 2012, basin = "AL")
 ```
 
@@ -32,7 +32,7 @@ al.2012 <- get_storms(year = 2012, basin = "AL")
 
 `get_storm_data` can be used to retrieve one or multiple products for one or more cyclones. A list of dataframes is returned.
 
-```{r}
+```{r, eval = FALSE}
 al182012_fstadv <- al.2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
@@ -41,7 +41,7 @@ al182012_fstadv <- al.2012 %>%
 
 We can get the forecast/advisory data and wind speed probabilities at once:
 
-```{r}
+```{r, eval = FALSE}
 al182012 <- al.2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
@@ -50,21 +50,13 @@ al182012 <- al.2012 %>%
 
 `al182012` now contains two dataframes for Hurricane Sandy; `fstadv` and `wndprb`.
 
-```{r}
-dim(al182012$fstadv)
-```
-
-```{r}
-dim(al182012$wndprb)
-```
-
 ## Forecast/Advisory Product (`fstadv`)
 
 The core of a storm's dataset is located in the Forecast/Advisory product, `fstadv`. This product contains current location, forecast position, movement and structural details of the cyclone. 
 
 To access only this product, we can use `get_fstadv`:
 
-```{r}
+```{r, eval = FALSE}
 al182012_fstadv <- al.2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
@@ -171,7 +163,7 @@ Please see the National Hurricane Center's website for more information on under
 
 Strike probabilities were discontinued after the 2005 hurricane season (replaced by Wind Speed Probabilities; `wndprb`). For this example, we'll look at Hurricane Katrina. For this we use the function `get_prblty`.
 
-```{r}
+```{r, eval = FALSE}
 al122005_prblty <- get_storms(year = 2005, basin = "AL") %>% 
     filter(Name == "Hurricane Katrina") %>% 
     .$Link %>% 
@@ -198,15 +190,15 @@ Strike Probabilities may not exist for most Pacific cyclones.
 
 ## Wind Speed Probabilities (`wndprb`)
 
-```{r}
-al122005_wndprb <- al.2012 %>% 
+```{r, eval = FALSE}
+al182012_wndprb <- al.2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
     get_wndprb()
 ```
 
 ```{r}
-str(al122005_wndprb)
+str(al182012_wndprb)
 ```
 
 Wind Speed Probabilities are a bit more advanced than their predecessor. The `Wind` variable is for 34kt, 50kt and 64kt winds expected within a specific time period. 

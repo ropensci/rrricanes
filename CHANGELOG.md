@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.0-3] 2017-06-22
+
+### Added
+  - Examples for functions `knots_to_mph`, `mb_to_in`, `status_abbr_to_str`, `get_discus`, `get_fstadv`, `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr`.
+
+### Changed
+  - Added data files to make building vignettes quicker.
+  - Added `skip_on_cran` to tests. Additionally, slimmed down some tests. Previous tests exist in branch `tests` and will be redeveloped.
+  - Minor documentation updates and corrections.
+
+### Removed
+  - NA
+
+### Deprecated
+  - NA
+
+### Fixed
+  - NA
+
+### Security
+  - NA
+
 ## [0.2.0-2] 2017-06-22
 
 ### Added

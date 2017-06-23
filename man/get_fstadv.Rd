@@ -24,7 +24,7 @@ clarifications:
     \item The value of `n` in `Hr\{n\}` variables is the forecast period.
         Up to 2002, forecast periods are 12, 24, 36, 48 and 72 hours. After
         2002, forecast periods were extended to 96 and 120 hours. Not all
-        forecast periods will be avialable for every cyclone advisory (e.g.,
+        forecast periods will be available for every cyclone advisory (e.g.,
         if it is dissipating or expected to dissipate.)
     \item Wind radius data is not included 96 and 120 hour forecast periods.
     \item Forecast dates are not truly 12, 24, ..., 120 hours from the
@@ -77,10 +77,16 @@ clarifications:
    \item{Hr\{n\}SE34}{Forecast wind radius in `n` hours}
    \item{Hr\{n\}SW34}{Forecast wind radius in `n` hours}
    \item{Hr\{n\}NW34}{Forecast wind radius in `n` hours}
-   \item{SeasNE}{Radius of 12ft seas in northeast qaudrant}
-   \item{SeasSE}{Radius of 12ft seas in southeast qaudrant}
-   \item{SeasSW}{Radius of 12ft seas in southwest qaudrant}
-   \item{SeasNW}{Radius of 12ft seas in northwest qaudrant}
+   \item{SeasNE}{Radius of 12ft seas in northeast quadrant}
+   \item{SeasSE}{Radius of 12ft seas in southeast quadrant}
+   \item{SeasSW}{Radius of 12ft seas in southwest quadrant}
+   \item{SeasNW}{Radius of 12ft seas in northwest quadrant}
+}
+}
+\examples{
+\dontrun{
+# Return dataframe of forecast/advisories for Tropical Storm Alex (AL011998)
+get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html")
 }
 }
 \seealso{

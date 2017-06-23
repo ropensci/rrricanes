@@ -30,9 +30,15 @@ Date to join with other tidy dataframes.
    \item{FwdDir}{Compass angle of forward motion}
    \item{FwdSpeed}{Forward speed in miles per hour}
    \item{Eye}{Size of eye in nautical miles}
-   \item{SeasNE}{Radius of 12ft seas in northeast qaudrant}
-   \item{SeasSE}{Radius of 12ft seas in southeast qaudrant}
-   \item{SeasSW}{Radius of 12ft seas in southwest qaudrant}
-   \item{SeasNW}{Radius of 12ft seas in northwest qaudrant}
+   \item{SeasNE}{Radius of 12ft seas in northeast quadrant}
+   \item{SeasSE}{Radius of 12ft seas in southeast quadrant}
+   \item{SeasSW}{Radius of 12ft seas in southwest quadrant}
+   \item{SeasNW}{Radius of 12ft seas in northwest quadrant}
+}
+}
+\examples{
+\dontrun{
+get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") \%>\%
+    tidy_fstadv()
 }
 }

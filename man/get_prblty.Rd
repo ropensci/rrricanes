@@ -18,7 +18,7 @@ passing within 65 nautical miles of a location.
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}
-  \item{Location}{Location for which the probablity statistics rely}
+  \item{Location}{Location for which the probability statistics rely}
   \item{A}{Probability of a strike within the next 12 hours}
   \item{B}{Probability of a strike between 12 and 24 hours}
   \item{C}{Probability of a strike between 24 and 36 hours}

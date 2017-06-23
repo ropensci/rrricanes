@@ -43,7 +43,8 @@
 #' \code{\link{load_storm_data}}. Currently only annual summaries,
 #' forecast/advisory, strike probabilities and wind speed probability products
 #' exist. As of this writing it is up-to-date but caution is advised for active
-#' cyclones. Use the above functions for the most up-to-date data as a fallback.
+#' cyclones. Use the above functions for the most up-to-date data as a
+#' fall-back.
 #'
 #' @section GIS Data:
 #'
@@ -99,6 +100,7 @@
 NULL
 
 #' @importFrom magrittr %>%
+#' @importFrom utils packageVersion
 
 .onLoad <- function(libname, pkgname) {
     op <- options()
@@ -188,7 +190,9 @@ get_nhc_link <- function(withTrailingSlash = TRUE) {
 #' @title knots_to_mph
 #' @description convert knots (kt) to miles per hour (mph)
 #' @param x wind speed in knots
-#' @return x in mph
+#' @return x in miles per hour
+#' @examples
+#' knots_to_mph(65)
 #' @export
 knots_to_mph <- function(x) {
     return(x * 1.15077945)
@@ -197,7 +201,9 @@ knots_to_mph <- function(x) {
 #' @title mb_to_in
 #' @description convert millibars (mb) to inches of mercury (in)
 #' @param x barometric pressure in mb
-#' @return x in in
+#' @return x in inches
+#' @examples
+#' mb_to_in(999)
 #' @export
 mb_to_in <- function(x) {
     return(x * 0.029529983071)
@@ -254,6 +260,12 @@ saffir <- function(x) {
 #' }
 #' @return character vector of strings
 #' @seealso \url{http://www.aoml.noaa.gov/hrd/hurdat/newhurdat-format.pdf}
+#' @examples
+#' # Extratropical Cyclone
+#' status_abbr_to_str("EX")
+#'
+#' # Hurricane
+#' status_abbr_to_str("HU")
 #' @export
 status_abbr_to_str <- function(x) {
     y <- character(length = 0)

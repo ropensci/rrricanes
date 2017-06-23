@@ -10,8 +10,11 @@ knots_to_mph(x)
 \item{x}{wind speed in knots}
 }
 \value{
-x in mph
+x in miles per hour
 }
 \description{
 convert knots (kt) to miles per hour (mph)
+}
+\examples{
+knots_to_mph(65)
 }

@@ -1,14 +1,9 @@
 context("Get Storms")
 
-# Set timeout options
-opt.timeout <- getOption("rrricanes.http_timeout")
-opt.attempts <- getOption("rrricanes.http_attempts")
-options("rrricanes.http_timeout" = 1)
-options("rrricanes.http_attempts" = 5)
-
 ## ---- URL Status -------------------------------------------------------------
 #' Test that annual archive links work. All results should return 'OK'.
 test_that("URL Status", {
+    skip_on_cran()
     url <- "http://www.nhc.noaa.gov/archive/1998/1998archive.shtml"
     expect_identical(httr::http_status(httr::GET(url))$reason, "OK")
 
@@ -23,6 +18,8 @@ test_that("URL Status", {
 ## ---- HTML format ------------------------------------------------------------
 #' Test that annual archive page formats haven't changed.
 test_that("HTML format", {
+
+    skip_on_cran()
 
     #' Extract text value in row(r), column(c) at link. Cell count goes left to
     #' right, up to down starting at 1. There is a gap of 2 rowwise between each
@@ -70,19 +67,15 @@ test_that("HTML format", {
 
 ## ---- Is Dataframe -----------------------------------------------------------
 test_that("Is Dataframe", {
+    skip_on_cran()
     expect_true(is.data.frame(get_storms(1998, basin = "AL")))
-    expect_true(is.data.frame(get_storms(2016, basin = "AL")))
     expect_true(is.data.frame(get_storms(1998, basin = "EP")))
-    expect_true(is.data.frame(get_storms(2016, basin = "EP")))
 })
 
 ## ---- Column Names -----------------------------------------------------------
 test_that('Column Names', {
-    expect_named(get_storms(1998, basin = "AL"),
-                 c("Year", "Name", "Basin", "Link"))
+    skip_on_cran()
     expect_named(get_storms(2016, basin = "AL"),
-                 c("Year", "Name", "Basin", "Link"))
-    expect_named(get_storms(1998, basin = "EP"),
                  c("Year", "Name", "Basin", "Link"))
     expect_named(get_storms(2016, basin = "EP"),
                  c("Year", "Name", "Basin", "Link"))
@@ -90,10 +83,7 @@ test_that('Column Names', {
 
 ## ---- Errors -----------------------------------------------------------------
 test_that("Errors", {
+    skip_on_cran()
     expect_error(get_storms(1997),
                  'Archives currently only available for 1998 to current year.')
 })
-
-# Reset options
-options("rrricanes.http_timeout" = opt.timeout)
-options("rrricanes.http_attempts" = opt.attempts)

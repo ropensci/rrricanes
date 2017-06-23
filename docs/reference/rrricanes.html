@@ -87,6 +87,8 @@
 hurricane data (past and current) into well-organized datasets. With these
 datasets you can explore past hurricane tracks, forecasts and structure
 elements.</p>
+<p>This documentation and additional help articles
+<a href = 'https://timtrice.github.io/rrricanes/'>can be found online</a>.</p>
 <p>Text products (Forecast/Advisory, Public Advisory, Discussions and
 Probabilities) are only available from 1998 to current. An effort will be
 made to add prior data as available.</p>
@@ -124,7 +126,28 @@ is often the case, unfortunately). You can access post-scraped datasets with
 <code><a href='load_storm_data.html'>load_storm_data</a></code>. Currently only annual summaries,
 forecast/advisory, strike probabilities and wind speed probability products
 exist. As of this writing it is up-to-date but caution is advised for active
-cyclones. Use the above functions for the most up-to-date data as a fallback.</p>
+cyclones. Use the above functions for the most up-to-date data as a
+fall-back.</p>
+    
+    <h2 class="hasAnchor" id="gis-data"><a class="anchor" href="#gis-data"></a>GIS Data</h2>
+
+    
+    <p>For enhanced plotting of storm data, several GIS datasets are available. The
+core GIS functions return URLs to help you refine the data you wish to view.
+(Some products will not exist for all storms/advisories). These products are:</p><dl class='dl-horizontal'>
+  <dt><code><a href='gis_advisory.html'>gis_advisory</a></code></dt><dd><p>Past track, current position, forecast and wind radii</p></dd>
+  <dt><code><a href='gis_breakpoints.html'>gis_breakpoints</a></code></dt><dd><p>Breakpoints for watches and warnings</p></dd>
+  <dt><code><a href='gis_latest.html'>gis_latest</a></code></dt><dd><p>All available GIS products for active cyclones</p></dd>
+  <dt><code><a href='gis_outlook.html'>gis_outlook</a></code></dt><dd><p>Tropical Weather Outlook</p></dd>
+  <dt><code><a href='gis_prob_storm_surge.html'>gis_prob_storm_surge</a></code></dt><dd><p>Probabilistic Storm Surge</p></dd>
+  <dt><code><a href='gis_windfield.html'>gis_windfield</a></code></dt><dd><p>Wind Radii</p></dd>
+  <dt><code><a href='gis_wsp.html'>gis_wsp</a></code></dt><dd><p>Wind Speed Probabilities</p></dd>
+</dl><p><code><a href='gis_download.html'>gis_download</a></code> will download the datasets from the above
+functions.</p>
+<p>Some GIS datasets will need to be converted to dataframes to plot geoms. Use
+<code><a href='shp_to_df.html'>shp_to_df</a></code> to convert SpatialLinesDataFrames and
+SpatialPolygonsDataFrames. SpatialPointsDataFrames can be converted using
+<code>tibble::as_data_frame</code> targeting the @data object.</p>
     
     <h2 class="hasAnchor" id="package-options"><a class="anchor" href="#package-options"></a>Package Options</h2>
 
@@ -157,6 +180,8 @@ attempts. Default is 3 seconds.</p>
       <li><a href="#getting-storms">Getting Storms</a></li>
 
       <li><a href="#getting-storm-data">Getting Storm Data</a></li>
+
+      <li><a href="#gis-data">GIS Data</a></li>
 
       <li><a href="#package-options">Package Options</a></li>
           </ul>

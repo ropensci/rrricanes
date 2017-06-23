@@ -12,7 +12,7 @@
 #'     \item The value of `n` in `Hr\{n\}` variables is the forecast period.
 #'         Up to 2002, forecast periods are 12, 24, 36, 48 and 72 hours. After
 #'         2002, forecast periods were extended to 96 and 120 hours. Not all
-#'         forecast periods will be avialable for every cyclone advisory (e.g.,
+#'         forecast periods will be available for every cyclone advisory (e.g.,
 #'         if it is dissipating or expected to dissipate.)
 #'     \item Wind radius data is not included 96 and 120 hour forecast periods.
 #'     \item Forecast dates are not truly 12, 24, ..., 120 hours from the
@@ -65,13 +65,18 @@
 #'    \item{Hr\{n\}SE34}{Forecast wind radius in `n` hours}
 #'    \item{Hr\{n\}SW34}{Forecast wind radius in `n` hours}
 #'    \item{Hr\{n\}NW34}{Forecast wind radius in `n` hours}
-#'    \item{SeasNE}{Radius of 12ft seas in northeast qaudrant}
-#'    \item{SeasSE}{Radius of 12ft seas in southeast qaudrant}
-#'    \item{SeasSW}{Radius of 12ft seas in southwest qaudrant}
-#'    \item{SeasNW}{Radius of 12ft seas in northwest qaudrant}
+#'    \item{SeasNE}{Radius of 12ft seas in northeast quadrant}
+#'    \item{SeasSE}{Radius of 12ft seas in southeast quadrant}
+#'    \item{SeasSW}{Radius of 12ft seas in southwest quadrant}
+#'    \item{SeasNW}{Radius of 12ft seas in northwest quadrant}
 #' }
 #' @seealso \code{\link{tidy_fstadv}}, \code{\link{tidy_wr}},
 #' \code{\link{tidy_fcst}}, \code{\link{tidy_fcst_wr}}
+#' @examples
+#' \dontrun{
+#' # Return dataframe of forecast/advisories for Tropical Storm Alex (AL011998)
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html")
+#' }
 #' @export
 get_fstadv <- function(link) {
 
@@ -595,10 +600,15 @@ fstadv_winds_gusts <- function(contents, what = NULL) {
 #'    \item{FwdDir}{Compass angle of forward motion}
 #'    \item{FwdSpeed}{Forward speed in miles per hour}
 #'    \item{Eye}{Size of eye in nautical miles}
-#'    \item{SeasNE}{Radius of 12ft seas in northeast qaudrant}
-#'    \item{SeasSE}{Radius of 12ft seas in southeast qaudrant}
-#'    \item{SeasSW}{Radius of 12ft seas in southwest qaudrant}
-#'    \item{SeasNW}{Radius of 12ft seas in northwest qaudrant}
+#'    \item{SeasNE}{Radius of 12ft seas in northeast quadrant}
+#'    \item{SeasSE}{Radius of 12ft seas in southeast quadrant}
+#'    \item{SeasSW}{Radius of 12ft seas in southwest quadrant}
+#'    \item{SeasNW}{Radius of 12ft seas in northwest quadrant}
+#' }
+#' @examples
+#' \dontrun{
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#'     tidy_fstadv()
 #' }
 #' @export
 tidy_fstadv <- function(df) {
@@ -623,6 +633,11 @@ tidy_fstadv <- function(df) {
 #'    \item{SE}{Radius of `Windfield` in the southeast quadrant}
 #'    \item{SW}{Radius of `Windfield` in the southwest quadrant}
 #'    \item{NW}{Radius of `Windfield` in the northwest quadrant}
+#' }
+#' @examples
+#' \dontrun{
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#'     tidy_wr()
 #' }
 #' @export
 tidy_wr <- function(df) {
@@ -678,6 +693,11 @@ tidy_wr <- function(df) {
 #'    \item{Lon}{Forecast Longitude}
 #'    \item{Wind}{Forecast wind in knots}
 #'    \item{Gust}{Forecast gust in knots}
+#' }
+#' @examples
+#' \dontrun{
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#'     tidy_fcst()
 #' }
 #' @export
 tidy_fcst <- function(df) {
@@ -737,7 +757,11 @@ tidy_fcst <- function(df) {
 #'    \item{SW}{Radius in nautical miles for southwest quadrant}
 #'    \item{NW}{Radius in nautical miles for northwest quadrant}
 #' }
-#'
+#' @examples
+#' \dontrun{
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#'     tidy_fcst_wr()
+#' }
 #' @export
 tidy_fcst_wr <- function(df) {
     if (!is.data.frame(df))

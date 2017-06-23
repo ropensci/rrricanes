@@ -3,7 +3,6 @@
 ^NEWS\.md$
 ^CHANGELOG\.md$
 ^\.travis\.yml$
-^packrat/
 ^\.Rprofile$
 ^README\.Rmd$
 ^data-raw$
@@ -13,4 +12,3 @@
 ^reports/
 ^\.github$
 ^_pkgdown.yml$
-^vignettes/data_world\.Rmd$

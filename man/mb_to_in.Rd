@@ -10,8 +10,11 @@ mb_to_in(x)
 \item{x}{barometric pressure in mb}
 }
 \value{
-x in in
+x in inches
 }
 \description{
 convert millibars (mb) to inches of mercury (in)
+}
+\examples{
+mb_to_in(999)
 }
