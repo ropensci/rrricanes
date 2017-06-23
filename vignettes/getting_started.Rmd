@@ -191,14 +191,14 @@ Strike Probabilities may not exist for most Pacific cyclones.
 ## Wind Speed Probabilities (`wndprb`)
 
 ```{r, eval = FALSE}
-al122005_wndprb <- al.2012 %>% 
+al182012_wndprb <- al.2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
     get_wndprb()
 ```
 
 ```{r}
-str(al122005_wndprb)
+str(al182012_wndprb)
 ```
 
 Wind Speed Probabilities are a bit more advanced than their predecessor. The `Wind` variable is for 34kt, 50kt and 64kt winds expected within a specific time period. 

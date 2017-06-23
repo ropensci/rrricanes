@@ -26,7 +26,7 @@ Wind Speed Probability product replaced Strike Probabilities product
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}
-  \item{Wind}{Minium wind speed for which probabilities reference}
+  \item{Wind}{Minimum wind speed for which probabilities reference}
   \item{Wind12}{Probability of sustained `Wind` within 12 hours}
   \item{Wind24}{Probability of sustained `Wind` within 24 hours}
   \item{Wind24Cum}{Cumulative probability through 24 hours}

@@ -43,7 +43,8 @@
 #' \code{\link{load_storm_data}}. Currently only annual summaries,
 #' forecast/advisory, strike probabilities and wind speed probability products
 #' exist. As of this writing it is up-to-date but caution is advised for active
-#' cyclones. Use the above functions for the most up-to-date data as a fallback.
+#' cyclones. Use the above functions for the most up-to-date data as a
+#' fall-back.
 #'
 #' @section GIS Data:
 #'

@@ -23,10 +23,10 @@ Probabilistic Storm Surge Forecasts
 \section{Products}{
 
 \describe{
-    \item{esurge}{The Tropical Cyclone Storm Surge Exceedences (P-Surge 2.5)
+    \item{esurge}{The Tropical Cyclone Storm Surge Exceedances (P-Surge 2.5)
           data shows the probability, in percent, of a specified storm surge,
           including tides, exceeding the specified height, in feet, during
-          the forecast period indicated. The 10 percent exceedence height,
+          the forecast period indicated. The 10 percent exceedance height,
           for example, is the storm surge height, including tides, above
           ground level (AGL) such that there is a 10 percent chance of
           exceeding it. The product is based upon an ensemble of Sea, Lake,
