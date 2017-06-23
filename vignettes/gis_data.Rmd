@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
+```{r, message = FALSE}
 library(dplyr)
 library(ggplot2)
 library(rrricanes)
@@ -35,26 +35,26 @@ args(rrricanes::tracking_chart)
 
 The countries and states parameters are TRUE by default. This means a basic call to `tracking_chart` will return a map with country and state borders. The basic call does not show this.
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 tracking_chart()
 ```
 
 You can pass typical `aes` parameters to refine the color and fill of the plot; remember the tracking chart is a ggplot object.
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 tracking_chart(color = "black", fill = "white", size = 0.1)
 ```
 
 You may choose to only show coastline data instead. In this case, just set the countries parameter to FALSE.
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 tracking_chart(countries = FALSE, res = 50, color = "black", fill = "white", 
                size = 0.1)
 ```
 
 For the purposes of this vignette we'll focus on Atlantic storms.
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 (p <- al_tracking_chart(color = "black", fill = "white", size = 0.1, res = 50))
 ```
 
@@ -77,7 +77,7 @@ There are several datasets that are published for active cyclones. The following
 gis_advisory(key = "AL182012", advisory = "18")
 ```
 
-```{r}
+```{r, eval = FALSE}
 adv <- gis_advisory(key = "AL182012", advisory = "18") %>% gis_download()
 ```
 
@@ -98,13 +98,13 @@ fcst_line <- as(adv$al182012_018_5day_lin, "SpatialPointsDataFrame") %>%
     broom::tidy()
 ```
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 p + geom_path(data = fcst_line, aes(coords.x1, coords.x2, group = FCSTPRD))
 ```
 
 ### Point track
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 p + geom_point(data = adv$al182012_018_5day_pts@data, aes(LON, LAT))
 ```
 
@@ -119,7 +119,7 @@ fcst.points = broom::tidy(fcst, region = "id")
 fcst <- dplyr::left_join(fcst.points, fcst@data, by = "id")
 ```
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 p + geom_polygon(data = fcst %>% filter(FCSTPRD == 120), 
                  aes(long, lat, group = group, fill = factor(FCSTPRD))) + 
     geom_polygon(data = fcst %>% filter(FCSTPRD == 72), 
@@ -128,7 +128,7 @@ p + geom_polygon(data = fcst %>% filter(FCSTPRD == 120),
 
 ## Watches and Warnings
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 p + geom_path(data = adv$al182012_018_ww_wwlin, 
                aes(x = long, y = lat, group = group), size = 2)
 ```
@@ -149,7 +149,7 @@ gis_prob_storm_surge(key = "AL142016", products = list(psurge = 0),
                      datetime = "20161006")
 ```
 
-```{r}
+```{r, eval = FALSE}
 ss <- gis_prob_storm_surge(key = "AL142016", 
                            products = list(psurge = 0), 
                            datetime = "20161006") %>% 
@@ -157,7 +157,7 @@ ss <- gis_prob_storm_surge(key = "AL142016",
     gis_download()
 ```
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 p + geom_path(data = ss$al142016_2016100618_gt0, 
                aes(x = long, y = lat, group = group), size = 1)
 ```
@@ -168,7 +168,7 @@ p + geom_path(data = ss$al142016_2016100618_gt0,
 gis_windfield("AL142016", advisory = "33")
 ```
 
-```{r}
+```{r, eval = FALSE}
 wf <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
 ```
 
@@ -181,7 +181,7 @@ wf_init.points = broom::tidy(wf_init, region = "id")
 wf_init <- dplyr::left_join(wf_init.points, wf_init@data, by = "id")
 ```
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 p + geom_polygon(data = wf_init, 
                   aes(x = long, y = lat, fill = factor(RADII)), alpha = 0.5)
 ```
@@ -193,7 +193,7 @@ wf_fcst.points = broom::tidy(wf_fcst, region = "id")
 wf_fcst <- dplyr::left_join(wf_fcst.points, wf_fcst@data, by = "id")
 ```
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 p + geom_polygon(data = wf_fcst, 
                   aes(x = long, y = lat, group = group, fill = factor(RADII)), 
                   alpha = 0.5)
@@ -205,27 +205,27 @@ p + geom_polygon(data = wf_fcst,
 gis_wsp(datetime = "2016100606", res = 0.5)
 ```
 
-```{r}
+```{r, eval = FALSE}
 wsp <- gis_wsp(datetime = "2016100606", res = 0.5) %>% gis_download()
 ```
 
 ### Cumulative Probability for >34kt Winds
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 p + geom_point(data = broom::tidy(wsp$`2016100606_wsp34knt120hr_halfDeg`), 
                aes(x = coords.x1, y = coords.x2, color = PWIND120))
 ```
 
 ### Cumulative Probability for >50kt Winds
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 p + geom_point(data = broom::tidy(wsp$`2016100606_wsp50knt120hr_halfDeg`), 
                aes(x = coords.x1, y = coords.x2, color = PWIND120))
 ```
 
 ### Cumulative Probability for >64kt Winds
 
-```{r}
+```{r, fig.width = 7, fig.align = "center"}
 p + geom_point(data = broom::tidy(wsp$`2016100606_wsp64knt120hr_halfDeg`), 
                aes(x = coords.x1, y = coords.x2, color = PWIND120))
 ```
