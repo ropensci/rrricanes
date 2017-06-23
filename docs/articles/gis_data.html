@@ -60,24 +60,15 @@
       <h1>GIS data</h1>
                         <h4 class="author">Tim Trice</h4>
             
-            <h4 class="date">2017-06-15</h4>
+            <h4 class="date">2017-06-22</h4>
           </div>
 
     
     
 <div class="contents">
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
-<pre><code>## 
-## Attaching package: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(rrricanes)</code></pre></div>
-<pre><code>## rrricanes is not intended for use in emergency situations.</code></pre>
 <p>Most storms will contain a variation of GIS datasets that can be plotted with <code>ggplot2</code>. The helper functions for this have the prefix ‘gis’.</p>
 <p><strong>All products are experimental and there maybe fluctuations particularly in current datasets.</strong></p>
 <p>In general, datasets are available for storms dated back to 1998. However, products such as Wind Speed Probabilities only go back to 1999.</p>
@@ -94,21 +85,21 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/tracking_chart.html">tracking_chart</a></span>()</code></pre></div>
 <pre><code>## Regions defined for each Polygons
 ## Regions defined for each Polygons</code></pre>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>You can pass typical <code>aes</code> parameters to refine the color and fill of the plot; remember the tracking chart is a ggplot object.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/tracking_chart.html">tracking_chart</a></span>(<span class="dt">color =</span> <span class="st">"black"</span>, <span class="dt">fill =</span> <span class="st">"white"</span>, <span class="dt">size =</span> <span class="fl">0.1</span>)</code></pre></div>
 <pre><code>## Regions defined for each Polygons
 ## Regions defined for each Polygons</code></pre>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>You may choose to only show coastline data instead. In this case, just set the countries parameter to FALSE.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/tracking_chart.html">tracking_chart</a></span>(<span class="dt">countries =</span> <span class="ot">FALSE</span>, <span class="dt">res =</span> <span class="dv">50</span>, <span class="dt">color =</span> <span class="st">"black"</span>, <span class="dt">fill =</span> <span class="st">"white"</span>, 
                <span class="dt">size =</span> <span class="fl">0.1</span>)</code></pre></div>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>For the purposes of this vignette we’ll focus on Atlantic storms.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(p &lt;-<span class="st"> </span><span class="kw"><a href="../reference/al_tracking_chart.html">al_tracking_chart</a></span>(<span class="dt">color =</span> <span class="st">"black"</span>, <span class="dt">fill =</span> <span class="st">"white"</span>, <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">res =</span> <span class="dv">50</span>))</code></pre></div>
 <pre><code>## Regions defined for each Polygons
 ## Regions defined for each Polygons</code></pre>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>The <code>res</code> parameter defines the resolution of the chart presented. Options are in 110nm, 50nm and 10nm. The lower the resolution the longer the chart takes to be built.</p>
 <p>States cannot be drawn on resolution greater than 50nm.</p>
 </div>
@@ -129,22 +120,6 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/gis_advisory.html">gis_advisory</a></span>(<span class="dt">key =</span> <span class="st">"AL182012"</span>, <span class="dt">advisory =</span> <span class="st">"18"</span>)</code></pre></div>
 <pre><code>## [1] "http://www.nhc.noaa.gov/gis/forecast/archive/al182012_5day_018.zip"</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_advisory.html">gis_advisory</a></span>(<span class="dt">key =</span> <span class="st">"AL182012"</span>, <span class="dt">advisory =</span> <span class="st">"18"</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmpy0Otmm", layer: "al182012.018_5day_lin"
-## with 2 features
-## It has 7 fields
-## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmpy0Otmm", layer: "al182012.018_5day_pgn"
-## with 2 features
-## It has 7 fields
-## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmpy0Otmm", layer: "al182012.018_5day_pts"
-## with 14 features
-## It has 23 fields
-## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmpy0Otmm", layer: "al182012.018_ww_wwlin"
-## with 13 features
-## It has 8 fields</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(adv)</code></pre></div>
 <pre><code>## [1] "al182012_018_5day_lin" "al182012_018_5day_pgn" "al182012_018_5day_pts"
 ## [4] "al182012_018_ww_wwlin"</code></pre>
@@ -184,13 +159,13 @@
 <pre><code>## Warning in tidy.default(.): No method for tidying an S3 object of class
 ## SpatialPointsDataFrame , using as.data.frame</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p +<span class="st"> </span><span class="kw">geom_path</span>(<span class="dt">data =</span> fcst_line, <span class="kw">aes</span>(coords.x1, coords.x2, <span class="dt">group =</span> FCSTPRD))</code></pre></div>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="point-track" class="section level3">
 <h3 class="hasAnchor">
 <a href="#point-track" class="anchor"></a>Point track</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p +<span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> adv$al182012_018_5day_pts@data, <span class="kw">aes</span>(LON, LAT))</code></pre></div>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div id="forecast-cone" class="section level2">
@@ -205,14 +180,14 @@ fcst &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>(fcst
                  <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(FCSTPRD))) +<span class="st"> </span>
 <span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> fcst %&gt;%<span class="st"> </span><span class="kw">filter</span>(FCSTPRD ==<span class="st"> </span><span class="dv">72</span>), 
                  <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(FCSTPRD)))</code></pre></div>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-15-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="watches-and-warnings" class="section level2">
 <h2 class="hasAnchor">
 <a href="#watches-and-warnings" class="anchor"></a>Watches and Warnings</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p +<span class="st"> </span><span class="kw">geom_path</span>(<span class="dt">data =</span> adv$al182012_018_ww_wwlin, 
                <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), <span class="dt">size =</span> <span class="dv">2</span>)</code></pre></div>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="probabilistic-storm-surge" class="section level2">
 <h2 class="hasAnchor">
@@ -236,14 +211,10 @@ fcst &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>(fcst
                            <span class="dt">datetime =</span> <span class="st">"20161006"</span>) %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw">last</span>() %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmpy0Otmm", layer: "al142016_2016100618_gt0"
-## with 100 features
-## It has 2 fields</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p +<span class="st"> </span><span class="kw">geom_path</span>(<span class="dt">data =</span> ss$al142016_2016100618_gt0, 
                <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), <span class="dt">size =</span> <span class="dv">1</span>)</code></pre></div>
 <pre><code>## Regions defined for each Polygons</code></pre>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="current-and-forecast-wind-field-radii" class="section level2">
 <h2 class="hasAnchor">
@@ -251,14 +222,6 @@ fcst &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>(fcst
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/gis_windfield.html">gis_windfield</a></span>(<span class="st">"AL142016"</span>, <span class="dt">advisory =</span> <span class="st">"33"</span>)</code></pre></div>
 <pre><code>## [1] "http://www.nhc.noaa.gov/gis/forecast/archive/al142016_fcst_033.zip"</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_windfield.html">gis_windfield</a></span>(<span class="st">"AL142016"</span>, <span class="dt">advisory =</span> <span class="st">"33"</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmpy0Otmm", layer: "al142016_2016100606_forecastradii"
-## with 16 features
-## It has 11 fields
-## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmpy0Otmm", layer: "al142016_2016100606_initialradii"
-## with 3 features
-## It has 11 fields</code></pre>
 <p>Initial radius</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wf_init &lt;-<span class="st"> </span>wf$al142016_2016100606_initialradii
 wf_init@data$id &lt;-<span class="st"> </span><span class="kw">rownames</span>(wf_init@data)
@@ -266,7 +229,7 @@ wf_init.points =<span class="st"> </span>broom::<span class="kw">tidy</span>(wf_
 wf_init &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>(wf_init.points, wf_init@data, <span class="dt">by =</span> <span class="st">"id"</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p +<span class="st"> </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> wf_init, 
                   <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">fill =</span> <span class="kw">factor</span>(RADII)), <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre></div>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-23-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wf_fcst &lt;-<span class="st"> </span>wf$al142016_2016100606_forecastradii
 wf_fcst@data$id &lt;-<span class="st"> </span><span class="kw">rownames</span>(wf_fcst@data)
 wf_fcst.points =<span class="st"> </span>broom::<span class="kw">tidy</span>(wf_fcst, <span class="dt">region =</span> <span class="st">"id"</span>)
@@ -274,7 +237,7 @@ wf_fcst &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>(w
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p +<span class="st"> </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> wf_fcst, 
                   <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(RADII)), 
                   <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre></div>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-25-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="wind-speed-probabilities" class="section level2">
 <h2 class="hasAnchor">
@@ -282,18 +245,6 @@ wf_fcst &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>(w
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/gis_wsp.html">gis_wsp</a></span>(<span class="dt">datetime =</span> <span class="st">"2016100606"</span>, <span class="dt">res =</span> <span class="fl">0.5</span>)</code></pre></div>
 <pre><code>## [1] "http://www.nhc.noaa.gov/gis/forecast/archive/2016100606_wsp_120hrhalfDeg.zip"</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wsp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_wsp.html">gis_wsp</a></span>(<span class="dt">datetime =</span> <span class="st">"2016100606"</span>, <span class="dt">res =</span> <span class="fl">0.5</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmpy0Otmm", layer: "2016100606_wsp34knt120hr_halfDeg"
-## with 4108 features
-## It has 2 fields
-## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmpy0Otmm", layer: "2016100606_wsp50knt120hr_halfDeg"
-## with 2351 features
-## It has 2 fields
-## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmpy0Otmm", layer: "2016100606_wsp64knt120hr_halfDeg"
-## with 1398 features
-## It has 2 fields</code></pre>
 <div id="cumulative-probability-for-34kt-winds" class="section level3">
 <h3 class="hasAnchor">
 <a href="#cumulative-probability-for-34kt-winds" class="anchor"></a>Cumulative Probability for &gt;34kt Winds</h3>
@@ -302,7 +253,7 @@ wf_fcst &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>(w
 <pre><code>## Warning in tidy.default(wsp$`2016100606_wsp34knt120hr_halfDeg`): No
 ## method for tidying an S3 object of class SpatialPointsDataFrame , using
 ## as.data.frame</code></pre>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-28-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="cumulative-probability-for-50kt-winds" class="section level3">
 <h3 class="hasAnchor">
@@ -312,7 +263,7 @@ wf_fcst &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>(w
 <pre><code>## Warning in tidy.default(wsp$`2016100606_wsp50knt120hr_halfDeg`): No
 ## method for tidying an S3 object of class SpatialPointsDataFrame , using
 ## as.data.frame</code></pre>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="cumulative-probability-for-64kt-winds" class="section level3">
 <h3 class="hasAnchor">
@@ -322,7 +273,7 @@ wf_fcst &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>(w
 <pre><code>## Warning in tidy.default(wsp$`2016100606_wsp64knt120hr_halfDeg`): No
 ## method for tidying an S3 object of class SpatialPointsDataFrame , using
 ## as.data.frame</code></pre>
-<p><img src="gis_data_files/figure-html/unnamed-chunk-30-1.png" width="672"></p>
+<p><img src="gis_data_files/figure-html/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>

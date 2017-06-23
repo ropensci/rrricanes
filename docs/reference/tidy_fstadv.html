@@ -115,13 +115,18 @@ Date to join with other tidy dataframes.</p><dl class='dl-horizontal'>
    <dt>FwdDir</dt><dd><p>Compass angle of forward motion</p></dd>
    <dt>FwdSpeed</dt><dd><p>Forward speed in miles per hour</p></dd>
    <dt>Eye</dt><dd><p>Size of eye in nautical miles</p></dd>
-   <dt>SeasNE</dt><dd><p>Radius of 12ft seas in northeast qaudrant</p></dd>
-   <dt>SeasSE</dt><dd><p>Radius of 12ft seas in southeast qaudrant</p></dd>
-   <dt>SeasSW</dt><dd><p>Radius of 12ft seas in southwest qaudrant</p></dd>
-   <dt>SeasNW</dt><dd><p>Radius of 12ft seas in northwest qaudrant</p></dd>
+   <dt>SeasNE</dt><dd><p>Radius of 12ft seas in northeast quadrant</p></dd>
+   <dt>SeasSE</dt><dd><p>Radius of 12ft seas in southeast quadrant</p></dd>
+   <dt>SeasSW</dt><dd><p>Radius of 12ft seas in southwest quadrant</p></dd>
+   <dt>SeasNW</dt><dd><p>Radius of 12ft seas in northwest quadrant</p></dd>
 </dl>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
+  <span class='fu'><a href='get_fstadv.html'>get_fstadv</a></span>(<span class='st'>"http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html"</span>) <span class='kw'>%&gt;%</span>
+      <span class='fu'>tidy_fstadv</span>()
+})</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -129,7 +134,9 @@ Date to join with other tidy dataframes.</p><dl class='dl-horizontal'>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
