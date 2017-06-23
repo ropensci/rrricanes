@@ -13,4 +13,3 @@
 ^reports/
 ^\.github$
 ^_pkgdown.yml$
-^vignettes/data_world\.Rmd$
