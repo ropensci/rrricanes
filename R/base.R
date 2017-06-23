@@ -99,6 +99,7 @@
 NULL
 
 #' @importFrom magrittr %>%
+#' @importFrom utils packageVersion
 
 .onLoad <- function(libname, pkgname) {
     op <- options()
