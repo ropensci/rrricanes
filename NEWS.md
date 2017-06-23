@@ -1,4 +1,4 @@
-rrricanes 0.2.0-3 (yyyy-mm-dd)
+rrricanes 0.2.0-3 (2017-06-22)
 ==================================
 
 ### NEW FEATURES
@@ -8,7 +8,8 @@ rrricanes 0.2.0-3 (yyyy-mm-dd)
 ### MINOR IMPROVEMENTS
 
 * Examples for functions `knots_to_mph`, `mb_to_in`, `status_abbr_to_str`, `get_discus`, `get_fstadv`, `tidy_fstadv`, `tidy_wr`, `tidy_fcst` and `tidy_fcst_wr`.
-
+* Minor documentation updates
+* Small enhancements to tests, vignettes
 
 ### BUG FIXES
 
