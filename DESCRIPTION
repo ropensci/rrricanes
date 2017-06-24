@@ -35,7 +35,6 @@ Imports:
 Suggests:
   devtools, 
   dwapi,
-  geosphere,
   knitr, 
   rmarkdown,
   testthat,
