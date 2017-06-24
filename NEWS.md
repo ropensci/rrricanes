@@ -7,11 +7,11 @@ rrricanes 0.2.0-4 (yyyy-mm-dd)
 
 ### MINOR IMPROVEMENTS
 
-* NA
+* `Key` variable added to `discus` dataframes. `Key` will be NA for all cyclones >= 2005. Should not be <= 2006. (#80)
 
 ### BUG FIXES
 
-* `Key` variable added to `discus` dataframes. `Key` will be NA for all cyclones >= 2005. Should not be <= 2006. (#80)
+* NA
 
 ### DEPRECATED AND DEFUNCT
 
