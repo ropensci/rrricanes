@@ -10,6 +10,7 @@ create_df_public <- function() {
                              # i.e., "1A", "2", "2A"...
                              "Adv" = character(),
                              "Date" = as.POSIXct(character(), tz = "UTC"),
+                             "Key" = character(),
                              "Contents" = character())
 
     return(df)
@@ -23,6 +24,7 @@ create_df_public <- function() {
 #'   \item{Name}{Name of storm}
 #'   \item{Adv}{Advisory Number}
 #'   \item{Date}{Date of advisory issuance}
+#'   \item{Key}{Unique ID of the cyclone}
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
@@ -74,6 +76,14 @@ public <- function(link, p = dplyr::progress_estimated(n = 1)) {
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
 
+    safely_scrape_header <- purrr::safely(scrape_header)
+    key <- safely_scrape_header(contents, ret = "key")
+    if (is.null(key$error)) {
+        key <- key$result
+    } else {
+        key <- NA
+    }
+
     if (getOption("rrricanes.working_msg"))
         message(sprintf("Working %s %s Public Advisory #%s (%s)",
                         status, name, adv, date))
@@ -83,6 +93,7 @@ public <- function(link, p = dplyr::progress_estimated(n = 1)) {
                         "Name" = name,
                         "Adv" = adv,
                         "Date" = date,
+                        "Key" = key,
                         "Contents" = contents)
 
     return(df)

@@ -17,6 +17,7 @@ Return dataframe of public advisory data.
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}
+  \item{Key}{Unique ID of the cyclone}
   \item{Contents}{Text content of product}
 }
 }
