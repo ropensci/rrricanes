@@ -7,6 +7,7 @@ create_df_update <- function() {
     df <- tibble::data_frame("Status" = character(),
                              "Name" = character(),
                              "Date" = as.POSIXct(character(), tz = "UTC"),
+                             "Key" = character(),
                              "Contents" = character())
 
     return(df)
@@ -19,6 +20,7 @@ create_df_update <- function() {
 #'     etc.}
 #'   \item{Name}{Name of storm}
 #'   \item{Date}{Date of advisory issuance}
+#'   \item{Key}{Unique ID of cyclone}
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
@@ -68,6 +70,14 @@ update <- function(link, p = dplyr::progress_estimated(n = 1)) {
     name <- scrape_header(contents, ret = "name")
     date <- scrape_header(contents, ret = "date")
 
+    safely_scrape_header <- purrr::safely(scrape_header)
+    key <- safely_scrape_header(contents, ret = "key")
+    if (is.null(key$error)) {
+        key <- key$result
+    } else {
+        key <- NA
+    }
+
     if (getOption("rrricanes.working_msg"))
         message(sprintf("Working %s %s Update #%s (%s)",
                         status, name, date))
@@ -76,6 +86,7 @@ update <- function(link, p = dplyr::progress_estimated(n = 1)) {
         tibble::add_row("Status" = status,
                         "Name" = name,
                         "Date" = date,
+                        "Key" = key,
                         "Contents" = contents)
 
     return(df)

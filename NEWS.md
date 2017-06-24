@@ -11,6 +11,7 @@ rrricanes 0.2.0-4 (yyyy-mm-dd)
 * Removed `Adv` variable from `posest` dataframes. Position estimates do not have advisory numbers. (#81)
 * Removed `Adv` variable from `update`. Updates do not have advisory numbers. (#84)
 * Added variable `Key` to `get_public` dataframes. (#85)
+* Added variable `Key` to `get_update` dataframes. (#86)
 
 ### BUG FIXES
 

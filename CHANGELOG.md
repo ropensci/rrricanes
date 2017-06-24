@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - Fix `scrape_adv_num` to accomodate possible "INTERMEDIATE" text in Public Advisory headers. (#83)
   - Remove variable `Adv` from `update`. Updates do not have advisory numbers. (#84)
   - Added variable `Key` to `get_public` dataframes. (#85)
+  - Added variable `Key` to `get_update` dataframes. (#86)
 
 ### Removed
   - NA

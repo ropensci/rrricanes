@@ -16,6 +16,7 @@ Return dataframe of cyclone update data.
     etc.}
   \item{Name}{Name of storm}
   \item{Date}{Date of advisory issuance}
+  \item{Key}{Unique ID of cyclone}
   \item{Contents}{Text content of product}
 }
 }
