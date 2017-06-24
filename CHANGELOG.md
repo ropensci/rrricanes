@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - NA
 
 ### Changed
-  - NA
+  - Added variable `Key` to `discus` dataframes. (#80)
 
 ### Removed
   - NA

@@ -128,11 +128,6 @@ if (!is.numeric(fstadv$Eye))
     warning("Non-numeric values in Eye")
 
 ## ---- * Wind Radii -----------------------------------------------------------
-fstadv_wr <- fstadv %>%
-    select(dplyr::matches(c(paste0(c("NE", "SE", "SW", "NW"), 34),
-                           paste0(c("NE", "SE", "SW", "NW"), 50),
-                           paste0(c("NE", "SE", "SW", "NW"), 64))))
-
 #' Convert to numeric, if not, which sould generate error if non-numeric values
 #' exist.
 fstadv_wr <- fstadv %>% select(matches(".[NE|SE|SW|NW][34|50|64].")) %>%

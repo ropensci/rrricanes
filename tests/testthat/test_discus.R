@@ -12,6 +12,7 @@ test_that("Dataframe Skeleton", {
     expect_identical(class(df$Name), "character")
     expect_identical(class(df$Adv), "character")
     expect_identical(class(df$Date), c("POSIXct", "POSIXt"))
+    expect_identical(class(df$Key), "character")
     expect_identical(class(df$Contents), "character")
 })
 

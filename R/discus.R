@@ -10,6 +10,7 @@ create_df_discus <- function() {
                              # i.e., "1A", "2", "2A"...
                              "Adv" = character(),
                              "Date" = as.POSIXct(character(), tz = "UTC"),
+                             "Key" = character(),
                              "Contents" = character())
 
     return(df)
@@ -23,6 +24,7 @@ create_df_discus <- function() {
 #'   \item{Name}{Name of storm}
 #'   \item{Adv}{Advisory Number}
 #'   \item{Date}{Date of advisory issuance}
+#'   \item{Key}{ID of cyclone}
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param link URL to storm's archive page.
@@ -84,6 +86,17 @@ discus <- function(link, p = dplyr::progress_estimated(n = 1)) {
     adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
 
+    # Keys were added to discus products beginning 2006. Prior, it doesn't
+    # exist. safely run scrape_header for key. If error, then use NA. Otherwise,
+    # add it.
+    safely_scrape_header <- purrr::safely(scrape_header)
+    key <- safely_scrape_header(contents, ret = "key")
+    if (is.null(key$error)) {
+        key <- key$result
+    } else {
+        key <- NA
+    }
+
     if (getOption("rrricanes.working_msg"))
         message(sprintf("Working %s %s Storm Discussion #%s (%s)",
                         status, name, adv, date))
@@ -93,6 +106,7 @@ discus <- function(link, p = dplyr::progress_estimated(n = 1)) {
                         "Name" = name,
                         "Adv" = adv,
                         "Date" = date,
+                        "Key" = key,
                         "Contents" = contents)
 
     return(df)
