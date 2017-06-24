@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
   - Added variable `Key` to `discus` dataframes. (#80)
   - Removed variable `Adv` from `posest`. Position estimates do not have advisory numbers. (#81)
+  - Fix `scrape_adv_num` to accomodate possible "INTERMEDIATE" text in Public Advisory headers. (#83)
 
 ### Removed
   - NA
