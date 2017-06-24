@@ -8,6 +8,7 @@ rrricanes 0.2.0-4 (yyyy-mm-dd)
 ### MINOR IMPROVEMENTS
 
 * `Key` variable added to `discus` dataframes. `Key` will be NA for all cyclones >= 2005. Should not be <= 2006. (#80)
+* Removed `Adv` variable from `posest` dataframes. Position estimates do not have advisory numbers. (#81)
 
 ### BUG FIXES
 
