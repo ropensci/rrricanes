@@ -6,9 +6,6 @@
 create_df_update <- function() {
     df <- tibble::data_frame("Status" = character(),
                              "Name" = character(),
-                             # Allow for intermediate advisories,
-                             # i.e., "1A", "2", "2A"...
-                             "Adv" = character(),
                              "Date" = as.POSIXct(character(), tz = "UTC"),
                              "Contents" = character())
 
@@ -21,7 +18,6 @@ create_df_update <- function() {
 #'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
 #'     etc.}
 #'   \item{Name}{Name of storm}
-#'   \item{Adv}{Advisory Number}
 #'   \item{Date}{Date of advisory issuance}
 #'   \item{Contents}{Text content of product}
 #' }
@@ -70,17 +66,15 @@ update <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     status <- scrape_header(contents, ret = "status")
     name <- scrape_header(contents, ret = "name")
-    adv <- scrape_header(contents, ret = "adv")
     date <- scrape_header(contents, ret = "date")
 
     if (getOption("rrricanes.working_msg"))
         message(sprintf("Working %s %s Update #%s (%s)",
-                        status, name, adv, date))
+                        status, name, date))
 
     df <- df %>%
         tibble::add_row("Status" = status,
                         "Name" = name,
-                        "Adv" = adv,
                         "Date" = date,
                         "Contents" = contents)
 
