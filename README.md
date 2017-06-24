@@ -74,3 +74,8 @@ Acknowledgments
 -   [Rudis, Bob](https://github.com/hrbrmstr)
 -   [Salmon, Maëlle](https://github.com/maelle)
 -   [Stachelek, Joseph](https://github.com/jsta)
+
+Known Data Quality Issues
+-------------------------
+
+1.  Hurricane Juan (AL152003), Adv 15; no status leads to improper `Status` and `Name` values in some datasets. ([\#82](https://github.com/timtrice/rrricanes/issues/82))
