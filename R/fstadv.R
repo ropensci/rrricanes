@@ -271,11 +271,11 @@ fstadv <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     df <- df %>%
         tibble::add_row("Status" = status, "Name" = name, "Adv" = adv,
-                             "Date" = date, "Key" = key, "Lat" = lat,
-                             "Lon" = lon, "Wind" = wind, "Gust" = gust,
-                             "Pressure" = pressure, "PosAcc" = posacc,
-                             "FwdDir" = fwd_dir, "FwdSpeed" = fwd_speed,
-                             "Eye" = eye)
+                        "Date" = date, "Key" = key, "Lat" = lat,
+                        "Lon" = lon, "Wind" = wind, "Gust" = gust,
+                        "Pressure" = pressure, "PosAcc" = posacc,
+                        "FwdDir" = fwd_dir, "FwdSpeed" = fwd_speed,
+                        "Eye" = eye)
 
     # Add current wind radius
     wind_radius <- fstadv_wind_radius(contents, wind)
@@ -900,98 +900,49 @@ tidy_fcst_wr <- function(df) {
     if (!is.data.frame(df))
         stop("Expecting a dataframe.")
 
-    df <- df %>%
-        dplyr::select(Key, Adv, Date,
-                      dplyr::matches("Hr\\d{2,3}FcstDate"),
-                      dplyr::matches("Hr\\d{2,3}\\w{2}\\d{2,3}")) %>%
-        dplyr::select(-dplyr::starts_with("Hr96"), -dplyr::starts_with("Hr120"))
+    # Build wind radius dataframe for each forecast position (12:72 hours; 96
+    # and 120 hours are never forecasted). This dataframe will be similar to
+    # fstadv.wr with the exception of FcstDate.
 
-    # This must be simplified. I'm currently in a rush so just trying to get
-    # this to work while matching previous results. Because the WindField values
-    # will not exist for each forecast period (and non-existent for 96, 120
-    # hours) we have to tidy the dataframe a bit differently than the previous
-    # version.
-    hr12 <- dplyr::select(df, Key, Adv, Date, dplyr::starts_with("Hr12")) %>%
-        dplyr::rename(FcstDate = Hr12FcstDate,
-                      NE64 = Hr12NE64,
-                      SE64 = Hr12SE64,
-                      SW64 = Hr12SW64,
-                      NW64 = Hr12NW64,
-                      NE50 = Hr12NE50,
-                      SE50 = Hr12SE50,
-                      SW50 = Hr12SW50,
-                      NW50 = Hr12NW50,
-                      NE34 = Hr12NE34,
-                      SE34 = Hr12SE34,
-                      SW34 = Hr12SW34,
-                      NW34 = Hr12NW34)
+    v <- c("NE", "SE", "SW", "NW")
 
-    hr24 <- dplyr::select(df, Key, Adv, Date, dplyr::starts_with("Hr24")) %>%
-        dplyr::rename(FcstDate = Hr24FcstDate,
-                      NE64 = Hr24NE64,
-                      SE64 = Hr24SE64,
-                      SW64 = Hr24SW64,
-                      NW64 = Hr24NW64,
-                      NE50 = Hr24NE50,
-                      SE50 = Hr24SE50,
-                      SW50 = Hr24SW50,
-                      NW50 = Hr24NW50,
-                      NE34 = Hr24NE34,
-                      SE34 = Hr24SE34,
-                      SW34 = Hr24SW34,
-                      NW34 = Hr24NW34)
+    # What forecast periods are in the current dataset?
+    fcst_periods <- as.list(names(df)) %>%
+        stringr::str_match(pattern = "Hr([:digit:]{2})FcstDate") %>%
+        .[,2] %>%
+        .[!rlang::are_na(.)] %>%
+        as.numeric()
 
-    hr36 <- dplyr::select(df, Key, Adv, Date, dplyr::starts_with("Hr36")) %>%
-        dplyr::rename(FcstDate = Hr36FcstDate,
-                      NE64 = Hr36NE64,
-                      SE64 = Hr36SE64,
-                      SW64 = Hr36SW64,
-                      NW64 = Hr36NW64,
-                      NE50 = Hr36NE50,
-                      SE50 = Hr36SE50,
-                      SW50 = Hr36SW50,
-                      NW50 = Hr36NW50,
-                      NE34 = Hr36NE34,
-                      SE34 = Hr36SE34,
-                      SW34 = Hr36SW34,
-                      NW34 = Hr36NW34)
+    df <- purrr::map_df(
+        .x = fcst_periods,
+        .f = function(x) {
+            if (x %in% c(12, 24, 36)) fcst_wind_radii <- c(34, 50, 64)
+            if (x %in% c(48, 72)) fcst_wind_radii <- c(34, 50)
+            if (x %in% c(96, 120)) return(NULL)
+            y <- purrr::map_df(.x = fcst_wind_radii, .f = function(z) {
+                dplyr::select_(df, .dots = c("Key", "Adv", "Date",
+                                             paste0("Hr", x, "FcstDate"),
+                                             paste0("Hr", x, v, z))) %>%
+                    dplyr::rename_(
+                        .dots = list("Key" = "Key",
+                                     "Adv" = "Adv",
+                                     "Date" = "Date",
+                                     "FcstDate" = paste0("Hr", x,
+                                                         "FcstDate"),
+                                     "NE" = paste0("Hr", x, "NE", z),
+                                     "SE" = paste0("Hr", x, "SE", z),
+                                     "SW" = paste0("Hr", x, "SW", z),
+                                     "NW" = paste0("Hr", x, "NW", z))) %>%
+                    dplyr::mutate_("WindField" = z) %>%
+                    dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
+                                             "WindField", "NE:NW"))})
+            return(y)
+        })
 
-    hr48 <- dplyr::select(df, Key, Adv, Date, dplyr::starts_with("Hr48")) %>%
-        dplyr::rename(FcstDate = Hr48FcstDate,
-                      NE50 = Hr48NE50,
-                      SE50 = Hr48SE50,
-                      SW50 = Hr48SW50,
-                      NW50 = Hr48NW50,
-                      NE34 = Hr48NE34,
-                      SE34 = Hr48SE34,
-                      SW34 = Hr48SW34,
-                      NW34 = Hr48NW34)
-
-    hr72 <- dplyr::select(df, Key, Adv, Date, dplyr::starts_with("Hr72")) %>%
-        dplyr::rename(FcstDate = Hr72FcstDate,
-                      NE50 = Hr72NE50,
-                      SE50 = Hr72SE50,
-                      SW50 = Hr72SW50,
-                      NW50 = Hr72NW50,
-                      NE34 = Hr72NE34,
-                      SE34 = Hr72SE34,
-                      SW34 = Hr72SW34,
-                      NW34 = Hr72NW34)
-
-    df <- dplyr::bind_rows(hr12, hr24, hr36, hr48, hr72)
-
-    df <- df %>% tidyr::gather(VarNE, NE, dplyr::starts_with("NE")) %>%
-        tidyr::gather(VarSE, SE, dplyr::starts_with("SE")) %>%
-        tidyr::gather(VarSW, SW, dplyr::starts_with("SW")) %>%
-        tidyr::gather(VarNW, NW, dplyr::starts_with("NW")) %>%
-        tidyr::extract(VarNE,
-                       into = c("Var", "WindField"),
-                       regex = "(NE)([[:digit:]]{2})") %>%
-        dplyr::select(-dplyr::starts_with("Var"))
-
-    df[df == 0] <- NA
+    df <- df %>% dplyr::arrange_("Key", "Date", "Adv", "FcstDate", "WindField")
 
     df <- df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
 
     return(df)
+
 }
