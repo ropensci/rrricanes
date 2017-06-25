@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - Remove variable `Adv` from `update`. Updates do not have advisory numbers. (#84)
   - Added variable `Key` to `get_public` dataframes. (#85)
   - Added variable `Key` to `get_update` dataframes. (#86)
+  - Removed non-existent wind radii variables in `get_fstadv`. Hrs 48 and 72 hours only have 34 and 50kt wind fields. Hrs 96 and 120 have none. (#89)
 
 ### Removed
   - NA

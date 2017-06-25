@@ -1,3 +1,129 @@
+#' @title create_df_fstadv
+#' @description Template for forecast/advisories dataframe
+#' @return empty dataframe
+#' @seealso \code{\link{get_fstadv}}
+#' @keywords internal
+create_df_fstadv <- function() {
+    df <- tibble::data_frame(Status = character(),
+                             Name = character(),
+                             Adv = integer(),
+                             Date = as.POSIXct(character(), tz = "UTC"),
+                             Key = character(),
+                             Lat = numeric(),
+                             Lon = numeric(),
+                             Wind = integer(),
+                             Gust = integer(),
+                             Pressure = integer(),
+                             PosAcc = integer(),
+                             FwdDir = integer(),
+                             FwdSpeed = integer(),
+                             Eye = integer(),
+                             SeasNE = integer(),
+                             SeasSE = integer(),
+                             SeasSW = integer(),
+                             SeasNW = integer(),
+                             NE64 = integer(),
+                             SE64 = integer(),
+                             SW64 = integer(),
+                             NW64 = integer(),
+                             NE50 = integer(),
+                             SE50 = integer(),
+                             SW50 = integer(),
+                             NW50 = integer(),
+                             NE34 = integer(),
+                             SE34 = integer(),
+                             SW34 = integer(),
+                             NW34 = integer(),
+                             Hr12FcstDate = as.POSIXct(character(), tz = "UTC"),
+                             Hr12Lat = numeric(),
+                             Hr12Lon = numeric(),
+                             Hr12Wind = integer(),
+                             Hr12Gust = integer(),
+                             Hr12NE64 = integer(),
+                             Hr12SE64 = integer(),
+                             Hr12SW64 = integer(),
+                             Hr12NW64 = integer(),
+                             Hr12NE50 = integer(),
+                             Hr12SE50 = integer(),
+                             Hr12SW50 = integer(),
+                             Hr12NW50 = integer(),
+                             Hr12NE34 = integer(),
+                             Hr12SE34 = integer(),
+                             Hr12SW34 = integer(),
+                             Hr12NW34 = integer(),
+                             Hr24FcstDate = as.POSIXct(character(), tz = "UTC"),
+                             Hr24Lat = numeric(),
+                             Hr24Lon = numeric(),
+                             Hr24Wind = integer(),
+                             Hr24Gust = integer(),
+                             Hr24NE64 = integer(),
+                             Hr24SE64 = integer(),
+                             Hr24SW64 = integer(),
+                             Hr24NW64 = integer(),
+                             Hr24NE50 = integer(),
+                             Hr24SE50 = integer(),
+                             Hr24SW50 = integer(),
+                             Hr24NW50 = integer(),
+                             Hr24NE34 = integer(),
+                             Hr24SE34 = integer(),
+                             Hr24SW34 = integer(),
+                             Hr24NW34 = integer(),
+                             Hr36FcstDate = as.POSIXct(character(), tz = "UTC"),
+                             Hr36Lat = numeric(),
+                             Hr36Lon = numeric(),
+                             Hr36Wind = integer(),
+                             Hr36Gust = integer(),
+                             Hr36NE64 = integer(),
+                             Hr36SE64 = integer(),
+                             Hr36SW64 = integer(),
+                             Hr36NW64 = integer(),
+                             Hr36NE50 = integer(),
+                             Hr36SE50 = integer(),
+                             Hr36SW50 = integer(),
+                             Hr36NW50 = integer(),
+                             Hr36NE34 = integer(),
+                             Hr36SE34 = integer(),
+                             Hr36SW34 = integer(),
+                             Hr36NW34 = integer(),
+                             Hr48FcstDate = as.POSIXct(character(), tz = "UTC"),
+                             Hr48Lat = numeric(),
+                             Hr48Lon = numeric(),
+                             Hr48Wind = integer(),
+                             Hr48Gust = integer(),
+                             Hr48NE50 = integer(),
+                             Hr48SE50 = integer(),
+                             Hr48SW50 = integer(),
+                             Hr48NW50 = integer(),
+                             Hr48NE34 = integer(),
+                             Hr48SE34 = integer(),
+                             Hr48SW34 = integer(),
+                             Hr48NW34 = integer(),
+                             Hr72FcstDate = as.POSIXct(character(), tz = "UTC"),
+                             Hr72Lat = numeric(),
+                             Hr72Lon = numeric(),
+                             Hr72Wind = integer(),
+                             Hr72Gust = integer(),
+                             Hr72NE50 = integer(),
+                             Hr72SE50 = integer(),
+                             Hr72SW50 = integer(),
+                             Hr72NW50 = integer(),
+                             Hr72NE34 = integer(),
+                             Hr72SE34 = integer(),
+                             Hr72SW34 = integer(),
+                             Hr72NW34 = integer(),
+                             Hr96FcstDate = as.POSIXct(character(), tz = "UTC"),
+                             Hr96Lat = numeric(),
+                             Hr96Lon = numeric(),
+                             Hr96Wind = integer(),
+                             Hr96Gust = integer(),
+                             Hr120FcstDate = as.POSIXct(character(), tz = "UTC"),
+                             Hr120Lat = numeric(),
+                             Hr120Lon = numeric(),
+                             Hr120Wind = integer(),
+                             Hr120Gust = integer())
+    return(df)
+}
+
 #' @title get_fstadv
 #' @description Return dataframe of forecast/advisory data.
 #' @param link URL to storms' archive page.
@@ -121,6 +247,8 @@ fstadv <- function(link, p = dplyr::progress_estimated(n = 1)) {
                                   "HFOTCMEP", "HFOTCMCP"))))
         stop(sprintf("Invalid Forecast/Advisory link. %s", link))
 
+    df <- create_df_fstadv()
+
     status <- scrape_header(contents, ret = "status")
     name <- scrape_header(contents, ret = "name")
     adv <- scrape_header(contents, ret = "adv")
@@ -141,7 +269,8 @@ fstadv <- function(link, p = dplyr::progress_estimated(n = 1)) {
     wind <- fstadv_winds(contents)
     gust <- fstadv_gusts(contents)
 
-    df <- tibble::data_frame("Status" = status, "Name" = name, "Adv" = adv,
+    df <- df %>%
+        tibble::add_row("Status" = status, "Name" = name, "Adv" = adv,
                              "Date" = date, "Key" = key, "Lat" = lat,
                              "Lon" = lon, "Wind" = wind, "Gust" = gust,
                              "Pressure" = pressure, "PosAcc" = posacc,
@@ -161,7 +290,7 @@ fstadv <- function(link, p = dplyr::progress_estimated(n = 1)) {
     if (all(!is.null(seas), nrow(seas) > 1)) {
         warning(sprintf("Too many rows of sea data for %s %s #%s.\n%s",
                         status, name, adv, seas[2:nrow(seas),]),
-                call.= FALSE)
+                call. = FALSE)
         seas <- seas[1,]
     }
 
@@ -309,9 +438,12 @@ fstadv_forecasts <- function(content, date) {
                       fcst_periods,
                       function(a, b) {
                           stats::setNames(df[[a]], paste0(b, names(df[[a]])))
-                          })
+                      })
 
     df <- dplyr::bind_cols(df)
+
+    # Filter out all NA columns
+    df <- df[,colSums(is.na(df)) != nrow(df)]
 
     return(df)
 }
@@ -764,48 +896,102 @@ tidy_fcst <- function(df) {
 #' }
 #' @export
 tidy_fcst_wr <- function(df) {
+
     if (!is.data.frame(df))
         stop("Expecting a dataframe.")
 
-    # Build wind radius dataframe for each forecast position (12:72 hours; 96
-    # and 120 hours are never forecasted). This dataframe will be similar to
-    # fstadv.wr with the exception of FcstDate.
+    df <- df %>%
+        dplyr::select(Key, Adv, Date,
+                      dplyr::matches("Hr\\d{2,3}FcstDate"),
+                      dplyr::matches("Hr\\d{2,3}\\w{2}\\d{2,3}")) %>%
+        dplyr::select(-dplyr::starts_with("Hr96"), -dplyr::starts_with("Hr120"))
 
-    v <- c("NE", "SE", "SW", "NW")
+    # This must be simplified. I'm currently in a rush so just trying to get
+    # this to work while matching previous results. Because the WindField values
+    # will not exist for each forecast period (and non-existent for 96, 120
+    # hours) we have to tidy the dataframe a bit differently than the previous
+    # version.
+    hr12 <- dplyr::select(df, Key, Adv, Date, dplyr::starts_with("Hr12")) %>%
+        dplyr::rename(FcstDate = Hr12FcstDate,
+                      NE64 = Hr12NE64,
+                      SE64 = Hr12SE64,
+                      SW64 = Hr12SW64,
+                      NW64 = Hr12NW64,
+                      NE50 = Hr12NE50,
+                      SE50 = Hr12SE50,
+                      SW50 = Hr12SW50,
+                      NW50 = Hr12NW50,
+                      NE34 = Hr12NE34,
+                      SE34 = Hr12SE34,
+                      SW34 = Hr12SW34,
+                      NW34 = Hr12NW34)
 
-    # What forecast periods are in the current dataset?
-    fcst_periods <- as.list(names(df)) %>%
-        stringr::str_match(pattern = "Hr([:digit:]{2})FcstDate") %>%
-        .[,2] %>%
-        .[!rlang::are_na(.)] %>%
-        as.numeric()
+    hr24 <- dplyr::select(df, Key, Adv, Date, dplyr::starts_with("Hr24")) %>%
+        dplyr::rename(FcstDate = Hr24FcstDate,
+                      NE64 = Hr24NE64,
+                      SE64 = Hr24SE64,
+                      SW64 = Hr24SW64,
+                      NW64 = Hr24NW64,
+                      NE50 = Hr24NE50,
+                      SE50 = Hr24SE50,
+                      SW50 = Hr24SW50,
+                      NW50 = Hr24NW50,
+                      NE34 = Hr24NE34,
+                      SE34 = Hr24SE34,
+                      SW34 = Hr24SW34,
+                      NW34 = Hr24NW34)
 
-    df <- purrr::map_df(
-        .x = fcst_periods,
-        .f = function(x) {
-            y <- purrr::map_df(.x = c(34, 50, 64), .f = function(z) {
-                dplyr::select_(df, .dots = c("Key", "Adv", "Date",
-                                             paste0("Hr", x, "FcstDate"),
-                                             paste0("Hr", x, v, z))) %>%
-                    dplyr::rename_(
-                        .dots = list("Key" = "Key",
-                                     "Adv" = "Adv",
-                                     "Date" = "Date",
-                                     "FcstDate" = paste0("Hr", x,
-                                                         "FcstDate"),
-                                     "NE" = paste0("Hr", x, "NE", z),
-                                     "SE" = paste0("Hr", x, "SE", z),
-                                     "SW" = paste0("Hr", x, "SW", z),
-                                     "NW" = paste0("Hr", x, "NW", z))) %>%
-                    dplyr::mutate_("WindField" = z) %>%
-                    dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
-                                             "WindField", "NE:NW"))})
-            return(y)
-        })
+    hr36 <- dplyr::select(df, Key, Adv, Date, dplyr::starts_with("Hr36")) %>%
+        dplyr::rename(FcstDate = Hr36FcstDate,
+                      NE64 = Hr36NE64,
+                      SE64 = Hr36SE64,
+                      SW64 = Hr36SW64,
+                      NW64 = Hr36NW64,
+                      NE50 = Hr36NE50,
+                      SE50 = Hr36SE50,
+                      SW50 = Hr36SW50,
+                      NW50 = Hr36NW50,
+                      NE34 = Hr36NE34,
+                      SE34 = Hr36SE34,
+                      SW34 = Hr36SW34,
+                      NW34 = Hr36NW34)
 
-    df <- df %>% dplyr::arrange_("Key", "Date", "Adv",
-                                                       "FcstDate", "WindField")
+    hr48 <- dplyr::select(df, Key, Adv, Date, dplyr::starts_with("Hr48")) %>%
+        dplyr::rename(FcstDate = Hr48FcstDate,
+                      NE50 = Hr48NE50,
+                      SE50 = Hr48SE50,
+                      SW50 = Hr48SW50,
+                      NW50 = Hr48NW50,
+                      NE34 = Hr48NE34,
+                      SE34 = Hr48SE34,
+                      SW34 = Hr48SW34,
+                      NW34 = Hr48NW34)
+
+    hr72 <- dplyr::select(df, Key, Adv, Date, dplyr::starts_with("Hr72")) %>%
+        dplyr::rename(FcstDate = Hr72FcstDate,
+                      NE50 = Hr72NE50,
+                      SE50 = Hr72SE50,
+                      SW50 = Hr72SW50,
+                      NW50 = Hr72NW50,
+                      NE34 = Hr72NE34,
+                      SE34 = Hr72SE34,
+                      SW34 = Hr72SW34,
+                      NW34 = Hr72NW34)
+
+    df <- dplyr::bind_rows(hr12, hr24, hr36, hr48, hr72)
+
+    df <- df %>% tidyr::gather(VarNE, NE, dplyr::starts_with("NE")) %>%
+        tidyr::gather(VarSE, SE, dplyr::starts_with("SE")) %>%
+        tidyr::gather(VarSW, SW, dplyr::starts_with("SW")) %>%
+        tidyr::gather(VarNW, NW, dplyr::starts_with("NW")) %>%
+        tidyr::extract(VarNE,
+                       into = c("Var", "WindField"),
+                       regex = "(NE)([[:digit:]]{2})") %>%
+        dplyr::select(-dplyr::starts_with("Var"))
+
+    df[df == 0] <- NA
 
     df <- df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
+
     return(df)
 }
