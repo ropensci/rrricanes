@@ -27,13 +27,19 @@ Some datasets require the use of the storm key and an optional advisory. Other p
 
 There are three functions available to help you plot GIS data; `tracking_chart`, `al_tracking_chart` and `ep_tracking_chart`. `al_tracking_chart` and `ep_tracking_chart` are just helpers centered on the Atlantic and northeast Pacific ocean, respectively. 
 
-Building tracking charts requires the `rnaturalearthdata` and, for high resolution charts, `rnaturalearthhires` packages.
-
 ```{r}
 args(rrricanes::tracking_chart)
 ```
 
-The countries and states parameters are TRUE by default. This means a basic call to `tracking_chart` will return a map with country and state borders. The basic call does not show this.
+The `countries` and `states` parameters are TRUE by default. This means a basic call to `tracking_chart` will return a map with country and state borders. The `res` parameter is resolution; one of 110, 50 or 10 nautical miles. Resolutions 110nm and 50nm can be used immediately. To use lower resolution you must install the `rnaturalearthdatahires` package from ropensci:
+
+```{r, eval = FALSE}
+install.packages("rnaturalearthhires",
+                 repos = "http://packages.ropensci.org",
+                 type = "source")
+```
+
+`tracking_chart` will print a basic tracking chart (a map of the planet).
 
 ```{r, fig.width = 7, fig.align = "center"}
 tracking_chart()
@@ -93,56 +99,79 @@ For this particular storm and advisory, included are the base line, point and po
 str(adv$al182012_018_5day_lin)
 ```
 
+As we're dealing with a SpatialLinesDataFrame which needs to be modified, you can use the helper function `shp_to_df` for plotting.
+
 ```{r}
-fcst_line <- as(adv$al182012_018_5day_lin, "SpatialPointsDataFrame") %>%
-    broom::tidy()
+fcst_line <- shp_to_df(adv$al182012_018_5day_lin)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
-p + geom_path(data = fcst_line, aes(coords.x1, coords.x2, group = FCSTPRD))
+p + geom_path(data = fcst_line, aes(long, lat, group = FCSTPRD))
+```
+
+There are two groups of data in the set: one for 72-hour forecast period and one for 120-hour. Grouping by `FCSTPRD` will show the forecast track correctly.
+
+There is a pretty wide field of view on the map above. You can use `sp::bbox` to "zoom in" on the map.
+
+```{r}
+(bb <- sp::bbox(adv$al182012_018_5day_lin))
+```
+
+```{r, fig.width = 7, fig.align = "center"}
+(p2 <- p + geom_path(data = fcst_line, aes(long, lat, group = FCSTPRD)) + 
+    coord_equal(xlim = c(bb[1,1] - 5, bb[1,2] + 5), 
+                ylim = c(bb[2,1] - 5, bb[2,2] + 5)))
 ```
 
 ### Point track
 
+Each forecast position is also included in the points dataframe. You can access this in the `adv$al182012_018_5day_pts@data` object; no conversion necessary.
+
 ```{r, fig.width = 7, fig.align = "center"}
-p + geom_point(data = adv$al182012_018_5day_pts@data, aes(LON, LAT))
+(p3 <- p2 + geom_point(data = adv$al182012_018_5day_pts@data, aes(LON, LAT)))
 ```
 
 ## Forecast Cone
 
-Forecast cone data is contained in the polygon dataset. To deal with this dataset we need to make some steps to build an appropriate dataframe.
+Forecast cone data is contained in the polygon dataset. To deal with this dataset you can use the `shp_to_df` function again or take the slightly longer way:
 
 ```{r}
-fcst <- adv$al182012_018_5day_pgn
-fcst@data$id <- rownames(fcst@data)
-fcst.points = broom::tidy(fcst, region = "id")
-fcst <- dplyr::left_join(fcst.points, fcst@data, by = "id")
+fcst_cone <- adv$al182012_018_5day_pgn
+fcst_cone@data$id <- rownames(fcst_cone@data)
+fcst_cone.points = broom::tidy(fcst_cone, region = "id")
+fcst_cone <- dplyr::left_join(fcst_cone.points, fcst_cone@data, by = "id")
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
-p + geom_polygon(data = fcst %>% filter(FCSTPRD == 120), 
-                 aes(long, lat, group = group, fill = factor(FCSTPRD))) + 
-    geom_polygon(data = fcst %>% filter(FCSTPRD == 72), 
-                 aes(long, lat, group = group, fill = factor(FCSTPRD)))
+p3 + geom_polygon(data = fcst_cone %>% filter(FCSTPRD == 120), 
+                 aes(long, lat, group = group, fill = factor(FCSTPRD)), 
+                 alpha = 0.5) + 
+    geom_polygon(data = fcst_cone %>% filter(FCSTPRD == 72), 
+                 aes(long, lat, group = group, fill = factor(FCSTPRD)), 
+                 alpha = 0.5)
 ```
+
+Note that in some GIS packages the forecast cones may be identical (though they shouldn't be). I've noticed it with Hurricanes Ike and Matthew; it's in the raw dataset.
 
 ## Watches and Warnings
 
-```{r, fig.width = 7, fig.align = "center"}
-p + geom_path(data = adv$al182012_018_ww_wwlin, 
-               aes(x = long, y = lat, group = group), size = 2)
+You can also plot watches and warnings if any are in effect for the package release time. 
+
+```{r}
+ww_line <- shp_to_df(adv$al182012_018_ww_wwlin)
 ```
+
+
+```{r, fig.width = 7, fig.align = "center"}
+p3 + geom_path(data = ww_line, 
+               aes(x = long, y = lat, group = group, color = TCWW), size = 1)
+```
+
+In the example above you can see tropical storm warnings issued for the Bahamas, North Carolina and portions of the South Carolina and Florida coast while tropical storm watches are in effect for northern Florida and South Carolina.
 
 ## Probabilistic Storm Surge
 
 The Tropical Cyclone Storm Surge Probabilities data shows the probability, in percent, of a specified storm surge occurring during the forecast period indicated. The product is based upon an ensemble of Sea, Lake, and Overland Surge from Hurricanes (SLOSH) model runs using the National Hurricane Center (NHC) official advisory and accounts for track, size, and intensity errors based on historical errors.
-
-see: http://www.nhc.noaa.gov/gis/metadata_ex_gt5_at.xml
-
-* Does not take an advisory number
-* `datetime` and `nobs` parameters created to help
-
-cumulative probablity of storm surge greater than 5ft
 
 ```{r}
 gis_prob_storm_surge(key = "AL142016", products = list(psurge = 0), 
@@ -157,12 +186,21 @@ ss <- gis_prob_storm_surge(key = "AL142016",
     gis_download()
 ```
 
+```{r}
+prob_surge <- shp_to_df(ss$al142016_2016100618_gt0)
+bb <- sp::bbox(ss$al142016_2016100618_gt0)
+```
+
 ```{r, fig.width = 7, fig.align = "center"}
-p + geom_path(data = ss$al142016_2016100618_gt0, 
-               aes(x = long, y = lat, group = group), size = 1)
+p + geom_path(data = prob_surge, 
+               aes(x = long, y = lat, group = group, color = PSurge00c), 
+              size = 1, alpha = 0.5) + 
+    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
 ```
 
 ## Current and Forecast Wind Field Radii
+
+Wind radii data may also be available for some cyclone advisory packages. This is the radius to which a minimum sustained wind speed may be felt from the center of circulation.
 
 ```{r}
 gis_windfield("AL142016", advisory = "33")
@@ -172,34 +210,32 @@ gis_windfield("AL142016", advisory = "33")
 wf <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
 ```
 
-Initial radius
-
 ```{r}
-wf_init <- wf$al142016_2016100606_initialradii
-wf_init@data$id <- rownames(wf_init@data)
-wf_init.points = broom::tidy(wf_init, region = "id")
-wf_init <- dplyr::left_join(wf_init.points, wf_init@data, by = "id")
+wf_init <- shp_to_df(wf$al142016_2016100606_initialradii)
+bb <- sp::bbox(wf$al142016_2016100606_forecastradii)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
-p + geom_polygon(data = wf_init, 
-                  aes(x = long, y = lat, fill = factor(RADII)), alpha = 0.5)
+(p4 <- p + geom_polygon(data = wf_init, 
+                  aes(x = long, y = lat, fill = factor(RADII)), alpha = 0.5) + 
+    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2])))
 ```
 
+Additionally, forecast wind radii data is also generally available in some packages
+
 ```{r}
-wf_fcst <- wf$al142016_2016100606_forecastradii
-wf_fcst@data$id <- rownames(wf_fcst@data)
-wf_fcst.points = broom::tidy(wf_fcst, region = "id")
-wf_fcst <- dplyr::left_join(wf_fcst.points, wf_fcst@data, by = "id")
+wf_fcst <- shp_to_df(wf$al142016_2016100606_forecastradii)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
-p + geom_polygon(data = wf_fcst, 
+p4 + geom_polygon(data = wf_fcst, 
                   aes(x = long, y = lat, group = group, fill = factor(RADII)), 
                   alpha = 0.5)
 ```
 
 ## Wind Speed Probabilities
+
+Wind Speed probabilities show the chance of experiencing a minimum-sustained winds of 34, 50 and 64 knots with a given period of time (typically, 120 hours). These products are not storm-specific but are global so other active cyclones in other basins may also appear.
 
 ```{r}
 gis_wsp(datetime = "2016100606", res = 0.5)
@@ -212,20 +248,29 @@ wsp <- gis_wsp(datetime = "2016100606", res = 0.5) %>% gis_download()
 ### Cumulative Probability for >34kt Winds
 
 ```{r, fig.width = 7, fig.align = "center"}
-p + geom_point(data = broom::tidy(wsp$`2016100606_wsp34knt120hr_halfDeg`), 
-               aes(x = coords.x1, y = coords.x2, color = PWIND120))
+bb <- sp::bbox(wsp$`2016100606_wsp34knt120hr_halfDeg`)
+(p5 <- p + 
+     geom_point(data = broom::tidy(wsp$`2016100606_wsp34knt120hr_halfDeg`), 
+                aes(x = coords.x1, y = coords.x2, color = PWIND120))) + 
+    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
 ```
 
-### Cumulative Probability for >50kt Winds
+Cumulative wind speed probability for >50kt winds:
 
 ```{r, fig.width = 7, fig.align = "center"}
-p + geom_point(data = broom::tidy(wsp$`2016100606_wsp50knt120hr_halfDeg`), 
-               aes(x = coords.x1, y = coords.x2, color = PWIND120))
+bb <- sp::bbox(wsp$`2016100606_wsp50knt120hr_halfDeg`)
+(p6 <- p + 
+     geom_point(data = broom::tidy(wsp$`2016100606_wsp50knt120hr_halfDeg`), 
+                aes(x = coords.x1, y = coords.x2, color = PWIND120))) + 
+    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
 ```
 
-### Cumulative Probability for >64kt Winds
+Cumulative probability for >64kt winds:
 
 ```{r, fig.width = 7, fig.align = "center"}
-p + geom_point(data = broom::tidy(wsp$`2016100606_wsp64knt120hr_halfDeg`), 
-               aes(x = coords.x1, y = coords.x2, color = PWIND120))
+bb <- sp::bbox(wsp$`2016100606_wsp64knt120hr_halfDeg`)
+(p7 <- p + 
+     geom_point(data = broom::tidy(wsp$`2016100606_wsp64knt120hr_halfDeg`), 
+                aes(x = coords.x1, y = coords.x2, color = PWIND120))) + 
+    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
 ```
