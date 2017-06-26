@@ -1,3 +1,27 @@
+rrricanes 0.2.0-4 (2017-06-25)
+==================================
+
+### NEW FEATURES
+
+* NA
+
+### MINOR IMPROVEMENTS
+
+* `Key` variable added to `discus` dataframes. `Key` will be NA for all cyclones >= 2005. Should not be <= 2006. (#80)
+* Removed `Adv` variable from `posest` dataframes. Position estimates do not have advisory numbers. (#81)
+* Removed `Adv` variable from `update`. Updates do not have advisory numbers. (#84)
+* Added variable `Key` to `get_public` dataframes. (#85)
+* Added variable `Key` to `get_update` dataframes. (#86)
+* Removed non-existent wind radii variables in `get_fstadv`. Hrs 48 and 72 hours only have 34 and 50kt wind fields. Hrs 96 and 120 have none. (#89)
+
+### BUG FIXES
+
+* NA
+
+### DEPRECATED AND DEFUNCT
+
+* NA
+
 rrricanes 0.2.0-3 (2017-06-22)
 ==================================
 

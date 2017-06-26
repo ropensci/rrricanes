@@ -17,6 +17,7 @@ Return dataframe of discussion data.
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}
+  \item{Key}{ID of cyclone}
   \item{Contents}{Text content of product}
 }
 }

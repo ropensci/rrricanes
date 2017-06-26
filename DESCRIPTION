@@ -4,7 +4,7 @@ Title: Web scraper for Atlantic and east Pacific hurricanes and tropical storms
 Description: Get archived data of past and current hurricanes and tropical 
   storms for the Atlantic and eastern Pacific oceans. Data is available for 
   storms since 1998.
-Version: 0.2.0-3
+Version: 0.2.0-4
 Authors@R: c(person("Tim", "Trice", email = "tim.trice@gmail.com", role = c("aut", "cre")))
 Maintainer: Tim Trice <tim.trice@gmail.com>
 Depends:
@@ -35,7 +35,6 @@ Imports:
 Suggests:
   devtools, 
   dwapi,
-  geosphere,
   knitr, 
   rmarkdown,
   testthat,

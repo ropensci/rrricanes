@@ -4,7 +4,8 @@
 #' @seealso \code{\link{scrape_header}}
 #' @keywords internal
 scrape_adv_num <- function(header) {
-    ptn <- paste0("(?:ADVISORY|DISCUSSION|PROBABILITIES)[:blank:]+NUMBER",
+    ptn <- paste0("(?:ADVISORY|DISCUSSION|PROBABILITIES)*[:blank:]+",
+                  "(?:INTERMEDIATE[:blank:])*NUMBER",
                   # Advisory number. Could alphanum; i.e., 1, 1A, 2, 2A, 2B
                   "[:blank:]+([:digit:]{1,3}[:alpha:]*)",
                   "(?:[[:space:][:punct:][:alpha:]]*)+")
@@ -154,7 +155,7 @@ scrape_date <- function(header) {
     # immeidately followed by Z which is not captured. Z is military code for
     # Zulu time which is equivalent of Z.
 
-    # That should be the reason... ¯\_(ツ)_/¯
+    # That should be the reason...
     tz <- datetime.extracted[,4]
     if (is.na(tz))
         tz <- "UTC"
