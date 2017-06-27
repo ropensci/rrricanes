@@ -251,7 +251,7 @@ fstadv <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     status <- scrape_header(contents, ret = "status")
     name <- scrape_header(contents, ret = "name")
-    adv <- scrape_header(contents, ret = "adv")
+    adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
     date <- scrape_header(contents, ret = "date")
 
     if (getOption("rrricanes.working_msg"))
