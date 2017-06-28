@@ -97,6 +97,7 @@ get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
 #' @title load_storm_data
 #' @description Load storm and year data from data repository.
 #' @param dataset A dataset to return
+#' @param ... additional parameters for readr
 #' @details This function is designed to give quicker access to post-scraped
 #' storm data and may be modified in future releases.
 #' \describe{
@@ -136,10 +137,11 @@ get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
 #' @export
 load_storm_data <- function(dataset = c("adv", "discus", "fcst", "fcst_wr",
                                         "fstadv", "posest", "prblty", "public",
-                                        "storms", "update", "wndprb", "wr")) {
+                                        "storms", "update", "wndprb", "wr"),
+                            ...) {
     dataset <- match.arg(dataset)
     base_url <- "https://github.com/timtrice/rrricanesdata/blob/master/"
     link <- paste0(base_url, dataset, ".csv?raw=true")
-    df <- readr::read_csv(link)
+    df <- readr::read_csv(link, ...)
     return(df)
 }

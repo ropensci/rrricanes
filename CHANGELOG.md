@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - NA
 
 ### Changed
-  - NA
+  - `load_storm_data` now takes `readr::read_csv` parameters.
 
 ### Removed
   - NA
