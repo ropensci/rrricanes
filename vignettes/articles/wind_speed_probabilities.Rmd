@@ -1,0 +1,124 @@
+---
+title: "Wind Speed Probabilities"
+author: "Tim Trice"
+date: "June 11, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.width = 10, 
+                      fig.asp = 1, 
+                      fig.align = "center")
+```
+
+```{r, message = FALSE}
+library(dplyr)
+library(ggplot2)
+library(rrricanes)
+library(sp)
+```
+
+```{r}
+key <- "AL092008"
+adv <- 42
+```
+
+```{r}
+wndprb <- load_storm_data("wndprb") %>% filter(Key == key, Adv <= adv)
+```
+
+### GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings
+
+```{r}
+gis_adv <- gis_advisory(key = key, advisory = adv) %>% gis_download()
+```
+
+Get bounding box of the forecast polygon.
+
+```{r}
+bbox <- bbox(gis_adv$al092008_042_5day_pgn)
+```
+
+## Build a Tracking Chart
+
+Generate a base plot of the Atlantic ocean.
+
+```{r}
+bp <- al_tracking_chart(color = "black", fill = "white", size = 0.1, res = 50)
+```
+
+I like to add a little cushion for the map inset and forecast cone data. 
+
+```{r}
+lat_min <- bbox[2,1] - 5
+lat_max <- bbox[2,2] + 5
+lon_min <- bbox[1,1] - 10
+lon_max <- bbox[1,2] + 10
+```
+
+Build a thin tracking map for the inset.
+
+```{r}
+bp_inset <- ggplotGrob(bp +
+    geom_rect(mapping = aes(xmin = lon_min, xmax = lon_max,
+                            ymin = lat_min, ymax = lat_max),
+              color = "red", alpha = 0) +
+    theme_bw() +
+    theme(axis.title = element_blank(),
+          axis.ticks = element_blank(),
+          axis.text.x = element_blank(),
+          axis.text.y = element_blank(),
+          plot.margin = margin(0, 0, 0, 0, "pt")))
+```
+
+Modify original `bp` zoomed in on our area of interest.
+
+```{r}
+bp <- bp +
+    coord_equal(xlim = c(lon_min, lon_max),
+                ylim = c(lat_min, lat_max)) +
+    scale_x_continuous(expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    labs(x = "Lon",
+         y = "Lat",
+         caption = sprintf("rrricanes %s", packageVersion("rrricanes")))
+```
+
+Combine `bp` and `bp_inset` to finalize initial base plot. `bp` will be a base plot without the inset. `bpi` will have the inset.
+
+```{r}
+bpi <- bp + annotation_custom(grob = bp_inset, xmin = lon_max - 5,
+                             xmax = lon_max - 1, ymin = -Inf,
+                             ymax = lat_min + 5)
+```
+
+The `wndprb` will not have coordinates for cities. An option is `al_prblty_stations`. However, please note this function may become [deprecated](https://github.com/timtrice/rrricanes/issues/46). 
+
+```{r}
+wndprb <- wndprb %>% 
+    left_join(al_prblty_stations(), by = "Location")
+```
+
+Check `wndprb` for NA values in `Lat`, `Lon`.
+
+```{r}
+any(is.na(wndprb$Lat), is.na(wndprb$Lon))
+```
+
+```{r}
+wndprb_adv42 <- wndprb %>% filter(Adv == adv, Wind >= 64)
+bp +
+    geom_point(data = wndprb_adv42, 
+               aes(x = Lon, y = Lat, color = Wind120Cum, size = Wind120Cum)) + 
+    scale_color_gradientn(colors = terrain.colors(10)) + 
+    coord_equal(xlim = c(min(wndprb$Lon) - 1, 
+                         max(wndprb$Lon) + 1),
+                # Account for extra padding of min Lat in original plot
+                ylim = c(min(wndprb$Lat) + 2, 
+                         max(wndprb$Lat) + 1)) + 
+    guides(size = FALSE) + 
+    theme(legend.position = "bottom", 
+          legend.box = "vertical") + 
+    labs(title = "Total Probability of Wind >= 64kts within 120 Hours")
+```

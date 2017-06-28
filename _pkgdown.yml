@@ -44,6 +44,16 @@ articles:
     contents:
     - getting_started
     - gis_data
+  - title: Tutorials
+    desc: >
+      Additional examples of using `rrricanes` to get storm-related data and
+      plotting.
+    contents:
+    - accumulated_cyclone_energy
+    - forecast_advisory
+    - probabilistic_storm_surge
+    - wind_pressure
+    - wind_speed_probabilities
   - title: Using Data World
     desc: Accessing data through data.world
     contents:
