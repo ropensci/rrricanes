@@ -14,7 +14,7 @@ Getting Started
 Please view the vignette 'Getting Started':
 
 ``` r
-vignette("getting-started", package = "rrricanes")
+vignette("getting_started", package = "rrricanes")
 ```
 
 [Online documentation](https://timtrice.github.io/rrricanes/) is also available.
