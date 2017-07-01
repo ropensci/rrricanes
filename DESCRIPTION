@@ -23,7 +23,7 @@ Imports:
   maptools (>= 0.9-2), 
   purrr (>= 0.2.2.2), 
   readr (>= 1.1.1), 
-  rgdal (>= 1.2-8),
+  rgdal (>= 1.2-7),
   rgeos (>= 0.3-23),
   rlang (>= 0.1.1),
   rnaturalearthdata (>= 0.1.0),
