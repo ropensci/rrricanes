@@ -70,40 +70,8 @@ walk(keys, .f = function(key) {
         if (purrr::is_empty(ret$result[[product]]))
             return(NULL)
 
-        # Set product and column types of existing dataset.
-        if (product == "discus") {
-            col_types = "cciTcc"
-        } else if (product == "fstadv") {
-            col_types = paste0("cciTcddiidiiii",
-                               # Seas
-                               "iiii",
-                               # Current wind radii
-                               "iiiiiiiiiiii",
-                               # 12 hrs
-                               "Tddiiiiiiiiiiiiii",
-                               # 24 hrs
-                               "Tddiiiiiiiiiiiiii",
-                               # 36 hrs
-                               "Tddiiiiiiiiiiiiii",
-                               # 48 hrs
-                               "Tddiiiiiiiiii",
-                               # 72 hrs
-                               "Tddiiiiiiiiii",
-                               # 96 hrs
-                               "Tddii",
-                               #120 hrs
-                               "Tddii")
-        } else if (product == "public") {
-            col_types = "cccTcc"
-        } else if (product == "update") {
-            col_types = "ccTcc"
-        } else if (product == "wndprb") {
-            col_types = "ciTciiiiiiiiiiiiii"
-        }
-
         # Read in full dataset
-        full_df <- read_csv(sprintf("./datasets/%s.csv", product),
-                            col_types = col_types)
+        full_df <- read_csv(sprintf("./datasets/%s.csv", product))
 
         max_date <- full_df %>% dplyr::filter(Key == key) %>% .$Date %>% max()
 
