@@ -156,6 +156,8 @@ load_storm_data <- function(dataset = c("adv", "discus", "fcst", "fcst_wr",
             col_types = "ccTcc"
         } else if (dataset == "wndprb") {
             col_types = "ciTciiiiiiiiiiiiii"
+        } else {
+            col_types = readr::cols()
         }
         df <- readr::read_csv(link, col_types = col_types, ...)
     } else {
