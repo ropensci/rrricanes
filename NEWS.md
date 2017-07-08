@@ -1,4 +1,4 @@
-rrricanes 0.2.0-5 (yyyy-mm-dd)
+rrricanes 0.2.0-5 (2017-07-08)
 ==================================
 
 ### NEW FEATURES
