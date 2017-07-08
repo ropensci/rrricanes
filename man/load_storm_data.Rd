@@ -5,10 +5,12 @@
 \title{load_storm_data}
 \usage{
 load_storm_data(dataset = c("adv", "discus", "fcst", "fcst_wr", "fstadv",
-  "posest", "prblty", "public", "storms", "update", "wndprb", "wr"))
+  "posest", "prblty", "public", "storms", "update", "wndprb", "wr"), ...)
 }
 \arguments{
 \item{dataset}{A dataset to return}
+
+\item{...}{additional parameters for readr}
 }
 \description{
 Load storm and year data from data repository.

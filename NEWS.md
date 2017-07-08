@@ -1,3 +1,22 @@
+rrricanes 0.2.0-5 (2017-07-08)
+==================================
+
+### NEW FEATURES
+
+* NA
+
+### MINOR IMPROVEMENTS
+
+* `load_storm_data` now takes `readr::read_csv` parameters.
+
+### BUG FIXES
+
+* NA
+
+### DEPRECATED AND DEFUNCT
+
+* NA
+
 rrricanes 0.2.0-4 (2017-06-25)
 ==================================
 

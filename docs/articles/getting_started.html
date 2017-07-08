@@ -60,7 +60,7 @@
       <h1>Getting Started</h1>
                         <h4 class="author">Tim Trice</h4>
             
-            <h4 class="date">2017-06-22</h4>
+            <h4 class="date">2017-06-27</h4>
           </div>
 
     
@@ -393,7 +393,7 @@
 ##   Lon = col_double(),
 ##   Wind = col_integer(),
 ##   Gust = col_integer(),
-##   Pressure = col_integer(),
+##   Pressure = col_double(),
 ##   PosAcc = col_integer(),
 ##   FwdDir = col_integer(),
 ##   FwdSpeed = col_integer(),
@@ -403,11 +403,7 @@
 ##   SeasSW = col_integer(),
 ##   SeasNW = col_integer()
 ## )</code></pre>
-<pre><code>## Warning in rbind(names(probs), probs_f): number of columns of result is not
-## a multiple of vector length (arg 1)</code></pre>
-<pre><code>## Warning: 2 parsing failures.
-## row # A tibble: 2 x 5 col     row      col               expected actual expected   &lt;int&gt;    &lt;chr&gt;                  &lt;chr&gt;  &lt;chr&gt; actual 1 12812 Pressure no trailing characters     e3 file 2 12813 Pressure no trailing characters     e3 row # ... with 1 more variables: file &lt;chr&gt;</code></pre>
-<pre><code>## # A tibble: 12,822 x 18
+<pre><code>## # A tibble: 12,825 x 18
 ##         Key   Adv                Date              Status  Name   Lat
 ##       &lt;chr&gt; &lt;int&gt;              &lt;dttm&gt;               &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
 ##  1 AL011998     1 1998-07-27 15:00:00 Tropical Depression   One  11.5
@@ -420,8 +416,8 @@
 ##  8 AL011998     8 1998-07-29 09:00:00      Tropical Storm  Alex  13.8
 ##  9 AL011998     9 1998-07-29 15:00:00      Tropical Storm  Alex  14.1
 ## 10 AL011998    10 1998-07-29 21:00:00      Tropical Storm  Alex  13.9
-## # ... with 12,812 more rows, and 12 more variables: Lon &lt;dbl&gt;, Wind &lt;int&gt;,
-## #   Gust &lt;int&gt;, Pressure &lt;int&gt;, PosAcc &lt;int&gt;, FwdDir &lt;int&gt;,
+## # ... with 12,815 more rows, and 12 more variables: Lon &lt;dbl&gt;, Wind &lt;int&gt;,
+## #   Gust &lt;int&gt;, Pressure &lt;dbl&gt;, PosAcc &lt;int&gt;, FwdDir &lt;int&gt;,
 ## #   FwdSpeed &lt;int&gt;, Eye &lt;int&gt;, SeasNE &lt;int&gt;, SeasSE &lt;int&gt;, SeasSW &lt;int&gt;,
 ## #   SeasNW &lt;int&gt;</code></pre>
 <p>These dataframes stick to the tidy properties of “each column is a variable and each row is an observation” (with the exception of <code>Key</code>, of course).</p>

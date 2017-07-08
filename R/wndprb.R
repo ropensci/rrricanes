@@ -116,7 +116,7 @@ wndprb <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     status <- scrape_header(contents, ret = "status")
     key <- scrape_header(contents, ret = "key")
-    adv <- scrape_header(contents, ret = "adv")
+    adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
     date <- scrape_header(contents, ret = "date")
     name <- scrape_header(contents, ret = "name")
 

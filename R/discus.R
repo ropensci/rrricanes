@@ -8,7 +8,7 @@ create_df_discus <- function() {
                              "Name" = character(),
                              # Allow for intermediate advisories,
                              # i.e., "1A", "2", "2A"...
-                             "Adv" = character(),
+                             "Adv" = integer(),
                              "Date" = as.POSIXct(character(), tz = "UTC"),
                              "Key" = character(),
                              "Contents" = character())
@@ -83,7 +83,7 @@ discus <- function(link, p = dplyr::progress_estimated(n = 1)) {
 
     status <- scrape_header(contents, ret = "status")
     name <- scrape_header(contents, ret = "name")
-    adv <- scrape_header(contents, ret = "adv")
+    adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
     date <- scrape_header(contents, ret = "date")
 
     # Keys were added to discus products beginning 2006. Prior, it doesn't

@@ -97,6 +97,7 @@ get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
 #' @title load_storm_data
 #' @description Load storm and year data from data repository.
 #' @param dataset A dataset to return
+#' @param ... additional parameters for readr
 #' @details This function is designed to give quicker access to post-scraped
 #' storm data and may be modified in future releases.
 #' \describe{
@@ -136,10 +137,31 @@ get_storm_data <- function(link, products = c("discus", "fstadv", "posest",
 #' @export
 load_storm_data <- function(dataset = c("adv", "discus", "fcst", "fcst_wr",
                                         "fstadv", "posest", "prblty", "public",
-                                        "storms", "update", "wndprb", "wr")) {
+                                        "storms", "update", "wndprb", "wr"),
+                            ...) {
     dataset <- match.arg(dataset)
     base_url <- "https://github.com/timtrice/rrricanesdata/blob/master/"
     link <- paste0(base_url, dataset, ".csv?raw=true")
-    df <- readr::read_csv(link)
+    readr_args <- list(...)
+    if (purrr::is_empty(readr_args$col_types)) {
+        if (dataset == "discus") {
+            col_types = "cciTcc"
+        } else if (dataset == "fstadv") {
+            col_types = paste0("cciTcddiidiiiiiiiiiiiiiiiiiiiiTddiiiiiiiiiiiiii",
+                               "TddiiiiiiiiiiiiiiTddiiiiiiiiiiiiiiTddiiiiiiiiii",
+                               "TddiiiiiiiiiiTddiiTddii")
+        } else if (dataset == "public") {
+            col_types = "cccTcc"
+        } else if (dataset == "update") {
+            col_types = "ccTcc"
+        } else if (dataset == "wndprb") {
+            col_types = "ciTciiiiiiiiiiiiii"
+        } else {
+            col_types = readr::cols()
+        }
+        df <- readr::read_csv(link, col_types = col_types, ...)
+    } else {
+        df <- readr::read_csv(link, ...)
+    }
     return(df)
 }

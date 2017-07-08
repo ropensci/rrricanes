@@ -1,0 +1,108 @@
+---
+title: "Accumulated Cyclone Energy (ACE)"
+author: "Tim Trice"
+date: "June 27, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.align = "center")
+```
+
+```{r, message = FALSE}
+library(dplyr)
+library(ggplot2)
+library(HURDAT)
+library(lubridate)
+library(readr)
+library(rrricanes)
+```
+
+ACE or Accumulated Cyclone Energy is a method of measuring energy of a cyclone or for an entire season. It is calculated by the formula
+
+$$ \text{ACE} = 10^{-4}\sum{v^2_\text{max}} $$
+
+where $v_\text{max}$ is the wind speed in knots. Values may only be used when a storm is a tropical system with winds of at least 35 knots. Additionally, only six-hour intervals are used.
+
+To calculate ACE you would want to use the `fstadv` dataset.
+
+```{r}
+fstadv <- load_storm_data("fstadv", col_types = cols())
+```
+
+Now, we need to apply the rules to our dataset:
+
+* since forecast/advisory products are typically issued at 03:00, 09:00, 15:00 and 21:00 UTC filter out odd hours
+* `Status` is Tropical Storm or Hurricane.
+* `Wind` is not NA
+* group by `Key`
+* select `Wind`
+
+```{r}
+fstadv <- fstadv %>% 
+    filter(hour(Date) %in% c(3, 9, 15, 21), 
+           Status %in% c("Tropical Storm", "Hurricane"), 
+           !is.na(Wind)) %>% 
+    group_by(Key) %>% 
+    select(Name, Wind)
+```
+
+Now let's summarise our dataset with new variable `ACE`.
+
+```{r}
+fstadv %>% 
+    summarise(Name = last(Name), 
+              ACE = sum(Wind^2) * 1e-04) %>% 
+    arrange(desc(ACE)) %>% 
+    top_n(10)
+```
+
+This matches somewhat well with [Wikipedia](https://en.wikipedia.org/wiki/Accumulated_cyclone_energy#Individual_storms) and other sources. But, you may notice we're missing some storms. `rrricanes` currently only holds data back to 1998; this data is considered "real-time". 
+
+A companion package, [HURDAT](https://github.com/timtrice/HURDAT) is available in CRAN that has data for all cyclones dating back as far as 1851. This package has less data than `rrricanes`. But, as it is based on a post-storm reanalysis project, the data is more accurate. 
+
+Let's revisit the top 10 using `HURDAT`:
+
+```{r}
+AL %>% 
+    filter(hour(DateTime) %in% c(0, 6, 12, 18), 
+           Status %in% c("TS", "HU"), 
+           !is.na(Wind)) %>% 
+    group_by(Key) %>% 
+    summarise(Name = last(Name), 
+              ACE = sum(Wind^2) * 1e-04) %>% 
+    arrange(desc(ACE)) %>% 
+    top_n(10)
+```
+
+A couple of things to notice here:
+
+1. in `HURDAT`, the common times used are 00:00, 06:00, 12:00 and 18:00 UTC
+2. Our list is more comprehensive than the Wikipedia list as that list only measures storms after 1950. 
+
+`ACE` is slightly higher and that could be for a number of reasons. For example, on re-analysis the Hurricane Research Division may have determined a cyclone was actually tropical (shown in `HURDAT`) when initially it was believed to be extratropical (as shown in `rrricanes`). Or, and more likely, they determined through additional data that a storm was actually stronger than originally though. 
+
+You can also calculate `ACE` for a season. Instead of grouping by `Key` we group by `Year`. I'll stick with `HURDAT` in this example.
+
+```{r}
+(df <- AL %>% 
+    mutate(Year = year(DateTime)) %>% 
+    filter(hour(DateTime) %in% c(0, 6, 12, 18), 
+           Status %in% c("TS", "HU"), 
+           !is.na(Wind)) %>% 
+    group_by(Year) %>% 
+    summarise(ACE = sum(Wind^2) * 1e-04) %>% 
+    arrange(desc(ACE))) %>% 
+    top_n(10)
+```
+
+This also matches relatively well with that on [Wikipedia](https://en.wikipedia.org/wiki/Accumulated_cyclone_energy#Atlantic_hurricane_seasons.2C_1950.E2.80.932017) and other sources. 
+
+```{r}
+ggplot(df, aes(x = Year, y = ACE)) + 
+    geom_bar(stat = "identity") + 
+    theme_bw()
+```
+
+It would certainly seem that tropical cyclone activity ebbs and flows over time. 

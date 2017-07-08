@@ -14,7 +14,7 @@ Getting Started
 Please view the vignette 'Getting Started':
 
 ``` r
-vignette("getting-started", package = "rrricanes")
+vignette("getting_started", package = "rrricanes")
 ```
 
 [Online documentation](https://timtrice.github.io/rrricanes/) is also available.
@@ -36,7 +36,7 @@ install.packages("rnaturalearthhires",
 `rrricanes` is currently only available in GitHub. It can be installed using the `devtools` package:
 
 ``` r
-devtools::install_github("timtrice/rrricanes")
+devtools::install_github("timtrice/rrricanes", build_vignettes = TRUE)
 ```
 
 Built With
