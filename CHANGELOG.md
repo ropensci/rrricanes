@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [0.2.0-5.1] yyyy-mm-dd
 
 ### Added
-  - NA
+  - Instructions for Linux users to install `libgdal1-dev`, `libproj-dev`, and `libxml2-dev`. (#95)
 
 ### Changed
   - NA

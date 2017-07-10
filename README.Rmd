@@ -37,7 +37,9 @@ vignette("getting_started", package = "rrricanes")
 
 `rrricanes` requires an active internet connection as data is extracted from online sources.
 
-Additionally, to use high resolution tracking maps you must install the `rnaturalearthhires` package:
+Linux users must also have the `libgdal-dev`, `libproj-dev` and `libxml2-dev` packages installed.
+
+To use high resolution tracking maps you will need to install the `rnaturalearthhires` package. 
 
 ```r
 install.packages("rnaturalearthhires",
