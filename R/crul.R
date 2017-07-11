@@ -280,7 +280,7 @@ crul_get_storm_data <- function(links,
   product_links <- split(product_links, ceiling(seq_along(product_links)/4))
   # set progress
   p <- dplyr::progress_estimated(length(product_links))
-  res <- purrr::map(product_links, get_url_contents, p) %>% purrr::flatten()
+  res <- purrr::map(product_links, crul_get_url_contents, p) %>% purrr::flatten()
   res_parsed <- purrr::map(res, ~.$parse("UTF-8"))
 
   list_products <- list(
@@ -292,11 +292,19 @@ crul_get_storm_data <- function(links,
     "update" = purrr::map(res, ~.$url) %>% filter_update() %>% purrr::map(~(!purrr::is_empty(.))) %>% purrr::flatten_lgl() %>% res_parsed[.],
     "wndprb" = purrr::map(res, ~.$url) %>% filter_wndprb() %>% purrr::map(~(!purrr::is_empty(.))) %>% purrr::flatten_lgl() %>% res_parsed[.])
 
-  df <- purrr::walk(products, .f = function(x) {
-    if (!purrr::is_empty(list_products[[x]]))
-      purrr::invoke_map_df(.f = sprintf("crul_%s", x), .x = list_products[[x]])
+  empty_list_products <- purrr::map(list_products, ~!purrr::is_empty(.)) %>% purrr::flatten_lgl()
+
+  filtered_list_products <- list_products[empty_list_products]
+
+  ds <- purrr::map(products, .f = function(x) {
+    purrr::invoke_map_df(.f = sprintf("crul_%s", x),
+                         .x = filtered_list_products[[x]]) %>%
+      dplyr::arrange(Date)
   })
-  return(df)
+
+  names(ds) <- names(filtered_list_products)
+
+  return(ds)
 }
 
 #' @title crul_get_storms
