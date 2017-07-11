@@ -371,6 +371,6 @@ crul_get_url_contents <- function(links, p) {
 #' @param links URLs to cyclone archive pages
 #' @export
 crul_get_wndprb <- function(links) {
-  res <- crul_get_storm_data(links, products = "wndprb")
-  return(res)
+  df <- crul_get_storm_data(links, products = "wndprb")
+  return(df$wndprb)
 }
