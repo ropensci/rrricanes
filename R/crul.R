@@ -188,8 +188,8 @@ crul_get_posest <- function(links) {
 #' @param links URLs to cyclone archive pages
 #' @export
 crul_get_prblty <- function(links) {
-  res <- crul_get_storm_data(links, products = "prblty")
-  return(res)
+  df <- crul_get_storm_data(links, products = "prblty")
+  return(df$prblty)
 }
 
 #' @title crul_get_products
