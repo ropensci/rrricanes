@@ -3,6 +3,7 @@
 export(al_prblty_stations)
 export(al_tracking_chart)
 export(cp_prblty_stations)
+export(crul_extract_storms)
 export(crul_get_discus)
 export(crul_get_fstadv)
 export(crul_get_posest)

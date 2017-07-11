@@ -1,53 +1,195 @@
-#' @title crul_get_url_contents
-#' @description Get contents from URL
-#' @param link URL to download
+#' @title crul_discus
+#' @description Parse storm Discussion products
+#' @param contents text of Storm Discussion product
+#' @keywords internal
+crul_discus <- function(contents) {
+
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
+
+  # Make sure this is a discussion product
+  if (!any(stringr::str_count(contents,
+                              c("MIATCD", "MIATCM", "TCD", "WTPA", "WTPZ",
+                                "MIAWRKAD1")))) {
+    # Check if the term "DISCUSSION" appears in header
+    if (!stringr::str_detect(scrape_header(contents), "DISCUSSION"))
+      stop(sprintf("Invalid Discussion link. %s", link))
+  }
+
+  df <- create_df_discus()
+
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
+  date <- scrape_header(contents, ret = "date")
+
+  # Keys were added to discus products beginning 2006. Prior, it doesn't
+  # exist. safely run scrape_header for key. If error, then use NA. Otherwise,
+  # add it.
+  safely_scrape_header <- purrr::safely(scrape_header)
+  key <- safely_scrape_header(contents, ret = "key")
+  if (is.null(key$error)) {
+    key <- key$result
+  } else {
+    key <- NA
+  }
+
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Storm Discussion #%s (%s)",
+                    status, name, adv, date))
+
+  df <- df %>%
+    tibble::add_row("Status" = status,
+                    "Name" = name,
+                    "Adv" = adv,
+                    "Date" = date,
+                    "Key" = key,
+                    "Contents" = contents)
+
+  return(df)
+}
+
+#' @title crul_extract_storms
+#' @description Extract storms for the given basin
+#' @param basin AL or EP
+#' @param contents Contents of archive pages
 #' @export
-crul_get_url_contents <- function(links, p) {
-  p$pause(0.5)$tick()$print()
-  links <- crul::Async$new(urls = links)
-  res <- links$get()
-  # Check status codes
-  #purrr::map(res, ~.$status_code) %>% purrr::flatten_dbl() %>% unique()
+crul_extract_storms <- function(basin, contents) {
+
+  if (basin == "AL") {
+    link_xpath <- "//td[(((count(preceding-sibling::*) + 1) = 1) and parent::*)]//a"
+  } else if (basin == "EP") {
+    link_xpath <- "//td[(((count(preceding-sibling::*) + 1) = 2) and parent::*)]//a"
+  } else {
+    stop("No basin")
+  }
+
+  contents <- purrr::map(contents, ~.$parse("UTF-8")) %>%
+    purrr::map(xml2::read_html)
+
+  years <- purrr::map(contents, rvest::html_nodes, xpath = "//title") %>%
+    purrr::map(rvest::html_text) %>%
+    stringr::str_sub(0L, 4L) %>%
+    as.numeric()
+
+  storms <- purrr::map(contents, rvest::html_nodes, xpath = link_xpath)
+  names <- purrr::map(storms, rvest::html_text) %>%
+    purrr::map(stringr::str_to_title)
+  links <- purrr::map(storms, rvest::html_attr, name = "href") %>%
+    purrr::map2(years, ~paste0(year_archives_link(.y), .x))
+  basins <- purrr::map(names, purrr::rep_along, basin)
+  years <- purrr::map2(names, years, purrr::rep_along)
+
+  df <- tibble::data_frame("Year" = years %>% purrr::flatten_dbl(),
+                           "Name" = names %>% purrr::flatten_chr(),
+                           "Basin" = basins %>% purrr::flatten_chr(),
+                           "Link" = links %>% purrr::flatten_chr())
+
+  return(df)
+}
+
+#' @title crul_fstadv
+#' @description Extrapolate data from FORECAST/ADVISORY products.
+#' @param contents text of product
+#' @keywords internal
+crul_fstadv <- function(contents) {
+
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
+
+  # Make sure this is a public advisory product
+  if (!any(stringr::str_count(contents,
+                              c("MIATCM", "[W]*TPA", "TCMAT", "WTPZ",
+                                "HFOTCMEP", "HFOTCMCP"))))
+    stop(sprintf("Invalid Forecast/Advisory link. %s", link))
+
+  df <- create_df_fstadv()
+
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
+  date <- scrape_header(contents, ret = "date")
+
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Forecast/Advisory #%s (%s)",
+                    status, name, adv, date))
+
+  key <- scrape_header(contents, ret = "key")
+  lat <- fstadv_lat(contents)
+  lon <- fstadv_lon(contents)
+  posacc <- fstadv_pos_accuracy(contents)
+  fwd_dir <- fstadv_fwd_dir(contents)
+  fwd_speed <- fstadv_fwd_speed(contents)
+  pressure <- fstadv_pressure(contents)
+  eye <- fstadv_eye(contents)
+  wind <- fstadv_winds(contents)
+  gust <- fstadv_gusts(contents)
+
+  df <- df %>%
+    tibble::add_row("Status" = status, "Name" = name, "Adv" = adv,
+                    "Date" = date, "Key" = key, "Lat" = lat,
+                    "Lon" = lon, "Wind" = wind, "Gust" = gust,
+                    "Pressure" = pressure, "PosAcc" = posacc,
+                    "FwdDir" = fwd_dir, "FwdSpeed" = fwd_speed,
+                    "Eye" = eye)
+
+  # Add current wind radius
+  wind_radius <- fstadv_wind_radius(contents, wind)
+
+  df[, names(wind_radius)] <- wind_radius[, names(wind_radius)]
+
+  # Add current sea radius
+  seas <- fstadv_seas(contents, wind)
+  # AL161999 has two rows of Seas data for advisory 5. The second row is
+  # within the forecast area where typically does not exist. Assumption is a
+  # typo. Would like to save this into attributes or something...
+  if (all(!is.null(seas), nrow(seas) > 1)) {
+    warning(sprintf("Too many rows of sea data for %s %s #%s.\n%s",
+                    status, name, adv, seas[2:nrow(seas),]),
+            call. = FALSE)
+    seas <- seas[1,]
+  }
+
+  df[, names(seas)] <- seas[, names(seas)]
+
+  # Add forecast positions and wind radii
+  forecasts <- fstadv_forecasts(contents, date)
+
+  df[, names(forecasts)] <- forecasts[, names(forecasts)]
+
+  return(df)
+}
+
+#' @title crul_get_discus
+#' @param links URLs to cyclone archive pages
+#' @export
+crul_get_discus <- function(links) {
+  res <- crul_get_storm_data(links, products = "discus")
   return(res)
 }
 
-#' @title crul_get_storms
-#' @description Returns storms and product link.
-#' @param year numeric or vector, four digits (\%Y format)
-#' @param basin One or both of c("AL", "EP")
+#' @title crul_get_fstadv
+#' @param links URLs to cyclone archive pages
 #' @export
-crul_get_storms <- function(year = format(Sys.Date(), "%Y"),
-                       basin = c("AL", "EP")) {
+crul_get_fstadv <- function(links) {
+  res <- crul_get_storm_data(links, products = "fstadv")
+  return(res)
+}
 
-  year <- validate_year(year)
+#' @title crul_get_posest
+#' @param links URLs to cyclone archive pages
+#' @export
+crul_get_posest <- function(links) {
+  res <- crul_get_storm_data(links, products = "posest")
+  return(res)
+}
 
-  # No archives earlier than 1998 for now
-  if (any(year < 1998))
-    stop('Archives currently only available for 1998 to current year.')
-
-  if (!all(basin %in% c("AL", "EP")))
-    stop("Basin must 'AL' and/or 'EP'")
-
-  links <- purrr::map(year, .f = year_archives_link) %>%
-    purrr::flatten_chr()
-
-  # 1998 is only year with slightly different URL. Modify accordingly
-  links[grep("1998", links)] <- paste0(links[grep("1998", links)],
-                                       "1998archive.shtml")
-
-  # There is an 80-hit/10-second limit to the NHC pages (note Issue #94), or 8
-  # requests/second. The below request will process 4 links every 0.5 seconds.
-  links <- split(links, ceiling(seq_along(links)/4))
-  p <- dplyr::progress_estimated(n = length(links))
-  contents <- purrr::map(links, .f = function(x) {crul_get_url_contents(x, p)}) %>%
-    purrr::flatten()
-
-  storm_df <- purrr::map_df(basin, extract_storms, contents) %>%
-    dplyr::group_by(Year, Basin) %>%
-    dplyr::arrange(Year, Basin) %>%
-    dplyr::ungroup()
-
-  return(storm_df)
+#' @title crul_get_prblty
+#' @param links URLs to cyclone archive pages
+#' @export
+crul_get_prblty <- function(links) {
+  res <- crul_get_storm_data(links, products = "prblty")
+  return(res)
 }
 
 #' @title crul_get_products
@@ -70,6 +212,14 @@ crul_get_products <- function(links) {
   }
 
   return(products)
+}
+
+#' @title crul_get_public
+#' @param links URLs to cyclone archive pages
+#' @export
+crul_get_public <- function(links) {
+  res <- crul_get_storm_data(links, products = "public")
+  return(res)
 }
 
 #' @title crul_get_storm_data
@@ -149,168 +299,43 @@ crul_get_storm_data <- function(links,
   return(df)
 }
 
-#' @title crul_get_discus
-#' @param links URLs to cyclone archive pages
+#' @title crul_get_storms
+#' @description Returns storms and product link.
+#' @param year numeric or vector, four digits (\%Y format)
+#' @param basin One or both of c("AL", "EP")
 #' @export
-crul_get_discus <- function(links) {
-  res <- crul_get_storm_data(links, products = "discus")
-  return(res)
-}
+crul_get_storms <- function(year = format(Sys.Date(), "%Y"),
+                            basin = c("AL", "EP")) {
 
-#' @title crul_discus
-#' @description Parse storm Discussion products
-#' @param contents text of Storm Discussion product
-#' @keywords internal
-crul_discus <- function(contents) {
+  year <- validate_year(year)
 
-  # Replace all carriage returns with empty string.
-  contents <- stringr::str_replace_all(contents, "\r", "")
+  # No archives earlier than 1998 for now
+  if (any(year < 1998))
+    stop('Archives currently only available for 1998 to current year.')
 
-  # Make sure this is a discussion product
-  if (!any(stringr::str_count(contents,
-                              c("MIATCD", "MIATCM", "TCD", "WTPA", "WTPZ",
-                                "MIAWRKAD1")))) {
-    # Check if the term "DISCUSSION" appears in header
-    if (!stringr::str_detect(scrape_header(contents), "DISCUSSION"))
-      stop(sprintf("Invalid Discussion link. %s", link))
-  }
+  if (!all(basin %in% c("AL", "EP")))
+    stop("Basin must 'AL' and/or 'EP'")
 
-  df <- create_df_discus()
+  links <- purrr::map(year, .f = year_archives_link) %>%
+    purrr::flatten_chr()
 
-  status <- scrape_header(contents, ret = "status")
-  name <- scrape_header(contents, ret = "name")
-  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
-  date <- scrape_header(contents, ret = "date")
+  # 1998 is only year with slightly different URL. Modify accordingly
+  links[grep("1998", links)] <- paste0(links[grep("1998", links)],
+                                       "1998archive.shtml")
 
-  # Keys were added to discus products beginning 2006. Prior, it doesn't
-  # exist. safely run scrape_header for key. If error, then use NA. Otherwise,
-  # add it.
-  safely_scrape_header <- purrr::safely(scrape_header)
-  key <- safely_scrape_header(contents, ret = "key")
-  if (is.null(key$error)) {
-    key <- key$result
-  } else {
-    key <- NA
-  }
+  # There is an 80-hit/10-second limit to the NHC pages (note Issue #94), or 8
+  # requests/second. The below request will process 4 links every 0.5 seconds.
+  links <- split(links, ceiling(seq_along(links)/4))
+  p <- dplyr::progress_estimated(n = length(links))
+  contents <- purrr::map(links, .f = function(x) {crul_get_url_contents(x, p)}) %>%
+    purrr::flatten()
 
-  if (getOption("rrricanes.working_msg"))
-    message(sprintf("Working %s %s Storm Discussion #%s (%s)",
-                    status, name, adv, date))
+  storm_df <- purrr::map_df(basin, crul_extract_storms, contents) %>%
+    dplyr::group_by(Year, Basin) %>%
+    dplyr::arrange(Year, Basin) %>%
+    dplyr::ungroup()
 
-  df <- df %>%
-    tibble::add_row("Status" = status,
-                    "Name" = name,
-                    "Adv" = adv,
-                    "Date" = date,
-                    "Key" = key,
-                    "Contents" = contents)
-
-  return(df)
-}
-
-#' @title crul_fstadv
-#' @description Extrapolate data from FORECAST/ADVISORY products.
-#' @param contents text of product
-#' @keywords internal
-crul_fstadv <- function(contents) {
-
-  # Replace all carriage returns with empty string.
-  contents <- stringr::str_replace_all(contents, "\r", "")
-
-  # Make sure this is a public advisory product
-  if (!any(stringr::str_count(contents,
-                              c("MIATCM", "[W]*TPA", "TCMAT", "WTPZ",
-                                "HFOTCMEP", "HFOTCMCP"))))
-    stop(sprintf("Invalid Forecast/Advisory link. %s", link))
-
-  df <- create_df_fstadv()
-
-  status <- scrape_header(contents, ret = "status")
-  name <- scrape_header(contents, ret = "name")
-  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
-  date <- scrape_header(contents, ret = "date")
-
-  if (getOption("rrricanes.working_msg"))
-    message(sprintf("Working %s %s Forecast/Advisory #%s (%s)",
-                    status, name, adv, date))
-
-  key <- scrape_header(contents, ret = "key")
-  lat <- fstadv_lat(contents)
-  lon <- fstadv_lon(contents)
-  posacc <- fstadv_pos_accuracy(contents)
-  fwd_dir <- fstadv_fwd_dir(contents)
-  fwd_speed <- fstadv_fwd_speed(contents)
-  pressure <- fstadv_pressure(contents)
-  eye <- fstadv_eye(contents)
-  wind <- fstadv_winds(contents)
-  gust <- fstadv_gusts(contents)
-
-  df <- df %>%
-    tibble::add_row("Status" = status, "Name" = name, "Adv" = adv,
-                    "Date" = date, "Key" = key, "Lat" = lat,
-                    "Lon" = lon, "Wind" = wind, "Gust" = gust,
-                    "Pressure" = pressure, "PosAcc" = posacc,
-                    "FwdDir" = fwd_dir, "FwdSpeed" = fwd_speed,
-                    "Eye" = eye)
-
-  # Add current wind radius
-  wind_radius <- fstadv_wind_radius(contents, wind)
-
-  df[, names(wind_radius)] <- wind_radius[, names(wind_radius)]
-
-  # Add current sea radius
-  seas <- fstadv_seas(contents, wind)
-  # AL161999 has two rows of Seas data for advisory 5. The second row is
-  # within the forecast area where typically does not exist. Assumption is a
-  # typo. Would like to save this into attributes or something...
-  if (all(!is.null(seas), nrow(seas) > 1)) {
-    warning(sprintf("Too many rows of sea data for %s %s #%s.\n%s",
-                    status, name, adv, seas[2:nrow(seas),]),
-            call. = FALSE)
-    seas <- seas[1,]
-  }
-
-  df[, names(seas)] <- seas[, names(seas)]
-
-  # Add forecast positions and wind radii
-  forecasts <- fstadv_forecasts(contents, date)
-
-  df[, names(forecasts)] <- forecasts[, names(forecasts)]
-
-  return(df)
-}
-
-
-#' @title crul_get_fstadv
-#' @param links URLs to cyclone archive pages
-#' @export
-crul_get_fstadv <- function(links) {
-  res <- crul_get_storm_data(links, products = "fstadv")
-  return(res)
-}
-
-#' @title crul_get_posest
-#' @param links URLs to cyclone archive pages
-#' @export
-crul_get_posest <- function(links) {
-  res <- crul_get_storm_data(links, products = "posest")
-  return(res)
-}
-
-#' @title crul_get_prblty
-#' @param links URLs to cyclone archive pages
-#' @export
-crul_get_prblty <- function(links) {
-  res <- crul_get_storm_data(links, products = "prblty")
-  return(res)
-}
-
-#' @title crul_get_public
-#' @param links URLs to cyclone archive pages
-#' @export
-crul_get_public <- function(links) {
-  res <- crul_get_storm_data(links, products = "public")
-  return(res)
+  return(storm_df)
 }
 
 #' @title crul_get_update
@@ -318,6 +343,19 @@ crul_get_public <- function(links) {
 #' @export
 crul_get_update <- function(links) {
   res <- crul_get_storm_data(links, products = "update")
+  return(res)
+}
+
+#' @title crul_get_url_contents
+#' @description Get contents from URL
+#' @param link URL to download
+#' @export
+crul_get_url_contents <- function(links, p) {
+  p$pause(0.5)$tick()$print()
+  links <- crul::Async$new(urls = links)
+  res <- links$get()
+  # Check status codes
+  #purrr::map(res, ~.$status_code) %>% purrr::flatten_dbl() %>% unique()
   return(res)
 }
 
