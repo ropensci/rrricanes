@@ -350,8 +350,8 @@ crul_get_storms <- function(year = format(Sys.Date(), "%Y"),
 #' @param links URLs to cyclone archive pages
 #' @export
 crul_get_update <- function(links) {
-  res <- crul_get_storm_data(links, products = "update")
-  return(res)
+  df <- crul_get_storm_data(links, products = "update")
+  return(df$update)
 }
 
 #' @title crul_get_url_contents
