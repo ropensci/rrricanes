@@ -218,8 +218,8 @@ crul_get_products <- function(links) {
 #' @param links URLs to cyclone archive pages
 #' @export
 crul_get_public <- function(links) {
-  res <- crul_get_storm_data(links, products = "public")
-  return(res)
+  df <- crul_get_storm_data(links, products = "public")
+  return(df$public)
 }
 
 #' @title crul_get_storm_data
