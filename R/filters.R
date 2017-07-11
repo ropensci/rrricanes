@@ -87,5 +87,6 @@ filter_wndprb <- function(links) {
 #' @param links Vector of links to filter
 #' @keywords internal
 filter_products <- function(ptn, links) {
-    return(links[grepl(paste(ptn, collapse = "|"), links)])
+  x <- purrr::map(links, ~.[grepl(paste(ptn, collapse = "|"), .)])
+  return(x)
 }
