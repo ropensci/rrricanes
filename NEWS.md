@@ -1,4 +1,4 @@
-rrricanes 0.2.0-5.1 (yyyy-mm-dd)
+rrricanes 0.2.0-6 (yyyy-mm-dd)
 ==================================
 
 ### NEW FEATURES

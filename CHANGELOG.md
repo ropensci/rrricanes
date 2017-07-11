@@ -4,10 +4,36 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.2.0-5.1] yyyy-mm-dd
+## [0.2.0-6] yyyy-mm-dd
+
+### Added
+  - NA
+
+### Added
+  - NA
+
+### Changed
+  - NA
+
+### Removed
+  - NA
+
+### Deprecated
+  - NA
+
+### Fixed
+  - NA
+
+### Security
+  - NA
+
+## [0.2.0-5.1] 2017-07-10
 
 ### Added
   - Instructions for Linux users to install `libgdal1-dev`, `libproj-dev`, and `libxml2-dev`. (#95)
+
+### Added
+  - NA
 
 ### Changed
   - NA
