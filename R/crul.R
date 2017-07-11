@@ -92,7 +92,7 @@ crul_get_storm_data <- function(links,
   p <- dplyr::progress_estimated(n = length(links))
   if (getOption("rrricanes.working_msg"))
     message("Gathering storm product links.")
-  res <- purrr::map(links, .f = function(x) {get_url_contents(x, p)}) %>%
+  res <- purrr::map(links, .f = function(x) {crul_get_url_contents(x, p)}) %>%
     purrr::flatten()
 
   # Get contents of all storms
