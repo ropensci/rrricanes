@@ -4,11 +4,11 @@
 \alias{get_storm_data}
 \title{get_storm_data}
 \usage{
-get_storm_data(link, products = c("discus", "fstadv", "posest", "public",
+get_storm_data(links, products = c("discus", "fstadv", "posest", "public",
   "prblty", "update", "wndprb"))
 }
 \arguments{
-\item{link}{to storm's archive page.}
+\item{links}{to storm's archive page.}
 
 \item{products}{Products to retrieve; discus, fstadv, posest, public,
 prblty, update, and windprb.}

@@ -4,10 +4,10 @@
 \alias{get_discus}
 \title{get_discus}
 \usage{
-get_discus(link)
+get_discus(links)
 }
 \arguments{
-\item{link}{URL to storm's archive page.}
+\item{links}{URL to storm's archive page.}
 }
 \description{
 Return dataframe of discussion data.

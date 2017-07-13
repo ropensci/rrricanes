@@ -155,25 +155,16 @@ extract_year_archive_link <- function(link) {
 #' the individual products \(thought it can be used in other instances\). Often,
 #' there are timeout issues. This is an attempt to try to work around that.
 #' @param link URL to download
+#' @param p dplyr progress bar object
 #' @keywords internal
-get_url_contents <- function(link) {
-    # Try to establish connection three times with timeout of 3 seconds
-    max_attempts <- getOption("rrricanes.http_attempts")
-    if (max_attempts > 5) max_attempts <- 5
-    for (i in seq(1, max_attempts)) {
-        if (i > 1) {
-            sleep <- as.integer(getOption("rrricanes.http_sleep"))
-            Sys.sleep(sleep)
-            if (getOption("rrricanes.working_msg") == TRUE)
-                message(sprintf("Waiting %s seconds to retry URL.", sleep))
-        }
-        safe_GET <- purrr::safely(httr::GET)
-        contents <- safe_GET(url = link,
-                             httr::timeout(getOption("rrricanes.http_timeout")))
-        if (!is.null(contents$result))
-            return(xml2::read_html(x = contents$result))
-    }
-    stop(contents$error$message, call. = TRUE)
+get_url_contents <- function(links, p) {
+  p$pause(0.5)$tick()$print()
+  links <- crul::Async$new(urls = links)
+  res <- links$get()
+  # Check status codes
+  if (purrr::map(res, ~.$status_code) %>% purrr::flatten_dbl() %>% unique() != 200)
+    warning("Bad status codes.")
+  return(res)
 }
 
 #' @title get_nhc_link

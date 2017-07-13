@@ -25,7 +25,7 @@ There are two basins which data is available: north Atlantic ("AL") and northeas
 By default, `get_storms` will return all storms that have developed for the current year in both basins. If no storms have developed, an error will be generated. For this example, we'll use 2012.
 
 ```{r get.storms, eval = FALSE}
-al.2012 <- get_storms(year = 2012, basin = "AL")
+al.2012 <- get_storms(years = 2012, basins = "AL")
 ```
 
 ## Getting Storm Data

@@ -19,5 +19,5 @@ test_that("Test get_posest()", {
     skip_on_cran()
     al2008 <- get_storms(year = 2008, basin = "AL") %>% dplyr::select(Link)
     df.al092008.posest <- al2008 %>% dplyr::slice(9) %>% .$Link %>% get_posest()
-    expect_identical(al092008.posest, df.al092008.posest)
+    expect_equal(al092008.posest, df.al092008.posest)
 })

@@ -23,64 +23,47 @@ create_df_posest <- function() {
 #'   \item{Date}{Date of advisory issuance}
 #'   \item{Contents}{Text content of product}
 #' }
-#' @param link URL to storm's archive page.
+#' @param links URL to storm's archive page.
 #' @seealso \code{\link{get_storms}}, \code{\link{posest}}
 #' @export
-get_posest <- function(link) {
-
-    products <- purrr::map(link, get_products) %>% purrr::flatten_chr()
-
-    products <- filter_posest(products)
-
-    # Set progress bar
-    p <- dplyr::progress_estimated(n = length(products))
-
-    products.posest <- purrr::map(products, posest, p)
-
-    posest <- purrr::map_df(products.posest, dplyr::bind_rows)
-
-    return(posest)
-
+get_posest <- function(links) {
+  df <- get_storm_data(links, products = "posest")
+  return(df$posest)
 }
 
 #' @title posest
 #' @description Extrapolate data from Position Estimate products.
 #' @details Given a direct link to a position estimate product, parse and return
 #' dataframe of values.
-#' @param link URL of a specific position estimate product
-#' @param p dplyr::progress_estimate.
+#' @param contents URL of a specific position estimate product
 #' @return Dataframe
 #' @seealso \code{\link{get_posest}}
 #' @keywords internal
-posest <- function(link, p = dplyr::progress_estimated(n = 1)) {
+posest <- function(contents) {
 
-    p$pause(0.5)$tick()$print()
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
 
-    contents <- scrape_contents(link)
+  # Make sure this is a public advisory product
+  if (!any(stringr::str_count(contents,
+                              c("MIATCE", "MEATIEST", "WTNT"))))
+    stop(sprintf("Invalid Position Estimate link. %s", link))
 
-    # Replace all carriage returns with empty string.
-    contents <- stringr::str_replace_all(contents, "\r", "")
+  df <- create_df_posest()
 
-    # Make sure this is a public advisory product
-    if (!any(stringr::str_count(contents,
-                                c("MIATCE", "MEATIEST", "WTNT"))))
-        stop(sprintf("Invalid Position Estimate link. %s", link))
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  date <- scrape_header(contents, ret = "date")
 
-    df <- create_df_posest()
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Position Estimate #%s (%s)",
+                    status, name, date))
 
-    status <- scrape_header(contents, ret = "status")
-    name <- scrape_header(contents, ret = "name")
-    date <- scrape_header(contents, ret = "date")
+  df <- df %>%
+    tibble::add_row("Status" = status,
+                    "Name" = name,
+                    "Date" = date,
+                    "Contents" = contents)
 
-    if (getOption("rrricanes.working_msg"))
-        message(sprintf("Working %s %s Position Estimate #%s (%s)",
-                        status, name, date))
-
-    df <- df %>%
-        tibble::add_row("Status" = status,
-                        "Name" = name,
-                        "Date" = date,
-                        "Contents" = contents)
-
-    return(df)
+  return(df)
 }

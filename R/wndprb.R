@@ -73,148 +73,129 @@ ep_prblty_stations <- function() {
 #'   \item{Wind120}{Probability of sustained `Wind` within 120 hours}
 #'   \item{Wind120Cum}{Cumulative probability through 120 hours}
 #' }
-#' @param link URL to storm's archive page.
+#' @param links URL to storm's archive page.
 #' @source \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 #' @export
-get_wndprb <- function(link) {
-
-    # Get all products for the current storm
-    products <- purrr::map(link, get_products) %>% purrr::flatten_chr()
-
-    # Filter out wndprb products
-    products <- filter_wndprb(products)
-
-    # Set progress bar
-    p <- dplyr::progress_estimated(n = length(products))
-
-    products.wndprb <- purrr::map(products, wndprb, p)
-
-    wndprb <- purrr::map_df(products.wndprb, dplyr::bind_rows)
-
-    return(wndprb)
+get_wndprb <- function(links) {
+  df <- get_storm_data(links, products = "wndprb")
+  return(df$wndprb)
 }
 
 #' @title wndprb
 #' @description Parse wind probability products
 #' @details Given a direct link to a wind probability product, parse and return
 #' dataframe of values.
-#' @param link Link to a storm's specific wind probability product.
-#' @param p dplyr::progress_estimate.
+#' @param contents Link to a storm's specific wind probability product.
 #' @keywords internal
-wndprb <- function(link, p = dplyr::progress_estimated(n = 1)) {
+wndprb <- function(contents) {
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
 
-    p$pause(0.5)$tick()$print()
+  # Make sure this is a wndprb advisory product
+  if (!any(stringr::str_count(contents, c("MIAPWS", "PWS"))))
+    stop(sprintf("Invalid Wind Probability link. %s", link))
 
-    contents <- scrape_contents(link)
+  status <- scrape_header(contents, ret = "status")
+  key <- scrape_header(contents, ret = "key")
+  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
+  date <- scrape_header(contents, ret = "date")
+  name <- scrape_header(contents, ret = "name")
 
-    # Replace all carriage returns with empty string.
-    contents <- stringr::str_replace_all(contents, "\r", "")
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
+                    status, name, adv, date))
 
-    # Make sure this is a wndprb advisory product
-    if (!any(stringr::str_count(contents, c("MIAPWS", "PWS"))))
-        stop(sprintf("Invalid Wind Probability link. %s", link))
+  ptn <- paste0("(?<=\n)", # Look-behind
+                # Location - first value must be capital letter.
+                "([:upper:]{1}[[:alnum:][:blank:][:punct:]]{14})",
+                # Wind
+                "([[:digit:]]{2})",
+                # Wind12
+                "[:blank:]+([:digit:]{1,2}|X)",
+                # Delim
+                "[:blank:]+",
+                # Wind24
+                "([:digit:]{1,2}|X)",
+                # Wind24 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # Delim
+                "[:blank:]+",
+                # Wind36
+                "([:digit:]{1,2}|X)",
+                # Wind36 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # Delim
+                "[:blank:]+",
+                # Wind48
+                "([:digit:]{1,2}|X)",
+                # Wind48 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # Delim
+                "[:blank:]+",
+                # Wind72
+                "([:digit:]{1,2}|X)",
+                # Wind72 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # Delim
+                "[:blank:]+",
+                # Wind96
+                "([:digit:]{1,2}|X)",
+                # Wind96 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # Delim
+                "[:blank:]+",
+                # Wind120
+                "([:digit:]{1,2}|X)",
+                # Wind120 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # End
+                "[[:blank:]\n]+")
 
-    status <- scrape_header(contents, ret = "status")
-    key <- scrape_header(contents, ret = "key")
-    adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
-    date <- scrape_header(contents, ret = "date")
-    name <- scrape_header(contents, ret = "name")
+  matches <- stringr::str_match_all(contents, pattern = ptn)
 
-    if (getOption("rrricanes.working_msg"))
-        message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
-                        status, name, adv, date))
+  # Load matches into dataframe
+  wndprb <- tibble::as_data_frame(matches[[1]][,2:16])
 
-    ptn <- paste0("(?<=\n)", # Look-behind
-                  # Location - first value must be capital letter.
-                  "([:upper:]{1}[[:alnum:][:blank:][:punct:]]{14})",
-                  # Wind
-                  "([[:digit:]]{2})",
-                  # Wind12
-                  "[:blank:]+([:digit:]{1,2}|X)",
-                  # Delim
-                  "[:blank:]+",
-                  # Wind24
-                  "([:digit:]{1,2}|X)",
-                  # Wind24 cumulative
-                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                  # Delim
-                  "[:blank:]+",
-                  # Wind36
-                  "([:digit:]{1,2}|X)",
-                  # Wind36 cumulative
-                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                  # Delim
-                  "[:blank:]+",
-                  # Wind48
-                  "([:digit:]{1,2}|X)",
-                  # Wind48 cumulative
-                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                  # Delim
-                  "[:blank:]+",
-                  # Wind72
-                  "([:digit:]{1,2}|X)",
-                  # Wind72 cumulative
-                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                  # Delim
-                  "[:blank:]+",
-                  # Wind96
-                  "([:digit:]{1,2}|X)",
-                  # Wind96 cumulative
-                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                  # Delim
-                  "[:blank:]+",
-                  # Wind120
-                  "([:digit:]{1,2}|X)",
-                  # Wind120 cumulative
-                  "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                  # End
-                  "[[:blank:]\n]+")
+  # If only one row, need to transpose wndprb
+  if (ncol(wndprb) == 1)
+    wndprb <- wndprb %>% t() %>% tibble::as_data_frame()
 
-    matches <- stringr::str_match_all(contents, pattern = ptn)
+  # If no wnd speed probabilities, return NULL
+  if (nrow(wndprb) == 0)
+    return(NULL)
 
-    # Load matches into dataframe
-    wndprb <- tibble::as_data_frame(matches[[1]][,2:16])
+  # Rename variables
+  names(wndprb) <- c("Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
+                     "Wind36", "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
+                     "Wind72Cum", "Wind96", "Wind96Cum", "Wind120",
+                     "Wind120Cum")
 
-    # If only one row, need to transpose wndprb
-    if (ncol(wndprb) == 1)
-        wndprb <- wndprb %>% t() %>% tibble::as_data_frame()
+  # Trim whitespace
+  wndprb <- purrr::map_df(.x = wndprb, .f = stringr::str_trim)
 
-    # If no wnd speed probabilities, return NULL
-    if (nrow(wndprb) == 0)
-        return(NULL)
+  # Make "X" values 0
+  wndprb[wndprb == "X"] <- 0
 
-    # Rename variables
-    names(wndprb) <- c("Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
-                       "Wind36", "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
-                       "Wind72Cum", "Wind96", "Wind96Cum", "Wind120",
-                       "Wind120Cum")
+  # Make Wind:Wind120Cum numeric
+  # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
+  # accomodate usage of both 0.5.0 and >= 0.6.0.
+  if (packageVersion("dplyr") > "0.5.0") {
+    wndprb <- dplyr::mutate_at(.tbl = wndprb,
+                               .vars = c(2:15),
+                               .funs = "as.numeric")
+  } else {
+    wndprb <- dplyr::mutate_at(.tbl = wndprb,
+                               .cols = c(2:15),
+                               .funs = "as.numeric")
+  }
 
-    # Trim whitespace
-    wndprb <- purrr::map_df(.x = wndprb, .f = stringr::str_trim)
+  # Add Key, Adv, Date and rearrange.
+  wndprb <- wndprb %>%
+    dplyr::mutate("Key" = key,
+                  "Adv" = adv,
+                  "Date" = date) %>%
+    dplyr::select_("Key:Date", "Location:Wind120Cum") %>%
+    dplyr::arrange_("Key", "Date", "Adv")
 
-    # Make "X" values 0
-    wndprb[wndprb == "X"] <- 0
-
-    # Make Wind:Wind120Cum numeric
-    # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
-    # accomodate usage of both 0.5.0 and >= 0.6.0.
-    if (packageVersion("dplyr") > "0.5.0") {
-        wndprb <- dplyr::mutate_at(.tbl = wndprb,
-                                   .vars = c(2:15),
-                                   .funs = "as.numeric")
-    } else {
-        wndprb <- dplyr::mutate_at(.tbl = wndprb,
-                                   .cols = c(2:15),
-                                   .funs = "as.numeric")
-    }
-
-    # Add Key, Adv, Date and rearrange.
-    wndprb <- wndprb %>%
-        dplyr::mutate("Key" = key,
-               "Adv" = adv,
-               "Date" = date) %>%
-        dplyr::select_("Key:Date", "Location:Wind120Cum") %>%
-        dplyr::arrange_("Key", "Date", "Adv")
-
-    return(wndprb)
+  return(wndprb)
 }

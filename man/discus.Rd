@@ -4,12 +4,10 @@
 \alias{discus}
 \title{discus}
 \usage{
-discus(link, p = dplyr::progress_estimated(n = 1))
+discus(contents)
 }
 \arguments{
-\item{link}{Link to a storm's specific discussion product.}
-
-\item{p}{dplyr::progress_estimate.}
+\item{contents}{Link to a storm's specific discussion product.}
 }
 \value{
 Dataframe

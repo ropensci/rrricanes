@@ -23,71 +23,55 @@ create_df_update <- function() {
 #'   \item{Key}{Unique ID of cyclone}
 #'   \item{Contents}{Text content of product}
 #' }
-#' @param link URL to storm's archive page.
+#' @param links URL to storm's archive page.
 #' @seealso \code{\link{get_storms}}, \code{\link{update}}
 #' @export
-get_update <- function(link) {
-
-    products <- purrr::map(link, get_products) %>% purrr::flatten_chr()
-
-    products <- filter_update(products)
-
-    # Set progress bar
-    p <- dplyr::progress_estimated(n = length(products))
-
-    products.update <- purrr::map(products, update, p)
-
-    update <- purrr::map_df(products.update, dplyr::bind_rows)
-
-    return(update)
+get_update <- function(links) {
+  df <- get_storm_data(links, products = "update")
+  return(df$update)
 }
 
 #' @title update
 #' @description Parse cyclone update products
 #' @details Given a direct link to a cyclone update product, parse and return
 #' dataframe of values.
-#' @param link Link to a storm's specific update advisory product.
-#' @param p dplyr::progress_estimate.
+#' @param contents Link to a storm's specific update advisory product.
 #' @return Dataframe
 #' @seealso \code{\link{get_update}}
 #' @keywords internal
-update <- function(link, p = dplyr::progress_estimated(n = 1)) {
+update <- function(contents) {
 
-    p$pause(0.5)$tick()$print()
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
 
-    contents <- scrape_contents(link)
+  # Make sure this is a update advisory product
+  if (!any(stringr::str_count(contents, c("MIATCU", "TCU", "WTNT"))))
+    stop(sprintf("Invalid Cyclone Update link. %s", link))
 
-    # Replace all carriage returns with empty string.
-    contents <- stringr::str_replace_all(contents, "\r", "")
+  df <- create_df_update()
 
-    # Make sure this is a update advisory product
-    if (!any(stringr::str_count(contents, c("MIATCU", "TCU", "WTNT"))))
-        stop(sprintf("Invalid Cyclone Update link. %s", link))
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  date <- scrape_header(contents, ret = "date")
 
-    df <- create_df_update()
+  safely_scrape_header <- purrr::safely(scrape_header)
+  key <- safely_scrape_header(contents, ret = "key")
+  if (is.null(key$error)) {
+    key <- key$result
+  } else {
+    key <- NA
+  }
 
-    status <- scrape_header(contents, ret = "status")
-    name <- scrape_header(contents, ret = "name")
-    date <- scrape_header(contents, ret = "date")
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Update #%s (%s)",
+                    status, name, date))
 
-    safely_scrape_header <- purrr::safely(scrape_header)
-    key <- safely_scrape_header(contents, ret = "key")
-    if (is.null(key$error)) {
-        key <- key$result
-    } else {
-        key <- NA
-    }
+  df <- df %>%
+    tibble::add_row("Status" = status,
+                    "Name" = name,
+                    "Date" = date,
+                    "Key" = key,
+                    "Contents" = contents)
 
-    if (getOption("rrricanes.working_msg"))
-        message(sprintf("Working %s %s Update #%s (%s)",
-                        status, name, date))
-
-    df <- df %>%
-        tibble::add_row("Status" = status,
-                        "Name" = name,
-                        "Date" = date,
-                        "Key" = key,
-                        "Contents" = contents)
-
-    return(df)
+  return(df)
 }

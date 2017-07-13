@@ -4,12 +4,10 @@
 \alias{public}
 \title{public}
 \usage{
-public(link, p = dplyr::progress_estimated(n = 1))
+public(contents)
 }
 \arguments{
-\item{link}{Link to a storm's specific public advisory product.}
-
-\item{p}{dplyr::progress_estimate.}
+\item{contents}{Link to a storm's specific public advisory product.}
 }
 \value{
 Dataframe

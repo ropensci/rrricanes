@@ -126,7 +126,7 @@ create_df_fstadv <- function() {
 
 #' @title get_fstadv
 #' @description Return dataframe of forecast/advisory data.
-#' @param link URL to storms' archive page.
+#' @param links URL to storms' archive page.
 #' @details Returns a wide dataframe of most the data available in a cyclones
 #' forecast/advisory product (watches and warnings are not included at this
 #' time).
@@ -204,104 +204,83 @@ create_df_fstadv <- function() {
 #' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html")
 #' }
 #' @export
-get_fstadv <- function(link) {
-
-    # Get all products for the current storm
-    products <- purrr::map(link, get_products) %>% purrr::flatten_chr()
-
-    # Filter out fstadv products
-    products <- filter_fstadv(products)
-
-    # Set progress bar
-    p <- dplyr::progress_estimated(n = length(products))
-
-    # Work products
-    products.fstadv <- purrr::map(products, fstadv, p)
-
-    # Build final dataframe
-    df <- purrr::map_df(products.fstadv, dplyr::bind_rows)
-
-    return(df)
-
+get_fstadv <- function(links) {
+  df <- get_storm_data(links, products = "fstadv")
+  return(df$fstadv)
 }
 
 #' @title fstadv
 #' @description Extrapolate data from FORECAST/ADVISORY products.
 #' @details Given a direct link to a forecast/advisory product, parse and
 #' return dataframe of values.
-#' @param link URL of a specific FORECAST/ADVISORY product
-#' @param p dplyr::progress_estimate.
+#' @param contents URL of a specific FORECAST/ADVISORY product
 #' @keywords internal
-fstadv <- function(link, p = dplyr::progress_estimated(n = 1)) {
+fstadv <- function(contents) {
 
-    p$pause(0.5)$tick()$print()
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
 
-    contents <- scrape_contents(link)
+  # Make sure this is a public advisory product
+  if (!any(stringr::str_count(contents,
+                              c("MIATCM", "[W]*TPA", "TCMAT", "WTPZ",
+                                "HFOTCMEP", "HFOTCMCP"))))
+    stop(sprintf("Invalid Forecast/Advisory link. %s", link))
 
-    # Replace all carriage returns with empty string.
-    contents <- stringr::str_replace_all(contents, "\r", "")
+  df <- create_df_fstadv()
 
-    # Make sure this is a public advisory product
-    if (!any(stringr::str_count(contents,
-                                c("MIATCM", "[W]*TPA", "TCMAT", "WTPZ",
-                                  "HFOTCMEP", "HFOTCMCP"))))
-        stop(sprintf("Invalid Forecast/Advisory link. %s", link))
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
+  date <- scrape_header(contents, ret = "date")
 
-    df <- create_df_fstadv()
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Forecast/Advisory #%s (%s)",
+                    status, name, adv, date))
 
-    status <- scrape_header(contents, ret = "status")
-    name <- scrape_header(contents, ret = "name")
-    adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
-    date <- scrape_header(contents, ret = "date")
+  key <- scrape_header(contents, ret = "key")
+  lat <- fstadv_lat(contents)
+  lon <- fstadv_lon(contents)
+  posacc <- fstadv_pos_accuracy(contents)
+  fwd_dir <- fstadv_fwd_dir(contents)
+  fwd_speed <- fstadv_fwd_speed(contents)
+  pressure <- fstadv_pressure(contents)
+  eye <- fstadv_eye(contents)
+  wind <- fstadv_winds(contents)
+  gust <- fstadv_gusts(contents)
 
-    if (getOption("rrricanes.working_msg"))
-        message(sprintf("Working %s %s Forecast/Advisory #%s (%s)",
-                        status, name, adv, date))
+  df <- df %>%
+    tibble::add_row("Status" = status, "Name" = name, "Adv" = adv,
+                    "Date" = date, "Key" = key, "Lat" = lat,
+                    "Lon" = lon, "Wind" = wind, "Gust" = gust,
+                    "Pressure" = pressure, "PosAcc" = posacc,
+                    "FwdDir" = fwd_dir, "FwdSpeed" = fwd_speed,
+                    "Eye" = eye)
 
-    key <- scrape_header(contents, ret = "key")
-    lat <- fstadv_lat(contents)
-    lon <- fstadv_lon(contents)
-    posacc <- fstadv_pos_accuracy(contents)
-    fwd_dir <- fstadv_fwd_dir(contents)
-    fwd_speed <- fstadv_fwd_speed(contents)
-    pressure <- fstadv_pressure(contents)
-    eye <- fstadv_eye(contents)
-    wind <- fstadv_winds(contents)
-    gust <- fstadv_gusts(contents)
+  # Add current wind radius
+  wind_radius <- fstadv_wind_radius(contents, wind)
 
-    df <- df %>%
-        tibble::add_row("Status" = status, "Name" = name, "Adv" = adv,
-                        "Date" = date, "Key" = key, "Lat" = lat,
-                        "Lon" = lon, "Wind" = wind, "Gust" = gust,
-                        "Pressure" = pressure, "PosAcc" = posacc,
-                        "FwdDir" = fwd_dir, "FwdSpeed" = fwd_speed,
-                        "Eye" = eye)
+  df[, names(wind_radius)] <- wind_radius[, names(wind_radius)]
 
-    # Add current wind radius
-    wind_radius <- fstadv_wind_radius(contents, wind)
+  # Add current sea radius
+  seas <- fstadv_seas(contents, wind)
+  # AL161999 has two rows of Seas data for advisory 5. The second row is
+  # within the forecast area where typically does not exist. Assumption is a
+  # typo. Would like to save this into attributes or something...
+  if (all(!is.null(seas), nrow(seas) > 1)) {
+    warning(sprintf("Too many rows of sea data for %s %s #%s.\n%s",
+                    status, name, adv, seas[2:nrow(seas),]),
+            call. = FALSE)
+    seas <- seas[1,]
+  }
 
-    df[, names(wind_radius)] <- wind_radius[, names(wind_radius)]
+  df[, names(seas)] <- seas[, names(seas)]
 
-    # Add current sea radius
-    seas <- fstadv_seas(contents, wind)
-    # AL161999 has two rows of Seas data for advisory 5. The second row is
-    # within the forecast area where typically does not exist. Assumption is a
-    # typo. Would like to save this into attributes or something...
-    if (all(!is.null(seas), nrow(seas) > 1)) {
-        warning(sprintf("Too many rows of sea data for %s %s #%s.\n%s",
-                        status, name, adv, seas[2:nrow(seas),]),
-                call. = FALSE)
-        seas <- seas[1,]
-    }
+  # Add forecast positions and wind radii
+  forecasts <- fstadv_forecasts(contents, date)
 
-    df[, names(seas)] <- seas[, names(seas)]
+  df[, names(forecasts)] <- forecasts[, names(forecasts)]
 
-    # Add forecast positions and wind radii
-    forecasts <- fstadv_forecasts(contents, date)
-
-    df[, names(forecasts)] <- forecasts[, names(forecasts)]
-
-    return(df)
+  return(df)
 }
 
 #' @title fstadv_eye

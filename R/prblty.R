@@ -14,114 +14,93 @@
 #'   \item{D}{Probability of a strike between 36 and 48 hours}
 #'   \item{E}{Probability of a strike between 48 and 72 hours}
 #' }
-#' @param link URL to storm's archive page.
+#' @param links URL to storm's archive page.
 #' @export
-get_prblty <- function(link) {
-
-    # Get all products for the current storm
-    products <- purrr::map(link, get_products) %>% purrr::flatten_chr()
-
-    # Filter out prblty products
-    products <- filter_prblty(products)
-
-    # Set progress bar
-    p <- dplyr::progress_estimated(n = length(products))
-
-    # Work products
-    products.prblty <- purrr::map(products, prblty, p)
-
-    prblty <- purrr::map_df(products.prblty, dplyr::bind_rows)
-
-    return(prblty)
+get_prblty <- function(links) {
+  df <- get_storm_data(links, products = "prblty")
+  return(df$prblty)
 }
 
 #' @title prblty
 #' @description Parse strike probability products
 #' @details Given a direct link to a strike probability advisory product, parse
 #' and return dataframe of values.
-#' @param link Link to a storm's specific strike probability advisory product.
-#' @param p dplyr::progress_estimate.
+#' @param contents Link to a storm's specific strike probability advisory product.
 #' @return Dataframe
 #' @seealso \code{\link{get_prblty}}
 #' @keywords internal
-prblty <- function(link, p = dplyr::progress_estimated(n = 1)) {
+prblty <- function(contents) {
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
 
-    p$pause(0.5)$tick()$print()
+  # Make sure this is a strike probability product
+  if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP", "SPFAT",
+                                          "MIAWRKSP"))))
+    stop(sprintf("Invalid Strike Probability link. %s", link))
 
-    contents <- scrape_contents(link)
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  adv <- scrape_header(contents, ret = "adv")
+  date <- scrape_header(contents, ret = "date")
 
-    # Replace all carriage returns with empty string.
-    contents <- stringr::str_replace_all(contents, "\r", "")
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Strike Probability #%s (%s)",
+                    status, name, adv, date))
 
-    # Make sure this is a strike probability product
-    if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP", "SPFAT",
-                                            "MIAWRKSP"))))
-        stop(sprintf("Invalid Strike Probability link. %s", link))
+  # 15.0N  43.4W      43  1  X  X 44   16.8N  48.2W       X  4 16  2 22
+  # 15.8N  45.9W       1 26  1  X 28
 
-    status <- scrape_header(contents, ret = "status")
-    name <- scrape_header(contents, ret = "name")
-    adv <- scrape_header(contents, ret = "adv")
-    date <- scrape_header(contents, ret = "date")
+  ptn <- paste0("(?<=[:blank:]{3}|\n)",
+                "([[:alpha:][:digit:][:punct:][:blank:]]{17})",   # Location
+                "[:blank:]+",                                     # Delimiter
+                "([:digit:]{1,2}|X)",                             # A
+                "[:blank:]+",                                     # Delimiter
+                "([:digit:]{1,2}|X)",                             # B
+                "[:blank:]+",                                     # Delimiter
+                "([:digit:]{1,2}|X)",                             # C
+                "[:blank:]+",                                     # Delimiter
+                "([:digit:]{1,2}|X)",                             # D
+                "[:blank:]+",                                     # Delimiter
+                "([:digit:]{1,2}|X)")                             # E
 
-    if (getOption("rrricanes.working_msg"))
-        message(sprintf("Working %s %s Strike Probability #%s (%s)",
-                        status, name, adv, date))
+  matches <- stringr::str_match_all(contents, ptn)
 
-    # 15.0N  43.4W      43  1  X  X 44   16.8N  48.2W       X  4 16  2 22
-    # 15.8N  45.9W       1 26  1  X 28
+  prblty <- tibble::as_data_frame(matches[[1]])
 
-    ptn <- paste0("(?<=[:blank:]{3}|\n)",
-                  "([[:alpha:][:digit:][:punct:][:blank:]]{17})",   # Location
-                  "[:blank:]+",                                     # Delimiter
-                  "([:digit:]{1,2}|X)",                             # A
-                  "[:blank:]+",                                     # Delimiter
-                  "([:digit:]{1,2}|X)",                             # B
-                  "[:blank:]+",                                     # Delimiter
-                  "([:digit:]{1,2}|X)",                             # C
-                  "[:blank:]+",                                     # Delimiter
-                  "([:digit:]{1,2}|X)",                             # D
-                  "[:blank:]+",                                     # Delimiter
-                  "([:digit:]{1,2}|X)")                             # E
+  names(prblty) <- c("Del", "Location", "A", "B", "C", "D", "E")
 
-    matches <- stringr::str_match_all(contents, ptn)
+  prblty$Del <- NULL
 
-    prblty <- tibble::as_data_frame(matches[[1]])
+  # Trim whitespace
+  prblty <- purrr::map_df(.x = prblty, .f = stringr::str_trim)
 
-    names(prblty) <- c("Del", "Location", "A", "B", "C", "D", "E")
+  # If no strike probabilities, return NULL
+  if (nrow(prblty) == 0)
+    return(NULL)
 
-    prblty$Del <- NULL
+  # Many values will have "X" for less than 1% chance. Make 0
+  prblty[prblty == "X"] <- 0
 
-    # Trim whitespace
-    prblty <- purrr::map_df(.x = prblty, .f = stringr::str_trim)
+  # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
+  # accomodate usage of both 0.5.0 and >= 0.6.0.
+  if (packageVersion("dplyr") > "0.5.0") {
+    prblty <- dplyr::mutate_at(.tbl = prblty,
+                               .vars = c(2:6),
+                               .funs = "as.numeric")
+  } else {
+    prblty <- dplyr::mutate_at(.tbl = prblty,
+                               .cols = c(2:6),
+                               .funs = "as.numeric")
+  }
 
-    # If no strike probabilities, return NULL
-    if (nrow(prblty) == 0)
-        return(NULL)
+  prblty <- prblty %>%
+    dplyr::mutate("Status" = status,
+                  "Name" = name,
+                  "Adv" = adv,
+                  "Date" = date) %>%
+    dplyr::select_("Status", "Name", "Adv", "Date", "Location", "A", "B",
+                   "C", "D", "E") %>%
+    dplyr::arrange_("Date", "Adv")
 
-    # Many values will have "X" for less than 1% chance. Make 0
-    prblty[prblty == "X"] <- 0
-
-    # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
-    # accomodate usage of both 0.5.0 and >= 0.6.0.
-    if (packageVersion("dplyr") > "0.5.0") {
-        prblty <- dplyr::mutate_at(.tbl = prblty,
-                                   .vars = c(2:6),
-                                   .funs = "as.numeric")
-    } else {
-        prblty <- dplyr::mutate_at(.tbl = prblty,
-                                   .cols = c(2:6),
-                                   .funs = "as.numeric")
-    }
-
-    prblty <- prblty %>%
-        dplyr::mutate("Status" = status,
-                      "Name" = name,
-                      "Adv" = adv,
-                      "Date" = date) %>%
-        dplyr::select_("Status", "Name", "Adv", "Date", "Location", "A", "B",
-                       "C", "D", "E") %>%
-        dplyr::arrange_("Date", "Adv")
-
-    return(prblty)
-
+  return(prblty)
 }

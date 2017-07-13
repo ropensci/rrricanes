@@ -13,27 +13,6 @@ scrape_adv_num <- function(header) {
     return(adv)
 }
 
-#' @title scrape_contents
-#' @description Extract text product from HTML
-#' @param link URL to product page
-#' @return Contents of product
-#' @keywords internal
-scrape_contents <- function(link) {
-
-    if (length(link) == 0)
-        stop("No valid links.")
-
-    contents <- get_url_contents(link) %>%
-        rvest::html_nodes(xpath = "//pre") %>%
-        rvest::html_text()
-
-    if (purrr::is_empty(contents))
-        contents <- get_url_contents(link) %>% rvest::html_text()
-
-    return(contents)
-
-}
-
 #' @title scrape_date
 #' @description Scrape date/time of product issuance from header.
 #' @param header Header text of product.

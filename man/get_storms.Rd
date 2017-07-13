@@ -16,12 +16,12 @@ To disable the progress bar set option dplyr.show_progress to FALSE.}
 \url{http://www.nhc.noaa.gov/archive/2016/}
 }
 \usage{
-get_storms(year = format(Sys.Date(), "\%Y"), basin = c("AL", "EP"))
+get_storms(years = format(Sys.Date(), "\%Y"), basins = c("AL", "EP"))
 }
 \arguments{
-\item{year}{numeric or vector, four digits (\%Y format)}
+\item{years}{numeric or vector, four digits (\%Y format)}
 
-\item{basin}{One or both of c("AL", "EP")}
+\item{basins}{One or both of c("AL", "EP")}
 }
 \value{
 Dataframe of storms.

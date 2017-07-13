@@ -4,10 +4,10 @@
 \alias{get_fstadv}
 \title{get_fstadv}
 \usage{
-get_fstadv(link)
+get_fstadv(links)
 }
 \arguments{
-\item{link}{URL to storms' archive page.}
+\item{links}{URL to storms' archive page.}
 }
 \description{
 Return dataframe of forecast/advisory data.

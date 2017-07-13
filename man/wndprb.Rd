@@ -4,12 +4,10 @@
 \alias{wndprb}
 \title{wndprb}
 \usage{
-wndprb(link, p = dplyr::progress_estimated(n = 1))
+wndprb(contents)
 }
 \arguments{
-\item{link}{Link to a storm's specific wind probability product.}
-
-\item{p}{dplyr::progress_estimate.}
+\item{contents}{Link to a storm's specific wind probability product.}
 }
 \description{
 Parse wind probability products

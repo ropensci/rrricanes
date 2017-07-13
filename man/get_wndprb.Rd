@@ -7,10 +7,10 @@
 \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 }
 \usage{
-get_wndprb(link)
+get_wndprb(links)
 }
 \arguments{
-\item{link}{URL to storm's archive page.}
+\item{links}{URL to storm's archive page.}
 }
 \description{
 Return dataframe of wind speed probability data.

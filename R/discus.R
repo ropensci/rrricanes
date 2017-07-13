@@ -27,7 +27,7 @@ create_df_discus <- function() {
 #'   \item{Key}{ID of cyclone}
 #'   \item{Contents}{Text content of product}
 #' }
-#' @param link URL to storm's archive page.
+#' @param links URL to storm's archive page.
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @examples
 #' \dontrun{
@@ -35,79 +35,62 @@ create_df_discus <- function() {
 #' get_discus("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html")
 #' }
 #' @export
-get_discus <- function(link) {
-
-    products <- purrr::map(link, get_products) %>% purrr::flatten_chr()
-
-    products <- filter_discus(products)
-
-    # Set progress bar
-    p <- dplyr::progress_estimated(n = length(products))
-
-    products.discus <- purrr::map(products, discus, p)
-
-    discus <- purrr::map_df(products.discus, dplyr::bind_rows)
-
-    return(discus)
-
+get_discus <- function(links) {
+  df <- get_storm_data(links, products = "discus")
+  return(df$discus)
 }
 
 #' @title discus
 #' @description Parse storm Discussion products
 #' @details Given a direct link to a discussion product, parse and return
 #' dataframe of values.
-#' @param link Link to a storm's specific discussion product.
-#' @param p dplyr::progress_estimate.
+#' @param contents Link to a storm's specific discussion product.
 #' @return Dataframe
 #' @seealso \code{\link{get_discus}}
 #' @keywords internal
-discus <- function(link, p = dplyr::progress_estimated(n = 1)) {
+discus <- function(contents) {
 
-    p$pause(0.5)$tick()$print()
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
 
-    contents <- scrape_contents(link)
+  # Make sure this is a discussion product
+  if (!any(stringr::str_count(contents,
+                              c("MIATCD", "MIATCM", "TCD", "WTPA", "WTPZ",
+                                "MIAWRKAD1")))) {
+    # Check if the term "DISCUSSION" appears in header
+    if (!stringr::str_detect(scrape_header(contents), "DISCUSSION"))
+      stop(sprintf("Invalid Discussion link. %s", link))
+  }
 
-    # Replace all carriage returns with empty string.
-    contents <- stringr::str_replace_all(contents, "\r", "")
+  df <- create_df_discus()
 
-    # Make sure this is a discussion product
-    if (!any(stringr::str_count(contents,
-                                c("MIATCD", "MIATCM", "TCD", "WTPA", "WTPZ",
-                                  "MIAWRKAD1")))) {
-        # Check if the term "DISCUSSION" appears in header
-        if (!stringr::str_detect(scrape_header(contents), "DISCUSSION"))
-            stop(sprintf("Invalid Discussion link. %s", link))
-    }
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
+  date <- scrape_header(contents, ret = "date")
 
-    df <- create_df_discus()
+  # Keys were added to discus products beginning 2006. Prior, it doesn't
+  # exist. safely run scrape_header for key. If error, then use NA. Otherwise,
+  # add it.
+  safely_scrape_header <- purrr::safely(scrape_header)
+  key <- safely_scrape_header(contents, ret = "key")
+  if (is.null(key$error)) {
+    key <- key$result
+  } else {
+    key <- NA
+  }
 
-    status <- scrape_header(contents, ret = "status")
-    name <- scrape_header(contents, ret = "name")
-    adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
-    date <- scrape_header(contents, ret = "date")
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Storm Discussion #%s (%s)",
+                    status, name, adv, date))
 
-    # Keys were added to discus products beginning 2006. Prior, it doesn't
-    # exist. safely run scrape_header for key. If error, then use NA. Otherwise,
-    # add it.
-    safely_scrape_header <- purrr::safely(scrape_header)
-    key <- safely_scrape_header(contents, ret = "key")
-    if (is.null(key$error)) {
-        key <- key$result
-    } else {
-        key <- NA
-    }
+  df <- df %>%
+    tibble::add_row("Status" = status,
+                    "Name" = name,
+                    "Adv" = adv,
+                    "Date" = date,
+                    "Key" = key,
+                    "Contents" = contents)
 
-    if (getOption("rrricanes.working_msg"))
-        message(sprintf("Working %s %s Storm Discussion #%s (%s)",
-                        status, name, adv, date))
-
-    df <- df %>%
-        tibble::add_row("Status" = status,
-                        "Name" = name,
-                        "Adv" = adv,
-                        "Date" = date,
-                        "Key" = key,
-                        "Contents" = contents)
-
-    return(df)
+  return(df)
 }
