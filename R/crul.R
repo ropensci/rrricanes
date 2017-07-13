@@ -280,19 +280,56 @@ crul_get_storm_data <- function(links,
   product_links <- split(product_links, ceiling(seq_along(product_links)/4))
   # set progress
   p <- dplyr::progress_estimated(length(product_links))
-  res <- purrr::map(product_links, crul_get_url_contents, p) %>% purrr::flatten()
-  res_parsed <- purrr::map(res, ~.$parse("UTF-8"))
+  res <- purrr::map(product_links, crul_get_url_contents, p) %>%
+    purrr::flatten()
+  #res_parsed <- purrr::map(res, ~.$parse("UTF-8"))
+  # res_parsed <- purrr::map(res, ~xml2::read_html(.$content)) %>%
+  #   purrr::map(rvest::html_nodes, xpath = "//pre") %>%
+  #   purrr::map(rvest::html_text)
+  res_parsed <- purrr::map(res, ~xml2::read_html(.$content)) %>%
+    purrr::map(.f = function(x) {
+      txt <- rvest::html_node(x, xpath = "//pre") %>% rvest::html_text()
+      if (is.na(txt)) txt <- rvest::html_text(x)
+    })
 
   list_products <- list(
-    "discus" = purrr::map(res, ~.$url) %>% filter_discus() %>% purrr::map(~(!purrr::is_empty(.))) %>% purrr::flatten_lgl() %>% res_parsed[.],
-    "fstadv" = purrr::map(res, ~.$url) %>% filter_fstadv() %>% purrr::map(~(!purrr::is_empty(.))) %>% purrr::flatten_lgl() %>% res_parsed[.],
-    "posest" = purrr::map(res, ~.$url) %>% filter_posest() %>% purrr::map(~(!purrr::is_empty(.))) %>% purrr::flatten_lgl() %>% res_parsed[.],
-    "prblty" = purrr::map(res, ~.$url) %>% filter_prblty() %>% purrr::map(~(!purrr::is_empty(.))) %>% purrr::flatten_lgl() %>% res_parsed[.],
-    "public" = purrr::map(res, ~.$url) %>% filter_public() %>% purrr::map(~(!purrr::is_empty(.))) %>% purrr::flatten_lgl() %>% res_parsed[.],
-    "update" = purrr::map(res, ~.$url) %>% filter_update() %>% purrr::map(~(!purrr::is_empty(.))) %>% purrr::flatten_lgl() %>% res_parsed[.],
-    "wndprb" = purrr::map(res, ~.$url) %>% filter_wndprb() %>% purrr::map(~(!purrr::is_empty(.))) %>% purrr::flatten_lgl() %>% res_parsed[.])
+    "discus" = purrr::map(res, ~.$url) %>%
+      filter_discus() %>%
+      purrr::map(~(!purrr::is_empty(.))) %>%
+      purrr::flatten_lgl() %>% res_parsed[.],
+    "fstadv" = purrr::map(res, ~.$url) %>%
+      filter_fstadv() %>%
+      purrr::map(~(!purrr::is_empty(.))) %>%
+      purrr::flatten_lgl() %>%
+      res_parsed[.],
+    "posest" = purrr::map(res, ~.$url) %>%
+      filter_posest() %>%
+      purrr::map(~(!purrr::is_empty(.))) %>%
+      purrr::flatten_lgl() %>%
+      res_parsed[.],
+    "prblty" = purrr::map(res, ~.$url) %>%
+      filter_prblty() %>%
+      purrr::map(~(!purrr::is_empty(.))) %>%
+      purrr::flatten_lgl() %>%
+      res_parsed[.],
+    "public" = purrr::map(res, ~.$url) %>%
+      filter_public() %>%
+      purrr::map(~(!purrr::is_empty(.))) %>%
+      purrr::flatten_lgl() %>%
+      res_parsed[.],
+    "update" = purrr::map(res, ~.$url) %>%
+      filter_update() %>%
+      purrr::map(~(!purrr::is_empty(.))) %>%
+      purrr::flatten_lgl() %>%
+      res_parsed[.],
+    "wndprb" = purrr::map(res, ~.$url) %>%
+      filter_wndprb() %>%
+      purrr::map(~(!purrr::is_empty(.))) %>%
+      purrr::flatten_lgl() %>%
+      res_parsed[.])
 
-  empty_list_products <- purrr::map(list_products, ~!purrr::is_empty(.)) %>% purrr::flatten_lgl()
+  empty_list_products <- purrr::map(list_products, ~!purrr::is_empty(.)) %>%
+    purrr::flatten_lgl()
 
   filtered_list_products <- list_products[empty_list_products]
 
@@ -363,7 +400,8 @@ crul_get_url_contents <- function(links, p) {
   links <- crul::Async$new(urls = links)
   res <- links$get()
   # Check status codes
-  #purrr::map(res, ~.$status_code) %>% purrr::flatten_dbl() %>% unique()
+  if (purrr::map(res, ~.$status_code) %>% purrr::flatten_dbl() %>% unique() != 200)
+    warning("Bad status codes.")
   return(res)
 }
 
@@ -373,4 +411,322 @@ crul_get_url_contents <- function(links, p) {
 crul_get_wndprb <- function(links) {
   df <- crul_get_storm_data(links, products = "wndprb")
   return(df$wndprb)
+}
+
+#' @title crul_posest
+#' @description Extrapolate data from Position Estimate products.
+#' @param contents URL of a specific position estimate product
+#' @export
+crul_posest <- function(contents) {
+
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
+
+  # Make sure this is a public advisory product
+  if (!any(stringr::str_count(contents,
+                              c("MIATCE", "MEATIEST", "WTNT"))))
+    stop(sprintf("Invalid Position Estimate link. %s", link))
+
+  df <- create_df_posest()
+
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  date <- scrape_header(contents, ret = "date")
+
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Position Estimate #%s (%s)",
+                    status, name, date))
+
+  df <- df %>%
+    tibble::add_row("Status" = status,
+                    "Name" = name,
+                    "Date" = date,
+                    "Contents" = contents)
+
+  return(df)
+}
+
+#' @title crul_prblty
+#' @description Parse strike probability products
+#' @param contents Link to a storm's specific strike probability advisory product.
+#' @export
+crul_prblty <- function(contents) {
+
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
+
+  # Make sure this is a strike probability product
+  if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP", "SPFAT",
+                                          "MIAWRKSP"))))
+    stop(sprintf("Invalid Strike Probability link. %s", link))
+
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  adv <- scrape_header(contents, ret = "adv")
+  date <- scrape_header(contents, ret = "date")
+
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Strike Probability #%s (%s)",
+                    status, name, adv, date))
+
+  # 15.0N  43.4W      43  1  X  X 44   16.8N  48.2W       X  4 16  2 22
+  # 15.8N  45.9W       1 26  1  X 28
+
+  ptn <- paste0("(?<=[:blank:]{3}|\n)",
+                "([[:alpha:][:digit:][:punct:][:blank:]]{17})",   # Location
+                "[:blank:]+",                                     # Delimiter
+                "([:digit:]{1,2}|X)",                             # A
+                "[:blank:]+",                                     # Delimiter
+                "([:digit:]{1,2}|X)",                             # B
+                "[:blank:]+",                                     # Delimiter
+                "([:digit:]{1,2}|X)",                             # C
+                "[:blank:]+",                                     # Delimiter
+                "([:digit:]{1,2}|X)",                             # D
+                "[:blank:]+",                                     # Delimiter
+                "([:digit:]{1,2}|X)")                             # E
+
+  matches <- stringr::str_match_all(contents, ptn)
+
+  prblty <- tibble::as_data_frame(matches[[1]])
+
+  names(prblty) <- c("Del", "Location", "A", "B", "C", "D", "E")
+
+  prblty$Del <- NULL
+
+  # Trim whitespace
+  prblty <- purrr::map_df(.x = prblty, .f = stringr::str_trim)
+
+  # If no strike probabilities, return NULL
+  if (nrow(prblty) == 0)
+    return(NULL)
+
+  # Many values will have "X" for less than 1% chance. Make 0
+  prblty[prblty == "X"] <- 0
+
+  # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
+  # accomodate usage of both 0.5.0 and >= 0.6.0.
+  if (packageVersion("dplyr") > "0.5.0") {
+    prblty <- dplyr::mutate_at(.tbl = prblty,
+                               .vars = c(2:6),
+                               .funs = "as.numeric")
+  } else {
+    prblty <- dplyr::mutate_at(.tbl = prblty,
+                               .cols = c(2:6),
+                               .funs = "as.numeric")
+  }
+
+  prblty <- prblty %>%
+    dplyr::mutate("Status" = status,
+                  "Name" = name,
+                  "Adv" = adv,
+                  "Date" = date) %>%
+    dplyr::select_("Status", "Name", "Adv", "Date", "Location", "A", "B",
+                   "C", "D", "E") %>%
+    dplyr::arrange_("Date", "Adv")
+
+  return(prblty)
+
+}
+
+#' @title crul_public
+#' @description Parse Public Advisory products
+#' @param contents Link to a storm's specific public advisory product.
+#' @export
+crul_public <- function(contents) {
+
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
+
+  # Make sure this is a public advisory product
+  if (!any(stringr::str_count(contents, c("MIATCP", "TCP", "WTPA",
+                                          "MIAWRKAP"))))
+    stop(sprintf("Invalid Public Advisory link. %s", link))
+
+  df <- create_df_public()
+
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  adv <- scrape_header(contents, ret = "adv")
+  date <- scrape_header(contents, ret = "date")
+
+  safely_scrape_header <- purrr::safely(scrape_header)
+  key <- safely_scrape_header(contents, ret = "key")
+  if (is.null(key$error)) {
+    key <- key$result
+  } else {
+    key <- NA
+  }
+
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Public Advisory #%s (%s)",
+                    status, name, adv, date))
+
+  df <- df %>%
+    tibble::add_row("Status" = status,
+                    "Name" = name,
+                    "Adv" = adv,
+                    "Date" = date,
+                    "Key" = key,
+                    "Contents" = contents)
+
+  return(df)
+}
+
+#' @title crul_update
+#' @description Parse cyclone update products
+#' @param contents Link to a storm's specific update advisory product.
+#' @export
+crul_update <- function(contents) {
+
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
+
+  # Make sure this is a update advisory product
+  if (!any(stringr::str_count(contents, c("MIATCU", "TCU", "WTNT"))))
+    stop(sprintf("Invalid Cyclone Update link. %s", link))
+
+  df <- create_df_update()
+
+  status <- scrape_header(contents, ret = "status")
+  name <- scrape_header(contents, ret = "name")
+  date <- scrape_header(contents, ret = "date")
+
+  safely_scrape_header <- purrr::safely(scrape_header)
+  key <- safely_scrape_header(contents, ret = "key")
+  if (is.null(key$error)) {
+    key <- key$result
+  } else {
+    key <- NA
+  }
+
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Update #%s (%s)",
+                    status, name, date))
+
+  df <- df %>%
+    tibble::add_row("Status" = status,
+                    "Name" = name,
+                    "Date" = date,
+                    "Key" = key,
+                    "Contents" = contents)
+
+  return(df)
+}
+
+#' @title crul_wndprb
+#' @description Parse wind probability products
+#' @param contents Link to a storm's specific wind probability product.
+#' @export
+crul_wndprb <- function(contents) {
+
+  # Replace all carriage returns with empty string.
+  contents <- stringr::str_replace_all(contents, "\r", "")
+
+  # Make sure this is a wndprb advisory product
+  if (!any(stringr::str_count(contents, c("MIAPWS", "PWS"))))
+    stop(sprintf("Invalid Wind Probability link. %s", link))
+
+  status <- scrape_header(contents, ret = "status")
+  key <- scrape_header(contents, ret = "key")
+  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
+  date <- scrape_header(contents, ret = "date")
+  name <- scrape_header(contents, ret = "name")
+
+  if (getOption("rrricanes.working_msg"))
+    message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
+                    status, name, adv, date))
+
+  ptn <- paste0("(?<=\n)", # Look-behind
+                # Location - first value must be capital letter.
+                "([:upper:]{1}[[:alnum:][:blank:][:punct:]]{14})",
+                # Wind
+                "([[:digit:]]{2})",
+                # Wind12
+                "[:blank:]+([:digit:]{1,2}|X)",
+                # Delim
+                "[:blank:]+",
+                # Wind24
+                "([:digit:]{1,2}|X)",
+                # Wind24 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # Delim
+                "[:blank:]+",
+                # Wind36
+                "([:digit:]{1,2}|X)",
+                # Wind36 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # Delim
+                "[:blank:]+",
+                # Wind48
+                "([:digit:]{1,2}|X)",
+                # Wind48 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # Delim
+                "[:blank:]+",
+                # Wind72
+                "([:digit:]{1,2}|X)",
+                # Wind72 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # Delim
+                "[:blank:]+",
+                # Wind96
+                "([:digit:]{1,2}|X)",
+                # Wind96 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # Delim
+                "[:blank:]+",
+                # Wind120
+                "([:digit:]{1,2}|X)",
+                # Wind120 cumulative
+                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+                # End
+                "[[:blank:]\n]+")
+
+  matches <- stringr::str_match_all(contents, pattern = ptn)
+
+  # Load matches into dataframe
+  wndprb <- tibble::as_data_frame(matches[[1]][,2:16])
+
+  # If only one row, need to transpose wndprb
+  if (ncol(wndprb) == 1)
+    wndprb <- wndprb %>% t() %>% tibble::as_data_frame()
+
+  # If no wnd speed probabilities, return NULL
+  if (nrow(wndprb) == 0)
+    return(NULL)
+
+  # Rename variables
+  names(wndprb) <- c("Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
+                     "Wind36", "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
+                     "Wind72Cum", "Wind96", "Wind96Cum", "Wind120",
+                     "Wind120Cum")
+
+  # Trim whitespace
+  wndprb <- purrr::map_df(.x = wndprb, .f = stringr::str_trim)
+
+  # Make "X" values 0
+  wndprb[wndprb == "X"] <- 0
+
+  # Make Wind:Wind120Cum numeric
+  # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
+  # accomodate usage of both 0.5.0 and >= 0.6.0.
+  if (packageVersion("dplyr") > "0.5.0") {
+    wndprb <- dplyr::mutate_at(.tbl = wndprb,
+                               .vars = c(2:15),
+                               .funs = "as.numeric")
+  } else {
+    wndprb <- dplyr::mutate_at(.tbl = wndprb,
+                               .cols = c(2:15),
+                               .funs = "as.numeric")
+  }
+
+  # Add Key, Adv, Date and rearrange.
+  wndprb <- wndprb %>%
+    dplyr::mutate("Key" = key,
+                  "Adv" = adv,
+                  "Date" = date) %>%
+    dplyr::select_("Key:Date", "Location:Wind120Cum") %>%
+    dplyr::arrange_("Key", "Date", "Adv")
+
+  return(wndprb)
 }
