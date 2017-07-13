@@ -288,8 +288,9 @@ crul_get_storm_data <- function(links,
   #   purrr::map(rvest::html_text)
   res_parsed <- purrr::map(res, ~xml2::read_html(.$content)) %>%
     purrr::map(.f = function(x) {
-      txt <- rvest::html_node(x, xpath = "//pre") %>% rvest::html_text()
-      if (is.na(txt)) txt <- rvest::html_text(x)
+      if (is.na(txt <- rvest::html_node(x, xpath = "//pre") %>% rvest::html_text()))
+          txt <- rvest::html_text(x)
+      return(txt)
     })
 
   list_products <- list(
