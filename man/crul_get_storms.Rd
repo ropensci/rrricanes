@@ -4,12 +4,12 @@
 \alias{crul_get_storms}
 \title{crul_get_storms}
 \usage{
-crul_get_storms(year = format(Sys.Date(), "\%Y"), basin = c("AL", "EP"))
+crul_get_storms(years = format(Sys.Date(), "\%Y"), basins = c("AL", "EP"))
 }
 \arguments{
-\item{year}{numeric or vector, four digits (\%Y format)}
+\item{years}{numeric or vector, four digits (\%Y format)}
 
-\item{basin}{One or both of c("AL", "EP")}
+\item{basins}{One or both of c("AL", "EP")}
 }
 \description{
 Returns storms and product link.

@@ -346,22 +346,22 @@ crul_get_storm_data <- function(links,
 
 #' @title crul_get_storms
 #' @description Returns storms and product link.
-#' @param year numeric or vector, four digits (\%Y format)
-#' @param basin One or both of c("AL", "EP")
+#' @param years numeric or vector, four digits (\%Y format)
+#' @param basins One or both of c("AL", "EP")
 #' @export
-crul_get_storms <- function(year = format(Sys.Date(), "%Y"),
-                            basin = c("AL", "EP")) {
+crul_get_storms <- function(years = format(Sys.Date(), "%Y"),
+                            basins = c("AL", "EP")) {
 
-  year <- validate_year(year)
+  years <- validate_year(years)
 
   # No archives earlier than 1998 for now
-  if (any(year < 1998))
+  if (any(years < 1998))
     stop('Archives currently only available for 1998 to current year.')
 
-  if (!all(basin %in% c("AL", "EP")))
+  if (!all(basins %in% c("AL", "EP")))
     stop("Basin must 'AL' and/or 'EP'")
 
-  links <- purrr::map(year, .f = year_archives_link) %>%
+  links <- purrr::map(years, .f = year_archives_link) %>%
     purrr::flatten_chr()
 
   # 1998 is only year with slightly different URL. Modify accordingly
@@ -375,7 +375,7 @@ crul_get_storms <- function(year = format(Sys.Date(), "%Y"),
   contents <- purrr::map(links, .f = function(x) {crul_get_url_contents(x, p)}) %>%
     purrr::flatten()
 
-  storm_df <- purrr::map_df(basin, crul_extract_storms, contents) %>%
+  storm_df <- purrr::map_df(basins, crul_extract_storms, contents) %>%
     dplyr::group_by(Year, Basin) %>%
     dplyr::arrange(Year, Basin) %>%
     dplyr::ungroup()
