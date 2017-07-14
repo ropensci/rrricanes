@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - NA
 
 ### Changed
-  - NA
+  - Prefaced all built-in data objects with "df"; modified names slightly.
 
 ### Removed
   - `load_storm_data` has been removed. Archived data can now be accessed 
