@@ -87,6 +87,19 @@
 #' progress of working through a storm's product advisories but will reset on
 #' new products/storms.
 #'
+#' @section Package Options:
+#'
+#' \code{dplyr.show_progress} displays the dplyr progress bar when scraping raw
+#' product datasets. In \code{\link{get_storms}}, it is based on the number of
+#' years being requested. In the product functions (i.e.,
+#' \code{\link{get_fstadv}}) it is based on the number of advisories. It can be
+#' misleading when calling \code{\link{get_storm_data}} because it shows the
+#' progress of working through a storm's product advisories but will reset on
+#' new products/storms.
+#'
+#' \code{rrricanes.working_msg} is set to FALSE by default. When TRUE, it will
+#' list the current storm, advisory and date being worked.
+#'
 #' @docType package
 #' @name rrricanes
 NULL
@@ -97,6 +110,11 @@ NULL
 .pkgenv <- new.env(parent = emptyenv())
 
 .onLoad <- function(libname, pkgname) {
+  op <- options()
+  op.rrricanes <- list(rrricanes.working_msg = FALSE)
+  toset <- !(names(op.rrricanes) %in% names(op))
+  if (any(toset)) options(op.rrricanes[toset])
+  invisible()
   has_data <- requireNamespace("rrricanesdata", quietly = TRUE)
   .pkgenv[["has_data"]] <- has_data
 }
