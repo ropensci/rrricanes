@@ -1,40 +1,36 @@
 language: r
-
 warnings_are_errors: true
-
 addons:
   apt:
     packages:
-      - libgdal-dev
-      - libproj-dev
-
-# Test package on multiple platforms
+    - libgdal-dev
+    - libproj-dev
 matrix:
   include:
-    - os: linux
-      dist: trusty
-      sudo: false
-      r: 3.3.3
-    - os: linux
-      dist: trusty
-      sudo: false
-      r: release
-    - os: linux
-      dist: trusty
-      sudo: false
-      r: devel
-    - os: osx
-      r: 3.3.3
-    - os: osx
-      r: release
-
+  - os: linux
+    dist: trusty
+    sudo: false
+    r: 3.3.3
+  - os: linux
+    dist: trusty
+    sudo: false
+    r: release
+  - os: linux
+    dist: trusty
+    sudo: false
+    r: devel
+  - os: osx
+    r: 3.3.3
+  - os: osx
+    r: release
 r_packages:
   - covr
-
 cache: packages
-
 after_success:
   - Rscript -e 'library(covr); codecov()'
-
-#r_github_packages:
-#  - ropenscilabs/rnaturalearthhires
+  - test $TRAVIS_PULL_REQUEST == "false" &&
+    test $TRAVIS_BRANCH == "master" &&
+    bash deploy.sh
+env:
+  global:
+    secure: t3RJn4gGOnWDc2DSBOHwZ+DkLTZsmo2f9JDfg0H9ugzhZQFvXWy9/+HCak4t00aCpRojkMadqmQPORoeGCvzbdZV6Iu+ueFBb9JPD6CVgBiUYLcBL0aaYtPydKpw5EAFmvoHQo2J/p6bVtVvpBPOf+OVaeLqzcKFD8mxJtVl/sbSuZzCUKhs2KPIEtfpYZuchlZKRV6K+vrDomQytqQJeTlc5TTqY1VMOyY2E1eRgTxpTnN44caWSiqAmMkBx403TmFRpA0XZzsxxmUxTpXrNayT6S0qdn/VClyTTvJb/E92jFjm6c2MxCL6D5Xw7mv51srHf4qIxf3eLyj2ilZUKB4aNeecr5Y1/NeBgmx9K+WD16e9TJYOfR0J8i2HikBLgSgFCvU8D5p3sC6gI/+GCPBXyAEVcndnPUBCaRqfz4eeu3CkxiWgzWwabBoqjas/jp7gyOaj1lwEqOm+WNgA4E/7Klv161CXVHPLyvC7w/7mwVLK6PYN/6yyLAgGA8sumigSPxUvRSnzpDhBRaZH0/39pMFcY+XDjM0tVGj2ku/fdWwKHK8nwTEjNYVWGEjnFuJt9mGnacWOnyeEG9AAMvXYKrLkbKVWh+i4332F0YGqSmtzBn+2X9EQ753fujXd+s3jKkoKaYI58hb+A7BVPeVInDJOfDMmj6KklT6JFHM=
