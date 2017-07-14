@@ -21,12 +21,12 @@ matrix:
     r: devel
   - os: osx
     r: 3.3.3
-    R_CHECK_FORCE_SUGGESTS_: false
   - os: osx
     r: release
-    R_CHECK_FORCE_SUGGESTS_: false
 r_packages:
   - covr
+r_github_packages:
+  - timtrice/rrricanesdata@feature/drat
 cache: packages
 after_success:
   - Rscript -e 'library(covr); codecov()'
