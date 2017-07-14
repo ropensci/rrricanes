@@ -80,21 +80,6 @@
 #' progress of working through a storm's product advisories but will reset on
 #' new products/storms.
 #'
-#' \code{rrricanes.working_msg} is set to FALSE by default. When TRUE, it will
-#' list the current storm, advisory and date being worked.
-#'
-#' \code{rrricanes.http_timeout} will set a timeout value in seconds. Often
-#' when scraping raw datasets the connection may time out. Use this option if
-#' this becomes an issue.
-#'
-#' \code{rrricanes.http_attempts} will control the maximum number of attempts to
-#' get a dataset. Default is 3 but no more than 5 attempts are permitted. If
-#' \code{rrricanes.http_timeout} is reached, `rrricanes` will reattempt until
-#' the value of \code{rrricanes.http_attempts} is reached.
-#'
-#' \code{rrricanes.http_sleep} controls how long to wait between multiple
-#' attempts. Default is 3 seconds.
-#'
 #' @docType package
 #' @name rrricanes
 NULL
@@ -102,19 +87,37 @@ NULL
 #' @importFrom magrittr %>%
 #' @importFrom utils packageVersion
 
+.pkgenv <- new.env(parent = emptyenv())
+
 .onLoad <- function(libname, pkgname) {
-    op <- options()
-    op.rrricanes <- list(rrricanes.working_msg = FALSE,
-                         rrricanes.http_timeout = 1L,
-                         rrricanes.http_attempts = 3L,
-                         rrricanes.http_sleep = 3L)
-    toset <- !(names(op.rrricanes) %in% names(op))
-    if (any(toset)) options(op.rrricanes[toset])
-    invisible()
+  has_data <- requireNamespace("rrricanesdata", quietly = TRUE)
+  .pkgenv[["has_data"]] <- has_data
 }
 
 .onAttach <- function(libname, pkgname) {
-    packageStartupMessage("rrricanes is not intended for use in emergency situations.")
+  packageStartupMessage("rrricanes is not intended for use in emergency situations.")
+}
+
+.onAttach <- function(libname, pkgname) {
+  if (!.pkgenv$has_data) {
+    msg <- paste("To use this package, you must install the",
+                 "hurricaneexposuredata package. To install that ",
+                 "package, run `install.packages('rrricanesdata',",
+                 "repos = 'https://timtrice.github.io/drat/', type = 'source')`.",
+                 "See the `drat` vignette for more details.")
+    msg <- paste(strwrap(msg), collapse = "\n")
+    packageStartupMessage(msg)
+  }
+}
+
+hasData <- function(has_data = .pkgenv$has_data) {
+  if (!has_data) {
+    msg <- paste("To use this function, you must have the",
+                 "`rrricanesdata` package installed. See the",
+                 "`drat` package vignette for more details.")
+    msg <- paste(strwrap(msg), collapse = "\n")
+    stop(msg)
+  }
 }
 
 utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
