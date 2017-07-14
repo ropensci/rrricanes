@@ -95,10 +95,6 @@ NULL
 }
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("rrricanes is not intended for use in emergency situations.")
-}
-
-.onAttach <- function(libname, pkgname) {
   if (!.pkgenv$has_data) {
     msg <- paste("To use this package, you must install the",
                  "hurricaneexposuredata package. To install that ",
