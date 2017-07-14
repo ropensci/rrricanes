@@ -21,8 +21,10 @@ matrix:
     r: devel
   - os: osx
     r: 3.3.3
+    R_CHECK_FORCE_SUGGESTS_: false
   - os: osx
     r: release
+    R_CHECK_FORCE_SUGGESTS_: false
 r_packages:
   - covr
 cache: packages
