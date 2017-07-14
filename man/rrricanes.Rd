@@ -32,20 +32,29 @@ of Atlantic ("AL") or East Pacific ("EP").
 
 
 \code{\link{get_storm_data}} can be used to select multiple products,
-multiple storms and from multiple basins. You can also use
-\code{\link{get_fstadv}} for Forecast/Advisory products,
-\code{\link{get_wndprb}} for Wind Speed Probabilities (cyclones >= 2006; for
-cyclones <= 2005 use \code{\link{get_prblty}}).
+multiple storms and from multiple basins.
 
 Additional text products are:
 \describe{
   \item{\code{\link{get_discus}}}{Storm Discussions}
+  \item{\code{\link{get_fstadv}}}{Forecast/Advisory. These products contain a
+    bulk of the information for tropical cyclones including current position,
+    structure, forecast position and forecast structure.}
   \item{\code{\link{get_posest}}}{Position Estimates. Rare and used generally
-    for threatening cyclones.}
+    for threatening cyclones. This product was discontinued after the 2013
+    season and is now issued as \code{\link{get_update}}.}
+  \item{\code{\link{get_prblty}}}{Strike Probabilities. Show the probability
+    of the center of a cyclone passing within 65nm of a location for a given
+    forecast period. This product was discontinued after 2005, replaced with
+    \code{\link{get_wndprb}}.}
   \item{\code{\link{get_public}}}{Public Advisory. General non-structured
     information exists in these products.}
   \item{\code{\link{get_update}}}{Updates. Generally issued when a cyclone
     undergoes a sudden change that requires immediate notice.}
+  \item{\code{\link{get_wndprb}}}{Wind Speed Probability. Lists the
+    probability of a location experiencing a minimum of 35kt, 50kt or 64kt
+    winds for an alotted forecast period or accumulated probability. This
+    product replaced \code{\link{get_prblty}} after the 2005 season.}
 }
 
 The products above may take some time to load if the NHC website is slow (as
@@ -100,5 +109,18 @@ years being requested. In the product functions (i.e.,
 misleading when calling \code{\link{get_storm_data}} because it shows the
 progress of working through a storm's product advisories but will reset on
 new products/storms.
+
+
+
+\code{dplyr.show_progress} displays the dplyr progress bar when scraping raw
+product datasets. In \code{\link{get_storms}}, it is based on the number of
+years being requested. In the product functions (i.e.,
+\code{\link{get_fstadv}}) it is based on the number of advisories. It can be
+misleading when calling \code{\link{get_storm_data}} because it shows the
+progress of working through a storm's product advisories but will reset on
+new products/storms.
+
+\code{rrricanes.working_msg} is set to FALSE by default. When TRUE, it will
+list the current storm, advisory and date being worked.
 }
 
