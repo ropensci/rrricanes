@@ -37,6 +37,7 @@ matrix:
 
 build_script:
 #  - travis-tool.sh install_github ropenscilabs/rnaturalearthhires
+  - travis-tool.sh install_github timtrice/rrricanesdata@gh-pages
   - travis-tool.sh r_binary_install proto rgdal
   - travis-tool.sh install_deps
 
