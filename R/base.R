@@ -39,12 +39,19 @@
 #' }
 #'
 #' The products above may take some time to load if the NHC website is slow (as
-#' is often the case, unfortunately). You can access post-scraped datasets with
-#' \code{\link{load_storm_data}}. Currently only annual summaries,
-#' forecast/advisory, strike probabilities and wind speed probability products
-#' exist. As of this writing it is up-to-date but caution is advised for active
-#' cyclones. Use the above functions for the most up-to-date data as a
-#' fall-back.
+#' is often the case, unfortunately). For all storm advisories issued outside
+#' of the current month, use the \code{rrricanesdata} package.
+#'
+#' To install \code{rrricanesdata}, run
+#'
+#' \code{
+#' install.packages("rrricanesdata",
+#'                  repos = "https://timtrice.github.io/drat/",
+#'                  type = "source")
+#' }
+#'
+#' See \code{vignette("installing_rrricanesdata", package = "rrricanes")} for
+#' more information.
 #'
 #' @section GIS Data:
 #'
@@ -95,24 +102,13 @@ NULL
 }
 
 .onAttach <- function(libname, pkgname) {
-  if (!.pkgenv$has_data) {
-    msg <- paste("To use this package, you must install the",
-                 "hurricaneexposuredata package. To install that ",
-                 "package, run `install.packages('rrricanesdata',",
-                 "repos = 'https://timtrice.github.io/drat/', type = 'source')`.",
-                 "See the `drat` vignette for more details.")
-    msg <- paste(strwrap(msg), collapse = "\n")
-    packageStartupMessage(msg)
-  }
+  msg <- "rrricanes is not intended for use in emergency situations."
+  packageStartupMessage(msg)
 }
 
 hasData <- function(has_data = .pkgenv$has_data) {
   if (!has_data) {
-    msg <- paste("To use this function, you must have the",
-                 "`rrricanesdata` package installed. See the",
-                 "`drat` package vignette for more details.")
-    msg <- paste(strwrap(msg), collapse = "\n")
-    stop(msg)
+    stop("rrricanesdata is not installed.")
   }
 }
 
