@@ -91,10 +91,6 @@ wndprb <- function(contents) {
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
 
-  # Make sure this is a wndprb advisory product
-  if (!any(stringr::str_count(contents, c("MIAPWS", "PWS"))))
-    stop(sprintf("Invalid Wind Probability link. %s", link))
-
   status <- scrape_header(contents, ret = "status")
   key <- scrape_header(contents, ret = "key")
   adv <- scrape_header(contents, ret = "adv") %>% as.numeric()

@@ -53,15 +53,6 @@ discus <- function(contents) {
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
 
-  # Make sure this is a discussion product
-  if (!any(stringr::str_count(contents,
-                              c("MIATCD", "MIATCM", "TCD", "WTPA", "WTPZ",
-                                "MIAWRKAD1")))) {
-    # Check if the term "DISCUSSION" appears in header
-    if (!stringr::str_detect(scrape_header(contents), "DISCUSSION"))
-      stop(sprintf("Invalid Discussion link. %s", link))
-  }
-
   df <- create_df_discus()
 
   status <- scrape_header(contents, ret = "status")

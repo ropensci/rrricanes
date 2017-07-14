@@ -44,10 +44,6 @@ update <- function(contents) {
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
 
-  # Make sure this is a update advisory product
-  if (!any(stringr::str_count(contents, c("MIATCU", "TCU", "WTNT"))))
-    stop(sprintf("Invalid Cyclone Update link. %s", link))
-
   df <- create_df_update()
 
   status <- scrape_header(contents, ret = "status")

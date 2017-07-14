@@ -44,11 +44,6 @@ posest <- function(contents) {
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
 
-  # Make sure this is a public advisory product
-  if (!any(stringr::str_count(contents,
-                              c("MIATCE", "MEATIEST", "WTNT"))))
-    stop(sprintf("Invalid Position Estimate link. %s", link))
-
   df <- create_df_posest()
 
   status <- scrape_header(contents, ret = "status")

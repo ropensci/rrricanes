@@ -220,12 +220,6 @@ fstadv <- function(contents) {
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
 
-  # Make sure this is a public advisory product
-  if (!any(stringr::str_count(contents,
-                              c("MIATCM", "[W]*TPA", "TCMAT", "WTPZ",
-                                "HFOTCMEP", "HFOTCMCP"))))
-    stop(sprintf("Invalid Forecast/Advisory link. %s", link))
-
   df <- create_df_fstadv()
 
   status <- scrape_header(contents, ret = "status")

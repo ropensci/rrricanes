@@ -33,11 +33,6 @@ prblty <- function(contents) {
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
 
-  # Make sure this is a strike probability product
-  if (!any(stringr::str_count(contents, c("MIASPFAT", "MIASPFEP", "SPFAT",
-                                          "MIAWRKSP"))))
-    stop(sprintf("Invalid Strike Probability link. %s", link))
-
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")
   adv <- scrape_header(contents, ret = "adv")
