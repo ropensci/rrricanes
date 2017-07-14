@@ -13,11 +13,3 @@ test_that("Dataframe Skeleton", {
     expect_identical(class(df$Date), c("POSIXct", "POSIXt"))
     expect_identical(class(df$Contents), "character")
 })
-
-## ---- Test get_posest() ------------------------------------------------------
-test_that("Test get_posest()", {
-    skip_on_cran()
-    al2008 <- get_storms(year = 2008, basin = "AL") %>% dplyr::select(Link)
-    df.al092008.posest <- al2008 %>% dplyr::slice(9) %>% .$Link %>% get_posest()
-    expect_equal(al092008.posest, df.al092008.posest)
-})

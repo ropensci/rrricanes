@@ -2,16 +2,6 @@ context("Forecast/Advisory Products (fstadv)")
 
 load(system.file("extdata", "al092008.fstadv.Rda", package = "rrricanes"))
 
-## ---- Test fstadv() ----------------------------------------------------------
-#' Test return of fstadv()
-test_that("Test fstadv()", {
-    skip_on_cran()
-    al2008 <- get_storms(year = 2008, basin = "AL") %>% dplyr::select(Link)
-    df.al092008.fstadv <- al2008 %>% dplyr::slice(9) %>% .$Link %>% get_fstadv()
-
-    expect_identical(al092008.fstadv, df.al092008.fstadv)
-})
-
 ## ---- Test tidy_fstadv() -----------------------------------------------------
 test_that("Test tidy_fstadv()", {
     x <- tidy_fstadv(al092008.fstadv)
