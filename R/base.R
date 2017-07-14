@@ -115,7 +115,7 @@ hasData <- function(has_data = .pkgenv$has_data) {
 utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
                          "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
                          "WindField34", "WindField50", "WindField64", "lat",
-                         "long", "group", ".", "NW34", "name", "data",
+                         "long", "group", ".", "NW34", "name", "data", "Basin",
                          paste0(c("NE", "SE", "SW", "NW", "64")),
                          paste0(c("NE", "SE", "SW", "NW", "50")),
                          paste0(c("NE", "SE", "SW", "NW", "34"))))
