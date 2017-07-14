@@ -69,6 +69,14 @@ vignette("getting_started", package = "rrricanes")
 
 Linux users must also have the `libgdal-dev`, `libproj-dev` and `libxml2-dev` packages installed.
 
+To add `rrricanesdata`, a [package of post-scraped datasets](https://github.com/timtrice/rrricanesdata), 
+
+```r
+install.packages("rrricanesdata", 
+                 repos = "https://timtrice.github.io/drat/", 
+                 type = "source")
+```
+
 To use high resolution tracking maps you will need to install the `rnaturalearthhires` package. 
 
 ```r
