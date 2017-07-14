@@ -49,12 +49,19 @@ Additional text products are:
 }
 
 The products above may take some time to load if the NHC website is slow (as
-is often the case, unfortunately). You can access post-scraped datasets with
-\code{\link{load_storm_data}}. Currently only annual summaries,
-forecast/advisory, strike probabilities and wind speed probability products
-exist. As of this writing it is up-to-date but caution is advised for active
-cyclones. Use the above functions for the most up-to-date data as a
-fall-back.
+is often the case, unfortunately). For all storm advisories issued outside
+of the current month, use the \code{rrricanesdata} package.
+
+To install \code{rrricanesdata}, run
+
+\code{
+install.packages("rrricanesdata",
+                 repos = "https://timtrice.github.io/drat/",
+                 type = "source")
+}
+
+See \code{vignette("installing_rrricanesdata", package = "rrricanes")} for
+more information.
 }
 
 \section{GIS Data}{
@@ -93,20 +100,5 @@ years being requested. In the product functions (i.e.,
 misleading when calling \code{\link{get_storm_data}} because it shows the
 progress of working through a storm's product advisories but will reset on
 new products/storms.
-
-\code{rrricanes.working_msg} is set to FALSE by default. When TRUE, it will
-list the current storm, advisory and date being worked.
-
-\code{rrricanes.http_timeout} will set a timeout value in seconds. Often
-when scraping raw datasets the connection may time out. Use this option if
-this becomes an issue.
-
-\code{rrricanes.http_attempts} will control the maximum number of attempts to
-get a dataset. Default is 3 but no more than 5 attempts are permitted. If
-\code{rrricanes.http_timeout} is reached, `rrricanes` will reattempt until
-the value of \code{rrricanes.http_attempts} is reached.
-
-\code{rrricanes.http_sleep} controls how long to wait between multiple
-attempts. Default is 3 seconds.
 }
 
