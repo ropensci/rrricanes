@@ -228,34 +228,3 @@ Other products are available:
 Hurricane Ike, 2008, has both updates and position estimates. 
 
 At this time none of these products are parsed. Only the content of the product is returned.
-
-## A Faster Alternative
-
-Scraping the data from the NHC archives may be time-consuming for those with "slow" internet connections. Additionally, sometimes the NHC archives [just aren't available for some reason](https://github.com/timtrice/rrricanes/issues/66). 
-
-An alternative method of getting data is by the use of `load_storm_data`. This function accesses the `rrricanesdata` repository and returns post-scraped datasets. 
-
-The repository is incomplete at this point of time with the exception of `fstadv`, `prblty` and `wndprb` products which are up-to-date as of this writing.
-
-`load_storm_data` returns full datasets that can then be filtered down using `tidyverse` packages as need be.
-
-Return a summary table of all storms in the dataset.
-
-```{r}
-load_storm_data("storms")
-```
-
-The `fstadv` dataset is already tidied into smaller dataframes: 
-
-* `adv`, which contains the core data for every advisory
-* `wr` contains the wind radii data for each advisory
-* `fcst` contains the forecast observations per advisory
-* `fcst_wr` contains the wind radii data per forecast position
-
-```{r}
-load_storm_data("adv")
-```
-
-These dataframes stick to the tidy properties of "each column is a variable and each row is an observation" (with the exception of `Key`, of course). 
-
-These same datasets are also available on data.world. [An introductory article](https://timtrice.github.io/rrricanes/articles/articles/data_world.html) to using data.world with SQL is available. The advantage of using data.world over `load_storm_data` is that you can manipulate your data as necessary before loading it into your environment, giving you much more freedom to view only what you need.

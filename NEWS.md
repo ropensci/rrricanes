@@ -15,7 +15,8 @@ rrricanes 0.2.0-6 (yyyy-mm-dd)
 
 ### DEPRECATED AND DEFUNCT
 
-* NA
+* `load_storm_data` has been removed in favor of loading `rrricanesdata`. See 
+  vignette "installing_rrricanesdata" for more information. 
 
 rrricanes 0.2.0-5 (2017-07-08)
 ==================================

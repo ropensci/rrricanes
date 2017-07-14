@@ -9,14 +9,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
   - NA
 
-### Added
-  - NA
-
 ### Changed
   - NA
 
 ### Removed
-  - NA
+  - `load_storm_data` has been removed. Archived data can now be accessed 
+    through `rrricanesdata`.
 
 ### Deprecated
   - NA
