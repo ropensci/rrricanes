@@ -90,16 +90,34 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
   # There is an 80-hit/10-second limit to the NHC pages (note Issue #94), or 8
   # requests/second. The below request will process 4 links every 0.5 seconds.
   links <- split(links, ceiling(seq_along(links)/4))
+
   p <- dplyr::progress_estimated(n = length(links))
-  contents <- purrr::map(links, .f = function(x) {get_url_contents(x, p)}) %>%
+
+  df <- purrr::map_df(links, get_storms_link, basins, p)
+
+  return(df)
+}
+
+#' @title get_storms_link
+#' @description Get all links to storms from the annual archive pages
+#' @param links URLs to a year's archive page
+#' @param basins Basins as passed to get_storms
+#' @param p dplyr::progress_estimated object
+#' @keywords internal
+get_storms_link <- function(links, basins, p) {
+
+  p$pause(0.5)$tick()$print()
+
+  contents <- purrr::map(links, .f = function(x) {get_url_contents(x)}) %>%
     purrr::flatten()
 
-  storm_df <- purrr::map_df(basins, extract_storms, contents) %>%
+  df <- purrr::map_df(basins, extract_storms, contents) %>%
     dplyr::group_by(Year, Basin) %>%
     dplyr::arrange(Year, Basin) %>%
     dplyr::ungroup()
 
-  return(storm_df)
+  return(df)
+
 }
 
 #' @title year_archives_link
