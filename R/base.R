@@ -177,15 +177,10 @@ extract_year_archive_link <- function(link) {
 #' the individual products \(thought it can be used in other instances\). Often,
 #' there are timeout issues. This is an attempt to try to work around that.
 #' @param link URL to download
-#' @param p dplyr progress bar object
 #' @keywords internal
-get_url_contents <- function(links, p) {
-  p$pause(0.5)$tick()$print()
+get_url_contents <- function(links) {
   links <- crul::Async$new(urls = links)
   res <- links$get()
-  # Check status codes
-  if (purrr::map(res, ~.$status_code) %>% purrr::flatten_dbl() %>% unique() != 200)
-    warning("Bad status codes.")
   return(res)
 }
 

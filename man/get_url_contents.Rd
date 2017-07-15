@@ -4,11 +4,9 @@
 \alias{get_url_contents}
 \title{get_url_contents}
 \usage{
-get_url_contents(links, p)
+get_url_contents(links)
 }
 \arguments{
-\item{p}{dplyr progress bar object}
-
 \item{link}{URL to download}
 }
 \description{
