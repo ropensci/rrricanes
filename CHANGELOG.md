@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - NA
 
 ### Changed
+  - `get_storms` and `get_storm_data` now use asynchronous http requests to make data collection faster. (#94)
   - Prefaced all built-in data objects with "df"; modified names slightly.
 
 ### Removed

@@ -7,7 +7,7 @@ rrricanes 0.2.0-6 (yyyy-mm-dd)
 
 ### MINOR IMPROVEMENTS
 
-* NA
+* `get_storms` and `get_storm_data` have been rewritten to utilize pkg `crul`'s asynchronous features. This will not make much of a difference in `get_storms` (and may actually be slightly slower; to be explained). But the difference with `get_storm_data` should be very noticeable. There is a limit to hitting the NHC archives; 80 requests per 10 seconds. Both functions send 4 links through every 0.5 seconds to avoid this limit. Timeout issues should no longer occur so options rrricanes.http_attempts and rrricanes.http_timeout have been removed. The primary cause of long processing now is due to scraping, particularly with the `fstadv` products; the amount of data in these products and the unstructured nature of the products require a number of rules. This can probably be simplified in future releases. (#94)
 
 ### BUG FIXES
 
