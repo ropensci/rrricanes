@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,46 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
+    </li>
+    <li>
+      <a href="../articles/articles/forecast_advisory.html">Forecast/Advisory GIS</a>
+    </li>
+    <li>
+      <a href="../articles/articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
+    </li>
+    <li>
+      <a href="../articles/articles/wind_pressure.html">Wind and Pressure</a>
+    </li>
+    <li>
+      <a href="../articles/articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
+    </li>
+    <li>
+      <a href="../articles/getting_started.html">Getting Started</a>
+    </li>
+    <li>
+      <a href="../articles/gis_data.html">GIS data</a>
+    </li>
+    <li>
+      <a href="../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -86,18 +123,14 @@
     <p>Extrapolate data from FORECAST/ADVISORY products.</p>
     
 
-    <pre class="usage"><span class='fu'>fstadv</span>(<span class='no'>link</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='kw'>dplyr</span><span class='kw'>::</span><span class='fu'>progress_estimated</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>))</pre>
+    <pre class="usage"><span class='fu'>fstadv</span>(<span class='no'>contents</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>link</th>
+      <th>contents</th>
       <td><p>URL of a specific FORECAST/ADVISORY product</p></td>
-    </tr>
-    <tr>
-      <th>p</th>
-      <td><p>dplyr::progress_estimate.</p></td>
     </tr>
     </table>
     

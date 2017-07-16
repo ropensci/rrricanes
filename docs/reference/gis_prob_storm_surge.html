@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,46 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
+    </li>
+    <li>
+      <a href="../articles/articles/forecast_advisory.html">Forecast/Advisory GIS</a>
+    </li>
+    <li>
+      <a href="../articles/articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
+    </li>
+    <li>
+      <a href="../articles/articles/wind_pressure.html">Wind and Pressure</a>
+    </li>
+    <li>
+      <a href="../articles/articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
+    </li>
+    <li>
+      <a href="../articles/getting_started.html">Getting Started</a>
+    </li>
+    <li>
+      <a href="../articles/gis_data.html">GIS data</a>
+    </li>
+    <li>
+      <a href="../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -114,45 +151,45 @@ esurge (10, 20, 30, 40, 50).</p></td>
 
     
     <dl class='dl-horizontal'>
-    <dt>esurge</dt><dd><p>The Tropical Cyclone Storm Surge Exceedances (P-Surge 2.5)
-          data shows the probability, in percent, of a specified storm surge,
-          including tides, exceeding the specified height, in feet, during
-          the forecast period indicated. The 10 percent exceedance height,
-          for example, is the storm surge height, including tides, above
-          ground level (AGL) such that there is a 10 percent chance of
-          exceeding it. The product is based upon an ensemble of Sea, Lake,
-          and Overland Surge from Hurricanes (SLOSH) model runs using the
-          National Hurricane Center (NHC) official advisory and accounts for
-          track, size, and intensity errors based on historical errors and
-          astronomical tide. Valid values are 10, 20, 30, 40 or 50.</p></dd>
-    <dt>psurge</dt><dd><p>The Tropical Cyclone Storm Surge Probabilities (P-Surge
-          2.5) data shows the probability, in percent, of a specified storm
-          surge occurring during the forecast period indicated. The product
-          is based upon an ensemble of Sea, Lake, and Overland Surge from
-          Hurricanes (SLOSH) model runs using the National Hurricane Center
-          (NHC) official advisory and accounts for track, size, and intensity
-          errors based on historical errors and astronomical tide. Valid
-          values are 0:20.</p></dd>
+  <dt>esurge</dt><dd><p>The Tropical Cyclone Storm Surge Exceedances (P-Surge 2.5)
+      data shows the probability, in percent, of a specified storm surge,
+      including tides, exceeding the specified height, in feet, during
+      the forecast period indicated. The 10 percent exceedance height,
+      for example, is the storm surge height, including tides, above
+      ground level (AGL) such that there is a 10 percent chance of
+      exceeding it. The product is based upon an ensemble of Sea, Lake,
+      and Overland Surge from Hurricanes (SLOSH) model runs using the
+      National Hurricane Center (NHC) official advisory and accounts for
+      track, size, and intensity errors based on historical errors and
+      astronomical tide. Valid values are 10, 20, 30, 40 or 50.</p></dd>
+  <dt>psurge</dt><dd><p>The Tropical Cyclone Storm Surge Probabilities (P-Surge
+      2.5) data shows the probability, in percent, of a specified storm
+      surge occurring during the forecast period indicated. The product
+      is based upon an ensemble of Sea, Lake, and Overland Surge from
+      Hurricanes (SLOSH) model runs using the National Hurricane Center
+      (NHC) official advisory and accounts for track, size, and intensity
+      errors based on historical errors and astronomical tide. Valid
+      values are 0:20.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><a href = 'http://www.nhc.noaa.gov/surge/psurge.php'>Tropical Cyclone Storm Surge Probabilities</a>
+    <p><a href='http://www.nhc.noaa.gov/surge/psurge.php'>Tropical Cyclone Storm Surge Probabilities</a>
     <code><a href='gis_download.html'>gis_download</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
-  <span class='co'># Return the last psurge0 product for storm AL092016</span>
-  <span class='fu'>gis_prob_storm_surge</span>(<span class='st'>"AL092016"</span>, <span class='kw'>products</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"psurge"</span> <span class='kw'>=</span> <span class='fl'>0</span>))
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># Return the last psurge0 product for storm AL092016</span>
+<span class='fu'>gis_prob_storm_surge</span>(<span class='st'>"AL092016"</span>, <span class='kw'>products</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"psurge"</span> <span class='kw'>=</span> <span class='fl'>0</span>))
 
-  <span class='co'># Return the psurge0 and esurge10 products for storm AL092016</span>
-  <span class='fu'>gis_prob_storm_surge</span>(<span class='st'>"AL092016"</span>, <span class='kw'>products</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"psurge"</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='st'>"esurge"</span> <span class='kw'>=</span> <span class='fl'>10</span>))
+<span class='co'># Return the psurge0 and esurge10 products for storm AL092016</span>
+<span class='fu'>gis_prob_storm_surge</span>(<span class='st'>"AL092016"</span>, <span class='kw'>products</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"psurge"</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='st'>"esurge"</span> <span class='kw'>=</span> <span class='fl'>10</span>))
 
-  <span class='co'># Return all psurge0 products for Sep 2, 2016, storm AL092016</span>
-  <span class='fu'>gis_prob_storm_surge</span>(<span class='st'>"AL092016"</span>, <span class='kw'>products</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"psurge"</span> <span class='kw'>=</span> <span class='fl'>0</span>),
-                       <span class='kw'>datetime</span> <span class='kw'>=</span> <span class='st'>"20160902"</span>)
-})</div></pre>
+<span class='co'># Return all psurge0 products for Sep 2, 2016, storm AL092016</span>
+<span class='fu'>gis_prob_storm_surge</span>(<span class='st'>"AL092016"</span>, <span class='kw'>products</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"psurge"</span> <span class='kw'>=</span> <span class='fl'>0</span>),
+           <span class='kw'>datetime</span> <span class='kw'>=</span> <span class='st'>"20160902"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

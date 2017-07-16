@@ -29,10 +29,46 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../../reference/index.html">Reference</a>
+  <a href="../..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../../articles/index.html">Articles</a>
+  <a href="../../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../../articles/articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/forecast_advisory.html">Forecast/Advisory GIS</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/wind_pressure.html">Wind and Pressure</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
+    </li>
+    <li>
+      <a href="../../articles/getting_started.html">Getting Started</a>
+    </li>
+    <li>
+      <a href="../../articles/gis_data.html">GIS data</a>
+    </li>
+    <li>
+      <a href="../../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../../news/index.html">News</a>
@@ -71,13 +107,12 @@
 <span class="kw">library</span>(HURDAT)
 <span class="kw">library</span>(lubridate)
 <span class="kw">library</span>(readr)
-<span class="kw">library</span>(rrricanes)</code></pre></div>
+<span class="kw">library</span>(rrricanes)
+<span class="kw">library</span>(rrricanesdata)</code></pre></div>
 <p>ACE or Accumulated Cyclone Energy is a method of measuring energy of a cyclone or for an entire season. It is calculated by the formula</p>
 <p><span class="math display">\[ \text{ACE} = 10^{-4}\sum{v^2_\text{max}} \]</span></p>
 <p>where <span class="math inline">\(v_\text{max}\)</span> is the wind speed in knots. Values may only be used when a storm is a tropical system with winds of at least 35 knots. Additionally, only six-hour intervals are used.</p>
-<p>To calculate ACE you would want to use the <code>fstadv</code> dataset.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/load_storm_data.html">load_storm_data</a></span>(<span class="st">"fstadv"</span>, <span class="dt">col_types =</span> <span class="kw">cols</span>())</code></pre></div>
-<p>Now, we need to apply the rules to our dataset:</p>
+<p>To calculate ACE you would want to use the <code>fstadv</code> dataset and apply the following rules:</p>
 <ul>
 <li>since forecast/advisory products are typically issued at 03:00, 09:00, 15:00 and 21:00 UTC filter out odd hours</li>
 <li>
@@ -90,18 +125,18 @@
 </li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv &lt;-<span class="st"> </span>fstadv %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">filter</span>(<span class="kw">hour</span>(Date) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">9</span>, <span class="dv">15</span>, <span class="dv">21</span>), 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/hour">hour</a></span>(Date) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">9</span>, <span class="dv">15</span>, <span class="dv">21</span>), 
            Status %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">"Tropical Storm"</span>, <span class="st">"Hurricane"</span>), 
            !<span class="kw">is.na</span>(Wind)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">group_by</span>(Key) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">select</span>(Name, Wind)</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/group_by">group_by</a></span>(Key) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/select">select</a></span>(Name, Wind)</code></pre></div>
 <pre><code>## Adding missing grouping variables: `Key`</code></pre>
 <p>Now let’s summarise our dataset with new variable <code>ACE</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">Name =</span> <span class="kw">last</span>(Name), 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/summarise">summarise</a></span>(<span class="dt">Name =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/nth">last</a></span>(Name), 
               <span class="dt">ACE =</span> <span class="kw">sum</span>(Wind^<span class="dv">2</span>) *<span class="st"> </span><span class="fl">1e-04</span>) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(ACE)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">top_n</span>(<span class="dv">10</span>)</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/arrange">arrange</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/desc">desc</a></span>(ACE)) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/top_n">top_n</a></span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>## Selecting by ACE</code></pre>
 <pre><code>## # A tibble: 10 x 3
 ##         Key    Name     ACE
@@ -120,14 +155,14 @@
 <p>A companion package, <a href="https://github.com/timtrice/HURDAT">HURDAT</a> is available in CRAN that has data for all cyclones dating back as far as 1851. This package has less data than <code>rrricanes</code>. But, as it is based on a post-storm reanalysis project, the data is more accurate.</p>
 <p>Let’s revisit the top 10 using <code>HURDAT</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AL %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">filter</span>(<span class="kw">hour</span>(DateTime) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">12</span>, <span class="dv">18</span>), 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/hour">hour</a></span>(DateTime) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">12</span>, <span class="dv">18</span>), 
            Status %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">"TS"</span>, <span class="st">"HU"</span>), 
            !<span class="kw">is.na</span>(Wind)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">group_by</span>(Key) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">Name =</span> <span class="kw">last</span>(Name), 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/group_by">group_by</a></span>(Key) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/summarise">summarise</a></span>(<span class="dt">Name =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/nth">last</a></span>(Name), 
               <span class="dt">ACE =</span> <span class="kw">sum</span>(Wind^<span class="dv">2</span>) *<span class="st"> </span><span class="fl">1e-04</span>) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(ACE)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">top_n</span>(<span class="dv">10</span>)</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/arrange">arrange</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/desc">desc</a></span>(ACE)) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/top_n">top_n</a></span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>## Selecting by ACE</code></pre>
 <pre><code>## # A tibble: 10 x 3
 ##         Key    Name     ACE
@@ -150,14 +185,14 @@
 <p><code>ACE</code> is slightly higher and that could be for a number of reasons. For example, on re-analysis the Hurricane Research Division may have determined a cyclone was actually tropical (shown in <code>HURDAT</code>) when initially it was believed to be extratropical (as shown in <code>rrricanes</code>). Or, and more likely, they determined through additional data that a storm was actually stronger than originally though.</p>
 <p>You can also calculate <code>ACE</code> for a season. Instead of grouping by <code>Key</code> we group by <code>Year</code>. I’ll stick with <code>HURDAT</code> in this example.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(df &lt;-<span class="st"> </span>AL %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">Year =</span> <span class="kw">year</span>(DateTime)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">filter</span>(<span class="kw">hour</span>(DateTime) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">12</span>, <span class="dv">18</span>), 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/mutate">mutate</a></span>(<span class="dt">Year =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/year">year</a></span>(DateTime)) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/hour">hour</a></span>(DateTime) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">12</span>, <span class="dv">18</span>), 
            Status %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">"TS"</span>, <span class="st">"HU"</span>), 
            !<span class="kw">is.na</span>(Wind)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">group_by</span>(Year) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">ACE =</span> <span class="kw">sum</span>(Wind^<span class="dv">2</span>) *<span class="st"> </span><span class="fl">1e-04</span>) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(ACE))) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">top_n</span>(<span class="dv">10</span>)</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/group_by">group_by</a></span>(Year) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/summarise">summarise</a></span>(<span class="dt">ACE =</span> <span class="kw">sum</span>(Wind^<span class="dv">2</span>) *<span class="st"> </span><span class="fl">1e-04</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/arrange">arrange</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/desc">desc</a></span>(ACE))) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/top_n">top_n</a></span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>## Selecting by ACE</code></pre>
 <pre><code>## # A tibble: 10 x 2
 ##     Year      ACE
@@ -173,10 +208,10 @@
 ##  9  1998 182.8700
 ## 10  1887 181.2600</code></pre>
 <p>This also matches relatively well with that on <a href="https://en.wikipedia.org/wiki/Accumulated_cyclone_energy#Atlantic_hurricane_seasons.2C_1950.E2.80.932017">Wikipedia</a> and other sources.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> ACE)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">"identity"</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="accumulated_cyclone_energy_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(df, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> ACE)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_bar">geom_bar</a></span>(<span class="dt">stat =</span> <span class="st">"identity"</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>()</code></pre></div>
+<p><img src="accumulated_cyclone_energy_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>It would certainly seem that tropical cyclone activity ebbs and flows over time.</p>
 </div>
   </div>

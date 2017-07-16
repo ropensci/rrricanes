@@ -29,10 +29,46 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../../reference/index.html">Reference</a>
+  <a href="../..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../../articles/index.html">Articles</a>
+  <a href="../../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../../articles/articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/forecast_advisory.html">Forecast/Advisory GIS</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/wind_pressure.html">Wind and Pressure</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
+    </li>
+    <li>
+      <a href="../../articles/getting_started.html">Getting Started</a>
+    </li>
+    <li>
+      <a href="../../articles/gis_data.html">GIS data</a>
+    </li>
+    <li>
+      <a href="../../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../../news/index.html">News</a>
@@ -70,53 +106,27 @@
 <span class="kw">library</span>(gganimate)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(rrricanes)
+<span class="kw">library</span>(rrricanesdata)
 <span class="kw">library</span>(tidyr)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">key &lt;-<span class="st"> "AL092008"</span>
 adv &lt;-<span class="st"> </span><span class="dv">42</span></code></pre></div>
 <div id="forecastadvisory-data-for-hurricane-ike-adv-42" class="section level3">
 <h3 class="hasAnchor">
 <a href="#forecastadvisory-data-for-hurricane-ike-adv-42" class="anchor"></a>Forecast/Advisory Data for Hurricane Ike Adv #42</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># No need to do this piece for active storms</span>
-fstadv &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/load_storm_data.html">load_storm_data</a></span>(<span class="st">"fstadv"</span>) %&gt;%<span class="st"> </span><span class="kw">filter</span>(Key ==<span class="st"> </span>key, Adv &lt;=<span class="st"> </span>adv)</code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   .default = col_integer(),
-##   Status = col_character(),
-##   Name = col_character(),
-##   Date = col_datetime(format = ""),
-##   Key = col_character(),
-##   Lat = col_double(),
-##   Lon = col_double(),
-##   Pressure = col_double(),
-##   Hr12FcstDate = col_datetime(format = ""),
-##   Hr12Lat = col_double(),
-##   Hr12Lon = col_double(),
-##   Hr24FcstDate = col_datetime(format = ""),
-##   Hr24Lat = col_double(),
-##   Hr24Lon = col_double(),
-##   Hr36FcstDate = col_datetime(format = ""),
-##   Hr36Lat = col_double(),
-##   Hr36Lon = col_double(),
-##   Hr48FcstDate = col_datetime(format = ""),
-##   Hr48Lat = col_double(),
-##   Hr48Lon = col_double(),
-##   Hr48NE34 = col_character()
-##   # ... with 20 more columns
-## )</code></pre>
-<pre><code>## See spec(...) for full column specifications.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv &lt;-<span class="st"> </span>fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Key ==<span class="st"> </span>key, Adv &lt;=<span class="st"> </span>adv)</code></pre></div>
 </div>
 <div id="wind-profile" class="section level2">
 <h2 class="hasAnchor">
 <a href="#wind-profile" class="anchor"></a>Wind Profile</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot wind values</span>
-fstadv %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Wind)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_line</span>() +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> Status), <span class="dt">size =</span> <span class="dv">3</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">name =</span> <span class="st">"Wind (kts)"</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme_bw</span>() +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>, 
+fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Wind)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>() +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">color =</span> Status), <span class="dt">size =</span> <span class="dv">3</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_continuous">scale_y_continuous</a></span>(<span class="dt">name =</span> <span class="st">"Wind (kts)"</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>() +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>, 
           <span class="dt">legend.box =</span> <span class="st">"vertical"</span>) +
-<span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">"Wind Profile"</span>, 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">"Wind Profile"</span>, 
          <span class="dt">caption =</span> <span class="kw">sprintf</span>(<span class="st">"rrricanes %s"</span>, <span class="kw">packageVersion</span>(<span class="st">"rrricanes"</span>)))</code></pre></div>
 <p><img src="wind_pressure_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
@@ -124,14 +134,14 @@ fstadv %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class
 <h2 class="hasAnchor">
 <a href="#pressure-profile" class="anchor"></a>Pressure Profile</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot pressure values</span>
-fstadv %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Pressure)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_line</span>() +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> Status), <span class="dt">size =</span> <span class="dv">3</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">name =</span> <span class="st">"Pressure (mb)"</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme_bw</span>() +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>, 
+fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Pressure)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>() +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">color =</span> Status), <span class="dt">size =</span> <span class="dv">3</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_continuous">scale_y_continuous</a></span>(<span class="dt">name =</span> <span class="st">"Pressure (mb)"</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>() +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>, 
           <span class="dt">legend.box =</span> <span class="st">"vertical"</span>) +
-<span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">"Pressure Profile"</span>, 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">"Pressure Profile"</span>, 
          <span class="dt">caption =</span> <span class="kw">sprintf</span>(<span class="st">"rrricanes %s"</span>, <span class="kw">packageVersion</span>(<span class="st">"rrricanes"</span>)))</code></pre></div>
 <p><img src="wind_pressure_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
@@ -139,16 +149,16 @@ fstadv %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class
 <h2 class="hasAnchor">
 <a href="#windpressure-relational-change" class="anchor"></a>Wind/Pressure Relational Change</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv %&gt;%
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">WindDist =</span> (Wind -<span class="st"> </span><span class="kw">min</span>(Wind))/(<span class="kw">max</span>(Wind) -<span class="st"> </span><span class="kw">min</span>(Wind)),
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/mutate">mutate</a></span>(<span class="dt">WindDist =</span> (Wind -<span class="st"> </span><span class="kw">min</span>(Wind))/(<span class="kw">max</span>(Wind) -<span class="st"> </span><span class="kw">min</span>(Wind)),
            <span class="dt">PressDist =</span> (Pressure -<span class="st"> </span><span class="kw">max</span>(Pressure))/(<span class="kw">max</span>(Pressure) -<span class="st"> </span><span class="kw">min</span>(Pressure))) %&gt;%
-<span class="st">    </span><span class="kw">gather</span>(Var, Val, WindDist, PressDist) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Val, <span class="dt">group =</span> Var, <span class="dt">color =</span> Var)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="dv">1</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">scale_color_discrete</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">"Pressure Change"</span>, <span class="st">"Wind Change"</span>)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme_bw</span>() +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>, 
-          <span class="dt">legend.title =</span> <span class="kw">element_blank</span>()) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">"Wind/Pressure Relational Change"</span>, 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/gather">gather</a></span>(Var, Val, WindDist, PressDist) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Val, <span class="dt">group =</span> Var, <span class="dt">color =</span> Var)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>(<span class="dt">size =</span> <span class="dv">1</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_hue">scale_color_discrete</a></span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">"Pressure Change"</span>, <span class="st">"Wind Change"</span>)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>() +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>, 
+          <span class="dt">legend.title =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/element">element_blank</a></span>()) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">"Wind/Pressure Relational Change"</span>, 
          <span class="dt">subtitle =</span> <span class="st">""</span>,
          <span class="dt">caption =</span> <span class="kw">sprintf</span>(<span class="st">"rrricanes %s"</span>, <span class="kw">packageVersion</span>(<span class="st">"rrricanes"</span>)), 
          <span class="dt">y =</span> <span class="st">""</span>)</code></pre></div>
@@ -158,18 +168,18 @@ fstadv %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class
 <h2 class="hasAnchor">
 <a href="#wind-radius" class="anchor"></a>Wind Radius</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wr_animate &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/tidy_wr.html">tidy_wr</a></span>(fstadv) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">gather</span>(Quadrant, Radius, NE:NW) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Quadrant, <span class="dt">y =</span> Radius, <span class="dt">fill =</span> <span class="kw">factor</span>(WindField), 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/gather">gather</a></span>(Quadrant, Radius, NE:NW) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Quadrant, <span class="dt">y =</span> Radius, <span class="dt">fill =</span> <span class="kw">factor</span>(WindField), 
                <span class="dt">frame =</span> Adv)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">"identity"</span>, <span class="dt">position =</span> <span class="st">"identity"</span>, <span class="dt">width =</span> <span class="dv">1</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_legend</span>(<span class="dt">title =</span> <span class="st">"Wind Field"</span>)) +
-<span class="st">    </span><span class="kw">coord_polar</span>() +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">"Wind Radius for Advisory"</span>, 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_bar">geom_bar</a></span>(<span class="dt">stat =</span> <span class="st">"identity"</span>, <span class="dt">position =</span> <span class="st">"identity"</span>, <span class="dt">width =</span> <span class="dv">1</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/guides">guides</a></span>(<span class="dt">fill =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/guide_legend">guide_legend</a></span>(<span class="dt">title =</span> <span class="st">"Wind Field"</span>)) +
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/coord_polar">coord_polar</a></span>() +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">"Wind Radius for Advisory"</span>, 
          <span class="dt">subtitle =</span> <span class="st">"Minimum sustained one-minute wind speed in knots"</span>,
          <span class="dt">caption =</span> <span class="kw">sprintf</span>(<span class="st">"rrricanes %s"</span>, <span class="kw">packageVersion</span>(<span class="st">"rrricanes"</span>)), 
          <span class="dt">y =</span> <span class="st">"Radius (nm)"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gganimate</span>(wr_animate, <span class="st">"wind_radius.gif"</span>, <span class="dt">ani.width =</span> <span class="dv">750</span>, <span class="dt">ani.height =</span> <span class="dv">750</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/gganimate/topics/gganimate">gganimate</a></span>(wr_animate, <span class="st">"wind_radius.gif"</span>, <span class="dt">ani.width =</span> <span class="dv">750</span>, <span class="dt">ani.height =</span> <span class="dv">750</span>)</code></pre></div>
 <pre><code>## Executing: 
 ## convert -loop 0 -delay 100 Rplot1.png Rplot2.png Rplot3.png
 ##     Rplot4.png Rplot5.png Rplot6.png Rplot7.png Rplot8.png
@@ -204,7 +214,8 @@ fstadv %&gt;%<span class="st"> </span><span class="kw">ggplot</span>(<span class
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#wind-profile">Wind Profile</a></li>
       <li><a href="#pressure-profile">Pressure Profile</a></li>

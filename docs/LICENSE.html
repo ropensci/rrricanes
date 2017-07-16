@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>tidy_fcst — tidy_fcst • rrricanes</title>
+<title>License • rrricanes</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -20,9 +20,9 @@
 
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="jquery.sticky-kit.min.js"></script>
+<script src="pkgdown.js"></script>
   
   
 <!-- mathjax -->
@@ -37,7 +37,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-license">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -47,18 +47,18 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">rrricanes</a>
+      <a class="navbar-brand" href="index.html">rrricanes</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="/index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -68,33 +68,33 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
+      <a href="articles/articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
     </li>
     <li>
-      <a href="../articles/articles/forecast_advisory.html">Forecast/Advisory GIS</a>
+      <a href="articles/articles/forecast_advisory.html">Forecast/Advisory GIS</a>
     </li>
     <li>
-      <a href="../articles/articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
+      <a href="articles/articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
     </li>
     <li>
-      <a href="../articles/articles/wind_pressure.html">Wind and Pressure</a>
+      <a href="articles/articles/wind_pressure.html">Wind and Pressure</a>
     </li>
     <li>
-      <a href="../articles/articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
+      <a href="articles/articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
     </li>
     <li>
-      <a href="../articles/getting_started.html">Getting Started</a>
+      <a href="articles/getting_started.html">Getting Started</a>
     </li>
     <li>
-      <a href="../articles/gis_data.html">GIS data</a>
+      <a href="articles/gis_data.html">GIS data</a>
     </li>
     <li>
-      <a href="../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
+      <a href="articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="news/index.html">News</a>
 </li>
       </ul>
       
@@ -114,60 +114,41 @@
       </header>
 
       <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-12">
     <div class="page-header">
-    <h1>tidy_fcst</h1>
+      <h1>License</h1>
     </div>
 
-    
-    <p>Tidy forecasts of a fstadv dataframe object.</p>
-    
+<pre>YEAR: 2017
+COPYRIGHT HOLDER: Tim Trice
 
-    <pre class="usage"><span class='fu'>tidy_fcst</span>(<span class='no'>df</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>df</th>
-      <td><p>fstadv dataframe object</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+The MIT License (MIT)
 
-    <p>Gathers all forecast points, tidies dataframe to make one row per
-forecast position. Complete cases only. Use Key, Adv and Date to join with
-other tidy dataframes.</p><dl class='dl-horizontal'>
- <dt>Key</dt><dd><p>Unique identifier of cyclone</p></dd>
- <dt>Adv</dt><dd><p>Advisory number</p></dd>
- <dt>Date</dt><dd><p>Date and time of advisory</p></dd>
- <dt>FcstDate</dt><dd><p>Forecast date and time in UTC</p></dd>
- <dt>Lat</dt><dd><p>Forecast latitude</p></dd>
- <dt>Lon</dt><dd><p>Forecast Longitude</p></dd>
- <dt>Wind</dt><dd><p>Forecast wind in knots</p></dd>
- <dt>Gust</dt><dd><p>Forecast gust in knots</p></dd>
-</dl>
-    
+Copyright (c) 2017 Tim Trice
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='get_fstadv.html'>get_fstadv</a></span>(<span class='st'>"http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>tidy_fcst</span>()
-<span class='co'># }</span></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</pre>
 
   </div>
+
 </div>
+
 
       <footer>
       <div class="copyright">

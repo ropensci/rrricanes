@@ -29,10 +29,46 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
+    </li>
+    <li>
+      <a href="../articles/articles/forecast_advisory.html">Forecast/Advisory GIS</a>
+    </li>
+    <li>
+      <a href="../articles/articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
+    </li>
+    <li>
+      <a href="../articles/articles/wind_pressure.html">Wind and Pressure</a>
+    </li>
+    <li>
+      <a href="../articles/articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
+    </li>
+    <li>
+      <a href="../articles/getting_started.html">Getting Started</a>
+    </li>
+    <li>
+      <a href="../articles/gis_data.html">GIS data</a>
+    </li>
+    <li>
+      <a href="../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -60,7 +96,7 @@
       <h1>GIS data</h1>
                         <h4 class="author">Tim Trice</h4>
             
-            <h4 class="date">2017-06-27</h4>
+            <h4 class="date">2017-07-16</h4>
           </div>
 
     
@@ -122,15 +158,15 @@
 <a href="#advisory-package" class="anchor"></a>Advisory Package</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/gis_advisory.html">gis_advisory</a></span>(<span class="dt">key =</span> <span class="st">"AL182012"</span>, <span class="dt">advisory =</span> <span class="st">"18"</span>)</code></pre></div>
 <pre><code>## [1] "http://www.nhc.noaa.gov/gis/forecast/archive/al182012_5day_018.zip"</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_advisory.html">gis_advisory</a></span>(<span class="dt">key =</span> <span class="st">"AL182012"</span>, <span class="dt">advisory =</span> <span class="st">"18"</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(adv)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.gis_adv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_advisory.html">gis_advisory</a></span>(<span class="dt">key =</span> <span class="st">"AL182012"</span>, <span class="dt">advisory =</span> <span class="st">"18"</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(df.gis_adv)</code></pre></div>
 <pre><code>## [1] "al182012_018_5day_lin" "al182012_018_5day_pgn" "al182012_018_5day_pts"
 ## [4] "al182012_018_ww_wwlin"</code></pre>
-<p>For this particular storm and advisory, included are the base line, point and polygon datasets along with a dataset for watches and warnings. The objects returned are spatial dataframes contained within the list of dataframes, <code>adv</code>.</p>
+<p>For this particular storm and advisory, included are the base line, point and polygon datasets along with a dataset for watches and warnings. The objects returned are spatial dataframes contained within the list of dataframes, <code>df.gis_adv</code>.</p>
 <div id="line-track" class="section level3">
 <h3 class="hasAnchor">
 <a href="#line-track" class="anchor"></a>Line track</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(adv$al182012_018_5day_lin)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.gis_adv$al182012_018_5day_lin)</code></pre></div>
 <pre><code>## Formal class 'SpatialLinesDataFrame' [package "sp"] with 4 slots
 ##   ..@ data       :'data.frame':  2 obs. of  7 variables:
 ##   .. ..$ STORMNAME: chr [1:2] "SANDY" "SANDY"
@@ -158,25 +194,25 @@
 ##   ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
 ##   .. .. ..@ projargs: chr "+proj=longlat +a=6371200 +b=6371200 +no_defs"</code></pre>
 <p>As we’re dealing with a SpatialLinesDataFrame which needs to be modified, you can use the helper function <code>shp_to_df</code> for plotting.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fcst_line &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(adv$al182012_018_5day_lin)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p +<span class="st"> </span><span class="kw">geom_path</span>(<span class="dt">data =</span> fcst_line, <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> FCSTPRD))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fcst_line &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(df.gis_adv$al182012_018_5day_lin)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_path</a></span>(<span class="dt">data =</span> fcst_line, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(long, lat, <span class="dt">group =</span> FCSTPRD))</code></pre></div>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>There are two groups of data in the set: one for 72-hour forecast period and one for 120-hour. Grouping by <code>FCSTPRD</code> will show the forecast track correctly.</p>
-<p>There is a pretty wide field of view on the map above. You can use <code>sp::bbox</code> to “zoom in” on the map.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(adv$al182012_018_5day_lin))</code></pre></div>
+<p>There is a pretty wide field of view on the map above. You can use <code><a href="http://www.rdocumentation.org/packages/sp/topics/bbox">sp::bbox</a></code> to “zoom in” on the map.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(df.gis_adv$al182012_018_5day_lin))</code></pre></div>
 <pre><code>##     min   max
 ## x -77.1 -71.5
 ## y  27.3  41.0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(p2 &lt;-<span class="st"> </span>p +<span class="st"> </span><span class="kw">geom_path</span>(<span class="dt">data =</span> fcst_line, <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> FCSTPRD)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">coord_equal</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>] -<span class="st"> </span><span class="dv">5</span>, bb[<span class="dv">1</span>,<span class="dv">2</span>] +<span class="st"> </span><span class="dv">5</span>), 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(p2 &lt;-<span class="st"> </span>p +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_path</a></span>(<span class="dt">data =</span> fcst_line, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(long, lat, <span class="dt">group =</span> FCSTPRD)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/coord_fixed">coord_equal</a></span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>] -<span class="st"> </span><span class="dv">5</span>, bb[<span class="dv">1</span>,<span class="dv">2</span>] +<span class="st"> </span><span class="dv">5</span>), 
                 <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>] -<span class="st"> </span><span class="dv">5</span>, bb[<span class="dv">2</span>,<span class="dv">2</span>] +<span class="st"> </span><span class="dv">5</span>)))</code></pre></div>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="point-track" class="section level3">
 <h3 class="hasAnchor">
 <a href="#point-track" class="anchor"></a>Point track</h3>
-<p>Each forecast position is also included in the points dataframe. You can access this in the <code>adv$al182012_018_5day_pts@data</code> object; no conversion necessary.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(p3 &lt;-<span class="st"> </span>p2 +<span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> adv$al182012_018_5day_pts@data, <span class="kw">aes</span>(LON, LAT)))</code></pre></div>
+<p>Each forecast position is also included in the points dataframe. You can access this in the <code>df.gis_adv$al182012_018_5day_pts@data</code> object; no conversion necessary.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(p3 &lt;-<span class="st"> </span>p2 +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">data =</span> df.gis_adv$al182012_018_5day_pts@data, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(LON, LAT)))</code></pre></div>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -184,15 +220,15 @@
 <h2 class="hasAnchor">
 <a href="#forecast-cone" class="anchor"></a>Forecast Cone</h2>
 <p>Forecast cone data is contained in the polygon dataset. To deal with this dataset you can use the <code>shp_to_df</code> function again or take the slightly longer way:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fcst_cone &lt;-<span class="st"> </span>adv$al182012_018_5day_pgn
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fcst_cone &lt;-<span class="st"> </span>df.gis_adv$al182012_018_5day_pgn
 fcst_cone@data$id &lt;-<span class="st"> </span><span class="kw">rownames</span>(fcst_cone@data)
-fcst_cone.points =<span class="st"> </span>broom::<span class="kw">tidy</span>(fcst_cone, <span class="dt">region =</span> <span class="st">"id"</span>)
-fcst_cone &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>(fcst_cone.points, fcst_cone@data, <span class="dt">by =</span> <span class="st">"id"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p3 +<span class="st"> </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> fcst_cone %&gt;%<span class="st"> </span><span class="kw">filter</span>(FCSTPRD ==<span class="st"> </span><span class="dv">120</span>), 
-                 <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(FCSTPRD)), 
+fcst_cone.points &lt;-<span class="st"> </span>broom::<span class="kw">tidy</span>(fcst_cone, <span class="dt">region =</span> <span class="st">"id"</span>)
+fcst_cone &lt;-<span class="st"> </span>dplyr::<span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/join">left_join</a></span>(fcst_cone.points, fcst_cone@data, <span class="dt">by =</span> <span class="st">"id"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p3 +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_polygon">geom_polygon</a></span>(<span class="dt">data =</span> fcst_cone %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(FCSTPRD ==<span class="st"> </span><span class="dv">120</span>), 
+                 <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(long, lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(FCSTPRD)), 
                  <span class="dt">alpha =</span> <span class="fl">0.5</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> fcst_cone %&gt;%<span class="st"> </span><span class="kw">filter</span>(FCSTPRD ==<span class="st"> </span><span class="dv">72</span>), 
-                 <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(FCSTPRD)), 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_polygon">geom_polygon</a></span>(<span class="dt">data =</span> fcst_cone %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(FCSTPRD ==<span class="st"> </span><span class="dv">72</span>), 
+                 <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(long, lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(FCSTPRD)), 
                  <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre></div>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Note that in some GIS packages the forecast cones may be identical (though they shouldn’t be). I’ve noticed it with Hurricanes Ike and Matthew; it’s in the raw dataset.</p>
@@ -201,9 +237,9 @@ fcst_cone &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>
 <h2 class="hasAnchor">
 <a href="#watches-and-warnings" class="anchor"></a>Watches and Warnings</h2>
 <p>You can also plot watches and warnings if any are in effect for the package release time.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ww_line &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(adv$al182012_018_ww_wwlin)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p3 +<span class="st"> </span><span class="kw">geom_path</span>(<span class="dt">data =</span> ww_line, 
-               <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">color =</span> TCWW), <span class="dt">size =</span> <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ww_line &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(df.gis_adv$al182012_018_ww_wwlin)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p3 +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_path</a></span>(<span class="dt">data =</span> ww_line, 
+               <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">color =</span> TCWW), <span class="dt">size =</span> <span class="dv">1</span>)</code></pre></div>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>In the example above you can see tropical storm warnings issued for the Bahamas, North Carolina and portions of the South Carolina and Florida coast while tropical storm watches are in effect for northern Florida and South Carolina.</p>
 </div>
@@ -217,17 +253,17 @@ fcst_cone &lt;-<span class="st"> </span>dplyr::<span class="kw">left_join</span>
 ## [2] "http://www.nhc.noaa.gov/gis/storm_surge/al142016_psurge0_2016100606.zip"
 ## [3] "http://www.nhc.noaa.gov/gis/storm_surge/al142016_psurge0_2016100612.zip"
 ## [4] "http://www.nhc.noaa.gov/gis/storm_surge/al142016_psurge0_2016100618.zip"</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ss &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_prob_storm_surge.html">gis_prob_storm_surge</a></span>(<span class="dt">key =</span> <span class="st">"AL142016"</span>, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.gis_storm_surge &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_prob_storm_surge.html">gis_prob_storm_surge</a></span>(<span class="dt">key =</span> <span class="st">"AL142016"</span>, 
                            <span class="dt">products =</span> <span class="kw">list</span>(<span class="dt">psurge =</span> <span class="dv">0</span>), 
                            <span class="dt">datetime =</span> <span class="st">"20161006"</span>) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw">last</span>() %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/nth">last</a></span>() %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prob_surge &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(ss$al142016_2016100618_gt0)
-bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(ss$al142016_2016100618_gt0)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p +<span class="st"> </span><span class="kw">geom_path</span>(<span class="dt">data =</span> prob_surge, 
-               <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">color =</span> PSurge00c), 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prob_surge &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(df.gis_storm_surge$al142016_2016100618_gt0)
+bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(df.gis_storm_surge$al142016_2016100618_gt0)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_path</a></span>(<span class="dt">data =</span> prob_surge, 
+               <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">color =</span> PSurge00c), 
               <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">coord_equal</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>], bb[<span class="dv">1</span>,<span class="dv">2</span>]), <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>], bb[<span class="dv">2</span>,<span class="dv">2</span>]))</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/coord_fixed">coord_equal</a></span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>], bb[<span class="dv">1</span>,<span class="dv">2</span>]), <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>], bb[<span class="dv">2</span>,<span class="dv">2</span>]))</code></pre></div>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="current-and-forecast-wind-field-radii" class="section level2">
@@ -236,17 +272,17 @@ bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(ss$al142016_20
 <p>Wind radii data may also be available for some cyclone advisory packages. This is the radius to which a minimum sustained wind speed may be felt from the center of circulation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/gis_windfield.html">gis_windfield</a></span>(<span class="st">"AL142016"</span>, <span class="dt">advisory =</span> <span class="st">"33"</span>)</code></pre></div>
 <pre><code>## [1] "http://www.nhc.noaa.gov/gis/forecast/archive/al142016_fcst_033.zip"</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_windfield.html">gis_windfield</a></span>(<span class="st">"AL142016"</span>, <span class="dt">advisory =</span> <span class="st">"33"</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wf_init &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(wf$al142016_2016100606_initialradii)
-bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(wf$al142016_2016100606_forecastradii)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(p4 &lt;-<span class="st"> </span>p +<span class="st"> </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> wf_init, 
-                  <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">fill =</span> <span class="kw">factor</span>(RADII)), <span class="dt">alpha =</span> <span class="fl">0.5</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">coord_equal</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>], bb[<span class="dv">1</span>,<span class="dv">2</span>]), <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>], bb[<span class="dv">2</span>,<span class="dv">2</span>])))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.gis_wind_radii &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_windfield.html">gis_windfield</a></span>(<span class="st">"AL142016"</span>, <span class="dt">advisory =</span> <span class="st">"33"</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wf_init &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(df.gis_wind_radii$al142016_2016100606_initialradii)
+bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(df.gis_wind_radii$al142016_2016100606_forecastradii)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(p4 &lt;-<span class="st"> </span>p +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_polygon">geom_polygon</a></span>(<span class="dt">data =</span> wf_init, 
+                  <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">fill =</span> <span class="kw">factor</span>(RADII)), <span class="dt">alpha =</span> <span class="fl">0.5</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/coord_fixed">coord_equal</a></span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>], bb[<span class="dv">1</span>,<span class="dv">2</span>]), <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>], bb[<span class="dv">2</span>,<span class="dv">2</span>])))</code></pre></div>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-28-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Additionally, forecast wind radii data is also generally available in some packages</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wf_fcst &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(wf$al142016_2016100606_forecastradii)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p4 +<span class="st"> </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> wf_fcst, 
-                  <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(RADII)), 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wf_fcst &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(df.gis_wind_radii$al142016_2016100606_forecastradii)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p4 +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_polygon">geom_polygon</a></span>(<span class="dt">data =</span> wf_fcst, 
+                  <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(RADII)), 
                   <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre></div>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
@@ -256,37 +292,37 @@ bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(wf$al142016_20
 <p>Wind Speed probabilities show the chance of experiencing a minimum-sustained winds of 34, 50 and 64 knots with a given period of time (typically, 120 hours). These products are not storm-specific but are global so other active cyclones in other basins may also appear.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/gis_wsp.html">gis_wsp</a></span>(<span class="dt">datetime =</span> <span class="st">"2016100606"</span>, <span class="dt">res =</span> <span class="fl">0.5</span>)</code></pre></div>
 <pre><code>## [1] "http://www.nhc.noaa.gov/gis/forecast/archive/2016100606_wsp_120hrhalfDeg.zip"</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wsp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_wsp.html">gis_wsp</a></span>(<span class="dt">datetime =</span> <span class="st">"2016100606"</span>, <span class="dt">res =</span> <span class="fl">0.5</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.gis_wsp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_wsp.html">gis_wsp</a></span>(<span class="dt">datetime =</span> <span class="st">"2016100606"</span>, <span class="dt">res =</span> <span class="fl">0.5</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
 <div id="cumulative-probability-for-34kt-winds" class="section level3">
 <h3 class="hasAnchor">
 <a href="#cumulative-probability-for-34kt-winds" class="anchor"></a>Cumulative Probability for &gt;34kt Winds</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(wsp$<span class="st">`</span><span class="dt">2016100606_wsp34knt120hr_halfDeg</span><span class="st">`</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(df.gis_wsp$<span class="st">`</span><span class="dt">2016100606_wsp34knt120hr_halfDeg</span><span class="st">`</span>)
 (p5 &lt;-<span class="st"> </span>p +<span class="st"> </span>
-<span class="st">     </span><span class="kw">geom_point</span>(<span class="dt">data =</span> broom::<span class="kw">tidy</span>(wsp$<span class="st">`</span><span class="dt">2016100606_wsp34knt120hr_halfDeg</span><span class="st">`</span>), 
-                <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y =</span> coords.x2, <span class="dt">color =</span> PWIND120))) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">coord_equal</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>], bb[<span class="dv">1</span>,<span class="dv">2</span>]), <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>], bb[<span class="dv">2</span>,<span class="dv">2</span>]))</code></pre></div>
-<pre><code>## Warning in tidy.default(wsp$`2016100606_wsp34knt120hr_halfDeg`): No
-## method for tidying an S3 object of class SpatialPointsDataFrame , using
+<span class="st">     </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">data =</span> broom::<span class="kw">tidy</span>(df.gis_wsp$<span class="st">`</span><span class="dt">2016100606_wsp34knt120hr_halfDeg</span><span class="st">`</span>), 
+                <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> coords.x1, <span class="dt">y =</span> coords.x2, <span class="dt">color =</span> PWIND120))) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/coord_fixed">coord_equal</a></span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>], bb[<span class="dv">1</span>,<span class="dv">2</span>]), <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>], bb[<span class="dv">2</span>,<span class="dv">2</span>]))</code></pre></div>
+<pre><code>## Warning in tidy.default(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`):
+## No method for tidying an S3 object of class SpatialPointsDataFrame , using
 ## as.data.frame</code></pre>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Cumulative wind speed probability for &gt;50kt winds:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(wsp$<span class="st">`</span><span class="dt">2016100606_wsp50knt120hr_halfDeg</span><span class="st">`</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(df.gis_wsp$<span class="st">`</span><span class="dt">2016100606_wsp50knt120hr_halfDeg</span><span class="st">`</span>)
 (p6 &lt;-<span class="st"> </span>p +<span class="st"> </span>
-<span class="st">     </span><span class="kw">geom_point</span>(<span class="dt">data =</span> broom::<span class="kw">tidy</span>(wsp$<span class="st">`</span><span class="dt">2016100606_wsp50knt120hr_halfDeg</span><span class="st">`</span>), 
-                <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y =</span> coords.x2, <span class="dt">color =</span> PWIND120))) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">coord_equal</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>], bb[<span class="dv">1</span>,<span class="dv">2</span>]), <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>], bb[<span class="dv">2</span>,<span class="dv">2</span>]))</code></pre></div>
-<pre><code>## Warning in tidy.default(wsp$`2016100606_wsp50knt120hr_halfDeg`): No
-## method for tidying an S3 object of class SpatialPointsDataFrame , using
+<span class="st">     </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">data =</span> broom::<span class="kw">tidy</span>(df.gis_wsp$<span class="st">`</span><span class="dt">2016100606_wsp50knt120hr_halfDeg</span><span class="st">`</span>), 
+                <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> coords.x1, <span class="dt">y =</span> coords.x2, <span class="dt">color =</span> PWIND120))) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/coord_fixed">coord_equal</a></span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>], bb[<span class="dv">1</span>,<span class="dv">2</span>]), <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>], bb[<span class="dv">2</span>,<span class="dv">2</span>]))</code></pre></div>
+<pre><code>## Warning in tidy.default(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`):
+## No method for tidying an S3 object of class SpatialPointsDataFrame , using
 ## as.data.frame</code></pre>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Cumulative probability for &gt;64kt winds:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(wsp$<span class="st">`</span><span class="dt">2016100606_wsp64knt120hr_halfDeg</span><span class="st">`</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(df.gis_wsp$<span class="st">`</span><span class="dt">2016100606_wsp64knt120hr_halfDeg</span><span class="st">`</span>)
 (p7 &lt;-<span class="st"> </span>p +<span class="st"> </span>
-<span class="st">     </span><span class="kw">geom_point</span>(<span class="dt">data =</span> broom::<span class="kw">tidy</span>(wsp$<span class="st">`</span><span class="dt">2016100606_wsp64knt120hr_halfDeg</span><span class="st">`</span>), 
-                <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y =</span> coords.x2, <span class="dt">color =</span> PWIND120))) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">coord_equal</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>], bb[<span class="dv">1</span>,<span class="dv">2</span>]), <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>], bb[<span class="dv">2</span>,<span class="dv">2</span>]))</code></pre></div>
-<pre><code>## Warning in tidy.default(wsp$`2016100606_wsp64knt120hr_halfDeg`): No
-## method for tidying an S3 object of class SpatialPointsDataFrame , using
+<span class="st">     </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">data =</span> broom::<span class="kw">tidy</span>(df.gis_wsp$<span class="st">`</span><span class="dt">2016100606_wsp64knt120hr_halfDeg</span><span class="st">`</span>), 
+                <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> coords.x1, <span class="dt">y =</span> coords.x2, <span class="dt">color =</span> PWIND120))) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/coord_fixed">coord_equal</a></span>(<span class="dt">xlim =</span> <span class="kw">c</span>(bb[<span class="dv">1</span>,<span class="dv">1</span>], bb[<span class="dv">1</span>,<span class="dv">2</span>]), <span class="dt">ylim =</span> <span class="kw">c</span>(bb[<span class="dv">2</span>,<span class="dv">1</span>], bb[<span class="dv">2</span>,<span class="dv">2</span>]))</code></pre></div>
+<pre><code>## Warning in tidy.default(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`):
+## No method for tidying an S3 object of class SpatialPointsDataFrame , using
 ## as.data.frame</code></pre>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-35-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
@@ -296,7 +332,8 @@ bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(wf$al142016_20
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#build-a-tracking-chart">Build a Tracking Chart</a></li>
       <li><a href="#gis-datasets">GIS Datasets</a></li>

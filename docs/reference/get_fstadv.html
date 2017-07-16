@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,46 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
+    </li>
+    <li>
+      <a href="../articles/articles/forecast_advisory.html">Forecast/Advisory GIS</a>
+    </li>
+    <li>
+      <a href="../articles/articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
+    </li>
+    <li>
+      <a href="../articles/articles/wind_pressure.html">Wind and Pressure</a>
+    </li>
+    <li>
+      <a href="../articles/articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
+    </li>
+    <li>
+      <a href="../articles/getting_started.html">Getting Started</a>
+    </li>
+    <li>
+      <a href="../articles/gis_data.html">GIS data</a>
+    </li>
+    <li>
+      <a href="../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -86,13 +123,13 @@
     <p>Return dataframe of forecast/advisory data.</p>
     
 
-    <pre class="usage"><span class='fu'>get_fstadv</span>(<span class='no'>link</span>)</pre>
+    <pre class="usage"><span class='fu'>get_fstadv</span>(<span class='no'>links</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>link</th>
+      <th>links</th>
       <td><p>URL to storms' archive page.</p></td>
     </tr>
     </table>
@@ -105,64 +142,64 @@ time).</p>
 <p>Overall structure of the dataframe is listed below. Note the following
 clarifications:</p><ol>
 <li><p>The value of `n` in `Hr{n}` variables is the forecast period.
-        Up to 2002, forecast periods are 12, 24, 36, 48 and 72 hours. After
-        2002, forecast periods were extended to 96 and 120 hours. Not all
-        forecast periods will be available for every cyclone advisory (e.g.,
-        if it is dissipating or expected to dissipate.)</p></li>
+    Up to 2002, forecast periods are 12, 24, 36, 48 and 72 hours. After
+    2002, forecast periods were extended to 96 and 120 hours. Not all
+    forecast periods will be available for every cyclone advisory (e.g.,
+    if it is dissipating or expected to dissipate.)</p></li>
 <li><p>Wind radius data is not included 96 and 120 hour forecast periods.</p></li>
 <li><p>Forecast dates are not truly 12, 24, ..., 120 hours from the
-        date/time of the advisory. The NHC issues two positions in these
-        products; one for current and one for three hours prior. It is the
-        latter position the forecast date/times are based.</p></li>
+    date/time of the advisory. The NHC issues two positions in these
+    products; one for current and one for three hours prior. It is the
+    latter position the forecast date/times are based.</p></li>
 </ol>
     <dl class='dl-horizontal'>
-   <dt>Status</dt><dd><p>Classification of cyclone</p></dd>
-   <dt>Name</dt><dd><p>Name of cyclone</p></dd>
-   <dt>Adv</dt><dd><p>Advisory number</p></dd>
-   <dt>Date</dt><dd><p>Date and time of advisory</p></dd>
-   <dt>Key</dt><dd><p>Unique identifier of cyclone</p></dd>
-   <dt>Lat</dt><dd><p>Latitude of cyclone center</p></dd>
-   <dt>Lon</dt><dd><p>Longitude of cyclone center</p></dd>
-   <dt>Wind</dt><dd><p>Maximum sustained one-minute winds in knots</p></dd>
-   <dt>Gust</dt><dd><p>Maximum sustained one-minute gusts in knots</p></dd>
-   <dt>Pressure</dt><dd><p>Minimum central pressure in millibars</p></dd>
-   <dt>PosAcc</dt><dd><p>Position accuracy of cyclone in nautical miles</p></dd>
-   <dt>FwdDir</dt><dd><p>Compass angle of forward motion</p></dd>
-   <dt>FwdSpeed</dt><dd><p>Forward speed in miles per hour</p></dd>
-   <dt>Eye</dt><dd><p>Size of eye in nautical miles</p></dd>
-   <dt>NE64</dt><dd><p>Radius of &gt;=64kt winds in northeast quadrant</p></dd>
-   <dt>SE64</dt><dd><p>Radius of &gt;=64kt winds in southeast quadrant</p></dd>
-   <dt>SW64</dt><dd><p>Radius of &gt;=64kt winds in southwest quadrant</p></dd>
-   <dt>NW64</dt><dd><p>Radius of &gt;=64kt winds in northwest quadrant</p></dd>
-   <dt>NE50</dt><dd><p>Radius of &gt;=50kt winds in northeast quadrant</p></dd>
-   <dt>SE50</dt><dd><p>Radius of &gt;=50kt winds in southeast quadrant</p></dd>
-   <dt>SW50</dt><dd><p>Radius of &gt;=50kt winds in southwest quadrant</p></dd>
-   <dt>NW50</dt><dd><p>Radius of &gt;=50kt winds in northwest quadrant</p></dd>
-   <dt>NE34</dt><dd><p>Radius of &gt;=34kt winds in northwest quadrant</p></dd>
-   <dt>SE34</dt><dd><p>Radius of &gt;=34kt winds in southeast quadrant</p></dd>
-   <dt>SW34</dt><dd><p>Radius of &gt;=34kt winds in southwest quadrant</p></dd>
-   <dt>NW34</dt><dd><p>Radius of &gt;=34kt winds in northwest quadrant</p></dd>
-   <dt>Hr{n}FcstDate</dt><dd><p>Forecast valid date</p></dd>
-   <dt>Hr{n}Lat</dt><dd><p>Forecast latitude in `n` hours</p></dd>
-   <dt>Hr{n}Lon</dt><dd><p>Forecast longitude in `n` hours</p></dd>
-   <dt>Hr{n}Wind</dt><dd><p>Forecast maximum wind in `n` hours</p></dd>
-   <dt>Hr{n}Gust</dt><dd><p>Forecast maximum gust in `n` hours</p></dd>
-   <dt>Hr{n}NE64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}SE64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}SW64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}NW64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}NE50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}SE50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}SW50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}NW50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}NE34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}SE34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}SW34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>Hr{n}NW34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
-   <dt>SeasNE</dt><dd><p>Radius of 12ft seas in northeast quadrant</p></dd>
-   <dt>SeasSE</dt><dd><p>Radius of 12ft seas in southeast quadrant</p></dd>
-   <dt>SeasSW</dt><dd><p>Radius of 12ft seas in southwest quadrant</p></dd>
-   <dt>SeasNW</dt><dd><p>Radius of 12ft seas in northwest quadrant</p></dd>
+ <dt>Status</dt><dd><p>Classification of cyclone</p></dd>
+ <dt>Name</dt><dd><p>Name of cyclone</p></dd>
+ <dt>Adv</dt><dd><p>Advisory number</p></dd>
+ <dt>Date</dt><dd><p>Date and time of advisory</p></dd>
+ <dt>Key</dt><dd><p>Unique identifier of cyclone</p></dd>
+ <dt>Lat</dt><dd><p>Latitude of cyclone center</p></dd>
+ <dt>Lon</dt><dd><p>Longitude of cyclone center</p></dd>
+ <dt>Wind</dt><dd><p>Maximum sustained one-minute winds in knots</p></dd>
+ <dt>Gust</dt><dd><p>Maximum sustained one-minute gusts in knots</p></dd>
+ <dt>Pressure</dt><dd><p>Minimum central pressure in millibars</p></dd>
+ <dt>PosAcc</dt><dd><p>Position accuracy of cyclone in nautical miles</p></dd>
+ <dt>FwdDir</dt><dd><p>Compass angle of forward motion</p></dd>
+ <dt>FwdSpeed</dt><dd><p>Forward speed in miles per hour</p></dd>
+ <dt>Eye</dt><dd><p>Size of eye in nautical miles</p></dd>
+ <dt>NE64</dt><dd><p>Radius of &gt;=64kt winds in northeast quadrant</p></dd>
+ <dt>SE64</dt><dd><p>Radius of &gt;=64kt winds in southeast quadrant</p></dd>
+ <dt>SW64</dt><dd><p>Radius of &gt;=64kt winds in southwest quadrant</p></dd>
+ <dt>NW64</dt><dd><p>Radius of &gt;=64kt winds in northwest quadrant</p></dd>
+ <dt>NE50</dt><dd><p>Radius of &gt;=50kt winds in northeast quadrant</p></dd>
+ <dt>SE50</dt><dd><p>Radius of &gt;=50kt winds in southeast quadrant</p></dd>
+ <dt>SW50</dt><dd><p>Radius of &gt;=50kt winds in southwest quadrant</p></dd>
+ <dt>NW50</dt><dd><p>Radius of &gt;=50kt winds in northwest quadrant</p></dd>
+ <dt>NE34</dt><dd><p>Radius of &gt;=34kt winds in northwest quadrant</p></dd>
+ <dt>SE34</dt><dd><p>Radius of &gt;=34kt winds in southeast quadrant</p></dd>
+ <dt>SW34</dt><dd><p>Radius of &gt;=34kt winds in southwest quadrant</p></dd>
+ <dt>NW34</dt><dd><p>Radius of &gt;=34kt winds in northwest quadrant</p></dd>
+ <dt>Hr{n}FcstDate</dt><dd><p>Forecast valid date</p></dd>
+ <dt>Hr{n}Lat</dt><dd><p>Forecast latitude in `n` hours</p></dd>
+ <dt>Hr{n}Lon</dt><dd><p>Forecast longitude in `n` hours</p></dd>
+ <dt>Hr{n}Wind</dt><dd><p>Forecast maximum wind in `n` hours</p></dd>
+ <dt>Hr{n}Gust</dt><dd><p>Forecast maximum gust in `n` hours</p></dd>
+ <dt>Hr{n}NE64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}SE64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}SW64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}NW64</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}NE50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}SE50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}SW50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}NW50</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}NE34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}SE34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}SW34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>Hr{n}NW34</dt><dd><p>Forecast wind radius in `n` hours</p></dd>
+ <dt>SeasNE</dt><dd><p>Radius of 12ft seas in northeast quadrant</p></dd>
+ <dt>SeasSE</dt><dd><p>Radius of 12ft seas in southeast quadrant</p></dd>
+ <dt>SeasSW</dt><dd><p>Radius of 12ft seas in southwest quadrant</p></dd>
+ <dt>SeasNW</dt><dd><p>Radius of 12ft seas in northwest quadrant</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -172,10 +209,10 @@ clarifications:</p><ol>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
-  <span class='co'># Return dataframe of forecast/advisories for Tropical Storm Alex (AL011998)</span>
-  <span class='fu'>get_fstadv</span>(<span class='st'>"http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html"</span>)
-})</div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># Return dataframe of forecast/advisories for Tropical Storm Alex (AL011998)</span>
+<span class='fu'>get_fstadv</span>(<span class='st'>"http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

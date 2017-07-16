@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,46 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
+    </li>
+    <li>
+      <a href="../articles/articles/forecast_advisory.html">Forecast/Advisory GIS</a>
+    </li>
+    <li>
+      <a href="../articles/articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
+    </li>
+    <li>
+      <a href="../articles/articles/wind_pressure.html">Wind and Pressure</a>
+    </li>
+    <li>
+      <a href="../articles/articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
+    </li>
+    <li>
+      <a href="../articles/getting_started.html">Getting Started</a>
+    </li>
+    <li>
+      <a href="../articles/gis_data.html">GIS data</a>
+    </li>
+    <li>
+      <a href="../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -88,7 +125,7 @@ hurricane data (past and current) into well-organized datasets. With these
 datasets you can explore past hurricane tracks, forecasts and structure
 elements.</p>
 <p>This documentation and additional help articles
-<a href = 'https://timtrice.github.io/rrricanes/'>can be found online</a>.</p>
+<a href='https://timtrice.github.io/rrricanes/'>can be found online</a>.</p>
 <p>Text products (Forecast/Advisory, Public Advisory, Discussions and
 Probabilities) are only available from 1998 to current. An effort will be
 made to add prior data as available.</p>
@@ -108,26 +145,39 @@ of Atlantic ("AL") or East Pacific ("EP").</p><dl class='dl-horizontal'>
 
     
     <p><code><a href='get_storm_data.html'>get_storm_data</a></code> can be used to select multiple products,
-multiple storms and from multiple basins. You can also use
-<code><a href='get_fstadv.html'>get_fstadv</a></code> for Forecast/Advisory products,
-<code><a href='get_wndprb.html'>get_wndprb</a></code> for Wind Speed Probabilities (cyclones &gt;= 2006; for
-cyclones &lt;= 2005 use <code><a href='get_prblty.html'>get_prblty</a></code>).</p>
+multiple storms and from multiple basins.</p>
 <p>Additional text products are:</p><dl class='dl-horizontal'>
   <dt><code><a href='get_discus.html'>get_discus</a></code></dt><dd><p>Storm Discussions</p></dd>
+  <dt><code><a href='get_fstadv.html'>get_fstadv</a></code></dt><dd><p>Forecast/Advisory. These products contain a
+  bulk of the information for tropical cyclones including current position,
+  structure, forecast position and forecast structure.</p></dd>
   <dt><code><a href='get_posest.html'>get_posest</a></code></dt><dd><p>Position Estimates. Rare and used generally
-    for threatening cyclones.</p></dd>
+  for threatening cyclones. This product was discontinued after the 2013
+  season and is now issued as <code><a href='get_update.html'>get_update</a></code>.</p></dd>
+  <dt><code><a href='get_prblty.html'>get_prblty</a></code></dt><dd><p>Strike Probabilities. Show the probability
+  of the center of a cyclone passing within 65nm of a location for a given
+  forecast period. This product was discontinued after 2005, replaced with
+  <code><a href='get_wndprb.html'>get_wndprb</a></code>.</p></dd>
   <dt><code><a href='get_public.html'>get_public</a></code></dt><dd><p>Public Advisory. General non-structured
-    information exists in these products.</p></dd>
+  information exists in these products.</p></dd>
   <dt><code><a href='get_update.html'>get_update</a></code></dt><dd><p>Updates. Generally issued when a cyclone
-    undergoes a sudden change that requires immediate notice.</p></dd>
+  undergoes a sudden change that requires immediate notice.</p></dd>
+  <dt><code><a href='get_wndprb.html'>get_wndprb</a></code></dt><dd><p>Wind Speed Probability. Lists the
+  probability of a location experiencing a minimum of 35kt, 50kt or 64kt
+  winds for an alotted forecast period or accumulated probability. This
+  product replaced <code><a href='get_prblty.html'>get_prblty</a></code> after the 2005 season.</p></dd>
 </dl>
     <p>The products above may take some time to load if the NHC website is slow (as
-is often the case, unfortunately). You can access post-scraped datasets with
-<code><a href='load_storm_data.html'>load_storm_data</a></code>. Currently only annual summaries,
-forecast/advisory, strike probabilities and wind speed probability products
-exist. As of this writing it is up-to-date but caution is advised for active
-cyclones. Use the above functions for the most up-to-date data as a
-fall-back.</p>
+is often the case, unfortunately). For all storm advisories issued outside
+of the current month, use the <code>rrricanesdata</code> package.</p>
+<p>To install <code>rrricanesdata</code>, run
+    <code>
+install.packages("rrricanesdata",
+         repos = "https://timtrice.github.io/drat/",
+         type = "source")
+</code></p>
+<p>See <code><a href='https://cran.rstudio.com/web/packages/rrricanes/vignettes/installing_rrricanesdata.html'>vignette("installing_rrricanesdata", package = "rrricanes")</a></code> for
+more information.</p>
     
     <h2 class="hasAnchor" id="gis-data"><a class="anchor" href="#gis-data"></a>GIS Data</h2>
 
@@ -147,7 +197,7 @@ functions.</p>
 <p>Some GIS datasets will need to be converted to dataframes to plot geoms. Use
 <code><a href='shp_to_df.html'>shp_to_df</a></code> to convert SpatialLinesDataFrames and
 SpatialPolygonsDataFrames. SpatialPointsDataFrames can be converted using
-<code>tibble::as_data_frame</code> targeting the @data object.</p>
+<code><a href='http://www.rdocumentation.org/packages/tibble/topics/as_tibble'>tibble::as_data_frame</a></code> targeting the @data object.</p>
     
     <h2 class="hasAnchor" id="package-options"><a class="anchor" href="#package-options"></a>Package Options</h2>
 
@@ -158,18 +208,16 @@ years being requested. In the product functions (i.e.,
 <code><a href='get_fstadv.html'>get_fstadv</a></code>) it is based on the number of advisories. It can be
 misleading when calling <code><a href='get_storm_data.html'>get_storm_data</a></code> because it shows the
 progress of working through a storm's product advisories but will reset on
+new products/storms.</p>
+    <p><code>dplyr.show_progress</code> displays the dplyr progress bar when scraping raw
+product datasets. In <code><a href='get_storms.html'>get_storms</a></code>, it is based on the number of
+years being requested. In the product functions (i.e.,
+<code><a href='get_fstadv.html'>get_fstadv</a></code>) it is based on the number of advisories. It can be
+misleading when calling <code><a href='get_storm_data.html'>get_storm_data</a></code> because it shows the
+progress of working through a storm's product advisories but will reset on
 new products/storms.
     <code>rrricanes.working_msg</code> is set to FALSE by default. When TRUE, it will
-list the current storm, advisory and date being worked.
-    <code>rrricanes.http_timeout</code> will set a timeout value in seconds. Often
-when scraping raw datasets the connection may time out. Use this option if
-this becomes an issue.
-    <code>rrricanes.http_attempts</code> will control the maximum number of attempts to
-get a dataset. Default is 3 but no more than 5 attempts are permitted. If
-<code>rrricanes.http_timeout</code> is reached, `rrricanes` will reattempt until
-the value of <code>rrricanes.http_attempts</code> is reached.
-    <code>rrricanes.http_sleep</code> controls how long to wait between multiple
-attempts. Default is 3 seconds.</p>
+list the current storm, advisory and date being worked.</p>
     
 
   </div>
