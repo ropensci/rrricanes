@@ -7,7 +7,6 @@ reference:
       Gather current and archived storm data.
     contents:
     - starts_with("get_")
-    - load_storm_data
   - title: Daily Discussions
     desc: Daily statements issued by the National Hurricane Center on current conditions.
     contents:
@@ -54,7 +53,3 @@ articles:
     - probabilistic_storm_surge
     - wind_pressure
     - wind_speed_probabilities
-  - title: Using Data World
-    desc: Accessing data through data.world
-    contents:
-    - data_world

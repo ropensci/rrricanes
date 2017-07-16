@@ -17,6 +17,7 @@ library(HURDAT)
 library(lubridate)
 library(readr)
 library(rrricanes)
+library(rrricanesdata)
 ```
 
 ACE or Accumulated Cyclone Energy is a method of measuring energy of a cyclone or for an entire season. It is calculated by the formula
@@ -25,13 +26,7 @@ $$ \text{ACE} = 10^{-4}\sum{v^2_\text{max}} $$
 
 where $v_\text{max}$ is the wind speed in knots. Values may only be used when a storm is a tropical system with winds of at least 35 knots. Additionally, only six-hour intervals are used.
 
-To calculate ACE you would want to use the `fstadv` dataset.
-
-```{r}
-fstadv <- load_storm_data("fstadv", col_types = cols())
-```
-
-Now, we need to apply the rules to our dataset:
+To calculate ACE you would want to use the `fstadv` dataset and apply the following rules:
 
 * since forecast/advisory products are typically issued at 03:00, 09:00, 15:00 and 21:00 UTC filter out odd hours
 * `Status` is Tropical Storm or Hurricane.
