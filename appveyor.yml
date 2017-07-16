@@ -36,8 +36,7 @@ matrix:
   fast_finish: true
 
 build_script:
-#  - travis-tool.sh install_github ropenscilabs/rnaturalearthhires
-  - travis-tool.sh install_github timtrice/rrricanesdata@feature/drat
+  - travis-tool.sh install_github timtrice/rrricanesdata
   - travis-tool.sh r_binary_install proto rgdal
   - travis-tool.sh install_deps
 
