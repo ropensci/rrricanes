@@ -16,29 +16,29 @@ Tidy current details of a fstadv dataframe object.
 Returns current data only of a fstadv dataframe. Use Key, Adv and
 Date to join with other tidy dataframes.
 \describe{
-   \item{Key}{Unique identifier of cyclone}
-   \item{Adv}{Advisory number}
-   \item{Date}{Date and time of advisory}
-   \item{Status}{Classification of cyclone}
-   \item{Name}{Name of cyclone}
-   \item{Lat}{Latitude of cyclone center}
-   \item{Lon}{Longitude of cyclone center}
-   \item{Wind}{Maximum sustained one-minute winds in knots}
-   \item{Gust}{Maximum sustained one-minute gusts in knots}
-   \item{Pressure}{Minimum central pressure in millibars}
-   \item{PosAcc}{Position accuracy of cyclone in nautical miles}
-   \item{FwdDir}{Compass angle of forward motion}
-   \item{FwdSpeed}{Forward speed in miles per hour}
-   \item{Eye}{Size of eye in nautical miles}
-   \item{SeasNE}{Radius of 12ft seas in northeast quadrant}
-   \item{SeasSE}{Radius of 12ft seas in southeast quadrant}
-   \item{SeasSW}{Radius of 12ft seas in southwest quadrant}
-   \item{SeasNW}{Radius of 12ft seas in northwest quadrant}
+ \item{Key}{Unique identifier of cyclone}
+ \item{Adv}{Advisory number}
+ \item{Date}{Date and time of advisory}
+ \item{Status}{Classification of cyclone}
+ \item{Name}{Name of cyclone}
+ \item{Lat}{Latitude of cyclone center}
+ \item{Lon}{Longitude of cyclone center}
+ \item{Wind}{Maximum sustained one-minute winds in knots}
+ \item{Gust}{Maximum sustained one-minute gusts in knots}
+ \item{Pressure}{Minimum central pressure in millibars}
+ \item{PosAcc}{Position accuracy of cyclone in nautical miles}
+ \item{FwdDir}{Compass angle of forward motion}
+ \item{FwdSpeed}{Forward speed in miles per hour}
+ \item{Eye}{Size of eye in nautical miles}
+ \item{SeasNE}{Radius of 12ft seas in northeast quadrant}
+ \item{SeasSE}{Radius of 12ft seas in southeast quadrant}
+ \item{SeasSW}{Radius of 12ft seas in southwest quadrant}
+ \item{SeasNW}{Radius of 12ft seas in northwest quadrant}
 }
 }
 \examples{
 \dontrun{
 get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") \%>\%
-    tidy_fstadv()
+  tidy_fstadv()
 }
 }

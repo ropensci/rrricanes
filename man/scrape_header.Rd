@@ -12,12 +12,12 @@ scrape_header(contents, ret = NULL)
 \item{ret}{Choose either status, name, adv or date to return.
 \describe{
   \item{status}{status of cyclone (Hurricane, Tropical Storm, Subtropical
-    Storm...)}
+  Storm...)}
   \item{name}{return name of storm}
   \item{adv}{return advisory number}
   \item{date}{Date/Time of product issuance.}
   \item{key}{Key, unique identifier for each storm. May not be available in
-    some packages}
+  some packages}
 }}
 }
 \value{

@@ -28,23 +28,23 @@
 #' \describe{
 #'   \item{\code{\link{get_discus}}}{Storm Discussions}
 #'   \item{\code{\link{get_fstadv}}}{Forecast/Advisory. These products contain a
-#'     bulk of the information for tropical cyclones including current position,
-#'     structure, forecast position and forecast structure.}
+#'   bulk of the information for tropical cyclones including current position,
+#'   structure, forecast position and forecast structure.}
 #'   \item{\code{\link{get_posest}}}{Position Estimates. Rare and used generally
-#'     for threatening cyclones. This product was discontinued after the 2013
-#'     season and is now issued as \code{\link{get_update}}.}
+#'   for threatening cyclones. This product was discontinued after the 2013
+#'   season and is now issued as \code{\link{get_update}}.}
 #'   \item{\code{\link{get_prblty}}}{Strike Probabilities. Show the probability
-#'     of the center of a cyclone passing within 65nm of a location for a given
-#'     forecast period. This product was discontinued after 2005, replaced with
-#'     \code{\link{get_wndprb}}.}
+#'   of the center of a cyclone passing within 65nm of a location for a given
+#'   forecast period. This product was discontinued after 2005, replaced with
+#'   \code{\link{get_wndprb}}.}
 #'   \item{\code{\link{get_public}}}{Public Advisory. General non-structured
-#'     information exists in these products.}
+#'   information exists in these products.}
 #'   \item{\code{\link{get_update}}}{Updates. Generally issued when a cyclone
-#'     undergoes a sudden change that requires immediate notice.}
+#'   undergoes a sudden change that requires immediate notice.}
 #'   \item{\code{\link{get_wndprb}}}{Wind Speed Probability. Lists the
-#'     probability of a location experiencing a minimum of 35kt, 50kt or 64kt
-#'     winds for an alotted forecast period or accumulated probability. This
-#'     product replaced \code{\link{get_prblty}} after the 2005 season.}
+#'   probability of a location experiencing a minimum of 35kt, 50kt or 64kt
+#'   winds for an alotted forecast period or accumulated probability. This
+#'   product replaced \code{\link{get_prblty}} after the 2005 season.}
 #' }
 #'
 #' The products above may take some time to load if the NHC website is slow (as
@@ -55,8 +55,8 @@
 #'
 #' \code{
 #' install.packages("rrricanesdata",
-#'                  repos = "https://timtrice.github.io/drat/",
-#'                  type = "source")
+#'          repos = "https://timtrice.github.io/drat/",
+#'          type = "source")
 #' }
 #'
 #' See \code{vignette("installing_rrricanesdata", package = "rrricanes")} for
@@ -135,17 +135,17 @@ NULL
 
 hasData <- function(has_data = .pkgenv$has_data) {
   if (!has_data) {
-    stop("rrricanesdata is not installed.")
+  stop("rrricanesdata is not installed.")
   }
 }
 
 utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
-                         "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
-                         "WindField34", "WindField50", "WindField64", "lat",
-                         "long", "group", ".", "NW34", "name", "data", "Basin",
-                         paste0(c("NE", "SE", "SW", "NW", "64")),
-                         paste0(c("NE", "SE", "SW", "NW", "50")),
-                         paste0(c("NE", "SE", "SW", "NW", "34"))))
+             "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
+             "WindField34", "WindField50", "WindField64", "lat",
+             "long", "group", ".", "NW34", "name", "data", "Basin",
+             paste0(c("NE", "SE", "SW", "NW", "64")),
+             paste0(c("NE", "SE", "SW", "NW", "50")),
+             paste0(c("NE", "SE", "SW", "NW", "34"))))
 
 #' @title convert_lat_lon
 #' @description Converts lat, lon to negative if in southern, western
@@ -155,9 +155,9 @@ utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
 #' @return integer positive or negative
 #' @keywords internal
 convert_lat_lon <- function(x, y) {
-    if (!is.numeric(x)) {stop("x is not numeric!")}
-    if (!(y %in% c('N', 'S', 'E', 'W'))) {stop("y must be c('N','S','E','W')")}
-    ifelse(y == 'S' | y == 'W', return(x * -1), return(x))
+  if (!is.numeric(x)) {stop("x is not numeric!")}
+  if (!(y %in% c('N', 'S', 'E', 'W'))) {stop("y must be c('N','S','E','W')")}
+  ifelse(y == 'S' | y == 'W', return(x * -1), return(x))
 }
 
 #' @title extract_year_archive_link
@@ -166,9 +166,9 @@ convert_lat_lon <- function(x, y) {
 #' @return year 4-digit numeric
 #' @keywords internal
 extract_year_archive_link <- function(link) {
-    # Year is listed in link towards the end surrounded by slashes.
-    year <- as.numeric(stringr::str_match(link, '/([:digit:]{4})/')[,2])
-    return(year)
+  # Year is listed in link towards the end surrounded by slashes.
+  year <- as.numeric(stringr::str_match(link, '/([:digit:]{4})/')[,2])
+  return(year)
 }
 
 #' @title get_url_contents
@@ -190,9 +190,9 @@ get_url_contents <- function(links) {
 #' trailing slash.
 #' @keywords internal
 get_nhc_link <- function(withTrailingSlash = TRUE) {
-    if (withTrailingSlash)
-        return('http://www.nhc.noaa.gov/')
-    return('http://www.nhc.noaa.gov')
+  if (withTrailingSlash)
+    return('http://www.nhc.noaa.gov/')
+  return('http://www.nhc.noaa.gov')
 }
 
 #' @title knots_to_mph
@@ -203,7 +203,7 @@ get_nhc_link <- function(withTrailingSlash = TRUE) {
 #' knots_to_mph(65)
 #' @export
 knots_to_mph <- function(x) {
-    return(x * 1.15077945)
+  return(x * 1.15077945)
 }
 
 #' @title mb_to_in
@@ -214,7 +214,7 @@ knots_to_mph <- function(x) {
 #' mb_to_in(999)
 #' @export
 mb_to_in <- function(x) {
-    return(x * 0.029529983071)
+  return(x * 0.029529983071)
 }
 
 #' @title month_str_to_num
@@ -223,10 +223,10 @@ mb_to_in <- function(x) {
 #' @return numeric 1-12
 #' @keywords internal
 month_str_to_num <- function(m) {
-    abbr <- which(month.abb == stringr::str_to_title(m))
-    if (purrr::is_empty(abbr))
-        stop(sprintf("%s is not a valid month abbreviation.", m))
-    return(abbr)
+  abbr <- which(month.abb == stringr::str_to_title(m))
+  if (purrr::is_empty(abbr))
+    stop(sprintf("%s is not a valid month abbreviation.", m))
+  return(abbr)
 }
 
 #' @title saffir
@@ -237,15 +237,15 @@ month_str_to_num <- function(m) {
 #' saffir(c(32, 45, 70, 90, 110, 125, 140))
 #' @export
 saffir <- function(x) {
-    y <- character(length = length(x))
-    y[x <= 33] <- "TD"
-    y[dplyr::between(x, 34, 64)] <- "TS"
-    y[dplyr::between(x, 65, 83)] <- "HU1"
-    y[dplyr::between(x, 84, 95)] <- "HU2"
-    y[dplyr::between(x, 96, 113)] <- "HU3"
-    y[dplyr::between(x, 114, 134)] <- "HU4"
-    y[x >= 135] <- "HU5"
-    return(y)
+  y <- character(length = length(x))
+  y[x <= 33] <- "TD"
+  y[dplyr::between(x, 34, 64)] <- "TS"
+  y[dplyr::between(x, 65, 83)] <- "HU1"
+  y[dplyr::between(x, 84, 95)] <- "HU2"
+  y[dplyr::between(x, 96, 113)] <- "HU3"
+  y[dplyr::between(x, 114, 134)] <- "HU4"
+  y[x >= 135] <- "HU5"
+  return(y)
 }
 
 #' @title status_abbr_to_str
@@ -253,18 +253,18 @@ saffir <- function(x) {
 #' @param x character vector of status abbreviations
 #' @details Status abbreviations
 #' \describe{
-#'     \item{DB}{Disturbance (of any intensity)}
-#'     \item{EX}{Extratropical cyclone (of any intensity)}
-#'     \item{HU}{Tropical cyclone of hurricane intensity (> 64 knots)}
-#'     \item{LO}{A low that is neither a tropical cyclone, a subtropical
-#'               cyclone, nor an extratropical cyclone (of any intensity)}
-#'     \item{SD}{Subtropical cyclone of subtropical depression intensity
-#'               (< 34 knots)}
-#'     \item{SS}{Subtropical cyclone of subtropical storm intensity
-#'               (> 34 knots)}
-#'     \item{TD}{Tropical cyclone of tropical depression intensity (< 34 knots)}
-#'     \item{TS}{Tropical cyclone of tropical storm intensity (34-63 knots)}
-#'     \item{WV}{Tropical Wave (of any intensity)}
+#'   \item{DB}{Disturbance (of any intensity)}
+#'   \item{EX}{Extratropical cyclone (of any intensity)}
+#'   \item{HU}{Tropical cyclone of hurricane intensity (> 64 knots)}
+#'   \item{LO}{A low that is neither a tropical cyclone, a subtropical
+#'         cyclone, nor an extratropical cyclone (of any intensity)}
+#'   \item{SD}{Subtropical cyclone of subtropical depression intensity
+#'         (< 34 knots)}
+#'   \item{SS}{Subtropical cyclone of subtropical storm intensity
+#'         (> 34 knots)}
+#'   \item{TD}{Tropical cyclone of tropical depression intensity (< 34 knots)}
+#'   \item{TS}{Tropical cyclone of tropical storm intensity (34-63 knots)}
+#'   \item{WV}{Tropical Wave (of any intensity)}
 #' }
 #' @return character vector of strings
 #' @seealso \url{http://www.aoml.noaa.gov/hrd/hurdat/newhurdat-format.pdf}
@@ -276,17 +276,17 @@ saffir <- function(x) {
 #' status_abbr_to_str("HU")
 #' @export
 status_abbr_to_str <- function(x) {
-    y <- character(length = 0)
-    y[x == "TD"] <- "Tropical Depression"
-    y[x == "TS"] <- "Tropical Storm"
-    y[x == "HU"] <- "Hurricane"
-    y[x == "EX"] <- "Extratropical Cyclone"
-    y[x == "SD"] <- "Subtropical Depression"
-    y[x == "SS"] <- "Subtropical Storm"
-    y[x == "LO"] <- "Low"
-    y[x == "WV"] <- "Tropical Wave"
-    y[x == "DB"] <- "Disturbance"
-    return(y)
+  y <- character(length = 0)
+  y[x == "TD"] <- "Tropical Depression"
+  y[x == "TS"] <- "Tropical Storm"
+  y[x == "HU"] <- "Hurricane"
+  y[x == "EX"] <- "Extratropical Cyclone"
+  y[x == "SD"] <- "Subtropical Depression"
+  y[x == "SS"] <- "Subtropical Storm"
+  y[x == "LO"] <- "Low"
+  y[x == "WV"] <- "Tropical Wave"
+  y[x == "DB"] <- "Disturbance"
+  return(y)
 }
 
 #' @title validate_year
@@ -294,10 +294,10 @@ status_abbr_to_str <- function(x) {
 #' @return numeric year(s)
 #' @keywords internal
 validate_year <- function(y) {
-    y <- as.numeric(y)
-    if (all(is.na(y)))
-        stop('Year must be numeric.')
-    if (any(nchar(y) != 4))
-        stop('Year must be 4 digits.')
-    return(y)
+  y <- as.numeric(y)
+  if (all(is.na(y)))
+    stop('Year must be numeric.')
+  if (any(nchar(y) != 4))
+    stop('Year must be 4 digits.')
+  return(y)
 }

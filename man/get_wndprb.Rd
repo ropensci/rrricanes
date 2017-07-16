@@ -17,12 +17,12 @@ Return dataframe of wind speed probability data.
 }
 \details{
 Wind Speed Probability product replaced Strike Probabilities product
-    after the 2005 hurricane season. These products may not be issued for
-    every advisory/cyclone.
+  after the 2005 hurricane season. These products may not be issued for
+  every advisory/cyclone.
 
 \describe{
   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
-    etc.}
+  etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}

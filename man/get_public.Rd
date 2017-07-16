@@ -13,7 +13,7 @@ get_public(links)
 Return dataframe of public advisory data.
 \describe{
   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
-    etc.}
+  etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}

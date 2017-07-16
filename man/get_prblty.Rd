@@ -14,7 +14,7 @@ Strike probabilities; the chances of the center of a cyclone
 passing within 65 nautical miles of a location.
 \describe{
   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
-    etc.}
+  etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}

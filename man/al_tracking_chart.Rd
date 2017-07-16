@@ -22,16 +22,16 @@ al_tracking_chart(color = "black", size = 0.1, fill = "white")
 
 # 50nm resolution, no states
 al_tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
-                  fill = "white")
+          fill = "white")
 
 # 50nm resolution, coastlines only
 al_tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
-                  fill = "white")
+          fill = "white")
 
 # Adding and modifying with ggplot functions
 al_tracking_chart(color = "black", size = 0.1, fill = "white") +
-    ggplot2::labs(x = "Lon", y = "Lat",
-    title = "Base Atlantic Tracking Chart")
+  ggplot2::labs(x = "Lon", y = "Lat",
+  title = "Base Atlantic Tracking Chart")
 }
 }
 \seealso{

@@ -18,19 +18,19 @@ forecast position. Complete cases only. Use Key, Adv and Date to join with
 other tidy dataframes.
 
 \describe{
-   \item{Key}{Unique identifier of cyclone}
-   \item{Adv}{Advisory number}
-   \item{Date}{Date and time of advisory}
-   \item{FcstDate}{Forecast date and time in UTC}
-   \item{Lat}{Forecast latitude}
-   \item{Lon}{Forecast Longitude}
-   \item{Wind}{Forecast wind in knots}
-   \item{Gust}{Forecast gust in knots}
+ \item{Key}{Unique identifier of cyclone}
+ \item{Adv}{Advisory number}
+ \item{Date}{Date and time of advisory}
+ \item{FcstDate}{Forecast date and time in UTC}
+ \item{Lat}{Forecast latitude}
+ \item{Lon}{Forecast Longitude}
+ \item{Wind}{Forecast wind in knots}
+ \item{Gust}{Forecast gust in knots}
 }
 }
 \examples{
 \dontrun{
 get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") \%>\%
-    tidy_fcst()
+  tidy_fcst()
 }
 }

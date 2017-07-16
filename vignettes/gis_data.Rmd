@@ -138,7 +138,7 @@ Forecast cone data is contained in the polygon dataset. To deal with this datase
 ```{r}
 fcst_cone <- df.gis_adv$al182012_018_5day_pgn
 fcst_cone@data$id <- rownames(fcst_cone@data)
-fcst_cone.points = broom::tidy(fcst_cone, region = "id")
+fcst_cone.points <- broom::tidy(fcst_cone, region = "id")
 fcst_cone <- dplyr::left_join(fcst_cone.points, fcst_cone@data, by = "id")
 ```
 

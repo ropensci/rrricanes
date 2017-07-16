@@ -21,26 +21,26 @@ Retrieve data from products.
 }
 \details{
 \code{get_storm_data} is a wrapper function to make it more
-    convenient to access the various storm products.
+  convenient to access the various storm products.
 
 Types of products:
 \describe{
   \item{discus}{Storm Discussions. This is technical information on the
-    cyclone such as satellite presentation, forecast model evaluation, etc.}
+  cyclone such as satellite presentation, forecast model evaluation, etc.}
   \item{fstadv}{Forecast/Advisory. These products contain the meat of an
-    advisory package. Current storm information is available as well as
-    structural design and forecast data.}
+  advisory package. Current storm information is available as well as
+  structural design and forecast data.}
   \item{posest}{Position Estimate. Issued generally when a storm is
-    threatening; provides a brief update on location and winds.}
+  threatening; provides a brief update on location and winds.}
   \item{public}{Public Advisory. Issued for public knowledge; more often for
-    Atlantic than East Pacific storms. Contains general information.}
+  Atlantic than East Pacific storms. Contains general information.}
   \item{prblty}{Strike Probability. Discontinued after the 2005 hurricane
-    season, strike probabilities list the chances of x-force winds in a
-    particular city.}
+  season, strike probabilities list the chances of x-force winds in a
+  particular city.}
   \item{update}{Cyclone Update. Generally issued when a significant change
-    occurs in the cyclone.}
+  occurs in the cyclone.}
   \item{windprb}{Wind Probability. Replace strike probabilities beginning in
-    the 2006 season. Nearly identical.}
+  the 2006 season. Nearly identical.}
 }
 
 Progress bars are displayed by default. These can be turned off by setting
@@ -51,13 +51,13 @@ each advisory being worked by setting the rrricanes.working_msg to TRUE.
 \dontrun{
 ## Get public advisories for first storm of 2016 Atlantic season.
 get_storms(year = 2016, basin = "AL") \%>\%
-    slice(1) \%>\%
-    .$Link \%>\%
-    get_storm_data(products = "public")
+  slice(1) \%>\%
+  .$Link \%>\%
+  get_storm_data(products = "public")
 ## Get public advisories and storm discussions for first storm of 2017 Atlantic season.
 get_storms(year = 2017, basin = "AL") \%>\%
-    slice(1) \%>\%
-    .$Link \%>\%
-    get_storm_data(products = c("discus", "public"))
+  slice(1) \%>\%
+  .$Link \%>\%
+  get_storm_data(products = c("discus", "public"))
 }
 }

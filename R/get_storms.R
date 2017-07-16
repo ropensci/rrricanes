@@ -7,33 +7,35 @@
 extract_storms <- function(basin, contents) {
 
   if (basin == "AL") {
-    link_xpath <- "//td[(((count(preceding-sibling::*) + 1) = 1) and parent::*)]//a"
+  link_xpath <- paste0("//td[(((count(preceding-sibling::*) + 1) = 1)",
+             " and parent::*)]//a")
   } else if (basin == "EP") {
-    link_xpath <- "//td[(((count(preceding-sibling::*) + 1) = 2) and parent::*)]//a"
+  link_xpath <- paste0("//td[(((count(preceding-sibling::*) + 1) = 2)",
+             " and parent::*)]//a")
   } else {
-    stop("No basin")
+  stop("No basin")
   }
 
   contents <- purrr::map(contents, ~.$parse("UTF-8")) %>%
-    purrr::map(xml2::read_html)
+  purrr::map(xml2::read_html)
 
   years <- purrr::map(contents, rvest::html_nodes, xpath = "//title") %>%
-    purrr::map(rvest::html_text) %>%
-    stringr::str_sub(0L, 4L) %>%
-    as.numeric()
+  purrr::map(rvest::html_text) %>%
+  stringr::str_sub(0L, 4L) %>%
+  as.numeric()
 
   storms <- purrr::map(contents, rvest::html_nodes, xpath = link_xpath)
   names <- purrr::map(storms, rvest::html_text) %>%
-    purrr::map(stringr::str_to_title)
+  purrr::map(stringr::str_to_title)
   links <- purrr::map(storms, rvest::html_attr, name = "href") %>%
-    purrr::map2(years, ~paste0(year_archives_link(.y), .x))
+  purrr::map2(years, ~paste0(year_archives_link(.y), .x))
   basins <- purrr::map(names, purrr::rep_along, basin)
   years <- purrr::map2(names, years, purrr::rep_along)
 
   df <- tibble::data_frame("Year" = years %>% purrr::flatten_dbl(),
-                           "Name" = names %>% purrr::flatten_chr(),
-                           "Basin" = basins %>% purrr::flatten_chr(),
-                           "Link" = links %>% purrr::flatten_chr())
+               "Name" = names %>% purrr::flatten_chr(),
+               "Basin" = basins %>% purrr::flatten_chr(),
+               "Link" = links %>% purrr::flatten_chr())
 
   return(df)
 }
@@ -69,23 +71,23 @@ extract_storms <- function(basin, contents) {
 #' @source \url{http://www.nhc.noaa.gov/archive/2016/}
 #' @export
 get_storms <- function(years = format(Sys.Date(), "%Y"),
-                       basins = c("AL", "EP")) {
+             basins = c("AL", "EP")) {
 
   years <- validate_year(years)
 
   # No archives earlier than 1998 for now
   if (any(years < 1998))
-    stop('Archives currently only available for 1998 to current year.')
+  stop('Archives currently only available for 1998 to current year.')
 
   if (!all(basins %in% c("AL", "EP")))
-    stop("Basin must 'AL' and/or 'EP'")
+  stop("Basin must 'AL' and/or 'EP'")
 
   links <- purrr::map(years, .f = year_archives_link) %>%
-    purrr::flatten_chr()
+  purrr::flatten_chr()
 
   # 1998 is only year with slightly different URL. Modify accordingly
   links[grep("1998", links)] <- paste0(links[grep("1998", links)],
-                                       "1998archive.shtml")
+                     "1998archive.shtml")
 
   # There is an 80-hit/10-second limit to the NHC pages (note Issue #94), or 8
   # requests/second. The below request will process 4 links every 0.5 seconds.
@@ -109,12 +111,12 @@ get_storms_link <- function(links, basins, p) {
   p$pause(0.5)$tick()$print()
 
   contents <- purrr::map(links, .f = function(x) {get_url_contents(x)}) %>%
-    purrr::flatten()
+  purrr::flatten()
 
   df <- purrr::map_df(basins, extract_storms, contents) %>%
-    dplyr::group_by(Year, Basin) %>%
-    dplyr::arrange(Year, Basin) %>%
-    dplyr::ungroup()
+  dplyr::group_by(Year, Basin) %>%
+  dplyr::arrange(Year, Basin) %>%
+  dplyr::ungroup()
 
   return(df)
 
@@ -125,7 +127,7 @@ get_storms_link <- function(links, basins, p) {
 #' @param year 4-digit numeric
 #' @keywords internal
 year_archives_link <- function(year) {
-    nhc_link <- get_nhc_link()
-    link <- sprintf(paste0(nhc_link, 'archive/%i/'), year)
-    return(link)
+  nhc_link <- get_nhc_link()
+  link <- sprintf(paste0(nhc_link, 'archive/%i/'), year)
+  return(link)
 }

@@ -5,14 +5,14 @@
 #' removed from the National Hurricane Center.
 #' @export
 al_prblty_stations <- function() {
-    url <- "http://www.nhc.noaa.gov/data/wsp/al_prblty_station.lst.csv.txt"
-    df <- readr::read_csv(url,
-                          col_names = c("Location", "Lat", "Lon"),
-                          col_types = readr::cols(Location = "c",
-                                                  Lat = "n",
-                                                  Lon = "n")) %>%
-        dplyr::arrange_("Location")
-    return(df)
+  url <- "http://www.nhc.noaa.gov/data/wsp/al_prblty_station.lst.csv.txt"
+  df <- readr::read_csv(url,
+              col_names = c("Location", "Lat", "Lon"),
+              col_types = readr::cols(Location = "c",
+                          Lat = "n",
+                          Lon = "n")) %>%
+    dplyr::arrange_("Location")
+  return(df)
 }
 
 #' @title cp_prblty_stations
@@ -22,14 +22,14 @@ al_prblty_stations <- function() {
 #' removed from the National Hurricane Center.
 #' @export
 cp_prblty_stations <- function() {
-    url <- "http://www.nhc.noaa.gov/data/wsp/cp_prblty_station.lst.csv.txt"
-    df <- readr::read_csv(url,
-                          col_names = c("Location", "Lat", "Lon"),
-                          col_types = readr::cols(Location = "c",
-                                                  Lat = "n",
-                                                  Lon = "n")) %>%
-        dplyr::arrange_("Location")
-    return(df)
+  url <- "http://www.nhc.noaa.gov/data/wsp/cp_prblty_station.lst.csv.txt"
+  df <- readr::read_csv(url,
+              col_names = c("Location", "Lat", "Lon"),
+              col_types = readr::cols(Location = "c",
+                          Lat = "n",
+                          Lon = "n")) %>%
+    dplyr::arrange_("Location")
+  return(df)
 }
 
 #' @title ep_prblty_stations
@@ -42,19 +42,19 @@ cp_prblty_stations <- function() {
 #' removed from the National Hurricane Center.
 #' @export
 ep_prblty_stations <- function() {
-    url <- "http://www.nhc.noaa.gov/data/wsp/ep_prblty_station.lst.csv.txt"
-    return(FALSE)
+  url <- "http://www.nhc.noaa.gov/data/wsp/ep_prblty_station.lst.csv.txt"
+  return(FALSE)
 }
 
 #' @title get_wndprb
 #' @description Return dataframe of wind speed probability data.
 #' @details Wind Speed Probability product replaced Strike Probabilities product
-#'     after the 2005 hurricane season. These products may not be issued for
-#'     every advisory/cyclone.
+#'   after the 2005 hurricane season. These products may not be issued for
+#'   every advisory/cyclone.
 #'
 #' \describe{
 #'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
-#'     etc.}
+#'   etc.}
 #'   \item{Name}{Name of storm}
 #'   \item{Adv}{Advisory Number}
 #'   \item{Date}{Date of advisory issuance}
@@ -98,54 +98,54 @@ wndprb <- function(contents) {
   name <- scrape_header(contents, ret = "name")
 
   if (getOption("rrricanes.working_msg"))
-    message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
-                    status, name, adv, date))
+  message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
+          status, name, adv, date))
 
   ptn <- paste0("(?<=\n)", # Look-behind
-                # Location - first value must be capital letter.
-                "([:upper:]{1}[[:alnum:][:blank:][:punct:]]{14})",
-                # Wind
-                "([[:digit:]]{2})",
-                # Wind12
-                "[:blank:]+([:digit:]{1,2}|X)",
-                # Delim
-                "[:blank:]+",
-                # Wind24
-                "([:digit:]{1,2}|X)",
-                # Wind24 cumulative
-                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                # Delim
-                "[:blank:]+",
-                # Wind36
-                "([:digit:]{1,2}|X)",
-                # Wind36 cumulative
-                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                # Delim
-                "[:blank:]+",
-                # Wind48
-                "([:digit:]{1,2}|X)",
-                # Wind48 cumulative
-                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                # Delim
-                "[:blank:]+",
-                # Wind72
-                "([:digit:]{1,2}|X)",
-                # Wind72 cumulative
-                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                # Delim
-                "[:blank:]+",
-                # Wind96
-                "([:digit:]{1,2}|X)",
-                # Wind96 cumulative
-                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                # Delim
-                "[:blank:]+",
-                # Wind120
-                "([:digit:]{1,2}|X)",
-                # Wind120 cumulative
-                "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                # End
-                "[[:blank:]\n]+")
+        # Location - first value must be capital letter.
+        "([:upper:]{1}[[:alnum:][:blank:][:punct:]]{14})",
+        # Wind
+        "([[:digit:]]{2})",
+        # Wind12
+        "[:blank:]+([:digit:]{1,2}|X)",
+        # Delim
+        "[:blank:]+",
+        # Wind24
+        "([:digit:]{1,2}|X)",
+        # Wind24 cumulative
+        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+        # Delim
+        "[:blank:]+",
+        # Wind36
+        "([:digit:]{1,2}|X)",
+        # Wind36 cumulative
+        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+        # Delim
+        "[:blank:]+",
+        # Wind48
+        "([:digit:]{1,2}|X)",
+        # Wind48 cumulative
+        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+        # Delim
+        "[:blank:]+",
+        # Wind72
+        "([:digit:]{1,2}|X)",
+        # Wind72 cumulative
+        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+        # Delim
+        "[:blank:]+",
+        # Wind96
+        "([:digit:]{1,2}|X)",
+        # Wind96 cumulative
+        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+        # Delim
+        "[:blank:]+",
+        # Wind120
+        "([:digit:]{1,2}|X)",
+        # Wind120 cumulative
+        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+        # End
+        "[[:blank:]\n]+")
 
   matches <- stringr::str_match_all(contents, pattern = ptn)
 
@@ -154,17 +154,17 @@ wndprb <- function(contents) {
 
   # If only one row, need to transpose wndprb
   if (ncol(wndprb) == 1)
-    wndprb <- wndprb %>% t() %>% tibble::as_data_frame()
+  wndprb <- wndprb %>% t() %>% tibble::as_data_frame()
 
   # If no wnd speed probabilities, return NULL
   if (nrow(wndprb) == 0)
-    return(NULL)
+  return(NULL)
 
   # Rename variables
   names(wndprb) <- c("Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
-                     "Wind36", "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
-                     "Wind72Cum", "Wind96", "Wind96Cum", "Wind120",
-                     "Wind120Cum")
+           "Wind36", "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
+           "Wind72Cum", "Wind96", "Wind96Cum", "Wind120",
+           "Wind120Cum")
 
   # Trim whitespace
   wndprb <- purrr::map_df(.x = wndprb, .f = stringr::str_trim)
@@ -176,22 +176,22 @@ wndprb <- function(contents) {
   # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
   # accomodate usage of both 0.5.0 and >= 0.6.0.
   if (packageVersion("dplyr") > "0.5.0") {
-    wndprb <- dplyr::mutate_at(.tbl = wndprb,
-                               .vars = c(2:15),
-                               .funs = "as.numeric")
+  wndprb <- dplyr::mutate_at(.tbl = wndprb,
+                 .vars = c(2:15),
+                 .funs = "as.numeric")
   } else {
-    wndprb <- dplyr::mutate_at(.tbl = wndprb,
-                               .cols = c(2:15),
-                               .funs = "as.numeric")
+  wndprb <- dplyr::mutate_at(.tbl = wndprb,
+                 .cols = c(2:15),
+                 .funs = "as.numeric")
   }
 
   # Add Key, Adv, Date and rearrange.
   wndprb <- wndprb %>%
-    dplyr::mutate("Key" = key,
-                  "Adv" = adv,
-                  "Date" = date) %>%
-    dplyr::select_("Key:Date", "Location:Wind120Cum") %>%
-    dplyr::arrange_("Key", "Date", "Adv")
+  dplyr::mutate("Key" = key,
+          "Adv" = adv,
+          "Date" = date) %>%
+  dplyr::select_("Key:Date", "Location:Wind120Cum") %>%
+  dplyr::arrange_("Key", "Date", "Adv")
 
   return(wndprb)
 }

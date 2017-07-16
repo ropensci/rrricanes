@@ -11,12 +11,12 @@ extract_product_contents <- function(links, product, p) {
   res <- purrr::map(links, get_url_contents) %>% purrr::flatten()
 
   res_parsed <- purrr::map(res, ~xml2::read_html(.$content)) %>%
-    purrr::map(.f = function(x) {
-      if (is.na(txt <- rvest::html_node(x, xpath = "//pre") %>%
-                rvest::html_text()))
-        txt <- rvest::html_text(x)
-      return(txt)
-    })
+  purrr::map(.f = function(x) {
+    if (is.na(txt <- rvest::html_node(x, xpath = "//pre") %>%
+        rvest::html_text()))
+    txt <- rvest::html_text(x)
+    return(txt)
+  })
 
   df <- purrr::invoke_map_df(product, .x = res_parsed)
 
@@ -35,21 +35,21 @@ extract_storm_links <- function(links, p) {
   p$tick()$print()
 
   res <- purrr::map(links, .f = function(x) {get_url_contents(x)}) %>%
-    purrr::flatten()
+  purrr::flatten()
 
   # Get contents of all storms
   storm_contents <- purrr::map(res, ~.$parse("UTF-8")) %>%
-    purrr::map(xml2::read_html)
+  purrr::map(xml2::read_html)
 
   years <- purrr::map(res, ~.$url) %>%
-    purrr::flatten_chr() %>%
-    stringr::str_extract("[[:digit:]]{4}") %>%
-    as.numeric()
+  purrr::flatten_chr() %>%
+  stringr::str_extract("[[:digit:]]{4}") %>%
+  as.numeric()
 
   # Extract all links
   product_links <- purrr::map(storm_contents,
-                              ~rvest::html_nodes(x = .x, xpath = "//td//a")) %>%
-    purrr::map(~rvest::html_attr(x = .x, name = "href"))
+                ~rvest::html_nodes(x = .x, xpath = "//td//a")) %>%
+  purrr::map(~rvest::html_attr(x = .x, name = "href"))
 
   # 1998 product links are relative and prefixed with "/archive/1998/" whereas
   # other years, product_links are absolute. If product_links exist for 1998
@@ -57,7 +57,7 @@ extract_storm_links <- function(links, p) {
   # nhc_domain
   nhc_domain <- get_nhc_link(withTrailingSlash = FALSE)
   product_links[years == 1998] <- purrr::map(product_links[years == 1998],
-                                             ~sprintf("/archive/1998/%s", .))
+                       ~sprintf("/archive/1998/%s", .))
   product_links <- purrr::map(product_links, ~sprintf("%s%s", nhc_domain, .))
   return(product_links)
 }
@@ -68,33 +68,33 @@ extract_storm_links <- function(links, p) {
 #' @return page content of archive page
 #' @keywords internal
 get_storm_content <- function(link) {
-    contents <- get_url_contents(link) %>% rvest::html_nodes(xpath = "//td//a")
-    return(contents)
+  contents <- get_url_contents(link) %>% rvest::html_nodes(xpath = "//td//a")
+  return(contents)
 }
 
 #' @title get_storm_data
 #' @description Retrieve data from products.
 #' @details \code{get_storm_data} is a wrapper function to make it more
-#'     convenient to access the various storm products.
+#'   convenient to access the various storm products.
 #'
 #' Types of products:
 #' \describe{
 #'   \item{discus}{Storm Discussions. This is technical information on the
-#'     cyclone such as satellite presentation, forecast model evaluation, etc.}
+#'   cyclone such as satellite presentation, forecast model evaluation, etc.}
 #'   \item{fstadv}{Forecast/Advisory. These products contain the meat of an
-#'     advisory package. Current storm information is available as well as
-#'     structural design and forecast data.}
+#'   advisory package. Current storm information is available as well as
+#'   structural design and forecast data.}
 #'   \item{posest}{Position Estimate. Issued generally when a storm is
-#'     threatening; provides a brief update on location and winds.}
+#'   threatening; provides a brief update on location and winds.}
 #'   \item{public}{Public Advisory. Issued for public knowledge; more often for
-#'     Atlantic than East Pacific storms. Contains general information.}
+#'   Atlantic than East Pacific storms. Contains general information.}
 #'   \item{prblty}{Strike Probability. Discontinued after the 2005 hurricane
-#'     season, strike probabilities list the chances of x-force winds in a
-#'     particular city.}
+#'   season, strike probabilities list the chances of x-force winds in a
+#'   particular city.}
 #'   \item{update}{Cyclone Update. Generally issued when a significant change
-#'     occurs in the cyclone.}
+#'   occurs in the cyclone.}
 #'   \item{windprb}{Wind Probability. Replace strike probabilities beginning in
-#'     the 2006 season. Nearly identical.}
+#'   the 2006 season. Nearly identical.}
 #' }
 #'
 #' Progress bars are displayed by default. These can be turned off by setting
@@ -103,25 +103,25 @@ get_storm_content <- function(link) {
 #'
 #' @param links to storm's archive page.
 #' @param products Products to retrieve; discus, fstadv, posest, public,
-#'     prblty, update, and windprb.
+#'   prblty, update, and windprb.
 #' @return list of dataframes for each of the products.
 #' @examples
 #' \dontrun{
 #' ## Get public advisories for first storm of 2016 Atlantic season.
 #' get_storms(year = 2016, basin = "AL") %>%
-#'     slice(1) %>%
-#'     .$Link %>%
-#'     get_storm_data(products = "public")
+#'   slice(1) %>%
+#'   .$Link %>%
+#'   get_storm_data(products = "public")
 #' ## Get public advisories and storm discussions for first storm of 2017 Atlantic season.
 #' get_storms(year = 2017, basin = "AL") %>%
-#'     slice(1) %>%
-#'     .$Link %>%
-#'     get_storm_data(products = c("discus", "public"))
+#'   slice(1) %>%
+#'   .$Link %>%
+#'   get_storm_data(products = c("discus", "public"))
 #' }
 #' @export
 get_storm_data <- function(links, products = c("discus", "fstadv", "posest",
-                                              "public", "prblty", "update",
-                                              "wndprb")) {
+                        "public", "prblty", "update",
+                        "wndprb")) {
 
   products <- match.arg(products, several.ok = TRUE)
 
@@ -133,20 +133,20 @@ get_storm_data <- function(links, products = c("discus", "fstadv", "posest",
   p <- dplyr::progress_estimated(n = length(links))
 
   if (getOption("rrricanes.working_msg"))
-    message("Gathering storm product links.")
+  message("Gathering storm product links.")
 
   storm_links <- purrr::lmap(links, extract_storm_links, p)
 
   # Filter links based on products and make one-dimensional
   product_links <- purrr::invoke_map(.f = sprintf("filter_%s", products),
-                                     .x = list(list(links = storm_links))) %>%
-    purrr::map(purrr::flatten_chr)
+                   .x = list(list(links = storm_links))) %>%
+  purrr::map(purrr::flatten_chr)
 
   names(product_links) <- products
 
   # Loop through each product getting link contents
   if (getOption("rrricanes.working_msg"))
-    message("Working individual products.")
+  message("Working individual products.")
 
   # group links by products
   grouped_links <- purrr::map(product_links, ~split(., ceiling(seq_along(.)/4)))
@@ -155,8 +155,8 @@ get_storm_data <- function(links, products = c("discus", "fstadv", "posest",
   p <- dplyr::progress_estimated(sum(purrr::map_int(grouped_links, length)))
 
   ds <- purrr::map(products, .f = function(x) {
-    df <- purrr::map_df(grouped_links[[x]], extract_product_contents, x, p) %>%
-      dplyr::arrange(Date)
+  df <- purrr::map_df(grouped_links[[x]], extract_product_contents, x, p) %>%
+    dplyr::arrange(Date)
   })
 
   names(ds) <- products

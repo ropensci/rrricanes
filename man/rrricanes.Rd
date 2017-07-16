@@ -38,23 +38,23 @@ Additional text products are:
 \describe{
   \item{\code{\link{get_discus}}}{Storm Discussions}
   \item{\code{\link{get_fstadv}}}{Forecast/Advisory. These products contain a
-    bulk of the information for tropical cyclones including current position,
-    structure, forecast position and forecast structure.}
+  bulk of the information for tropical cyclones including current position,
+  structure, forecast position and forecast structure.}
   \item{\code{\link{get_posest}}}{Position Estimates. Rare and used generally
-    for threatening cyclones. This product was discontinued after the 2013
-    season and is now issued as \code{\link{get_update}}.}
+  for threatening cyclones. This product was discontinued after the 2013
+  season and is now issued as \code{\link{get_update}}.}
   \item{\code{\link{get_prblty}}}{Strike Probabilities. Show the probability
-    of the center of a cyclone passing within 65nm of a location for a given
-    forecast period. This product was discontinued after 2005, replaced with
-    \code{\link{get_wndprb}}.}
+  of the center of a cyclone passing within 65nm of a location for a given
+  forecast period. This product was discontinued after 2005, replaced with
+  \code{\link{get_wndprb}}.}
   \item{\code{\link{get_public}}}{Public Advisory. General non-structured
-    information exists in these products.}
+  information exists in these products.}
   \item{\code{\link{get_update}}}{Updates. Generally issued when a cyclone
-    undergoes a sudden change that requires immediate notice.}
+  undergoes a sudden change that requires immediate notice.}
   \item{\code{\link{get_wndprb}}}{Wind Speed Probability. Lists the
-    probability of a location experiencing a minimum of 35kt, 50kt or 64kt
-    winds for an alotted forecast period or accumulated probability. This
-    product replaced \code{\link{get_prblty}} after the 2005 season.}
+  probability of a location experiencing a minimum of 35kt, 50kt or 64kt
+  winds for an alotted forecast period or accumulated probability. This
+  product replaced \code{\link{get_prblty}} after the 2005 season.}
 }
 
 The products above may take some time to load if the NHC website is slow (as
@@ -65,8 +65,8 @@ To install \code{rrricanesdata}, run
 
 \code{
 install.packages("rrricanesdata",
-                 repos = "https://timtrice.github.io/drat/",
-                 type = "source")
+         repos = "https://timtrice.github.io/drat/",
+         type = "source")
 }
 
 See \code{vignette("installing_rrricanesdata", package = "rrricanes")} for
