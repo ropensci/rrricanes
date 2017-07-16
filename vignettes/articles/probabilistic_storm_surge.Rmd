@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE,
 library(dplyr)
 library(ggplot2)
 library(rrricanes)
+library(rrricanesdata)
 library(sp)
 ```
 
@@ -27,7 +28,7 @@ adv <- 42
 ```
 
 ```{r}
-fstadv <- load_storm_data("fstadv") %>% filter(Key == key, Adv <= adv)
+fstadv <- fstadv %>% filter(Key == key, Adv <= adv)
 ```
 
 ## Probabilistic Storm Surge

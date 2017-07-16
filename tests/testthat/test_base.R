@@ -42,17 +42,6 @@ test_that("Lat/Lon is not numeric", {
     expect_error(convert_lat_lon("93.1N", "N"), "x is not numeric")
 })
 
-## ---- get_url_contents() -----------------------------------------------------
-test_that("Test get_url_contents()", {
-    expect_error(get_url_contents("http://httpbin.org/delay/1"),
-                 "Timeout was reached")
-    # Test expected return
-    load(system.file("extdata", "df.get_url_contents.Rda",
-                     package = "rrricanes"))
-    expect_equal(get_url_contents("http://httpbin.org/delay/0"),
-                     df.get_url_contents)
-})
-
 ## ---- knots_to_mph() ---------------------------------------------------------
 test_that("Knots to Miles per Hour", {
     expect_equal(knots_to_mph(91), 104.72093)

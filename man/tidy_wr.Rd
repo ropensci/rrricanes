@@ -16,19 +16,19 @@ Tidy current wind radius of a fstadv dataframe object.
 Returns tidy dataframe of current wind radius values for a cyclone.
 Returns only complete.cases (based on quadrants).
 \describe{
-   \item{Key}{Unique identifier of cyclone}
-   \item{Adv}{Advisory number}
-   \item{Date}{Date and time of advisory}
-   \item{Windfield}{Minimum wind speed expected}
-   \item{NE}{Radius of `Windfield` in the northeast quadrant}
-   \item{SE}{Radius of `Windfield` in the southeast quadrant}
-   \item{SW}{Radius of `Windfield` in the southwest quadrant}
-   \item{NW}{Radius of `Windfield` in the northwest quadrant}
+ \item{Key}{Unique identifier of cyclone}
+ \item{Adv}{Advisory number}
+ \item{Date}{Date and time of advisory}
+ \item{Windfield}{Minimum wind speed expected}
+ \item{NE}{Radius of `Windfield` in the northeast quadrant}
+ \item{SE}{Radius of `Windfield` in the southeast quadrant}
+ \item{SW}{Radius of `Windfield` in the southwest quadrant}
+ \item{NW}{Radius of `Windfield` in the northwest quadrant}
 }
 }
 \examples{
 \dontrun{
 get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") \%>\%
-    tidy_wr()
+  tidy_wr()
 }
 }

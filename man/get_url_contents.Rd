@@ -4,7 +4,7 @@
 \alias{get_url_contents}
 \title{get_url_contents}
 \usage{
-get_url_contents(link)
+get_url_contents(links)
 }
 \arguments{
 \item{link}{URL to download}

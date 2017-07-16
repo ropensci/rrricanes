@@ -23,25 +23,25 @@ Probabilistic Storm Surge Forecasts
 \section{Products}{
 
 \describe{
-    \item{esurge}{The Tropical Cyclone Storm Surge Exceedances (P-Surge 2.5)
-          data shows the probability, in percent, of a specified storm surge,
-          including tides, exceeding the specified height, in feet, during
-          the forecast period indicated. The 10 percent exceedance height,
-          for example, is the storm surge height, including tides, above
-          ground level (AGL) such that there is a 10 percent chance of
-          exceeding it. The product is based upon an ensemble of Sea, Lake,
-          and Overland Surge from Hurricanes (SLOSH) model runs using the
-          National Hurricane Center (NHC) official advisory and accounts for
-          track, size, and intensity errors based on historical errors and
-          astronomical tide. Valid values are 10, 20, 30, 40 or 50.}
-    \item{psurge}{The Tropical Cyclone Storm Surge Probabilities (P-Surge
-          2.5) data shows the probability, in percent, of a specified storm
-          surge occurring during the forecast period indicated. The product
-          is based upon an ensemble of Sea, Lake, and Overland Surge from
-          Hurricanes (SLOSH) model runs using the National Hurricane Center
-          (NHC) official advisory and accounts for track, size, and intensity
-          errors based on historical errors and astronomical tide. Valid
-          values are 0:20.}
+  \item{esurge}{The Tropical Cyclone Storm Surge Exceedances (P-Surge 2.5)
+      data shows the probability, in percent, of a specified storm surge,
+      including tides, exceeding the specified height, in feet, during
+      the forecast period indicated. The 10 percent exceedance height,
+      for example, is the storm surge height, including tides, above
+      ground level (AGL) such that there is a 10 percent chance of
+      exceeding it. The product is based upon an ensemble of Sea, Lake,
+      and Overland Surge from Hurricanes (SLOSH) model runs using the
+      National Hurricane Center (NHC) official advisory and accounts for
+      track, size, and intensity errors based on historical errors and
+      astronomical tide. Valid values are 10, 20, 30, 40 or 50.}
+  \item{psurge}{The Tropical Cyclone Storm Surge Probabilities (P-Surge
+      2.5) data shows the probability, in percent, of a specified storm
+      surge occurring during the forecast period indicated. The product
+      is based upon an ensemble of Sea, Lake, and Overland Surge from
+      Hurricanes (SLOSH) model runs using the National Hurricane Center
+      (NHC) official advisory and accounts for track, size, and intensity
+      errors based on historical errors and astronomical tide. Valid
+      values are 0:20.}
 }
 }
 
@@ -55,7 +55,7 @@ gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10))
 
 # Return all psurge0 products for Sep 2, 2016, storm AL092016
 gis_prob_storm_surge("AL092016", products = list("psurge" = 0),
-                     datetime = "20160902")
+           datetime = "20160902")
 }
 }
 \seealso{

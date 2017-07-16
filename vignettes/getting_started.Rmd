@@ -25,7 +25,7 @@ There are two basins which data is available: north Atlantic ("AL") and northeas
 By default, `get_storms` will return all storms that have developed for the current year in both basins. If no storms have developed, an error will be generated. For this example, we'll use 2012.
 
 ```{r get.storms, eval = FALSE}
-al.2012 <- get_storms(year = 2012, basin = "AL")
+df.al_2012 <- get_storms(years = 2012, basins = "AL")
 ```
 
 ## Getting Storm Data
@@ -33,7 +33,7 @@ al.2012 <- get_storms(year = 2012, basin = "AL")
 `get_storm_data` can be used to retrieve one or multiple products for one or more cyclones. A list of dataframes is returned.
 
 ```{r, eval = FALSE}
-al182012_fstadv <- al.2012 %>% 
+df.al_18_2012_fstadv <- df.al_2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
     get_storm_data(products = "fstadv")
@@ -42,13 +42,13 @@ al182012_fstadv <- al.2012 %>%
 We can get the forecast/advisory data and wind speed probabilities at once:
 
 ```{r, eval = FALSE}
-al182012 <- al.2012 %>% 
+df.al_18_2012 <- df.al_2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
     get_storm_data(c("fstadv", "wndprb"))
 ```
 
-`al182012` now contains two dataframes for Hurricane Sandy; `fstadv` and `wndprb`.
+`df.al_18_2012` now contains two dataframes for Hurricane Sandy; `fstadv` and `wndprb`.
 
 ## Forecast/Advisory Product (`fstadv`)
 
@@ -57,7 +57,7 @@ The core of a storm's dataset is located in the Forecast/Advisory product, `fsta
 To access only this product, we can use `get_fstadv`:
 
 ```{r, eval = FALSE}
-al182012_fstadv <- al.2012 %>% 
+df.al_18_2012_fstadv <- df.al_2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
     get_fstadv()
@@ -70,7 +70,7 @@ As you may have noticed above, the dataframe is very wide at 149 variables. Ther
 Let's look at an example of the current details.
 
 ```{r}
-str(al182012_fstadv %>% select(Status:Eye, SeasNE:SeasNW))
+str(df.al_18_2012_fstadv %>% select(Status:Eye, SeasNE:SeasNW))
 ```
 
 The most important variable in this dataset is `Key`. `Key` is a unique identifier for each storm that develops in either basin. It is formatted such as "AABBCCCC" where "AA" is the basin abbreviation (AL or EP), "BB" is the year number of the storm left-padded, and "CC" is the year of the storm.
@@ -96,7 +96,7 @@ Lastly, the `Seas` variables will exist for a storm of at least tropical storm-s
 Helper function `tidy_fstadv` will subset this data to a narrow dataframe.
 
 ```{r}
-tidy_fstadv(al182012_fstadv)
+tidy_fstadv(df.al_18_2012_fstadv)
 ```
 
 ### Wind Radius
@@ -104,13 +104,13 @@ tidy_fstadv(al182012_fstadv)
 Any cyclone of at least tropical storm-strength will have associated wind radius values. This is the distance from the center of circulation that a specified wind speed (34kts, 50kts, 64kts) can be found in each quadrant. Measurement is in nautical miles.
 
 ```{r}
-str(al182012_fstadv %>% select(NE64:NW34))
+str(df.al_18_2012_fstadv %>% select(NE64:NW34))
 ```
 
 A helper function, `tidy_wr` will reorganize this data into a narrow format and tidied up. Complete wind radius values that are NA are removed for efficiency.
 
 ```{r}
-tidy_wr(al182012_fstadv)
+tidy_wr(df.al_18_2012_fstadv)
 ```
 
 ### Forecast
@@ -118,7 +118,7 @@ tidy_wr(al182012_fstadv)
 Most Forecast/Advisory products will have forecast data associated with it unless the storm has dissipated or is no longer tropical. There may be up to seven forecast positions. These positions are issued by 12-hour intervals through 48 hours where they are then at 24-hour intervals; 12, 24, 36, 48, 72, 96 and 120 hours.
 
 ```{r, eval = FALSE}
-str(al182012_fstadv %>% select(Hr12FcstDate:Hr12Gust))
+str(df.al_18_2012_fstadv %>% select(Hr12FcstDate:Hr12Gust))
 ```
 
 Notice each variable begins with the prefix "Hrn" where n is the forecast period as noted above. Only Date, Lat, Lon, Wind, Gust and wind radius (will discuss shortly) are given for forecast periods.
@@ -126,7 +126,7 @@ Notice each variable begins with the prefix "Hrn" where n is the forecast period
 Use `tidy_fcst` to tidy forecast data.
 
 ```{r}
-tidy_fcst(al182012_fstadv)
+tidy_fcst(df.al_18_2012_fstadv)
 ```
 
 #### Forecast Dates/Times
@@ -134,7 +134,7 @@ tidy_fcst(al182012_fstadv)
 A note about forecast times. 
 
 ```{r}
-al182012_fstadv %>% select(Date, Hr12FcstDate) %>% slice(1)
+df.al_18_2012_fstadv %>% select(Date, Hr12FcstDate) %>% slice(1)
 ```
 
 Notice the `Date` of this advisory is Oct 22 at 15:00 UTC. The `Hr12FcstDate` is Oct 23, 00:00 UTC. This difference, obviously, is not 12 hours. What gives? Forecast/Advisory products are issued with two "current" positions: one that is current (and provided in the dataset) and a position from three hours prior. So, in this specific advisory the text would contain the position of the storm for Oct 22, 12:00 UTC. It is from this position the forecast points are based. I do not know why.
@@ -146,7 +146,7 @@ Therefore, while officially the forecast periods are 12, 24, 36, ... hours, in r
 Some forecast positions may also contain wind radius information (only up to 72 hours). 
 
 ```{r, eval = FALSE}
-str(al182012_fstadv %>% select(Hr12NE64:Hr12NW34))
+str(df.al_18_2012_fstadv %>% select(Hr12NE64:Hr12NW34))
 ```
 
 Again, these variables are prepended with the prefix prefix "Hrn" where n notes the forecast period. 
@@ -154,7 +154,7 @@ Again, these variables are prepended with the prefix prefix "Hrn" where n notes 
 `tidy_fcst_wr` will tidy this subset of data.
 
 ```{r}
-tidy_fcst_wr(al182012_fstadv)
+tidy_fcst_wr(df.al_18_2012_fstadv)
 ```
 
 Please see the National Hurricane Center's website for more information on understanding the [Forecast/Advisory product](http://www.nhc.noaa.gov/help/tcm.shtml?).
@@ -164,14 +164,14 @@ Please see the National Hurricane Center's website for more information on under
 Strike probabilities were discontinued after the 2005 hurricane season (replaced by Wind Speed Probabilities; `wndprb`). For this example, we'll look at Hurricane Katrina. For this we use the function `get_prblty`.
 
 ```{r, eval = FALSE}
-al122005_prblty <- get_storms(year = 2005, basin = "AL") %>% 
+df.al_12_2005_prblty <- get_storms(year = 2005, basin = "AL") %>% 
     filter(Name == "Hurricane Katrina") %>% 
     .$Link %>% 
     get_prblty()
 ```
 
 ```{r}
-str(al122005_prblty)
+str(df.al_12_2005_prblty)
 ```
 
 This dataframe contains the possibility of a cyclone passing within 65 nautical miles of `Location`. The variables `A`, `B`, `C`, `D`, and `E` are as they appear in the products and were left as-is to avoid confusion. They're definition is as follows:
@@ -191,14 +191,14 @@ Strike Probabilities may not exist for most Pacific cyclones.
 ## Wind Speed Probabilities (`wndprb`)
 
 ```{r, eval = FALSE}
-al182012_wndprb <- al.2012 %>% 
+df.al_18_2012_wndprb <- df.al_2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
     get_wndprb()
 ```
 
 ```{r}
-str(al182012_wndprb)
+str(df.al_18_2012_wndprb)
 ```
 
 Wind Speed Probabilities are a bit more advanced than their predecessor. The `Wind` variable is for 34kt, 50kt and 64kt winds expected within a specific time period. 
@@ -228,34 +228,3 @@ Other products are available:
 Hurricane Ike, 2008, has both updates and position estimates. 
 
 At this time none of these products are parsed. Only the content of the product is returned.
-
-## A Faster Alternative
-
-Scraping the data from the NHC archives may be time-consuming for those with "slow" internet connections. Additionally, sometimes the NHC archives [just aren't available for some reason](https://github.com/timtrice/rrricanes/issues/66). 
-
-An alternative method of getting data is by the use of `load_storm_data`. This function accesses the `rrricanesdata` repository and returns post-scraped datasets. 
-
-The repository is incomplete at this point of time with the exception of `fstadv`, `prblty` and `wndprb` products which are up-to-date as of this writing.
-
-`load_storm_data` returns full datasets that can then be filtered down using `tidyverse` packages as need be.
-
-Return a summary table of all storms in the dataset.
-
-```{r}
-load_storm_data("storms")
-```
-
-The `fstadv` dataset is already tidied into smaller dataframes: 
-
-* `adv`, which contains the core data for every advisory
-* `wr` contains the wind radii data for each advisory
-* `fcst` contains the forecast observations per advisory
-* `fcst_wr` contains the wind radii data per forecast position
-
-```{r}
-load_storm_data("adv")
-```
-
-These dataframes stick to the tidy properties of "each column is a variable and each row is an observation" (with the exception of `Key`, of course). 
-
-These same datasets are also available on data.world. [An introductory article](https://timtrice.github.io/rrricanes/articles/articles/data_world.html) to using data.world with SQL is available. The advantage of using data.world over `load_storm_data` is that you can manipulate your data as necessary before loading it into your environment, giving you much more freedom to view only what you need.

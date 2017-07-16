@@ -11,4 +11,5 @@
 ^datasets/
 ^reports/
 ^\.github$
-^_pkgdown.yml$
+^_pkgdown\.yml$
+^deploy\.sh$

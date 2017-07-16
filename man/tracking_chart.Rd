@@ -20,7 +20,7 @@ appear.}
 }
 \value{
 Returns ggplot2 object that can be printed directly or have new
-    layers added.
+  layers added.
 }
 \description{
 Build base tracking chart using ggplot
@@ -32,15 +32,15 @@ tracking_chart(color = "black", size = 0.1, fill = "white")
 
 # 50nm resolution, no states
 tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
-               fill = "white")
+       fill = "white")
 
 # 50nm resolution, coastlines only
 tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
-               fill = "white")
+       fill = "white")
 
 # Adding and modifying with ggplot functions
 tracking_chart(color = "black", size = 0.1, fill = "white") +
-    ggplot2::labs(x = "Lon", y = "Lat", title = "Base Tracking Chart")
+  ggplot2::labs(x = "Lon", y = "Lat", title = "Base Tracking Chart")
 }
 }
 \seealso{

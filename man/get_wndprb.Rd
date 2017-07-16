@@ -7,22 +7,22 @@
 \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 }
 \usage{
-get_wndprb(link)
+get_wndprb(links)
 }
 \arguments{
-\item{link}{URL to storm's archive page.}
+\item{links}{URL to storm's archive page.}
 }
 \description{
 Return dataframe of wind speed probability data.
 }
 \details{
 Wind Speed Probability product replaced Strike Probabilities product
-    after the 2005 hurricane season. These products may not be issued for
-    every advisory/cyclone.
+  after the 2005 hurricane season. These products may not be issued for
+  every advisory/cyclone.
 
 \describe{
   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
-    etc.}
+  etc.}
   \item{Name}{Name of storm}
   \item{Adv}{Advisory Number}
   \item{Date}{Date of advisory issuance}

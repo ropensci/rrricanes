@@ -4,12 +4,10 @@
 \alias{prblty}
 \title{prblty}
 \usage{
-prblty(link, p = dplyr::progress_estimated(n = 1))
+prblty(contents)
 }
 \arguments{
-\item{link}{Link to a storm's specific strike probability advisory product.}
-
-\item{p}{dplyr::progress_estimate.}
+\item{contents}{Link to a storm's specific strike probability advisory product.}
 }
 \value{
 Dataframe

@@ -4,12 +4,10 @@
 \alias{posest}
 \title{posest}
 \usage{
-posest(link, p = dplyr::progress_estimated(n = 1))
+posest(contents)
 }
 \arguments{
-\item{link}{URL of a specific position estimate product}
-
-\item{p}{dplyr::progress_estimate.}
+\item{contents}{URL of a specific position estimate product}
 }
 \value{
 Dataframe

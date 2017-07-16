@@ -4,12 +4,10 @@
 \alias{fstadv}
 \title{fstadv}
 \usage{
-fstadv(link, p = dplyr::progress_estimated(n = 1))
+fstadv(contents)
 }
 \arguments{
-\item{link}{URL of a specific FORECAST/ADVISORY product}
-
-\item{p}{dplyr::progress_estimate.}
+\item{contents}{URL of a specific FORECAST/ADVISORY product}
 }
 \description{
 Extrapolate data from FORECAST/ADVISORY products.

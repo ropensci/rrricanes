@@ -4,12 +4,10 @@
 \alias{update}
 \title{update}
 \usage{
-update(link, p = dplyr::progress_estimated(n = 1))
+update(contents)
 }
 \arguments{
-\item{link}{Link to a storm's specific update advisory product.}
-
-\item{p}{dplyr::progress_estimate.}
+\item{contents}{Link to a storm's specific update advisory product.}
 }
 \value{
 Dataframe

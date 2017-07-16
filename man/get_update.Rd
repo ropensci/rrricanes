@@ -4,16 +4,16 @@
 \alias{get_update}
 \title{get_update}
 \usage{
-get_update(link)
+get_update(links)
 }
 \arguments{
-\item{link}{URL to storm's archive page.}
+\item{links}{URL to storm's archive page.}
 }
 \description{
 Return dataframe of cyclone update data.
 \describe{
   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
-    etc.}
+  etc.}
   \item{Name}{Name of storm}
   \item{Date}{Date of advisory issuance}
   \item{Key}{Unique ID of cyclone}

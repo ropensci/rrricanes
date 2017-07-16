@@ -84,25 +84,25 @@ gis_advisory(key = "AL182012", advisory = "18")
 ```
 
 ```{r, eval = FALSE}
-adv <- gis_advisory(key = "AL182012", advisory = "18") %>% gis_download()
+df.gis_adv <- gis_advisory(key = "AL182012", advisory = "18") %>% gis_download()
 ```
 
 ```{r}
-names(adv)
+names(df.gis_adv)
 ```
 
-For this particular storm and advisory, included are the base line, point and polygon datasets along with a dataset for watches and warnings. The objects returned are spatial dataframes contained within the list of dataframes, `adv`.
+For this particular storm and advisory, included are the base line, point and polygon datasets along with a dataset for watches and warnings. The objects returned are spatial dataframes contained within the list of dataframes, `df.gis_adv`.
 
 ### Line track
 
 ```{r}
-str(adv$al182012_018_5day_lin)
+str(df.gis_adv$al182012_018_5day_lin)
 ```
 
 As we're dealing with a SpatialLinesDataFrame which needs to be modified, you can use the helper function `shp_to_df` for plotting.
 
 ```{r}
-fcst_line <- shp_to_df(adv$al182012_018_5day_lin)
+fcst_line <- shp_to_df(df.gis_adv$al182012_018_5day_lin)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
@@ -114,7 +114,7 @@ There are two groups of data in the set: one for 72-hour forecast period and one
 There is a pretty wide field of view on the map above. You can use `sp::bbox` to "zoom in" on the map.
 
 ```{r}
-(bb <- sp::bbox(adv$al182012_018_5day_lin))
+(bb <- sp::bbox(df.gis_adv$al182012_018_5day_lin))
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
@@ -125,10 +125,10 @@ There is a pretty wide field of view on the map above. You can use `sp::bbox` to
 
 ### Point track
 
-Each forecast position is also included in the points dataframe. You can access this in the `adv$al182012_018_5day_pts@data` object; no conversion necessary.
+Each forecast position is also included in the points dataframe. You can access this in the `df.gis_adv$al182012_018_5day_pts@data` object; no conversion necessary.
 
 ```{r, fig.width = 7, fig.align = "center"}
-(p3 <- p2 + geom_point(data = adv$al182012_018_5day_pts@data, aes(LON, LAT)))
+(p3 <- p2 + geom_point(data = df.gis_adv$al182012_018_5day_pts@data, aes(LON, LAT)))
 ```
 
 ## Forecast Cone
@@ -136,9 +136,9 @@ Each forecast position is also included in the points dataframe. You can access 
 Forecast cone data is contained in the polygon dataset. To deal with this dataset you can use the `shp_to_df` function again or take the slightly longer way:
 
 ```{r}
-fcst_cone <- adv$al182012_018_5day_pgn
+fcst_cone <- df.gis_adv$al182012_018_5day_pgn
 fcst_cone@data$id <- rownames(fcst_cone@data)
-fcst_cone.points = broom::tidy(fcst_cone, region = "id")
+fcst_cone.points <- broom::tidy(fcst_cone, region = "id")
 fcst_cone <- dplyr::left_join(fcst_cone.points, fcst_cone@data, by = "id")
 ```
 
@@ -158,7 +158,7 @@ Note that in some GIS packages the forecast cones may be identical (though they 
 You can also plot watches and warnings if any are in effect for the package release time. 
 
 ```{r}
-ww_line <- shp_to_df(adv$al182012_018_ww_wwlin)
+ww_line <- shp_to_df(df.gis_adv$al182012_018_ww_wwlin)
 ```
 
 
@@ -179,7 +179,7 @@ gis_prob_storm_surge(key = "AL142016", products = list(psurge = 0),
 ```
 
 ```{r, eval = FALSE}
-ss <- gis_prob_storm_surge(key = "AL142016", 
+df.gis_storm_surge <- gis_prob_storm_surge(key = "AL142016", 
                            products = list(psurge = 0), 
                            datetime = "20161006") %>% 
     last() %>% 
@@ -187,8 +187,8 @@ ss <- gis_prob_storm_surge(key = "AL142016",
 ```
 
 ```{r}
-prob_surge <- shp_to_df(ss$al142016_2016100618_gt0)
-bb <- sp::bbox(ss$al142016_2016100618_gt0)
+prob_surge <- shp_to_df(df.gis_storm_surge$al142016_2016100618_gt0)
+bb <- sp::bbox(df.gis_storm_surge$al142016_2016100618_gt0)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
@@ -207,12 +207,12 @@ gis_windfield("AL142016", advisory = "33")
 ```
 
 ```{r, eval = FALSE}
-wf <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
+df.gis_wind_radii <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
 ```
 
 ```{r}
-wf_init <- shp_to_df(wf$al142016_2016100606_initialradii)
-bb <- sp::bbox(wf$al142016_2016100606_forecastradii)
+wf_init <- shp_to_df(df.gis_wind_radii$al142016_2016100606_initialradii)
+bb <- sp::bbox(df.gis_wind_radii$al142016_2016100606_forecastradii)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
@@ -224,7 +224,7 @@ bb <- sp::bbox(wf$al142016_2016100606_forecastradii)
 Additionally, forecast wind radii data is also generally available in some packages
 
 ```{r}
-wf_fcst <- shp_to_df(wf$al142016_2016100606_forecastradii)
+wf_fcst <- shp_to_df(df.gis_wind_radii$al142016_2016100606_forecastradii)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
@@ -242,15 +242,15 @@ gis_wsp(datetime = "2016100606", res = 0.5)
 ```
 
 ```{r, eval = FALSE}
-wsp <- gis_wsp(datetime = "2016100606", res = 0.5) %>% gis_download()
+df.gis_wsp <- gis_wsp(datetime = "2016100606", res = 0.5) %>% gis_download()
 ```
 
 ### Cumulative Probability for >34kt Winds
 
 ```{r, fig.width = 7, fig.align = "center"}
-bb <- sp::bbox(wsp$`2016100606_wsp34knt120hr_halfDeg`)
+bb <- sp::bbox(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`)
 (p5 <- p + 
-     geom_point(data = broom::tidy(wsp$`2016100606_wsp34knt120hr_halfDeg`), 
+     geom_point(data = broom::tidy(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`), 
                 aes(x = coords.x1, y = coords.x2, color = PWIND120))) + 
     coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
 ```
@@ -258,9 +258,9 @@ bb <- sp::bbox(wsp$`2016100606_wsp34knt120hr_halfDeg`)
 Cumulative wind speed probability for >50kt winds:
 
 ```{r, fig.width = 7, fig.align = "center"}
-bb <- sp::bbox(wsp$`2016100606_wsp50knt120hr_halfDeg`)
+bb <- sp::bbox(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`)
 (p6 <- p + 
-     geom_point(data = broom::tidy(wsp$`2016100606_wsp50knt120hr_halfDeg`), 
+     geom_point(data = broom::tidy(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`), 
                 aes(x = coords.x1, y = coords.x2, color = PWIND120))) + 
     coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
 ```
@@ -268,9 +268,9 @@ bb <- sp::bbox(wsp$`2016100606_wsp50knt120hr_halfDeg`)
 Cumulative probability for >64kt winds:
 
 ```{r, fig.width = 7, fig.align = "center"}
-bb <- sp::bbox(wsp$`2016100606_wsp64knt120hr_halfDeg`)
+bb <- sp::bbox(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`)
 (p7 <- p + 
-     geom_point(data = broom::tidy(wsp$`2016100606_wsp64knt120hr_halfDeg`), 
+     geom_point(data = broom::tidy(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`), 
                 aes(x = coords.x1, y = coords.x2, color = PWIND120))) + 
     coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
 ```

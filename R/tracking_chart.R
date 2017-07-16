@@ -10,22 +10,22 @@
 #'
 #' # 50nm resolution, no states
 #' al_tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
-#'                   fill = "white")
+#'           fill = "white")
 #'
 #' # 50nm resolution, coastlines only
 #' al_tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
-#'                   fill = "white")
+#'           fill = "white")
 #'
 #' # Adding and modifying with ggplot functions
 #' al_tracking_chart(color = "black", size = 0.1, fill = "white") +
-#'     ggplot2::labs(x = "Lon", y = "Lat",
-#'     title = "Base Atlantic Tracking Chart")
+#'   ggplot2::labs(x = "Lon", y = "Lat",
+#'   title = "Base Atlantic Tracking Chart")
 #' }
 #' @export
 al_tracking_chart <- function(...) {
-    p <- tracking_chart(...)
-    p <- p + ggplot2::coord_equal(xlim = c(-100, 0), ylim = c(0, 60))
-    return(p)
+  p <- tracking_chart(...)
+  p <- p + ggplot2::coord_equal(xlim = c(-100, 0), ylim = c(0, 60))
+  return(p)
 }
 
 #' @title ep_tracking_chart
@@ -40,35 +40,35 @@ al_tracking_chart <- function(...) {
 #'
 #' # 50nm resolution, no states
 #' ep_tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
-#'                   fill = "white")
+#'           fill = "white")
 #'
 #' # 50nm resolution, coastlines only
 #' ep_tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
-#'                   fill = "white")
+#'           fill = "white")
 #'
 #' # Adding and modifying with ggplot functions
 #' ep_tracking_chart(color = "black", size = 0.1, fill = "white") +
-#'     ggplot2::labs(x = "Lon", y = "Lat",
-#'     title = "Base East Pacific Tracking Chart")
+#'   ggplot2::labs(x = "Lon", y = "Lat",
+#'   title = "Base East Pacific Tracking Chart")
 #' }
 #' @export
 ep_tracking_chart <- function(...) {
-    p <- tracking_chart(...)
-    p <- p + ggplot2::coord_equal(xlim = c(-140, -80), ylim = c(0, 35))
-    return(p)
+  p <- tracking_chart(...)
+  p <- p + ggplot2::coord_equal(xlim = c(-140, -80), ylim = c(0, 35))
+  return(p)
 }
 
 #' @title tracking_chart
 #' @description Build base tracking chart using ggplot
 #' @param countries Show country borders. Default TRUE.
 #' @param states Show state boundaries. Default TRUE. Ignored if `countries` is
-#'     FALSE.
+#'   FALSE.
 #' @param res Resolution of charts; 110 (1:110m), 50 (1:50m), 10 (1:10m).
-#'     Default is low. The higher the resolution, the longer the plot takes to
-#'     appear.
+#'   Default is low. The higher the resolution, the longer the plot takes to
+#'   appear.
 #' @param ... Additional ggplot2::aes parameters
 #' @return Returns ggplot2 object that can be printed directly or have new
-#'     layers added.
+#'   layers added.
 #' @seealso \code{\link[ggplot2]{aes}}
 #' @examples
 #' \dontrun{
@@ -77,62 +77,62 @@ ep_tracking_chart <- function(...) {
 #'
 #' # 50nm resolution, no states
 #' tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
-#'                fill = "white")
+#'        fill = "white")
 #'
 #' # 50nm resolution, coastlines only
 #' tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
-#'                fill = "white")
+#'        fill = "white")
 #'
 #' # Adding and modifying with ggplot functions
 #' tracking_chart(color = "black", size = 0.1, fill = "white") +
-#'     ggplot2::labs(x = "Lon", y = "Lat", title = "Base Tracking Chart")
+#'   ggplot2::labs(x = "Lon", y = "Lat", title = "Base Tracking Chart")
 #' }
 #' @export
 tracking_chart <- function(countries = TRUE, states = TRUE, res = 110, ...) {
 
-    # Convert to numeric just in case
-    res <- as.integer(res)
+  # Convert to numeric just in case
+  res <- as.integer(res)
 
-    # Validate res
-    if (!(res %in% c(110, 50, 10)))
-        stop("Chart resolution must be 110, 50, 10")
+  # Validate res
+  if (!(res %in% c(110, 50, 10)))
+    stop("Chart resolution must be 110, 50, 10")
 
-    pkg <- "rnaturalearth"
-    if (res %in% c(110, 50)) {
-        pkg <- paste0(pkg, "data")
-    } else {
-        pkg <- paste0(pkg, "hires")
+  pkg <- "rnaturalearth"
+  if (res %in% c(110, 50)) {
+    pkg <- paste0(pkg, "data")
+  } else {
+    pkg <- paste0(pkg, "hires")
+  }
+
+  # A base map can be drawn off either coastlines data or countries data. If
+  # countries is FALSE, return coastlines data. Otherwise, build countries w/
+  # states if states is TRUE.
+  if (!countries) {
+    dataset <- paste0("coastline", res)
+    base_map_data <- getExportedValue(ns = pkg, name = dataset)
+  } else {
+    dataset <- paste0("countries", res)
+    base_map_data <- getExportedValue(ns = pkg, name = dataset)
+    if (states) {
+      if (res >= 50) {
+        dataset <- paste0("states", 50)
+        state_map_data <- getExportedValue(ns = pkg, name = dataset)
+      } else {
+        dataset <- paste0("states", res)
+        state_map_data <- getExportedValue(ns = pkg, name = dataset)
+      }
     }
+  }
 
-    # A base map can be drawn off either coastlines data or countries data. If
-    # countries is FALSE, return coastlines data. Otherwise, build countries w/
-    # states if states is TRUE.
-    if (!countries) {
-        dataset <- paste0("coastline", res)
-        base_map_data <- getExportedValue(ns = pkg, name = dataset)
-    } else {
-        dataset <- paste0("countries", res)
-        base_map_data <- getExportedValue(ns = pkg, name = dataset)
-        if (states) {
-            if (res >= 50) {
-                dataset <- paste0("states", 50)
-                state_map_data <- getExportedValue(ns = pkg, name = dataset)
-            } else {
-                dataset <- paste0("states", res)
-                state_map_data <- getExportedValue(ns = pkg, name = dataset)
-            }
-        }
-    }
+  p <- ggplot2::ggplot() +
+    ggplot2::geom_polygon(data = base_map_data,
+                ggplot2::aes(long, lat, group = group), ...) +
+    ggplot2::coord_equal()
 
-    p <- ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = base_map_data,
-                              ggplot2::aes(long, lat, group = group), ...) +
-        ggplot2::coord_equal()
+  if (exists("state_map_data"))
+    p <- p +
+    ggplot2::geom_polygon(data = state_map_data,
+                ggplot2::aes(long, lat, group = group), ...)
 
-    if (exists("state_map_data"))
-        p <- p +
-        ggplot2::geom_polygon(data = state_map_data,
-                              ggplot2::aes(long, lat, group = group), ...)
-
-    return(p)
+  return(p)
 }

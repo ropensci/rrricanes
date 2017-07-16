@@ -4,12 +4,12 @@
 \alias{extract_storms}
 \title{extract_storms}
 \usage{
-extract_storms(basin, link)
+extract_storms(basin, contents)
 }
 \arguments{
 \item{basin}{AL or EP}
 
-\item{link}{URL to basin archive page}
+\item{contents}{contents of basin archive page}
 }
 \value{
 4xN Dataframe

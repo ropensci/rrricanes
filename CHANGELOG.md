@@ -4,10 +4,35 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.2.0-5.1] yyyy-mm-dd
+## [0.2.0-6] 2017-07-16
+
+### Added
+  - NA
+
+### Changed
+  - `get_storms` and `get_storm_data` now use asynchronous http requests to make data collection faster. (#94)
+  - Prefaced all built-in data objects with "df"; modified names slightly.
+
+### Removed
+  - `load_storm_data` has been removed. Archived data can now be accessed 
+    through `rrricanesdata`.
+
+### Deprecated
+  - NA
+
+### Fixed
+  - NA
+
+### Security
+  - NA
+
+## [0.2.0-5.1] 2017-07-10
 
 ### Added
   - Instructions for Linux users to install `libgdal1-dev`, `libproj-dev`, and `libxml2-dev`. (#95)
+
+### Added
+  - NA
 
 ### Changed
   - NA

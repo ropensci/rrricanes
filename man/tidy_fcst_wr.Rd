@@ -18,20 +18,20 @@ cases only (by quadrants). Use Key, Adv and Date to join with other tidy
 dataframes.
 
 \describe{
-   \item{Key}{Unique identifier of cyclone}
-   \item{Adv}{Advisory number}
-   \item{Date}{Date and time of advisory}
-   \item{FcstDate}{Forecast date and time in UTC}
-   \item{WindField}{Minimum sustained wind field for quadrants}
-   \item{NE}{Radius in nautical miles for northeast quadrant}
-   \item{SE}{Radius in nautical miles for southeast quadrant}
-   \item{SW}{Radius in nautical miles for southwest quadrant}
-   \item{NW}{Radius in nautical miles for northwest quadrant}
+ \item{Key}{Unique identifier of cyclone}
+ \item{Adv}{Advisory number}
+ \item{Date}{Date and time of advisory}
+ \item{FcstDate}{Forecast date and time in UTC}
+ \item{WindField}{Minimum sustained wind field for quadrants}
+ \item{NE}{Radius in nautical miles for northeast quadrant}
+ \item{SE}{Radius in nautical miles for southeast quadrant}
+ \item{SW}{Radius in nautical miles for southwest quadrant}
+ \item{NW}{Radius in nautical miles for northwest quadrant}
 }
 }
 \examples{
 \dontrun{
 get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") \%>\%
-    tidy_fcst_wr()
+  tidy_fcst_wr()
 }
 }

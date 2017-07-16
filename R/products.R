@@ -6,9 +6,9 @@
 #' available to point to the NHC website.
 #' @export
 twoal <- function() {
-    url <- "http://www.nhc.noaa.gov/index-at.xml"
-    contents <- xml2::read_xml(url) %>% xml2::as_list()
-    return(contents)
+  url <- "http://www.nhc.noaa.gov/index-at.xml"
+  contents <- xml2::read_xml(url) %>% xml2::as_list()
+  return(contents)
 }
 
 #' @title twoep
@@ -19,7 +19,7 @@ twoal <- function() {
 #' available to point to the NHC website.
 #' @export
 twoep <- function() {
-    url <- "http://www.nhc.noaa.gov/xml/TWOEP.xml"
-    contents <- xml2::read_xml(url) %>% xml2::as_list()
-    return(contents)
+  url <- "http://www.nhc.noaa.gov/xml/TWOEP.xml"
+  contents <- xml2::read_xml(url) %>% xml2::as_list()
+  return(contents)
 }

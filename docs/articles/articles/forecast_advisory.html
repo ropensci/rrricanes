@@ -29,10 +29,46 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../../reference/index.html">Reference</a>
+  <a href="../..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../../articles/index.html">Articles</a>
+  <a href="../../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../../articles/articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/forecast_advisory.html">Forecast/Advisory GIS</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/wind_pressure.html">Wind and Pressure</a>
+    </li>
+    <li>
+      <a href="../../articles/articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
+    </li>
+    <li>
+      <a href="../../articles/getting_started.html">Getting Started</a>
+    </li>
+    <li>
+      <a href="../../articles/gis_data.html">GIS data</a>
+    </li>
+    <li>
+      <a href="../../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../../news/index.html">News</a>
@@ -69,58 +105,33 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(rrricanes)
+<span class="kw">library</span>(rrricanesdata)
 <span class="kw">library</span>(sp)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">key &lt;-<span class="st"> "AL092008"</span>
 adv &lt;-<span class="st"> </span><span class="dv">42</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/load_storm_data.html">load_storm_data</a></span>(<span class="st">"fstadv"</span>) %&gt;%<span class="st"> </span><span class="kw">filter</span>(Key ==<span class="st"> </span>key, Adv &lt;=<span class="st"> </span>adv)</code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   .default = col_integer(),
-##   Status = col_character(),
-##   Name = col_character(),
-##   Date = col_datetime(format = ""),
-##   Key = col_character(),
-##   Lat = col_double(),
-##   Lon = col_double(),
-##   Pressure = col_double(),
-##   Hr12FcstDate = col_datetime(format = ""),
-##   Hr12Lat = col_double(),
-##   Hr12Lon = col_double(),
-##   Hr24FcstDate = col_datetime(format = ""),
-##   Hr24Lat = col_double(),
-##   Hr24Lon = col_double(),
-##   Hr36FcstDate = col_datetime(format = ""),
-##   Hr36Lat = col_double(),
-##   Hr36Lon = col_double(),
-##   Hr48FcstDate = col_datetime(format = ""),
-##   Hr48Lat = col_double(),
-##   Hr48Lon = col_double(),
-##   Hr48NE34 = col_character()
-##   # ... with 20 more columns
-## )</code></pre>
-<pre><code>## See spec(...) for full column specifications.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv &lt;-<span class="st"> </span>fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Key ==<span class="st"> </span>key, Adv &lt;=<span class="st"> </span>adv)</code></pre></div>
 <div id="gis-advisory-forecast-track-cone-of-uncertainty-and-watcheswarnings" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gis-advisory-forecast-track-cone-of-uncertainty-and-watcheswarnings" class="anchor"></a>GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gis_adv &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/gis_advisory.html">gis_advisory</a></span>(<span class="dt">key =</span> key, <span class="dt">advisory =</span> adv) %&gt;%<span class="st"> </span><span class="kw"><a href="../../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmpuXaMob", layer: "al092008.042_5day_lin"
+## Source: "/tmp/Rtmp7L4Bki", layer: "al092008.042_5day_lin"
 ## with 2 features
 ## It has 9 fields
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmpuXaMob", layer: "al092008.042_5day_pgn"
+## Source: "/tmp/Rtmp7L4Bki", layer: "al092008.042_5day_pgn"
 ## with 2 features
 ## It has 9 fields
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmpuXaMob", layer: "al092008.042_5day_pts"
+## Source: "/tmp/Rtmp7L4Bki", layer: "al092008.042_5day_pts"
 ## with 13 features
 ## It has 20 fields
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmpuXaMob", layer: "al092008.042_ww_wwlin"
+## Source: "/tmp/Rtmp7L4Bki", layer: "al092008.042_ww_wwlin"
 ## with 5 features
 ## It has 10 fields</code></pre>
 <p>Get bounding box of the forecast polygon.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bbox &lt;-<span class="st"> </span><span class="kw">bbox</span>(gis_adv$al092008_042_5day_pgn)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bbox &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/sp/topics/bbox">bbox</a></span>(gis_adv$al092008_042_5day_pgn)</code></pre></div>
 <p>Generate a base plot of the Atlantic ocean.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(bp &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/al_tracking_chart.html">al_tracking_chart</a></span>(<span class="dt">color =</span> <span class="st">"black"</span>, <span class="dt">fill =</span> <span class="st">"white"</span>, <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">res =</span> <span class="dv">50</span>))</code></pre></div>
 <pre><code>## Regions defined for each Polygons
@@ -132,28 +143,28 @@ lat_max &lt;-<span class="st"> </span>bbox[<span class="dv">2</span>,<span class
 lon_min &lt;-<span class="st"> </span>bbox[<span class="dv">1</span>,<span class="dv">1</span>] -<span class="st"> </span><span class="dv">10</span>
 lon_max &lt;-<span class="st"> </span>bbox[<span class="dv">1</span>,<span class="dv">2</span>] +<span class="st"> </span><span class="dv">10</span></code></pre></div>
 <p>Build a thin tracking map for the inset.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bp_inset &lt;-<span class="st"> </span><span class="kw">ggplotGrob</span>(bp +
-<span class="st">    </span><span class="kw">geom_rect</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">xmin =</span> lon_min, <span class="dt">xmax =</span> lon_max,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bp_inset &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplotGrob">ggplotGrob</a></span>(bp +
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_tile">geom_rect</a></span>(<span class="dt">mapping =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">xmin =</span> lon_min, <span class="dt">xmax =</span> lon_max,
                             <span class="dt">ymin =</span> lat_min, <span class="dt">ymax =</span> lat_max),
               <span class="dt">color =</span> <span class="st">"red"</span>, <span class="dt">alpha =</span> <span class="dv">0</span>) +
-<span class="st">    </span><span class="kw">theme_bw</span>() +
-<span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.title =</span> <span class="kw">element_blank</span>(),
-          <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>(),
-          <span class="dt">axis.text.x =</span> <span class="kw">element_blank</span>(),
-          <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),
-          <span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="st">"pt"</span>)))</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>() +
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">axis.title =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/element">element_blank</a></span>(),
+          <span class="dt">axis.ticks =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/element">element_blank</a></span>(),
+          <span class="dt">axis.text.x =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/element">element_blank</a></span>(),
+          <span class="dt">axis.text.y =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/element">element_blank</a></span>(),
+          <span class="dt">plot.margin =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/element">margin</a></span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="st">"pt"</span>)))</code></pre></div>
 <p>Modify original <code>bp</code> zoomed in on our area of interest.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(bp &lt;-<span class="st"> </span>bp +
-<span class="st">    </span><span class="kw">coord_equal</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(lon_min, lon_max),
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/coord_fixed">coord_equal</a></span>(<span class="dt">xlim =</span> <span class="kw">c</span>(lon_min, lon_max),
                 <span class="dt">ylim =</span> <span class="kw">c</span>(lat_min, lat_max)) +
-<span class="st">    </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) +
-<span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">expand =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) +
-<span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"Lon"</span>,
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_continuous">scale_x_continuous</a></span>(<span class="dt">expand =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) +
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_continuous">scale_y_continuous</a></span>(<span class="dt">expand =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) +
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">x =</span> <span class="st">"Lon"</span>,
          <span class="dt">y =</span> <span class="st">"Lat"</span>,
          <span class="dt">caption =</span> <span class="kw">sprintf</span>(<span class="st">"rrricanes %s"</span>, <span class="kw">packageVersion</span>(<span class="st">"rrricanes"</span>))))</code></pre></div>
 <p><img src="forecast_advisory_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Combine <code>bp</code> and <code>bp_inset</code> to finalize initial base plot. <code>bp</code> will be a base plot without the inset. <code>bpi</code> will have the inset.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(bpi &lt;-<span class="st"> </span>bp +<span class="st"> </span><span class="kw">annotation_custom</span>(<span class="dt">grob =</span> bp_inset, <span class="dt">xmin =</span> lon_max -<span class="st"> </span><span class="dv">5</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(bpi &lt;-<span class="st"> </span>bp +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/annotation_custom">annotation_custom</a></span>(<span class="dt">grob =</span> bp_inset, <span class="dt">xmin =</span> lon_max -<span class="st"> </span><span class="dv">5</span>,
                              <span class="dt">xmax =</span> lon_max -<span class="st"> </span><span class="dv">1</span>, <span class="dt">ymin =</span> -<span class="ot">Inf</span>,
                              <span class="dt">ymax =</span> lat_min +<span class="st"> </span><span class="dv">5</span>))</code></pre></div>
 <p><img src="forecast_advisory_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;"></p>
@@ -167,9 +178,9 @@ shp_storm_lin &lt;-<span class="st"> </span><span class="kw"><a href="../../refe
 shp_storm_ww &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/shp_to_df.html">shp_to_df</a></span>(gis_adv$al092008_042_ww_wwlin)
 <span class="co"># Convert object SpatialPolygonsDataframe to dataframe</span>
 shp_storm_pgn &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/shp_to_df.html">shp_to_df</a></span>(gis_adv$al092008_042_5day_pgn)</code></pre></div>
-<p>Points dataframes can just be converted with <code>tibble::as_data_frame</code>.</p>
+<p>Points dataframes can just be converted with <code><a href="http://www.rdocumentation.org/packages/tibble/topics/as_tibble">tibble::as_data_frame</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert object SpatialPointsDataframe to dataframe</span>
-shp_storm_pts &lt;-<span class="st"> </span><span class="kw">as_data_frame</span>(gis_adv$al092008_042_5day_pts)</code></pre></div>
+shp_storm_pts &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/reexports">as_data_frame</a></span>(gis_adv$al092008_042_5day_pts)</code></pre></div>
 <p>Modify <code>shp_storm_pts$DVLBL</code> with full strings and ordered factor.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">shp_storm_pts$DVLBL &lt;-<span class="st"> </span><span class="kw">factor</span>(shp_storm_pts$DVLBL, 
                               <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">"D"</span>, <span class="st">"S"</span>, <span class="st">"H"</span>), 
@@ -183,18 +194,18 @@ shp_storm_pts &lt;-<span class="st"> </span><span class="kw">as_data_frame</span
                                          <span class="st">"Tropical Storm Warning"</span>, 
                                          <span class="st">"Hurricane Watch"</span>, 
                                          <span class="st">"Hurricane Warning"</span>))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bpi +<span class="st"> </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> shp_storm_pgn, 
-                  <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bpi +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_polygon">geom_polygon</a></span>(<span class="dt">data =</span> shp_storm_pgn, 
+                  <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),
                   <span class="dt">alpha =</span> <span class="fl">0.15</span>, <span class="dt">fill =</span> <span class="st">"orange"</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_path</span>(<span class="dt">data =</span> shp_storm_lin, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">data =</span> shp_storm_pts, <span class="kw">aes</span>(<span class="dt">x =</span> LON, <span class="dt">y =</span> LAT, <span class="dt">fill =</span> DVLBL,
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_path</a></span>(<span class="dt">data =</span> shp_storm_lin, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">data =</span> shp_storm_pts, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> LON, <span class="dt">y =</span> LAT, <span class="dt">fill =</span> DVLBL,
                                          <span class="dt">shape =</span> DVLBL, <span class="dt">size =</span> MAXWIND)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_path</span>(<span class="dt">data =</span> shp_storm_ww, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">color =</span> TCWW, 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_path</a></span>(<span class="dt">data =</span> shp_storm_ww, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">color =</span> TCWW, 
                                        <span class="dt">group =</span> group), <span class="dt">size =</span> <span class="dv">1</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">scale_shape_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">21</span>, <span class="dv">21</span>, <span class="dv">21</span>, <span class="dv">21</span>)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">guides</span>(<span class="dt">shape =</span> <span class="kw">guide_legend</span>(<span class="dt">override.aes =</span> <span class="kw">list</span>(<span class="dt">size =</span> <span class="dv">3</span>)), 
-           <span class="dt">size =</span> <span class="kw">guide_legend</span>(<span class="dt">nrow =</span> <span class="dv">1</span>)) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>, 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_manual">scale_shape_manual</a></span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">21</span>, <span class="dv">21</span>, <span class="dv">21</span>, <span class="dv">21</span>)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/guides">guides</a></span>(<span class="dt">shape =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/guide_legend">guide_legend</a></span>(<span class="dt">override.aes =</span> <span class="kw">list</span>(<span class="dt">size =</span> <span class="dv">3</span>)), 
+           <span class="dt">size =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/guide_legend">guide_legend</a></span>(<span class="dt">nrow =</span> <span class="dv">1</span>)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>, 
           <span class="dt">legend.box =</span> <span class="st">"vertical"</span>)</code></pre></div>
 <p><img src="forecast_advisory_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Very often, areas that are under a hurricane watch may also be under a tropical storm warning. The chart above does not show the hurricane watch area.</p>
@@ -204,7 +215,8 @@ shp_storm_pts &lt;-<span class="st"> </span><span class="kw">as_data_frame</span
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#current-advisory-details">Current Advisory Details</a></li>
       </ul>

@@ -16,7 +16,7 @@ numeric
 }
 \description{
 Returns numeric for latitude or longitude; negative if in
-    southern or eastern hemisphere
+  southern or eastern hemisphere
 }
 \details{
 Helper function to take character latitude or longitude and,
