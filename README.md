@@ -112,6 +112,7 @@ Acknowledgments
 
 -   [Molyneux, James](https://github.com/jimmylovestea)
 -   [Padgham, Mark](https://github.com/mpadge)
+-   [Robinson, Emily](https://github.com/robinsones)
 -   [Rudis, Bob](https://github.com/hrbrmstr)
 -   [Salmon, Maëlle](https://github.com/maelle)
 -   [Stachelek, Joseph](https://github.com/jsta)
