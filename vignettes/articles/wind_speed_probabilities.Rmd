@@ -94,7 +94,7 @@ bpi <- bp + annotation_custom(grob = bp_inset, xmin = lon_max - 5,
                              ymax = lat_min + 5)
 ```
 
-The `wndprb` will not have coordinates for cities. An option is `al_prblty_stations`. However, please note this function may become [deprecated](https://github.com/timtrice/rrricanes/issues/46). 
+The `wndprb` will not have coordinates for cities. An option is `al_prblty_stations`. However, please note this function may become [deprecated](https://github.com/ropensci/rrricanes/issues/46). 
 
 ```{r}
 wndprb <- wndprb %>% 

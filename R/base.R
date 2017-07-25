@@ -5,7 +5,7 @@
 #' elements.
 #'
 #' This documentation and additional help articles
-#' \href{https://timtrice.github.io/rrricanes/}{can be found online}.
+#' \href{https://ropensci.github.io/rrricanes/}{can be found online}.
 #'
 #' Text products (Forecast/Advisory, Public Advisory, Discussions and
 #' Probabilities) are only available from 1998 to current. An effort will be

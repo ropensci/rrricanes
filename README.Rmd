@@ -3,12 +3,12 @@ output: github_document
 ---
 
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-3.3.3-6666ff.svg)](https://cran.r-project.org/) 
-[![GitHub (pre-)release](https://img.shields.io/github/release/timtrice/rrricanes/all.svg)](https://github.com/timtrice/rrricanes/tags)
+[![GitHub (pre-)release](https://img.shields.io/github/release/ropensci/rrricanes/all.svg)](https://github.com/ropensci/rrricanes/tags)
 [![](http://badges.ropensci.org/118_status.svg)](https://github.com/ropensci/onboarding/issues/118)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes)
-[![Build Status](https://img.shields.io/travis/timtrice/rrricanes/master.svg)](https://travis-ci.org/timtrice/rrricanes)
-[![AppVeyor Build Status](https://img.shields.io/appveyor/ci/timtrice/rrricanes/master.svg)](https://ci.appveyor.com/project/timtrice/rrricanes)
-[![codecov](https://codecov.io/gh/timtrice/rrricanes/branch/master/graph/badge.svg)](https://codecov.io/gh/timtrice/rrricanes) 
+[![Build Status](https://img.shields.io/travis/ropensci/rrricanes/master.svg)](https://travis-ci.org/ropensci/rrricanes)
+[![AppVeyor Build Status](https://img.shields.io/appveyor/ci/ropensci/rrricanes/master.svg)](https://ci.appveyor.com/project/ropensci/rrricanes)
+[![codecov](https://codecov.io/gh/ropensci/rrricanes/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/rrricanes) 
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
@@ -70,7 +70,7 @@ vignette("getting_started", package = "rrricanes")
 
 Linux users must also have the `libgdal-dev`, `libproj-dev` and `libxml2-dev` packages installed.
 
-To add `rrricanesdata`, a [package of post-scraped datasets](https://github.com/timtrice/rrricanesdata), 
+To add `rrricanesdata`, a [package of post-scraped datasets](https://github.com/ropensci/rrricanesdata), 
 
 ```r
 install.packages("rrricanesdata", 
@@ -91,7 +91,7 @@ install.packages("rnaturalearthhires",
 `rrricanes` is currently only available in GitHub. It can be installed using the `devtools` package:
 
 ```r
-devtools::install_github("timtrice/rrricanes", build_vignettes = TRUE)
+devtools::install_github("ropensci/rrricanes", build_vignettes = TRUE)
 ```
 
 ## Built With
@@ -100,7 +100,7 @@ devtools::install_github("timtrice/rrricanes", build_vignettes = TRUE)
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/timtrice/rrricanes/blob/master/.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://github.com/ropensci/rrricanes/blob/master/.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
@@ -110,7 +110,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 * **Tim Trice** - *Initial work* - [timtrice](https://github.com/timtrice)
 
-See also the list of [contributors](https://github.com/timtrice/rrricanes/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/ropensci/rrricanes/contributors) who participated in this project.
 
 ## License
 
@@ -127,4 +127,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Known Data Quality Issues
 
-1. Hurricane Juan (AL152003), Adv 15; no status leads to improper `Status` and `Name` values in some datasets. ([#82](https://github.com/timtrice/rrricanes/issues/82))
+1. Hurricane Juan (AL152003), Adv 15; no status leads to improper `Status` and `Name` values in some datasets. ([#82](https://github.com/ropensci/rrricanes/issues/82))

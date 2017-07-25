@@ -36,7 +36,7 @@ matrix:
   fast_finish: true
 
 build_script:
-  - travis-tool.sh install_github timtrice/rrricanesdata
+  - travis-tool.sh install_github ropensci/rrricanesdata
   - travis-tool.sh r_binary_install proto rgdal
   - travis-tool.sh install_deps
 
@@ -71,7 +71,7 @@ notifications:
    to:
      - tim.trice@gmail.com
    subject: 'rrricanes build {{status}}'
-   message: "https://ci.appveyor.com/project/timtrice/rrricanes"
+   message: "https://ci.appveyor.com/project/ropensci/rrricanes"
    on_build_success: false
    on_build_failure: true
    on_build_status_changed: true
