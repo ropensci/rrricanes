@@ -4,6 +4,7 @@ output: github_document
 
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-3.3.3-6666ff.svg)](https://cran.r-project.org/) 
 [![GitHub (pre-)release](https://img.shields.io/github/release/timtrice/rrricanes/all.svg)](https://github.com/timtrice/rrricanes/tags)
+[![](http://badges.ropensci.org/118_status.svg)](https://github.com/ropensci/onboarding/issues/118)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes)
 [![Build Status](https://img.shields.io/travis/timtrice/rrricanes/master.svg)](https://travis-ci.org/timtrice/rrricanes)
 [![AppVeyor Build Status](https://img.shields.io/appveyor/ci/timtrice/rrricanes/master.svg)](https://ci.appveyor.com/project/timtrice/rrricanes)
