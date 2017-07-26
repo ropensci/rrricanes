@@ -76,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/timtrice/rrricanes">
+  <a href="https://github.com/ropensci/rrricanes">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -96,7 +96,7 @@
       <h1>Getting Started</h1>
                         <h4 class="author">Tim Trice</h4>
             
-            <h4 class="date">2017-07-16</h4>
+            <h4 class="date">2017-07-26</h4>
           </div>
 
     
@@ -121,12 +121,12 @@
 <a href="#getting-storm-data" class="anchor"></a>Getting Storm Data</h2>
 <p><code>get_storm_data</code> can be used to retrieve one or multiple products for one or more cyclones. A list of dataframes is returned.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.al_18_2012_fstadv &lt;-<span class="st"> </span>df.al_2012 %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Name ==<span class="st"> "Hurricane Sandy"</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Name ==<span class="st"> "Hurricane Sandy"</span>) %&gt;%<span class="st"> </span>
 <span class="st">    </span>.$Link %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw"><a href="../reference/get_storm_data.html">get_storm_data</a></span>(<span class="dt">products =</span> <span class="st">"fstadv"</span>)</code></pre></div>
 <p>We can get the forecast/advisory data and wind speed probabilities at once:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.al_18_2012 &lt;-<span class="st"> </span>df.al_2012 %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Name ==<span class="st"> "Hurricane Sandy"</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Name ==<span class="st"> "Hurricane Sandy"</span>) %&gt;%<span class="st"> </span>
 <span class="st">    </span>.$Link %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw"><a href="../reference/get_storm_data.html">get_storm_data</a></span>(<span class="kw">c</span>(<span class="st">"fstadv"</span>, <span class="st">"wndprb"</span>))</code></pre></div>
 <p><code>df.al_18_2012</code> now contains two dataframes for Hurricane Sandy; <code>fstadv</code> and <code>wndprb</code>.</p>
@@ -137,7 +137,7 @@
 <p>The core of a storm’s dataset is located in the Forecast/Advisory product, <code>fstadv</code>. This product contains current location, forecast position, movement and structural details of the cyclone.</p>
 <p>To access only this product, we can use <code>get_fstadv</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.al_18_2012_fstadv &lt;-<span class="st"> </span>df.al_2012 %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Name ==<span class="st"> "Hurricane Sandy"</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Name ==<span class="st"> "Hurricane Sandy"</span>) %&gt;%<span class="st"> </span>
 <span class="st">    </span>.$Link %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw"><a href="../reference/get_fstadv.html">get_fstadv</a></span>()</code></pre></div>
 <p>As you may have noticed above, the dataframe is very wide at 149 variables. There are four groups of variables in this dataset: current details, current wind radii, forecast positions, and forecast wind radii.</p>
@@ -145,7 +145,7 @@
 <h3 class="hasAnchor">
 <a href="#current-details" class="anchor"></a>Current Details</h3>
 <p>Let’s look at an example of the current details.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.al_18_2012_fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/select">select</a></span>(Status:Eye, SeasNE:SeasNW))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.al_18_2012_fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(Status:Eye, SeasNE:SeasNW))</code></pre></div>
 <pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    31 obs. of  18 variables:
 ##  $ Status  : chr  "Tropical Depression" "Tropical Storm" "Tropical Storm" "Tropical Storm" ...
 ##  $ Name    : chr  "Eighteen" "Sandy" "Sandy" "Sandy" ...
@@ -199,7 +199,7 @@
 <h3 class="hasAnchor">
 <a href="#wind-radius" class="anchor"></a>Wind Radius</h3>
 <p>Any cyclone of at least tropical storm-strength will have associated wind radius values. This is the distance from the center of circulation that a specified wind speed (34kts, 50kts, 64kts) can be found in each quadrant. Measurement is in nautical miles.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.al_18_2012_fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/select">select</a></span>(NE64:NW34))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.al_18_2012_fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(NE64:NW34))</code></pre></div>
 <pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    31 obs. of  12 variables:
 ##  $ NE64: num  NA NA NA NA NA NA NA NA 20 25 ...
 ##  $ SE64: num  NA NA NA NA NA NA NA NA 20 20 ...
@@ -234,7 +234,7 @@
 <h3 class="hasAnchor">
 <a href="#forecast" class="anchor"></a>Forecast</h3>
 <p>Most Forecast/Advisory products will have forecast data associated with it unless the storm has dissipated or is no longer tropical. There may be up to seven forecast positions. These positions are issued by 12-hour intervals through 48 hours where they are then at 24-hour intervals; 12, 24, 36, 48, 72, 96 and 120 hours.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.al_18_2012_fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/select">select</a></span>(Hr12FcstDate:Hr12Gust))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.al_18_2012_fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(Hr12FcstDate:Hr12Gust))</code></pre></div>
 <p>Notice each variable begins with the prefix “Hrn” where n is the forecast period as noted above. Only Date, Lat, Lon, Wind, Gust and wind radius (will discuss shortly) are given for forecast periods.</p>
 <p>Use <code>tidy_fcst</code> to tidy forecast data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/tidy_fcst.html">tidy_fcst</a></span>(df.al_18_2012_fstadv)</code></pre></div>
@@ -256,7 +256,7 @@
 <h4 class="hasAnchor">
 <a href="#forecast-datestimes" class="anchor"></a>Forecast Dates/Times</h4>
 <p>A note about forecast times.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.al_18_2012_fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/select">select</a></span>(Date, Hr12FcstDate) %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/slice">slice</a></span>(<span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.al_18_2012_fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(Date, Hr12FcstDate) %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/slice.html">slice</a></span>(<span class="dv">1</span>)</code></pre></div>
 <pre><code>## # A tibble: 1 x 2
 ##                  Date Hr12FcstDate
 ##                &lt;dttm&gt;       &lt;dttm&gt;
@@ -269,7 +269,7 @@
 <h3 class="hasAnchor">
 <a href="#forecast-wind-radius" class="anchor"></a>Forecast Wind Radius</h3>
 <p>Some forecast positions may also contain wind radius information (only up to 72 hours).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.al_18_2012_fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/select">select</a></span>(Hr12NE64:Hr12NW34))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.al_18_2012_fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(Hr12NE64:Hr12NW34))</code></pre></div>
 <p>Again, these variables are prepended with the prefix prefix “Hrn” where n notes the forecast period.</p>
 <p><code>tidy_fcst_wr</code> will tidy this subset of data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/tidy_fcst_wr.html">tidy_fcst_wr</a></span>(df.al_18_2012_fstadv)</code></pre></div>
@@ -296,7 +296,7 @@
 <a href="#strike-probabilities-prblty" class="anchor"></a>Strike Probabilities (<code>prblty</code>)</h2>
 <p>Strike probabilities were discontinued after the 2005 hurricane season (replaced by Wind Speed Probabilities; <code>wndprb</code>). For this example, we’ll look at Hurricane Katrina. For this we use the function <code>get_prblty</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.al_12_2005_prblty &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_storms.html">get_storms</a></span>(<span class="dt">year =</span> <span class="dv">2005</span>, <span class="dt">basin =</span> <span class="st">"AL"</span>) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Name ==<span class="st"> "Hurricane Katrina"</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Name ==<span class="st"> "Hurricane Katrina"</span>) %&gt;%<span class="st"> </span>
 <span class="st">    </span>.$Link %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw"><a href="../reference/get_prblty.html">get_prblty</a></span>()</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.al_12_2005_prblty)</code></pre></div>
@@ -332,7 +332,7 @@
 <h2 class="hasAnchor">
 <a href="#wind-speed-probabilities-wndprb" class="anchor"></a>Wind Speed Probabilities (<code>wndprb</code>)</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.al_18_2012_wndprb &lt;-<span class="st"> </span>df.al_2012 %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Name ==<span class="st"> "Hurricane Sandy"</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Name ==<span class="st"> "Hurricane Sandy"</span>) %&gt;%<span class="st"> </span>
 <span class="st">    </span>.$Link %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw"><a href="../reference/get_wndprb.html">get_wndprb</a></span>()</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df.al_18_2012_wndprb)</code></pre></div>

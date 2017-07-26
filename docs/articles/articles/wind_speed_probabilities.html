@@ -76,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/timtrice/rrricanes">
+  <a href="https://github.com/ropensci/rrricanes">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -109,25 +109,25 @@
 <span class="kw">library</span>(sp)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">key &lt;-<span class="st"> "AL092008"</span>
 adv &lt;-<span class="st"> </span><span class="dv">42</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wndprb &lt;-<span class="st"> </span>wndprb %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Key ==<span class="st"> </span>key, Adv &lt;=<span class="st"> </span>adv)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wndprb &lt;-<span class="st"> </span>wndprb %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Key ==<span class="st"> </span>key, Adv &lt;=<span class="st"> </span>adv)</code></pre></div>
 <div id="gis-advisory-forecast-track-cone-of-uncertainty-and-watcheswarnings" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gis-advisory-forecast-track-cone-of-uncertainty-and-watcheswarnings" class="anchor"></a>GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gis_adv &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/gis_advisory.html">gis_advisory</a></span>(<span class="dt">key =</span> key, <span class="dt">advisory =</span> adv) %&gt;%<span class="st"> </span><span class="kw"><a href="../../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmptbwVoU", layer: "al092008.042_5day_lin"
+## Source: "/tmp/Rtmp06Q6ag", layer: "al092008.042_5day_lin"
 ## with 2 features
 ## It has 9 fields
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmptbwVoU", layer: "al092008.042_5day_pgn"
+## Source: "/tmp/Rtmp06Q6ag", layer: "al092008.042_5day_pgn"
 ## with 2 features
 ## It has 9 fields
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmptbwVoU", layer: "al092008.042_5day_pts"
+## Source: "/tmp/Rtmp06Q6ag", layer: "al092008.042_5day_pts"
 ## with 13 features
 ## It has 20 fields
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmptbwVoU", layer: "al092008.042_ww_wwlin"
+## Source: "/tmp/Rtmp06Q6ag", layer: "al092008.042_ww_wwlin"
 ## with 5 features
 ## It has 10 fields</code></pre>
 <p>Get bounding box of the forecast polygon.</p>
@@ -169,13 +169,13 @@ lon_max &lt;-<span class="st"> </span>bbox[<span class="dv">1</span>,<span class
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bpi &lt;-<span class="st"> </span>bp +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/annotation_custom">annotation_custom</a></span>(<span class="dt">grob =</span> bp_inset, <span class="dt">xmin =</span> lon_max -<span class="st"> </span><span class="dv">5</span>,
                              <span class="dt">xmax =</span> lon_max -<span class="st"> </span><span class="dv">1</span>, <span class="dt">ymin =</span> -<span class="ot">Inf</span>,
                              <span class="dt">ymax =</span> lat_min +<span class="st"> </span><span class="dv">5</span>)</code></pre></div>
-<p>The <code>wndprb</code> will not have coordinates for cities. An option is <code>al_prblty_stations</code>. However, please note this function may become <a href="https://github.com/timtrice/rrricanes/issues/46">deprecated</a>.</p>
+<p>The <code>wndprb</code> will not have coordinates for cities. An option is <code>al_prblty_stations</code>. However, please note this function may become <a href="https://github.com/ropensci/rrricanes/issues/46">deprecated</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wndprb &lt;-<span class="st"> </span>wndprb %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/join">left_join</a></span>(<span class="kw"><a href="../../reference/al_prblty_stations.html">al_prblty_stations</a></span>(), <span class="dt">by =</span> <span class="st">"Location"</span>)</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(<span class="kw"><a href="../../reference/al_prblty_stations.html">al_prblty_stations</a></span>(), <span class="dt">by =</span> <span class="st">"Location"</span>)</code></pre></div>
 <p>Check <code>wndprb</code> for NA values in <code>Lat</code>, <code>Lon</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">any</span>(<span class="kw">is.na</span>(wndprb$Lat), <span class="kw">is.na</span>(wndprb$Lon))</code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wndprb_adv42 &lt;-<span class="st"> </span>wndprb %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Adv ==<span class="st"> </span>adv, Wind &gt;=<span class="st"> </span><span class="dv">64</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wndprb_adv42 &lt;-<span class="st"> </span>wndprb %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Adv ==<span class="st"> </span>adv, Wind &gt;=<span class="st"> </span><span class="dv">64</span>)
 bp +
 <span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">data =</span> wndprb_adv42, 
                <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Lon, <span class="dt">y =</span> Lat, <span class="dt">color =</span> Wind120Cum, <span class="dt">size =</span> Wind120Cum)) +<span class="st"> </span>

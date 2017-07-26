@@ -76,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/timtrice/rrricanes">
+  <a href="https://github.com/ropensci/rrricanes">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -136,7 +136,7 @@
 <a href="#prerequisites" class="anchor"></a>Prerequisites</h3>
 <p><code>rrricanes</code> requires an active internet connection as data is extracted from online sources.</p>
 <p>Linux users must also have the <code>libgdal-dev</code>, <code>libproj-dev</code> and <code>libxml2-dev</code> packages installed.</p>
-<p>To add <code>rrricanesdata</code>, a <a href="https://github.com/timtrice/rrricanesdata">package of post-scraped datasets</a>,</p>
+<p>To add <code>rrricanesdata</code>, a <a href="https://github.com/ropensci/rrricanesdata">package of post-scraped datasets</a>,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"rrricanesdata"</span>, 
                  <span class="dt">repos =</span> <span class="st">"https://timtrice.github.io/drat/"</span>, 
                  <span class="dt">type =</span> <span class="st">"source"</span>)</code></pre></div>
@@ -149,7 +149,7 @@
 <h3 class="hasAnchor">
 <a href="#installing" class="anchor"></a>Installing</h3>
 <p><code>rrricanes</code> is currently only available in GitHub. It can be installed using the <code>devtools</code> package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">"timtrice/rrricanes"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">"ropensci/rrricanes"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
 </div>
 <div id="built-with" class="section level2">
@@ -163,7 +163,7 @@
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>Please read <a href="https://github.com/timtrice/rrricanes/blob/master/.github/CONTRIBUTING.md">CONTRIBUTING.md</a> for details on our code of conduct, and the process for submitting pull requests to us.</p>
+<p>Please read <a href="https://github.com/ropensci/rrricanes/blob/master/.github/CONTRIBUTING.md">CONTRIBUTING.md</a> for details on our code of conduct, and the process for submitting pull requests to us.</p>
 </div>
 <div id="versioning" class="section level2">
 <h2 class="hasAnchor">
@@ -178,7 +178,7 @@
 <strong>Tim Trice</strong> - <em>Initial work</em> - <a href="https://github.com/timtrice">timtrice</a>
 </li>
 </ul>
-<p>See also the list of <a href="https://github.com/timtrice/rrricanes/contributors">contributors</a> who participated in this project.</p>
+<p>See also the list of <a href="https://github.com/ropensci/rrricanes/contributors">contributors</a> who participated in this project.</p>
 </div>
 <div id="license" class="section level2">
 <h2 class="hasAnchor">
@@ -191,6 +191,7 @@
 <ul>
 <li><a href="https://github.com/jimmylovestea">Molyneux, James</a></li>
 <li><a href="https://github.com/mpadge">Padgham, Mark</a></li>
+<li><a href="https://github.com/robinsones">Robinson, Emily</a></li>
 <li><a href="https://github.com/hrbrmstr">Rudis, Bob</a></li>
 <li><a href="https://github.com/maelle">Salmon, Maëlle</a></li>
 <li><a href="https://github.com/jsta">Stachelek, Joseph</a></li>
@@ -200,7 +201,7 @@
 <h2 class="hasAnchor">
 <a href="#known-data-quality-issues" class="anchor"></a>Known Data Quality Issues</h2>
 <ol style="list-style-type: decimal">
-<li>Hurricane Juan (AL152003), Adv 15; no status leads to improper <code>Status</code> and <code>Name</code> values in some datasets. (<a href="https://github.com/timtrice/rrricanes/issues/82">#82</a>)</li>
+<li>Hurricane Juan (AL152003), Adv 15; no status leads to improper <code>Status</code> and <code>Name</code> values in some datasets. (<a href="https://github.com/ropensci/rrricanes/issues/82">#82</a>)</li>
 </ol>
 </div>
 </div>
@@ -211,9 +212,9 @@
     <h2 class="hasAnchor">
 <a href="#sidebar" class="anchor"></a>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/timtrice/rrricanes">https://​github.com/​timtrice/​rrricanes</a>
+<li>Browse source code at <br><a href="https://github.com/ropensci/rrricanes">https://​github.com/​ropensci/​rrricanes</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/timtrice/rrricanes/issues">https://​github.com/​timtrice/​rrricanes/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/ropensci/rrricanes/issues">https://​github.com/​ropensci/​rrricanes/​issues</a>
 </li>
 </ul>
 <h2>License</h2>
@@ -221,15 +222,17 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Tim Trice <br><small class="roles"> Author, maintainer </small> </li>
+<li><a href="authors.html">All authors...</a></li>
 </ul>
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://cran.r-project.org/"><img src="https://img.shields.io/badge/R%3E%3D-3.3.3-6666ff.svg" alt="minimal R version"></a></li>
-<li><a href="https://github.com/timtrice/rrricanes/tags"><img src="https://img.shields.io/github/release/timtrice/rrricanes/all.svg" alt="GitHub (pre-)release"></a></li>
+<li><a href="https://github.com/ropensci/rrricanes/tags"><img src="https://img.shields.io/github/release/ropensci/rrricanes/all.svg" alt="GitHub (pre-)release"></a></li>
+<li><a href="https://github.com/ropensci/onboarding/issues/118"><img src="https://badges.ropensci.org/118_status.svg"></a></li>
 <li><a href="https://cran.r-project.org/package=rrricanes"><img src="http://www.r-pkg.org/badges/version/rrricanes" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://travis-ci.org/timtrice/rrricanes"><img src="https://img.shields.io/travis/timtrice/rrricanes/master.svg" alt="Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/timtrice/rrricanes"><img src="https://img.shields.io/appveyor/ci/timtrice/rrricanes/master.svg" alt="AppVeyor Build Status"></a></li>
-<li><a href="https://codecov.io/gh/timtrice/rrricanes"><img src="https://codecov.io/gh/timtrice/rrricanes/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://travis-ci.org/ropensci/rrricanes"><img src="https://img.shields.io/travis/ropensci/rrricanes/master.svg" alt="Build Status"></a></li>
+<li><a href="https://ci.appveyor.com/project/timtrice/rrricanes-g4dos"><img src="https://img.shields.io/appveyor/ci/timtrice/rrricanes-g4dos/master.svg" alt="AppVeyor Build Status"></a></li>
+<li><a href="https://codecov.io/gh/ropensci/rrricanes"><img src="https://codecov.io/gh/ropensci/rrricanes/branch/master/graph/badge.svg" alt="codecov"></a></li>
 </ul>
 </div>
 

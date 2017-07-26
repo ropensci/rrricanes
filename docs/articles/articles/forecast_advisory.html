@@ -76,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/timtrice/rrricanes">
+  <a href="https://github.com/ropensci/rrricanes">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -109,25 +109,25 @@
 <span class="kw">library</span>(sp)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">key &lt;-<span class="st"> "AL092008"</span>
 adv &lt;-<span class="st"> </span><span class="dv">42</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv &lt;-<span class="st"> </span>fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Key ==<span class="st"> </span>key, Adv &lt;=<span class="st"> </span>adv)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv &lt;-<span class="st"> </span>fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Key ==<span class="st"> </span>key, Adv &lt;=<span class="st"> </span>adv)</code></pre></div>
 <div id="gis-advisory-forecast-track-cone-of-uncertainty-and-watcheswarnings" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gis-advisory-forecast-track-cone-of-uncertainty-and-watcheswarnings" class="anchor"></a>GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gis_adv &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/gis_advisory.html">gis_advisory</a></span>(<span class="dt">key =</span> key, <span class="dt">advisory =</span> adv) %&gt;%<span class="st"> </span><span class="kw"><a href="../../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmp7L4Bki", layer: "al092008.042_5day_lin"
+## Source: "/tmp/RtmpS6h1pf", layer: "al092008.042_5day_lin"
 ## with 2 features
 ## It has 9 fields
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmp7L4Bki", layer: "al092008.042_5day_pgn"
+## Source: "/tmp/RtmpS6h1pf", layer: "al092008.042_5day_pgn"
 ## with 2 features
 ## It has 9 fields
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmp7L4Bki", layer: "al092008.042_5day_pts"
+## Source: "/tmp/RtmpS6h1pf", layer: "al092008.042_5day_pts"
 ## with 13 features
 ## It has 20 fields
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/Rtmp7L4Bki", layer: "al092008.042_ww_wwlin"
+## Source: "/tmp/RtmpS6h1pf", layer: "al092008.042_ww_wwlin"
 ## with 5 features
 ## It has 10 fields</code></pre>
 <p>Get bounding box of the forecast polygon.</p>
@@ -180,7 +180,7 @@ shp_storm_ww &lt;-<span class="st"> </span><span class="kw"><a href="../../refer
 shp_storm_pgn &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/shp_to_df.html">shp_to_df</a></span>(gis_adv$al092008_042_5day_pgn)</code></pre></div>
 <p>Points dataframes can just be converted with <code><a href="http://www.rdocumentation.org/packages/tibble/topics/as_tibble">tibble::as_data_frame</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert object SpatialPointsDataframe to dataframe</span>
-shp_storm_pts &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/reexports">as_data_frame</a></span>(gis_adv$al092008_042_5day_pts)</code></pre></div>
+shp_storm_pts &lt;-<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/reexports.html">as_data_frame</a></span>(gis_adv$al092008_042_5day_pts)</code></pre></div>
 <p>Modify <code>shp_storm_pts$DVLBL</code> with full strings and ordered factor.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">shp_storm_pts$DVLBL &lt;-<span class="st"> </span><span class="kw">factor</span>(shp_storm_pts$DVLBL, 
                               <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">"D"</span>, <span class="st">"S"</span>, <span class="st">"H"</span>), 

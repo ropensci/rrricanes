@@ -76,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/timtrice/rrricanes">
+  <a href="https://github.com/ropensci/rrricanes">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -113,7 +113,7 @@ adv &lt;-<span class="st"> </span><span class="dv">42</span></code></pre></div>
 <div id="forecastadvisory-data-for-hurricane-ike-adv-42" class="section level3">
 <h3 class="hasAnchor">
 <a href="#forecastadvisory-data-for-hurricane-ike-adv-42" class="anchor"></a>Forecast/Advisory Data for Hurricane Ike Adv #42</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv &lt;-<span class="st"> </span>fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(Key ==<span class="st"> </span>key, Adv &lt;=<span class="st"> </span>adv)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv &lt;-<span class="st"> </span>fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Key ==<span class="st"> </span>key, Adv &lt;=<span class="st"> </span>adv)</code></pre></div>
 </div>
 <div id="wind-profile" class="section level2">
 <h2 class="hasAnchor">
@@ -149,7 +149,7 @@ fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocu
 <h2 class="hasAnchor">
 <a href="#windpressure-relational-change" class="anchor"></a>Wind/Pressure Relational Change</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv %&gt;%
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/mutate">mutate</a></span>(<span class="dt">WindDist =</span> (Wind -<span class="st"> </span><span class="kw">min</span>(Wind))/(<span class="kw">max</span>(Wind) -<span class="st"> </span><span class="kw">min</span>(Wind)),
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">WindDist =</span> (Wind -<span class="st"> </span><span class="kw">min</span>(Wind))/(<span class="kw">max</span>(Wind) -<span class="st"> </span><span class="kw">min</span>(Wind)),
            <span class="dt">PressDist =</span> (Pressure -<span class="st"> </span><span class="kw">max</span>(Pressure))/(<span class="kw">max</span>(Pressure) -<span class="st"> </span><span class="kw">min</span>(Pressure))) %&gt;%
 <span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/gather">gather</a></span>(Var, Val, WindDist, PressDist) %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Val, <span class="dt">group =</span> Var, <span class="dt">color =</span> Var)) +<span class="st"> </span>

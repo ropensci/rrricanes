@@ -76,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/timtrice/rrricanes">
+  <a href="https://github.com/ropensci/rrricanes">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -125,18 +125,18 @@
 </li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv &lt;-<span class="st"> </span>fstadv %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/hour">hour</a></span>(Date) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">9</span>, <span class="dv">15</span>, <span class="dv">21</span>), 
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/hour">hour</a></span>(Date) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">9</span>, <span class="dv">15</span>, <span class="dv">21</span>), 
            Status %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">"Tropical Storm"</span>, <span class="st">"Hurricane"</span>), 
            !<span class="kw">is.na</span>(Wind)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/group_by">group_by</a></span>(Key) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/select">select</a></span>(Name, Wind)</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(Key) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(Name, Wind)</code></pre></div>
 <pre><code>## Adding missing grouping variables: `Key`</code></pre>
 <p>Now let’s summarise our dataset with new variable <code>ACE</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fstadv %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/summarise">summarise</a></span>(<span class="dt">Name =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/nth">last</a></span>(Name), 
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="dt">Name =</span> <span class="kw"><a href="http://dplyr.tidyverse.org/reference/nth.html">last</a></span>(Name), 
               <span class="dt">ACE =</span> <span class="kw">sum</span>(Wind^<span class="dv">2</span>) *<span class="st"> </span><span class="fl">1e-04</span>) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/arrange">arrange</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/desc">desc</a></span>(ACE)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/top_n">top_n</a></span>(<span class="dv">10</span>)</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="kw"><a href="http://dplyr.tidyverse.org/reference/desc.html">desc</a></span>(ACE)) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/top_n.html">top_n</a></span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>## Selecting by ACE</code></pre>
 <pre><code>## # A tibble: 10 x 3
 ##         Key    Name     ACE
@@ -155,14 +155,14 @@
 <p>A companion package, <a href="https://github.com/timtrice/HURDAT">HURDAT</a> is available in CRAN that has data for all cyclones dating back as far as 1851. This package has less data than <code>rrricanes</code>. But, as it is based on a post-storm reanalysis project, the data is more accurate.</p>
 <p>Let’s revisit the top 10 using <code>HURDAT</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AL %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/hour">hour</a></span>(DateTime) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">12</span>, <span class="dv">18</span>), 
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/hour">hour</a></span>(DateTime) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">12</span>, <span class="dv">18</span>), 
            Status %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">"TS"</span>, <span class="st">"HU"</span>), 
            !<span class="kw">is.na</span>(Wind)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/group_by">group_by</a></span>(Key) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/summarise">summarise</a></span>(<span class="dt">Name =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/nth">last</a></span>(Name), 
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(Key) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="dt">Name =</span> <span class="kw"><a href="http://dplyr.tidyverse.org/reference/nth.html">last</a></span>(Name), 
               <span class="dt">ACE =</span> <span class="kw">sum</span>(Wind^<span class="dv">2</span>) *<span class="st"> </span><span class="fl">1e-04</span>) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/arrange">arrange</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/desc">desc</a></span>(ACE)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/top_n">top_n</a></span>(<span class="dv">10</span>)</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="kw"><a href="http://dplyr.tidyverse.org/reference/desc.html">desc</a></span>(ACE)) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/top_n.html">top_n</a></span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>## Selecting by ACE</code></pre>
 <pre><code>## # A tibble: 10 x 3
 ##         Key    Name     ACE
@@ -185,14 +185,14 @@
 <p><code>ACE</code> is slightly higher and that could be for a number of reasons. For example, on re-analysis the Hurricane Research Division may have determined a cyclone was actually tropical (shown in <code>HURDAT</code>) when initially it was believed to be extratropical (as shown in <code>rrricanes</code>). Or, and more likely, they determined through additional data that a storm was actually stronger than originally though.</p>
 <p>You can also calculate <code>ACE</code> for a season. Instead of grouping by <code>Key</code> we group by <code>Year</code>. I’ll stick with <code>HURDAT</code> in this example.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(df &lt;-<span class="st"> </span>AL %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/mutate">mutate</a></span>(<span class="dt">Year =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/year">year</a></span>(DateTime)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/hour">hour</a></span>(DateTime) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">12</span>, <span class="dv">18</span>), 
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">Year =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/year">year</a></span>(DateTime)) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/lubridate/topics/hour">hour</a></span>(DateTime) %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">12</span>, <span class="dv">18</span>), 
            Status %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">"TS"</span>, <span class="st">"HU"</span>), 
            !<span class="kw">is.na</span>(Wind)) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/group_by">group_by</a></span>(Year) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/summarise">summarise</a></span>(<span class="dt">ACE =</span> <span class="kw">sum</span>(Wind^<span class="dv">2</span>) *<span class="st"> </span><span class="fl">1e-04</span>) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/arrange">arrange</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/desc">desc</a></span>(ACE))) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/top_n">top_n</a></span>(<span class="dv">10</span>)</code></pre></div>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(Year) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="dt">ACE =</span> <span class="kw">sum</span>(Wind^<span class="dv">2</span>) *<span class="st"> </span><span class="fl">1e-04</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="kw"><a href="http://dplyr.tidyverse.org/reference/desc.html">desc</a></span>(ACE))) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/top_n.html">top_n</a></span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>## Selecting by ACE</code></pre>
 <pre><code>## # A tibble: 10 x 2
 ##     Year      ACE

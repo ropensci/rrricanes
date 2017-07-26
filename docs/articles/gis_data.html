@@ -76,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/timtrice/rrricanes">
+  <a href="https://github.com/ropensci/rrricanes">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -96,7 +96,7 @@
       <h1>GIS data</h1>
                         <h4 class="author">Tim Trice</h4>
             
-            <h4 class="date">2017-07-16</h4>
+            <h4 class="date">2017-07-26</h4>
           </div>
 
     
@@ -223,11 +223,11 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fcst_cone &lt;-<span class="st"> </span>df.gis_adv$al182012_018_5day_pgn
 fcst_cone@data$id &lt;-<span class="st"> </span><span class="kw">rownames</span>(fcst_cone@data)
 fcst_cone.points &lt;-<span class="st"> </span>broom::<span class="kw">tidy</span>(fcst_cone, <span class="dt">region =</span> <span class="st">"id"</span>)
-fcst_cone &lt;-<span class="st"> </span>dplyr::<span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/join">left_join</a></span>(fcst_cone.points, fcst_cone@data, <span class="dt">by =</span> <span class="st">"id"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p3 +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_polygon">geom_polygon</a></span>(<span class="dt">data =</span> fcst_cone %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(FCSTPRD ==<span class="st"> </span><span class="dv">120</span>), 
+fcst_cone &lt;-<span class="st"> </span>dplyr::<span class="kw"><a href="http://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(fcst_cone.points, fcst_cone@data, <span class="dt">by =</span> <span class="st">"id"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p3 +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_polygon">geom_polygon</a></span>(<span class="dt">data =</span> fcst_cone %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(FCSTPRD ==<span class="st"> </span><span class="dv">120</span>), 
                  <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(long, lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(FCSTPRD)), 
                  <span class="dt">alpha =</span> <span class="fl">0.5</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_polygon">geom_polygon</a></span>(<span class="dt">data =</span> fcst_cone %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/filter">filter</a></span>(FCSTPRD ==<span class="st"> </span><span class="dv">72</span>), 
+<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_polygon">geom_polygon</a></span>(<span class="dt">data =</span> fcst_cone %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(FCSTPRD ==<span class="st"> </span><span class="dv">72</span>), 
                  <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(long, lat, <span class="dt">group =</span> group, <span class="dt">fill =</span> <span class="kw">factor</span>(FCSTPRD)), 
                  <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre></div>
 <p><img src="gis_data_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;"></p>
@@ -256,7 +256,7 @@ fcst_cone &lt;-<span class="st"> </span>dplyr::<span class="kw"><a href="http://
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df.gis_storm_surge &lt;-<span class="st"> </span><span class="kw"><a href="../reference/gis_prob_storm_surge.html">gis_prob_storm_surge</a></span>(<span class="dt">key =</span> <span class="st">"AL142016"</span>, 
                            <span class="dt">products =</span> <span class="kw">list</span>(<span class="dt">psurge =</span> <span class="dv">0</span>), 
                            <span class="dt">datetime =</span> <span class="st">"20161006"</span>) %&gt;%<span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/nth">last</a></span>() %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/nth.html">last</a></span>() %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw"><a href="../reference/gis_download.html">gis_download</a></span>()</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prob_surge &lt;-<span class="st"> </span><span class="kw"><a href="../reference/shp_to_df.html">shp_to_df</a></span>(df.gis_storm_surge$al142016_2016100618_gt0)
 bb &lt;-<span class="st"> </span>sp::<span class="kw">bbox</span>(df.gis_storm_surge$al142016_2016100618_gt0)</code></pre></div>
