@@ -1,3 +1,22 @@
+rrricanes Unreleased (yyyy-mm-dd)
+==================================
+
+### NEW FEATURES
+
+* NA
+
+### MINOR IMPROVEMENTS
+
+* Add `nm_to_sm` to convert nautical miles to survey miles. (#99)
+
+### BUG FIXES
+
+* NA
+
+### DEPRECATED AND DEFUNCT
+
+* NA
+
 rrricanes 0.2.0-6 (2017-07-16)
 ==================================
 
