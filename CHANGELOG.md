@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased] yyyy-mm-dd
 
 ### Added
-  - NA
+  - `nm_to_sm` Convert nautical miles to survey miles. (#99)
 
 ### Changed
   - NA
