@@ -54,6 +54,11 @@ test_that("Millibars to Inches", {
     expect_equal(mb_to_in(888), 26.222624967048)
 })
 
+## ---- nm_to_sm() -------------------------------------------------------------
+test_that("Nautical Miles to Survey Miles", {
+  expect_equal(nm_to_sm(c(50, 100, 150)), c(57.539, 115.078, 172.617))
+})
+
 ## ---- saffir() ---------------------------------------------------------------
 test_that("test saffir()", {
     expect_identical(saffir(c(32, 45, 70, 90, 110, 125, 140)),
