@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - `nm_to_sm` Convert nautical miles to survey miles. (#99)
 
 ### Changed
-  - NA
+  - `gis_download` and `gis_latest` can accept parameters for rgdal::readOGR (#104).
 
 ### Removed
   - NA

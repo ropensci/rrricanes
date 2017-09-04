@@ -97,8 +97,9 @@ gis_breakpoints <- function(year = as.numeric(strftime(Sys.Date(), "%Y"))) {
 #' @title gis_download
 #' @description Get GIS data for storm.
 #' @param url link to GIS dataset to download.
+#' @param ... additional parameters for rgdal::readOGR
 #' @export
-gis_download <- function(url) {
+gis_download <- function(url, ...) {
 
   destdir <- tempdir()
 
@@ -116,7 +117,8 @@ gis_download <- function(url) {
     sp_object <- rgdal::readOGR(dsn = d, layer = shp_file,
                   encoding = "UTF-8",
                   stringsAsFactors = FALSE,
-                  use_iconv = TRUE)
+                  use_iconv = TRUE,
+                  ...)
     return(sp_object)
   })
 
@@ -132,8 +134,9 @@ gis_download <- function(url) {
 #' @title gis_latest
 #' @description Latest GIS datasets for active cyclones
 #' @param basins AL and/or EP.
+#' @param ... additional parameters for rgdal::readOGR
 #' @export
-gis_latest <- function(basins = c("AL", "EP")) {
+gis_latest <- function(basins = c("AL", "EP"), ...) {
 
   if (!(all(basins %in% c("AL", "EP"))))
     stop("Invalid basin")
@@ -149,7 +152,7 @@ gis_latest <- function(basins = c("AL", "EP")) {
     .[!is.na(.)]
 
   if (!purrr::is_empty(gis_zips)) {
-    ds <- purrr::map(gis_zips, gis_download)
+    ds <- purrr::map(gis_zips, gis_download, ...)
     return(ds)
   }
   return(FALSE)

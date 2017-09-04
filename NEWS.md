@@ -8,6 +8,7 @@ rrricanes Unreleased (yyyy-mm-dd)
 ### MINOR IMPROVEMENTS
 
 * Add `nm_to_sm` to convert nautical miles to survey miles. (#99)
+* Allow parameters for rgdal::readOGR (#104)
 
 ### BUG FIXES
 
