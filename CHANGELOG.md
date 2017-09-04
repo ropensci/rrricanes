@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Added
   - `nm_to_sm` Convert nautical miles to survey miles. (#99)
+  - `tidy_adv` to replace `tidy_fstadv` which will be removed in release 0.2.2 (#103)
 
 ### Changed
   - `gis_download` and `gis_latest` can accept parameters for rgdal::readOGR (#104).

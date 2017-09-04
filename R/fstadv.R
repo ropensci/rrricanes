@@ -686,7 +686,7 @@ fstadv_winds_gusts <- function(contents, what = NULL) {
 
 }
 
-#' @title tidy_fstadv
+#' @title tidy_adv
 #' @description Tidy current details of a fstadv dataframe object.
 #' @param df fstadv dataframe object
 #' @details Returns current data only of a fstadv dataframe. Use Key, Adv and
@@ -714,15 +714,23 @@ fstadv_winds_gusts <- function(contents, what = NULL) {
 #' @examples
 #' \dontrun{
 #' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
-#'   tidy_fstadv()
+#'   tidy_adv()
 #' }
 #' @export
-tidy_fstadv <- function(df) {
+tidy_adv <- function(df) {
   if (!is.data.frame(df))
     stop("Expecting a dataframe.")
   df <- dplyr::select_(df, "Key", "Adv:Date", "Status:Name", "Lat:Eye",
              ~dplyr::starts_with("Seas"))
   return(df)
+}
+
+#' @title tidy_fstadv
+#' @description \code{tidy_fstadv} will be deprecated in 0.2.2
+#' @rdname tidy_adv
+#' @export
+tidy_fstadv <- function(df) {
+  return(tidy_adv(df))
 }
 
 #' @title tidy_wr

@@ -9,6 +9,7 @@ rrricanes Unreleased (yyyy-mm-dd)
 
 * Add `nm_to_sm` to convert nautical miles to survey miles. (#99)
 * Allow parameters for rgdal::readOGR (#104)
+* Add `tidy_adv` to replace `tidy_fstadv`; `tidy_fstadv` will be removed in release 0.2.2 (#103)
 
 ### BUG FIXES
 
