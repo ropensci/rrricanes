@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - NA
 
 ### Fixed
-  - NA
+  - `tidy_fcst` now returns all forecast periods; previously only returned hours 12:96 (#107)
 
 ### Security
   - NA
