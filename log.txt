@@ -1,0 +1,6 @@
+Forecast/Advisory error: Error in mapply(FUN = f, ..., SIMPLIFY = FALSE): zero-length inputs cannot be mixed with those of non-zero length
+
+http://www.nhc.noaa.gov/archive/1998/1998JEANNEadv.html
+Forecast/Advisory error: Error in mapply(FUN = f, ..., SIMPLIFY = FALSE): zero-length inputs cannot be mixed with those of non-zero length
+
+http://www.nhc.noaa.gov/archive/1998/1998KARLadv.html

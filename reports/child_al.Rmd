@@ -1,0 +1,17 @@
+
+```{r keys_al}
+keys_al <- keys[str_which(keys, "^AL.")]
+```
+
+```{r}
+if (is_empty(keys_al)) {
+  src <- "There are no storms in the Atlantic basin."
+} else {
+  src <- walk(keys_al, function(x) {
+    knit_expand(file = "child_storm.Rmd", 
+                arguments = list(key = x))
+  })
+}
+```
+
+`r knit(text = unlist(src))`
