@@ -1,3 +1,23 @@
+rrricanes 0.2.0.7 (2017-09-06)
+==================================
+
+### NEW FEATURES
+
+* NA
+
+### MINOR IMPROVEMENTS
+
+* NA
+
+
+### BUG FIXES
+
+* `tidy_fcst` only returned forecasts for hours 12:96. Now returns 120. (#107)
+
+### DEPRECATED AND DEFUNCT
+
+* NA
+
 rrricanes 0.2.0-6 (2017-07-16)
 ==================================
 

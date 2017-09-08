@@ -819,8 +819,9 @@ tidy_fcst <- function(df) {
   v <- c("FcstDate", "Lat", "Lon", "Wind", "Gust")
 
   # What forecast periods are in the current dataset?
+  # #107 Modified regex pattern to look for Hr120, as well.
   fcst_periods <- as.list(names(df)) %>%
-    stringr::str_match(pattern = "Hr([:digit:]{2})FcstDate") %>%
+    stringr::str_match(pattern = "Hr([:digit:]{2,3})FcstDate") %>%
     .[,2] %>%
     .[!rlang::are_na(.)] %>%
     as.numeric()
