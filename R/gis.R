@@ -418,10 +418,10 @@ gis_windfield <- function(key, advisory = as.character()) {
 #' @examples
 #' \dontrun{
 #' # Return datasets for January 1, 2016 with resolution of 0.5 degrees
-#' gis_wndprb("20160101", res = 0.5)
+#' gis_wsp("20160101", res = 0.5)
 #'
 #' # Return wsp of 0.1 and 0.5 degree resolution, July, 2015
-#' gis_wndprb("201507", res = c(0.5, 0.1))
+#' gis_wsp("201507", res = c(0.5, 0.1))
 #' }
 #' @export
 gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
