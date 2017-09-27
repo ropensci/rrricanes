@@ -13,11 +13,7 @@ rrricanes Unreleased (yyyy-mm-dd)
 
 ### BUG FIXES
 
-* NA
-
-### BUG FIXES
-
-* NA
+* `gis_wsp` now uses GET instead of POST to retrieve wind speed probability GIS datasets. (#108)
 
 ### DEPRECATED AND DEFUNCT
 

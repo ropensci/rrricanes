@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Fixed
   - `tidy_fcst` now returns all forecast periods; previously only returned hours 12:96 (#107)
+  - NHC GIS page went from using POST to GET parameters at some point recently for wind speed probability datasets. Func `gis_wsp` modified accordingly. (#108)
 
 ### Security
   - NA

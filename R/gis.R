@@ -439,7 +439,7 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
 
   year <- stringr::str_sub(datetime, 0L, 4L)
 
-  request <- httr::POST("http://www.nhc.noaa.gov/gis/archive_wsp.php",
+  request <- httr::GET("http://www.nhc.noaa.gov/gis/archive_wsp.php",
               body = list(year = year), encode = "form")
   contents <- httr::content(request, as = "parsed", encoding = "UTF-8")
 
