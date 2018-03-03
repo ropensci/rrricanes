@@ -1,7 +1,8 @@
 # set CRAN mirrors
 local({
   r <- getOption("repos")
-	r["CRAN"] <- "https://mran.microsoft.com/snapshot/2017-07-16"
+  # If date below is changed then shall also be updated in ./.Rprofile
+  r["CRAN"] <- "https://mran.microsoft.com/snapshot/2017-07-16"
   options(repos = r)
 })
 
