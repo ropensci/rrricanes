@@ -13,7 +13,4 @@
 ^\.github$
 ^_pkgdown\.yml$
 ^deploy\.sh$
-^Dockerfile$
-^docker-build\.sh$
-^docker-compose\.yml$
-^packages\.R$
+^_docker/
