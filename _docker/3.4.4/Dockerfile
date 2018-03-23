@@ -1,4 +1,4 @@
-FROM rocker/tidyverse:3.3.3
+FROM rocker/tidyverse:3.4.4
 
 RUN apt-get update \ 
   && apt-get upgrade -y \ 

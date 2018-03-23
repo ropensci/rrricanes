@@ -1,28 +1,33 @@
-FROM rocker/rstudio:3.4.0
+FROM rocker/tidyverse:3.4.0
 
-RUN apt-get update \
-  && apt-get upgrade -y \
-  && apt-get install -y \
-    vim \
-    libgdal-dev \
+RUN apt-get update \ 
+  && apt-get upgrade -y \ 
+  && apt-get install -y \ 
+    libgdal-dev \ 
     libproj-dev \
-    libxml2-dev
-
-# Add working directory for proceeding commands
-WORKDIR /home/rstudio
-
-# Clone GitHub repo
-RUN git clone https://github.com/ropensci/rrricanes.git
-
-# Move to rrricanes directory
-WORKDIR /home/rstudio/rrricanes
-
-# Checkout branch develop
-RUN git checkout develop
-
-# Install R packages
-RUN Rscript _docker/_install.R
-
-# Change ownership of all files to rstudio
-RUN chown -R rstudio:rstudio .
-
+    libxml2-dev \
+    vim \
+  && install2.r -e \ 
+    broom \ 
+    crul \
+    devtools \
+    httr \
+    knitr \
+    lubridate \
+    magrittr \
+    maptools \
+    rgdal \
+    rgeos \
+    rlang \
+    rmarkdown \
+    rnaturalearthdata \
+    rvest \
+    sp \
+    testthat \
+    xml2 \ 
+  && install2.r -e -r https://timtrice.github.io/drat/ \ 
+    rrricanesdata \
+  && installGithub.r \ 
+    r-lib/fs@v1.2.1 \ 
+    r-lib/pkgdown \ 
+    klutometis/roxygen@v6.0.1
