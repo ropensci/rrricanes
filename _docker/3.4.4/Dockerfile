@@ -5,9 +5,12 @@ RUN apt-get update \
   && apt-get install -y \ 
     libgdal-dev \ 
     libproj-dev \
-    vim
-
-RUN install2.r -e crul
-RUN install2.r -e rgdal
-RUN install2.r -e rgeos
-RUN install2.r -e rnaturalearthdata
+    vim \
+  && install2.r -e \
+    crul \
+    rgdal \
+    rgeos \ 
+    rnaturalearthdata \
+  && installGithub.r \ 
+    r-lib/fs@v1.2.1 \ 
+    r-lib/pkgdown
