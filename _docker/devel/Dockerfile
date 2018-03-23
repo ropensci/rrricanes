@@ -5,9 +5,14 @@ RUN apt-get update \
   && apt-get install -y \ 
     libgdal-dev \ 
     libproj-dev \
-    vim
-
-RUN install2.r -e crul
-RUN install2.r -e rgdal
-RUN install2.r -e rgeos
-RUN install2.r -e rnaturalearthdata
+    vim \ 
+  && install2.r -e \
+    crul \
+    rgdal \
+    rgeos \
+    rnaturalearthdata \ 
+  && install2.r -e -r https://timtrice.github.io/drat/ \ 
+    rrricanesdata \ 
+  && installGithub.r \ 
+    r-lib/fs \
+    r-lib/pkgdown
