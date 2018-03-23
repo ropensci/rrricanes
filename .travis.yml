@@ -5,6 +5,7 @@ addons:
     packages:
     - libgdal-dev
     - libproj-dev
+dist: trusty
 os:
   - linux
   - osx
