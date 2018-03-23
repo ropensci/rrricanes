@@ -14,3 +14,4 @@
 ^_pkgdown\.yml$
 ^deploy\.sh$
 ^_docker/
+^rrricanes\.code-workspace
