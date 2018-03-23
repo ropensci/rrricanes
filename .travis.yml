@@ -14,35 +14,15 @@ matrix:
   - os: linux
     dist: trusty
     sudo: false
-    r: 3.4.0
-  - os: linux
-    dist: trusty
-    sudo: false
-    r: 3.4.1
-  - os: linux
-    dist: trusty
-    sudo: false
-    r: 3.4.2
-  - os: linux
-    dist: trusty
-    sudo: false
-    r: 3.4.3
+    r: release
   - os: linux
     dist: trusty
     sudo: false
     r: devel
   - os: osx
     r: 3.3.3
-	- os: osx
-	  r: 3.4.0
   - os: osx
-	  r: 3.4.1
-	- os: osx
-	  r: 3.4.2
-  - os: osx
-	  r: 3.4.3
-  - os: osx
-    r: devel
+    r: release
 r_packages:
   - covr
 r_github_packages:
