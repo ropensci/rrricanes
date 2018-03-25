@@ -10,7 +10,6 @@ RUN apt-get update \
     crul \
     rgdal \
     rgeos \
-    rnaturalearthdata
-
-RUN install2.r -e -r https://timtrice.github.io/drat/ \ 
+    rnaturalearthdata \ 
+  && install2.r -e -r https://timtrice.github.io/drat/ \ 
     rrricanesdata
