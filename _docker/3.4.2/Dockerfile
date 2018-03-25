@@ -12,4 +12,4 @@ RUN apt-get update \
     rgeos \
     rnaturalearthdata \ 
   && install2.r -e -r https://timtrice.github.io/drat/ \ 
-    rrricanesdata@v0.2.0-6
+    rrricanesdata@v0.0.1.5
