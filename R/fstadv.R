@@ -730,6 +730,7 @@ tidy_adv <- function(df) {
 #' @rdname tidy_adv
 #' @export
 tidy_fstadv <- function(df) {
+  .Deprecated("tidy_adv")
   return(tidy_adv(df))
 }
 
