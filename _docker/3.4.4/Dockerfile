@@ -14,5 +14,5 @@ RUN apt-get update \
   && install2.r -e -r https://timtrice.github.io/drat/ \ 
     rrricanesdata \ 
   && installGithub.r \ 
-    r-lib/fs@v1.2.1 \
+    r-lib/fs \
     r-lib/pkgdown
