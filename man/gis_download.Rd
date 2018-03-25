@@ -4,10 +4,12 @@
 \alias{gis_download}
 \title{gis_download}
 \usage{
-gis_download(url)
+gis_download(url, ...)
 }
 \arguments{
 \item{url}{link to GIS dataset to download.}
+
+\item{...}{additional parameters for rgdal::readOGR}
 }
 \description{
 Get GIS data for storm.

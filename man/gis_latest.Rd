@@ -4,10 +4,12 @@
 \alias{gis_latest}
 \title{gis_latest}
 \usage{
-gis_latest(basins = c("AL", "EP"))
+gis_latest(basins = c("AL", "EP"), ...)
 }
 \arguments{
 \item{basins}{AL and/or EP.}
+
+\item{...}{additional parameters for rgdal::readOGR}
 }
 \description{
 Latest GIS datasets for active cyclones

@@ -18,15 +18,24 @@ environment:
     WARNINGS_ARE_ERRORS: 1
 
   matrix:
-  - R_VERSION: stable
-
-  - R_VERSION: patched
-
-  - R_VERSION: release
-    R_ARCH: x64
+  - R_VERSION: oldrel
+    RTOOLS_VERSION: 333
+    CRAN: http://cran.rstudio.com
 
   - R_VERSION: oldrel
-    RTOOLS_VERSION: 33
+    RTOOLS_VERSION: 340
+    CRAN: http://cran.rstudio.com
+
+  - R_VERSION: oldrel
+    RTOOLS_VERSION: 341
+    CRAN: http://cran.rstudio.com
+
+  - R_VERSION: oldrel
+    RTOOLS_VERSION: 342
+    CRAN: http://cran.rstudio.com
+
+  - R_VERSION: oldrel
+    RTOOLS_VERSION: 343
     CRAN: http://cran.rstudio.com
 
   - R_VERSION: devel

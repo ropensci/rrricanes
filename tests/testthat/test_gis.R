@@ -10,13 +10,14 @@ test_that("gis_advisory", {
 })
 
 ## ---- gis_breakpoints --------------------------------------------------------
-test_that("gis_breakpoints", {
-  expect_identical(gis_breakpoints(2017),
-                   sprintf("%s%s%s",
-                           get_nhc_link(),
-                           "gis/breakpoints/archive/",
-                           "Breakpoints_2017.zip"))
-})
+#TODO #109
+# test_that("gis_breakpoints", {
+#   expect_identical(gis_breakpoints(2017),
+#                    sprintf("%s%s%s",
+#                            get_nhc_link(),
+#                            "gis/breakpoints/archive/",
+#                            "Breakpoints_2017.zip"))
+# })
 
 ## ---- gis_outlook ------------------------------------------------------------
 test_that("gis_outlook", {

@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased] yyyy-mm-dd
+
+### Added
+  - `nm_to_sm` Convert nautical miles to survey miles. (#99)
+  - `tidy_adv` to replace `tidy_fstadv` which will be removed in release 0.2.2 (#103)
+
+### Changed
+  - `gis_download` and `gis_latest` can accept parameters for rgdal::readOGR (#104).
+
+### Removed
+  - NA
+
+### Deprecated
+  - NA
+
+### Fixed
+  - `tidy_fcst` now returns all forecast periods; previously only returned hours 12:96 (#107)
+  - NHC GIS page went from using POST to GET parameters at some point recently for wind speed probability datasets. Func `gis_wsp` modified accordingly. (#108)
+
+### Security
+  - NA
+
 ## [0.2.0.7] 2017-09-06
 
 ### Added

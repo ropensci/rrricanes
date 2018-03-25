@@ -180,17 +180,10 @@ fstadv %&gt;%<span class="st"> </span><span class="kw"><a href="http://www.rdocu
          <span class="dt">caption =</span> <span class="kw">sprintf</span>(<span class="st">"rrricanes %s"</span>, <span class="kw">packageVersion</span>(<span class="st">"rrricanes"</span>)), 
          <span class="dt">y =</span> <span class="st">"Radius (nm)"</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/gganimate/topics/gganimate">gganimate</a></span>(wr_animate, <span class="st">"wind_radius.gif"</span>, <span class="dt">ani.width =</span> <span class="dv">750</span>, <span class="dt">ani.height =</span> <span class="dv">750</span>)</code></pre></div>
-<pre><code>## Executing: 
-## convert -loop 0 -delay 100 Rplot1.png Rplot2.png Rplot3.png
-##     Rplot4.png Rplot5.png Rplot6.png Rplot7.png Rplot8.png
-##     Rplot9.png Rplot10.png Rplot11.png Rplot12.png Rplot13.png
-##     Rplot14.png Rplot15.png Rplot16.png Rplot17.png Rplot18.png
-##     Rplot19.png Rplot20.png Rplot21.png Rplot22.png Rplot23.png
-##     Rplot24.png Rplot25.png Rplot26.png Rplot27.png Rplot28.png
-##     Rplot29.png Rplot30.png Rplot31.png Rplot32.png Rplot33.png
-##     Rplot34.png Rplot35.png Rplot36.png Rplot37.png Rplot38.png
-##     Rplot39.png Rplot40.png Rplot41.png 'wind_radius.gif'</code></pre>
-<pre><code>## Output at: wind_radius.gif</code></pre>
+<pre><code>## I cannot find ImageMagick with convert = 'convert'</code></pre>
+<pre><code>## Warning in im.convert(img.files, output = path.expand(movie.name), convert
+## = convert, : Please install ImageMagick first or put its bin path into the
+## system PATH variable</code></pre>
 <div class="figure">
 <img src="wind_radius.gif">
 </div>

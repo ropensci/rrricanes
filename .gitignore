@@ -1,4 +1,3 @@
-rrricanes.Rproj
 .RData
 .Rhistory
 .Rproj.user
@@ -7,4 +6,4 @@ rrricanes.wiki/
 rrricanes.Rcheck
 datasets
 inst/doc
-.Renviron
+rrricanes.code-workspace

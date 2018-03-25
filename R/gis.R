@@ -97,8 +97,9 @@ gis_breakpoints <- function(year = as.numeric(strftime(Sys.Date(), "%Y"))) {
 #' @title gis_download
 #' @description Get GIS data for storm.
 #' @param url link to GIS dataset to download.
+#' @param ... additional parameters for rgdal::readOGR
 #' @export
-gis_download <- function(url) {
+gis_download <- function(url, ...) {
 
   destdir <- tempdir()
 
@@ -116,7 +117,8 @@ gis_download <- function(url) {
     sp_object <- rgdal::readOGR(dsn = d, layer = shp_file,
                   encoding = "UTF-8",
                   stringsAsFactors = FALSE,
-                  use_iconv = TRUE)
+                  use_iconv = TRUE,
+                  ...)
     return(sp_object)
   })
 
@@ -132,8 +134,9 @@ gis_download <- function(url) {
 #' @title gis_latest
 #' @description Latest GIS datasets for active cyclones
 #' @param basins AL and/or EP.
+#' @param ... additional parameters for rgdal::readOGR
 #' @export
-gis_latest <- function(basins = c("AL", "EP")) {
+gis_latest <- function(basins = c("AL", "EP"), ...) {
 
   if (!(all(basins %in% c("AL", "EP"))))
     stop("Invalid basin")
@@ -149,7 +152,7 @@ gis_latest <- function(basins = c("AL", "EP")) {
     .[!is.na(.)]
 
   if (!purrr::is_empty(gis_zips)) {
-    ds <- purrr::map(gis_zips, gis_download)
+    ds <- purrr::map(gis_zips, gis_download, ...)
     return(ds)
   }
   return(FALSE)
@@ -415,10 +418,10 @@ gis_windfield <- function(key, advisory = as.character()) {
 #' @examples
 #' \dontrun{
 #' # Return datasets for January 1, 2016 with resolution of 0.5 degrees
-#' gis_wndprb("20160101", res = 0.5)
+#' gis_wsp("20160101", res = 0.5)
 #'
 #' # Return wsp of 0.1 and 0.5 degree resolution, July, 2015
-#' gis_wndprb("201507", res = c(0.5, 0.1))
+#' gis_wsp("201507", res = c(0.5, 0.1))
 #' }
 #' @export
 gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
@@ -436,7 +439,7 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
 
   year <- stringr::str_sub(datetime, 0L, 4L)
 
-  request <- httr::POST("http://www.nhc.noaa.gov/gis/archive_wsp.php",
+  request <- httr::GET("http://www.nhc.noaa.gov/gis/archive_wsp.php",
               body = list(year = year), encode = "form")
   contents <- httr::content(request, as = "parsed", encoding = "UTF-8")
 

@@ -229,6 +229,16 @@ month_str_to_num <- function(m) {
   return(abbr)
 }
 
+#' @title nm_to_sm
+#' @description Convert nautical miles to survey miles
+#' @param x Nautical miles
+#' @examples
+#' nm_to_sm(c(50, 100, 150))
+#' @export
+nm_to_sm <- function(x) {
+  return(x * 1.15078)
+}
+
 #' @title saffir
 #' @description Return category of tropical cyclone based on wind. Saffir-
 #' Simpson Hurricane Scale does not apply to non-tropical cyclones.

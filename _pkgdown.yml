@@ -35,6 +35,19 @@ reference:
     - saffir
     - status_abbr_to_str
     - starts_with("tidy_")
+  - title: Datasets
+    desc: >
+      Sample datasets included in this package.
+    contents:
+      - df.al_12_2005_prblty
+      - df.al_18_2012_fstadv
+      - df.al_18_2012_wndprb
+      - df.al_18_2012
+      - df.al_2012
+      - df.gis_adv
+      - df.gis_storm_surge
+      - df.gis_wind_radii
+      - df.gis_wsp
 
 articles:
   - title: Vignettes
@@ -43,6 +56,7 @@ articles:
     contents:
     - getting_started
     - gis_data
+    - installing_rrricanesdata
   - title: Tutorials
     desc: >
       Additional examples of using `rrricanes` to get storm-related data and

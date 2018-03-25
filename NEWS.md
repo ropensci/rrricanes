@@ -1,3 +1,24 @@
+rrricanes Unreleased (yyyy-mm-dd)
+==================================
+
+### NEW FEATURES
+
+* NA
+
+### MINOR IMPROVEMENTS
+
+* Add `nm_to_sm` to convert nautical miles to survey miles. (#99)
+* Allow parameters for rgdal::readOGR (#104)
+* Add `tidy_adv` to replace `tidy_fstadv`; `tidy_fstadv` will be removed in release 0.2.2 (#103)
+
+### BUG FIXES
+
+* `gis_wsp` now uses GET instead of POST to retrieve wind speed probability GIS datasets. (#108)
+
+### DEPRECATED AND DEFUNCT
+
+* NA
+
 rrricanes 0.2.0.7 (2017-09-06)
 ==================================
 
@@ -9,6 +30,9 @@ rrricanes 0.2.0.7 (2017-09-06)
 
 * NA
 
+### BUG FIXES
+
+* NA
 
 ### BUG FIXES
 
