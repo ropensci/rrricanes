@@ -26,26 +26,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Security
   - NA
 
-## [0.2.0.7] 2017-09-06
-
-### Added
-  - NA
-
-### Changed
-  - NA
-
-### Removed
-  - NA
-
-### Deprecated
-  - NA
-
-### Fixed
-  - `tidy_fcst` now returns all forecast periods; previously only returned hours 12:96 (#107)
-
-### Security
-  - NA
-
 ## [0.2.0-6] 2017-07-16
 
 ### Added

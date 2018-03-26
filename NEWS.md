@@ -13,30 +13,8 @@ rrricanes Unreleased (yyyy-mm-dd)
 
 ### BUG FIXES
 
-* `gis_wsp` now uses GET instead of POST to retrieve wind speed probability GIS datasets. (#108)
-
-### DEPRECATED AND DEFUNCT
-
-* NA
-
-rrricanes 0.2.0.7 (2017-09-06)
-==================================
-
-### NEW FEATURES
-
-* NA
-
-### MINOR IMPROVEMENTS
-
-* NA
-
-### BUG FIXES
-
-* NA
-
-### BUG FIXES
-
 * `tidy_fcst` only returned forecasts for hours 12:96. Now returns 120. (#107)
+* `gis_wsp` now uses GET instead of POST to retrieve wind speed probability GIS datasets. (#108)
 
 ### DEPRECATED AND DEFUNCT
 
