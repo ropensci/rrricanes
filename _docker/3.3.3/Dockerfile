@@ -13,3 +13,7 @@ RUN apt-get update \
     rnaturalearthdata \ 
   && install2.r -e -r https://timtrice.github.io/drat/ \ 
     rrricanesdata
+
+RUN mkdir -p /home/rstudio/.rstudio/monitored/user-settings
+COPY ../user-settings /home/rstudio/.rstudio/monitored/user-settings/
+RUN chown -R rstudio:rstudio /home/rstudio/.rstudio

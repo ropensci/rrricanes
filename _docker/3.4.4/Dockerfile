@@ -16,3 +16,7 @@ RUN apt-get update \
   && installGithub.r \ 
     r-lib/fs \
     r-lib/pkgdown
+
+RUN mkdir -p /home/rstudio/.rstudio/monitored/user-settings
+COPY ../user-settings /home/rstudio/.rstudio/monitored/user-settings/
+RUN chown -R rstudio:rstudio /home/rstudio/.rstudio
