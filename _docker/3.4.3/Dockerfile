@@ -15,5 +15,5 @@ RUN apt-get update \
     rrricanesdata
 
 RUN mkdir -p /home/rstudio/.rstudio/monitored/user-settings
-COPY ../user-settings /home/rstudio/.rstudio/monitored/user-settings/
+COPY user-settings /home/rstudio/.rstudio/monitored/user-settings/
 RUN chown -R rstudio:rstudio /home/rstudio/.rstudio
