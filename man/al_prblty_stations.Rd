@@ -11,6 +11,22 @@ Retrieve list of probability stations based in the Atlantic
 basin from the NHC. To be used in tandem with `wndprb` products.
 }
 \details{
-This function may be deprecated soon as the data sources may be
-removed from the National Hurricane Center.
+Originally it was believed this data source would be removed by the
+National Hurricane Center but it appears to have been updated. Additional
+columns have been added, one up front and three in the back. These columns
+all contain the same values each and I am unable to find documentation
+describing the values.
+
+Regardless, the data is kept, just in case.
 }
+\section{Warnings}{
+
+
+Calling \code{al_prblty_stations} will generate a warning:
+
+> "Expected 7 pieces. Additional pieces discarded in 1 rows [90]."
+
+Station PATRICK AFB actually has eight columns. The data is kept for
+consistency; you decide if you want it or not.
+}
+

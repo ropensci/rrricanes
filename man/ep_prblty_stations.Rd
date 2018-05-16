@@ -11,9 +11,21 @@ Retrieve list of probability stations based in the eastern
 Pacific from the NHC. To be used in tandem with `wndprb` products.
 }
 \details{
-This is a placeholder function. The current listing does not match
-the format for Atlantic and central Pacific stations.
+Originally it was believed this data source would be removed by the
+National Hurricane Center but it appears to have been updated. Additional
+columns have been added, one up front and three in the back. These columns
+all contain the same values each and I am unable to find documentation
+describing the values.
 
-This function may be deprecated soon as the data sources may be
-removed from the National Hurricane Center.
+Regardless, the data is kept, just in case.
 }
+\section{Warnings}{
+
+
+Calling \code{ep_prblty_stations} will generate a warning:
+
+> "Expected 7 pieces. Missing pieces filled with `NA` in 1 rows [41]."
+
+Station SALINA CRUZ actually has six columns.
+}
+
