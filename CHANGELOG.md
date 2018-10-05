@@ -11,6 +11,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
   - `nm_to_sm` Convert nautical miles to survey miles. (#99)
   - `tidy_adv` to replace `tidy_fstadv` which will be removed in release 0.2.2 
     (#103)
+  - `get_storm_list` returns dataframe of all known cyclones. (#114)
 
 ### Changed
   - `gis_download` and `gis_latest` can accept parameters for rgdal::readOGR 

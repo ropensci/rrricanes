@@ -25,6 +25,7 @@ df.al_09_2008_public <- get_public(al_2008[[9,4]])
 df.al_09_2008_update <- get_update(al_2008[[9,4]])
 df.al_09_2008_wndprb <- get_wndprb(al_2008[[9,4]])
 
+storm_list <- get_storm_list()
 ## ---- Get Storms -------------------------------------------------------------
 
 ## ---- * URL Status -----------------------------------------------------------
@@ -311,4 +312,16 @@ test_that("ep_prblty_stations", {
 test_that("Test get_wndprb()", {
   skip_on_cran()
   expect_identical(al_09_2008_wndprb, df.al_09_2008_wndprb)
+})
+
+## get_storm_list ----
+test_that("Get Storm List", {
+  expect_output(str(storm_list), "21 variables")
+  expect_identical(
+    names(storm_list),
+    c("STORM_NAME", "RE", "X", "R2", "R3", "R4", "R5", "CY", "YYYY", "TY", "I",
+      "YYY1MMDDHH", "YYY2MMDDHH", "SIZE", "GENESIS_NUM", "PAR1", "PAR2",
+      "PRIORITY", "STORM_STATE", "WT_NUMBER", "STORMID"
+    )
+  )
 })

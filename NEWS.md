@@ -3,7 +3,7 @@ rrricanes Unreleased (yyyy-mm-dd)
 
 ### NEW FEATURES
 
-* NA
+* Add `get_storm_list` that returns a list of, it would appear, all known storms for many basins (beyond AL, EP)
 
 ### MINOR IMPROVEMENTS
 
