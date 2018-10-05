@@ -191,8 +191,8 @@ get_url_contents <- function(links) {
 #' @keywords internal
 get_nhc_link <- function(withTrailingSlash = TRUE) {
   if (withTrailingSlash)
-    return('http://www.nhc.noaa.gov/')
-  return('http://www.nhc.noaa.gov')
+    return('https://www.nhc.noaa.gov/')
+  return('https://www.nhc.noaa.gov')
 }
 
 #' @title knots_to_mph
