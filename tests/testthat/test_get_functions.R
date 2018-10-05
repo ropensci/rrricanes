@@ -25,6 +25,7 @@ df.al_09_2008_public <- get_public(al_2008[[9,4]])
 df.al_09_2008_update <- get_update(al_2008[[9,4]])
 df.al_09_2008_wndprb <- get_wndprb(al_2008[[9,4]])
 
+storm_list <- get_storm_list()
 ## ---- Get Storms -------------------------------------------------------------
 
 ## ---- * URL Status -----------------------------------------------------------
@@ -201,7 +202,8 @@ test_that("Test create_df_fstadv", {
 
 ## ---- * tidy_fstadv ----------------------------------------------------------
 test_that("Test tidy_fstadv()", {
-  x <- tidy_fstadv(al_09_2008_fstadv)
+  expect_warning(x <- tidy_fstadv(al_09_2008_fstadv),
+                 "'tidy_fstadv' is deprecated.\nUse 'tidy_adv' instead.")
   expect_identical(dim(x), c(53L, 18L))
   expect_identical(names(x), c("Key", "Adv", "Date", "Status", "Name", "Lat",
                                "Lon", "Wind", "Gust", "Pressure", "PosAcc",
@@ -281,25 +283,45 @@ test_that("get_update", {
 
 ## ---- * al_prblty_stations ---------------------------------------------------
 test_that("al_prblty_stations", {
-  expect_identical(dim(al_prblty_stations()), c(155L, 3L))
-  expect_identical(names(al_prblty_stations()),
-                   c("Location", "Lat", "Lon"))
+  expect_warning(x <- al_prblty_stations(),
+                 "Expected 7 pieces. Additional pieces discarded in 1 rows [90].",
+                 fixed = TRUE)
+  expect_identical(dim(x), c(214L, 7L))
+  expect_identical(names(x),
+                   c("X1", "Location", "Lat", "Lon", "X5", "X6", "X7"))
 })
 
 ## ---- * cp_prblty_stations ---------------------------------------------------
 test_that("cp_prblty_stations", {
-  expect_identical(dim(cp_prblty_stations()), c(125L, 3L))
+  expect_identical(dim(cp_prblty_stations()), c(168L, 7L))
   expect_identical(names(cp_prblty_stations()),
-                   c("Location", "Lat", "Lon"))
+                   c("X1", "Location", "Lat", "Lon", "X5", "X6", "X7"))
 })
 
 ## ---- * ep_prblty_stations ---------------------------------------------------
 test_that("ep_prblty_stations", {
-  expect_identical(ep_prblty_stations(), FALSE)
+  expect_warning(x <- ep_prblty_stations(),
+                 "Expected 7 pieces. Missing pieces filled with `NA` in 1 rows [41].",
+                 fixed = TRUE)
+  expect_identical(dim(x), c(168L, 7L))
+  expect_identical(names(x),
+                   c("X1", "Location", "Lat", "Lon", "X5", "X6", "X7"))
 })
 
 ## ---- * get_wndprb -----------------------------------------------------------
 test_that("Test get_wndprb()", {
   skip_on_cran()
   expect_identical(al_09_2008_wndprb, df.al_09_2008_wndprb)
+})
+
+## get_storm_list ----
+test_that("Get Storm List", {
+  expect_output(str(storm_list), "21 variables")
+  expect_identical(
+    names(storm_list),
+    c("STORM_NAME", "RE", "X", "R2", "R3", "R4", "R5", "CY", "YYYY", "TY", "I",
+      "YYY1MMDDHH", "YYY2MMDDHH", "SIZE", "GENESIS_NUM", "PAR1", "PAR2",
+      "PRIORITY", "STORM_STATE", "WT_NUMBER", "STORMID"
+    )
+  )
 })
