@@ -44,7 +44,7 @@ Suggests:
   rrricanesdata (>= 0.0.1),
   sp,
   testthat
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Additional_repositories: https://timtrice.github.io/drat
 Encoding: UTF-8
