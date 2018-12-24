@@ -5,3 +5,4 @@ README.md merge=ours
 data/* binary
 src/* text=lf
 R/* text=lf
+*.html linguist-documentation=true

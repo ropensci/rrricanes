@@ -3,13 +3,21 @@ rrricanes Unreleased (yyyy-mm-dd)
 
 ### NEW FEATURES
 
-* NA
+* Add `get_storm_list` that returns a list of, it would appear, all known storms for many basins (beyond AL, EP)
 
 ### MINOR IMPROVEMENTS
 
 * Add `nm_to_sm` to convert nautical miles to survey miles. (#99)
+
 * Allow parameters for rgdal::readOGR (#104)
-* Add `tidy_adv` to replace `tidy_fstadv`; `tidy_fstadv` will be removed in release 0.2.2 (#103)
+
+* Add `tidy_adv` to replace `tidy_fstadv`; `tidy_fstadv` will be removed in 
+  release 0.2.2 (#103)
+
+* `al_prblty_stations` and `cp_prblty_stations` updated 
+  to accomodate new dataset. (#46)
+  
+* `ep_prblty_stations` now returns dataset of east Pacific stations. (#46)
 
 ### BUG FIXES
 
