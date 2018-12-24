@@ -4,8 +4,8 @@
 \alias{get_storm_data}
 \title{get_storm_data}
 \usage{
-get_storm_data(links, products = c("discus", "fstadv", "posest", "public",
-  "prblty", "update", "wndprb"))
+get_storm_data(links, products = c("discus", "fstadv", "posest",
+  "public", "prblty", "update", "wndprb"))
 }
 \arguments{
 \item{links}{to storm's archive page.}
@@ -60,4 +60,7 @@ get_storms(year = 2017, basin = "AL") \%>\%
   .$Link \%>\%
   get_storm_data(products = c("discus", "public"))
 }
+}
+\seealso{
+\code{\link{get_ftp_storm_data}}
 }

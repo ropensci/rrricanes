@@ -6,7 +6,7 @@ Description: Get archived data of past and current hurricanes and tropical
   storms since 1998. Datasets are updated via the rrricanesdata package. 
   Currently, this package is about 6MB of datasets. See the README or view 
   `vignette("drat")` for more information.
-Version: 0.2.0-6.9000
+Version: 0.2.0-6.9001
 Authors@R: c(person("Tim", "Trice", email = "tim.trice@gmail.com", role = c("aut", "cre")), 
   person("Joseph", "Stachelek", role = c("rev"), comment = "Joseph Stachelek reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/118"), 
   person("Emily", "Robinson", role = c("rev"), comment = "Emily Robinson reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/118"))
@@ -44,7 +44,7 @@ Suggests:
   rrricanesdata (>= 0.0.1),
   sp,
   testthat
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Additional_repositories: https://timtrice.github.io/drat
 Encoding: UTF-8

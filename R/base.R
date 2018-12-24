@@ -195,6 +195,16 @@ get_nhc_link <- function(withTrailingSlash = TRUE) {
   return('https://www.nhc.noaa.gov')
 }
 
+#' @title get_nhc_ftp_link
+#' @description Return root of NHC FTP server
+#' @inheritParams get_nhc_link
+#' @keywords internal
+get_nhc_ftp_link <- function(withTrailingSlash = TRUE) {
+  if (withTrailingSlash)
+    return("ftp://ftp.nhc.noaa.gov/")
+  return("ftp://ftp.nhc.noaa.gov")
+}
+
 #' @title knots_to_mph
 #' @description convert knots (kt) to miles per hour (mph)
 #' @param x wind speed in knots
