@@ -2,9 +2,9 @@ context("Test base functions.")
 
 ## ---- get_nhc_link() ---------------------------------------------------------
 test_that("NHC Link", {
-    expect_identical(get_nhc_link(), "http://www.nhc.noaa.gov/")
+    expect_identical(get_nhc_link(), "https://www.nhc.noaa.gov/")
     expect_identical(get_nhc_link(withTrailingSlash = FALSE),
-                     "http://www.nhc.noaa.gov")
+                     "https://www.nhc.noaa.gov")
 })
 
 ## ---- month_str_to_num() -----------------------------------------------------
