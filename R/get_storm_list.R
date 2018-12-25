@@ -218,7 +218,11 @@ get_ftp_storm_data <- function(stormid,
       dplyr::filter(
         grepl(
           pattern =
-            sprintf("^%s\\.%s\\.\\d{3}$", stringr::str_to_lower(stormid), products),
+            sprintf(
+              fmt = "^%s\\.%s\\.\\d{3}$",
+              stringr::str_to_lower(stormid),
+              products
+            ),
           x = Name
         )
       ) %>%
