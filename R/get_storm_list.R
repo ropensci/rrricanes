@@ -22,7 +22,7 @@ get_storm_list <- function() {
 #' @description Get a list of the FTP directors in /atcf/archive
 #' @keywords internal
 get_ftp_dirs <- function(x) {
-  url <- paste(get_nhc_ftp_link(), x, sep = "/")
+  url <- paste0(get_nhc_ftp_link(), x)
   con <- curl::curl(url, "r")
   ftp_dirs <-
     con %>%
@@ -113,11 +113,82 @@ get_ftp_storm_data <- function(stormid,
       ) %>%
       dplyr::pull(Name)
 
-    links <- sprintf(
-      fmt = "ftp://ftp.nhc.noaa.gov/atcf/archive/2017/messages/%s",
-      links
-    )
+    if (purrr::is_empty(links)) {
+      # For years previous 1998, text products are wrapped into zip files. In
+      # these instances, we'll take a detour. We'll download the zip files to
+      # a temp directory, read in the products requested, scrape then do an
+      # early return.
+      links <-
+        ftp_contents %>%
+        dplyr::filter(
+          grepl(
+            pattern = sprintf("^%s_msg.zip", stringr::str_to_lower(stormid)),
+            x = Name
+          )
+        ) %>%
+        dplyr::pull(Name)
 
+      pkg <- sprintf(
+        fmt = "ftp://ftp.nhc.noaa.gov/atcf/archive/%s/messages/%s",
+        yyyy,
+        links
+      )
+
+      destdir <- tempdir()
+      tmp_file <- tempfile(
+        pattern = tools::file_path_sans_ext(links),
+        tmpdir = destdir,
+        fileext = ".zip"
+      )
+
+      res <- utils::download.file(
+        url = file.path(pkg),
+        destfile = tmp_file
+      )
+
+      list_files <- utils::unzip(tmp_file, list = TRUE)$Name
+
+      utils::unzip(tmp_file, exdir = destdir)
+
+      named_products <- list(
+        "discus" = "n",
+        "fstadv" = "m",
+        "public" = "p",
+        "prblty" = "l"
+      )
+
+      files <- list.files(
+        path = destdir,
+        pattern = sprintf(
+          fmt = "^%s%s%s%s\\.\\d{3}$",
+          #' What product?
+          named_products[products],
+          #' Lower-case basin abbreviation
+          stringr::str_to_lower(stringr::str_sub(stormid, 1L, 2L)),
+          # storm number
+          stringr::str_to_lower(stringr::str_sub(stormid, 3L, 4L)),
+          # year without century, 4-digits
+          stringr::str_to_lower(stringr::str_sub(stormid, 7L, 8L))
+        )
+      )
+
+      files <- file.path(destdir, files)
+      files_length <- purrr::map(.x = files, .f = file.info) %>%
+        purrr::map_dbl("size")
+      res_txt <- purrr::map2_chr(.x = files, .y = files_length, readChar)
+
+    } else {
+      links <- sprintf(
+        fmt = "ftp://ftp.nhc.noaa.gov/atcf/archive/%s/messages/%s",
+        yyyy,
+        links
+      )
+
+      res <- rrricanes:::get_url_contents(links)
+      res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
+      res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
+
+    }
   } else {
     # If the `yyyy` value is not in the ftp archives, then it is in a product
     # folder directly under **atcf** directory.
@@ -159,11 +230,12 @@ get_ftp_storm_data <- function(stormid,
       links
     )
 
+    res <- rrricanes:::get_url_contents(links)
+    res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
+    res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
+
   }
 
-  res <- rrricanes:::get_url_contents(links)
-  res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
-  res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
   df <- purrr::invoke_map_df(
     .f = getFromNamespace(x = products, ns = "rrricanes"),
     .x = res_txt
