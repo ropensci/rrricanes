@@ -73,11 +73,12 @@ extract_storms <- function(basin, contents) {
 get_storms <- function(years = format(Sys.Date(), "%Y"),
              basins = c("AL", "EP")) {
 
-  years <- validate_year(years)
+  years <- as.integer(years)
 
-  # No archives earlier than 1998 for now
-  if (any(years < 1998))
-  stop('Archives currently only available for 1998 to current year.')
+  if (!all(years %in% 1998:lubridate::year(Sys.Date())))
+    stop(sprintf("Param `years` must be between 1998 and %s.",
+                 lubridate::year(Sys.Date())),
+         call. = FALSE)
 
   if (!all(basins %in% c("AL", "EP")))
   stop("Basin must 'AL' and/or 'EP'")

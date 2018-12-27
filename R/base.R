@@ -308,16 +308,3 @@ status_abbr_to_str <- function(x) {
   y[x == "DB"] <- "Disturbance"
   return(y)
 }
-
-#' @title validate_year
-#' @description Test if year is 4-digit numeric.
-#' @return numeric year(s)
-#' @keywords internal
-validate_year <- function(y) {
-  y <- as.numeric(y)
-  if (all(is.na(y)))
-    stop('Year must be numeric.')
-  if (any(nchar(y) != 4))
-    stop('Year must be 4 digits.')
-  return(y)
-}
