@@ -71,7 +71,7 @@ extract_storms <- function(basin, contents) {
 #' @source \url{http://www.nhc.noaa.gov/archive/2016/}
 #' @export
 get_storms <- function(years = format(Sys.Date(), "%Y"),
-             basins = c("AL", "EP")) {
+                       basins = c("AL", "EP")) {
 
   years <- as.integer(years)
 
@@ -81,45 +81,20 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
          call. = FALSE)
 
   if (!all(basins %in% c("AL", "EP")))
-  stop("Basin must 'AL' and/or 'EP'")
+    stop("Basin must 'AL' and/or 'EP'.", call. = FALSE)
 
-  links <- purrr::map(years, .f = year_archives_link) %>%
-  purrr::flatten_chr()
+  links <-
+    purrr::map(years, .f = year_archives_link) %>%
+    purrr::flatten_chr()
 
   # 1998 is only year with slightly different URL. Modify accordingly
   links[grep("1998", links)] <- paste0(links[grep("1998", links)],
-                     "1998archive.shtml")
+                                       "1998archive.shtml")
 
-  # There is an 80-hit/10-second limit to the NHC pages (note Issue #94), or 8
-  # requests/second. The below request will process 4 links every 0.5 seconds.
-  links <- split(links, ceiling(seq_along(links)/4))
+  contents <- purrr::map(links, get_url_contents) %>%
+    purrr::flatten()
 
-  p <- dplyr::progress_estimated(n = length(links))
-
-  df <- purrr::map_df(links, get_storms_link, basins, p)
-
-  return(df)
-}
-
-#' @title get_storms_link
-#' @description Get all links to storms from the annual archive pages
-#' @param links URLs to a year's archive page
-#' @param basins Basins as passed to get_storms
-#' @param p dplyr::progress_estimated object
-#' @keywords internal
-get_storms_link <- function(links, basins, p) {
-
-  p$pause(0.5)$tick()$print()
-
-  contents <- purrr::map(links, .f = function(x) {get_url_contents(x)}) %>%
-  purrr::flatten()
-
-  df <- purrr::map_df(basins, extract_storms, contents) %>%
-  dplyr::group_by(Year, Basin) %>%
-  dplyr::arrange(Year, Basin) %>%
-  dplyr::ungroup()
-
-  return(df)
+  purrr::map_df(basins, extract_storms, contents)
 
 }
 
