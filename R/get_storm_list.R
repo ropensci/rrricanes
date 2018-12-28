@@ -199,7 +199,7 @@ get_ftp_storm_data <- function(stormid,
         links
       )
 
-      res <- rrricanes:::get_url_contents(links)
+      res <- get_url_contents(links)
       res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
       res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
 
@@ -249,7 +249,7 @@ get_ftp_storm_data <- function(stormid,
       links
     )
 
-    res <- rrricanes:::get_url_contents(links)
+    res <- get_url_contents(links)
     res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
     res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
 
