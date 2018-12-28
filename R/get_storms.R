@@ -6,38 +6,45 @@
 #' @keywords internal
 extract_storms <- function(basin, contents) {
 
-  if (basin == "AL") {
-  link_xpath <- paste0("//td[(((count(preceding-sibling::*) + 1) = 1)",
-             " and parent::*)]//a")
-  } else if (basin == "EP") {
-  link_xpath <- paste0("//td[(((count(preceding-sibling::*) + 1) = 2)",
-             " and parent::*)]//a")
-  } else {
-  stop("No basin")
-  }
+  xpaths <- list(
+    "AL" = "//td[(((count(preceding-sibling::*) + 1) = 1) and parent::*)]//a",
+    "EP" = "//td[(((count(preceding-sibling::*) + 1) = 2) and parent::*)]//a"
+  )
 
-  contents <- purrr::map(contents, ~.$parse("UTF-8")) %>%
-  purrr::map(xml2::read_html)
+  link_xpath <- xpaths[[basin]]
 
-  years <- purrr::map(contents, rvest::html_nodes, xpath = "//title") %>%
-  purrr::map(rvest::html_text) %>%
-  stringr::str_sub(0L, 4L) %>%
-  as.numeric()
+  contents <-
+    contents %>%
+    purrr::map(~.x$parse("UTF-8")) %>%
+    purrr::map(xml2::read_html)
+
+  years <-
+    contents %>%
+    purrr::map(rvest::html_nodes, xpath = "//title") %>%
+    purrr::map(rvest::html_text) %>%
+    stringr::str_sub(0L, 4L) %>%
+    as.numeric()
 
   storms <- purrr::map(contents, rvest::html_nodes, xpath = link_xpath)
-  names <- purrr::map(storms, rvest::html_text) %>%
-  purrr::map(stringr::str_to_title)
-  links <- purrr::map(storms, rvest::html_attr, name = "href") %>%
-  purrr::map2(years, ~paste0(year_archives_link(.y), .x))
+
+  names <-
+    storms %>%
+    purrr::map(rvest::html_text) %>%
+    purrr::map(stringr::str_to_title)
+
+  links <-
+    storms %>%
+    purrr::map(rvest::html_attr, name = "href") %>%
+    purrr::map2(years, ~paste0(year_archives_link(.y), .x))
+
   basins <- purrr::map(names, purrr::rep_along, basin)
+
   years <- purrr::map2(names, years, purrr::rep_along)
 
-  df <- tibble::data_frame("Year" = years %>% purrr::flatten_dbl(),
-               "Name" = names %>% purrr::flatten_chr(),
-               "Basin" = basins %>% purrr::flatten_chr(),
-               "Link" = links %>% purrr::flatten_chr())
-
-  return(df)
+  tibble::data_frame("Year" = purrr::flatten_dbl(years),
+                     "Name" = purrr::flatten_chr(names),
+                     "Basin" = purrr::flatten_chr(basins),
+                     "Link" = purrr::flatten_chr(links))
 }
 
 #' @title get_storms
@@ -84,14 +91,17 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
     stop("Basin must 'AL' and/or 'EP'.", call. = FALSE)
 
   links <-
-    purrr::map(years, .f = year_archives_link) %>%
+    years %>%
+    purrr::map(.f = year_archives_link) %>%
     purrr::flatten_chr()
 
   # 1998 is only year with slightly different URL. Modify accordingly
   links[grep("1998", links)] <- paste0(links[grep("1998", links)],
                                        "1998archive.shtml")
 
-  contents <- purrr::map(links, get_url_contents) %>%
+  contents <-
+    links %>%
+    purrr::map(get_url_contents) %>%
     purrr::flatten()
 
   purrr::map_df(basins, extract_storms, contents)
