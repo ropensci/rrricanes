@@ -3,12 +3,12 @@ context("Filters")
 #' Filters are to help extract product URL's from a storm's archive pages.
 
 AL122005 <-
-  "https://www.nhc.noaa.gov/archive/2005/KATRINA.shtml?" %>%
+  sprintf("%sarchive/2005/KATRINA.shtml?", get_nhc_link()) %>%
   rrricanes:::extract_storm_links(p = dplyr::progress_estimated(1)) %>%
   purrr::flatten_chr()
 
 AL092008 <-
-  "https://www.nhc.noaa.gov/archive/2008/IKE.shtml?" %>%
+  sprintf("%sarchive/2008/IKE.shtml?", get_nhc_link()) %>%
   rrricanes:::extract_storm_links(p = dplyr::progress_estimated(1)) %>%
   purrr::flatten_chr()
 

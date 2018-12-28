@@ -20,7 +20,10 @@
 #'
 #' @export
 al_prblty_stations <- function() {
-  url <- "http://www.nhc.noaa.gov/data/wsp/al_prblty_station.lst.csv.txt"
+  url <- sprintf(
+    "%sdata/wsp/al_prblty_station.lst.csv.txt",
+    get_nhc_link(protocol = "http")
+  )
   df <- parse_stations(url)
   return(df)
 }
@@ -30,7 +33,11 @@ al_prblty_stations <- function() {
 #' Pacific from the NHC. To be used in tandem with `wndprb` products.
 #' @export
 cp_prblty_stations <- function() {
-  url <- "http://www.nhc.noaa.gov/data/wsp/cp_prblty_station.lst.csv.txt"
+  url <-
+    sprintf(
+      "%sdata/wsp/cp_prblty_station.lst.csv.txt",
+      get_nhc_link(protocol = "http")
+    )
   df <- parse_stations(url)
   return(df)
 }
@@ -56,7 +63,10 @@ cp_prblty_stations <- function() {
 #'
 #' @export
 ep_prblty_stations <- function() {
-  url <- "http://www.nhc.noaa.gov/data/wsp/ep_prblty_station.lst.csv.txt"
+  url <- sprintf(
+    "%sdata/wsp/ep_prblty_station.lst.csv.txt",
+    get_nhc_link(protocol = "http")
+  )
   df <- parse_stations(url)
   return(df)
 }

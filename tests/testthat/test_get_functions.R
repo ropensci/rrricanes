@@ -32,11 +32,11 @@ storm_list <- rrricanes::get_storm_list()
 #' Test that annual archive links work. All results should return 'OK'.
 test_that("URL Status", {
   skip_on_cran()
-  url <- "https://www.nhc.noaa.gov/archive/1998/1998archive.shtml"
+  url <- sprintf("%sarchive/1998/1998archive.shtml", get_nhc_link())
   expect_identical(httr::http_status(httr::GET(url))$reason, "OK")
 
   #' 1999 to current all have nearly identical links (year changes)
-  url <- "https://www.nhc.noaa.gov/archive/%i/"
+  url <- sprintf("%sarchive/%%i/", get_nhc_link())
   urls <- sprintf(url, 1999:2016)
   lapply(urls, function(x) {
     expect_identical(httr::http_status(httr::GET(x))$reason, "OK")
@@ -72,24 +72,24 @@ test_that("HTML format", {
   ## ---- * * 1998 -------------------------------------------------------------
   #' 1998
   expect_identical(
-    v(1, 1, "https://www.nhc.noaa.gov/archive/1998/1998archive.shtml"),
+    v(1, 1, sprintf("%sarchive/1998/1998archive.shtml", get_nhc_link())),
     "TROPICAL STORM ALEX")
   expect_identical(
-    v(29, 2, "https://www.nhc.noaa.gov/archive/1998/1998archive.shtml"),
+    v(29, 2, sprintf("%sarchive/1998/1998archive.shtml", get_nhc_link())),
     "HURRICANE MADELINE")
   ## ---- * * 2005 -------------------------------------------------------------
   #' 2005
-  expect_identical(v(1, 1, "https://www.nhc.noaa.gov/archive/2005/"),
+  expect_identical(v(1, 1, sprintf("%sarchive/2005/", get_nhc_link())),
                    "Tropical Storm ARLENE")
-  expect_identical(v(31, 2, "https://www.nhc.noaa.gov/archive/2005/"),
+  expect_identical(v(31, 2, sprintf("%sarchive/2005/", get_nhc_link())),
                    "Tropical Depression SIXTEEN-E")
-  expect_identical(v(59, 1, "https://www.nhc.noaa.gov/archive/2005/"),
+  expect_identical(v(59, 1, sprintf("%sarchive/2005/", get_nhc_link())),
                    "Tropical Storm ZETA")
   ## ---- * * 2016 -------------------------------------------------------------
   #' 2016
-  expect_identical(v(29, 1, "https://www.nhc.noaa.gov/archive/2016/"),
+  expect_identical(v(29, 1, sprintf("%sarchive/2016/", get_nhc_link())),
                    "Hurricane NICOLE")
-  expect_identical(v(41, 2, "https://www.nhc.noaa.gov/archive/2016/"),
+  expect_identical(v(41, 2, sprintf("%sarchive/2016/", get_nhc_link())),
                    "Tropical Storm TINA")
 })
 
