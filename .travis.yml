@@ -3,25 +3,28 @@ warnings_are_errors: true
 addons:
   apt:
     packages:
-      - gdal-bin
-      - libgdal-dev
-      - libgdal1-dev
-      - libproj-dev
-dist: trusty
-os:
-  - linux
-  - osx
-r:
-  - 3.3.3
-  - 3.4.0
-  - 3.4.1
-  - 3.4.2
-  - 3.4.3
-  - release
-  - devel
+    - libgdal-dev
+    - libproj-dev
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    sudo: false
+    r: 3.3.3
+  - os: linux
+    dist: trusty
+    sudo: false
+    r: release
+  - os: linux
+    dist: trusty
+    sudo: false
+    r: devel
+  - os: osx
+    r: 3.3.3
+  - os: osx
+    r: release
 r_packages:
   - covr
-  - devtools
 r_github_packages:
   - timtrice/rrricanesdata
 cache: packages
@@ -30,15 +33,6 @@ after_success:
   - test $TRAVIS_PULL_REQUEST == "false" &&
     test $TRAVIS_BRANCH == "master" &&
     bash deploy.sh
-before_install:
-  - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
-  - sudo apt-get --yes --force-yes update -qq
-  - sudo apt-get install -y gdal-bin libgdal-dev libgdal1-dev libproj-dev
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
-  - ./travis-tool.sh install_deps
-  - ./travis-tool.sh install_github jimhester/covr hadley/xml2
 env:
   global:
     secure: t3RJn4gGOnWDc2DSBOHwZ+DkLTZsmo2f9JDfg0H9ugzhZQFvXWy9/+HCak4t00aCpRojkMadqmQPORoeGCvzbdZV6Iu+ueFBb9JPD6CVgBiUYLcBL0aaYtPydKpw5EAFmvoHQo2J/p6bVtVvpBPOf+OVaeLqzcKFD8mxJtVl/sbSuZzCUKhs2KPIEtfpYZuchlZKRV6K+vrDomQytqQJeTlc5TTqY1VMOyY2E1eRgTxpTnN44caWSiqAmMkBx403TmFRpA0XZzsxxmUxTpXrNayT6S0qdn/VClyTTvJb/E92jFjm6c2MxCL6D5Xw7mv51srHf4qIxf3eLyj2ilZUKB4aNeecr5Y1/NeBgmx9K+WD16e9TJYOfR0J8i2HikBLgSgFCvU8D5p3sC6gI/+GCPBXyAEVcndnPUBCaRqfz4eeu3CkxiWgzWwabBoqjas/jp7gyOaj1lwEqOm+WNgA4E/7Klv161CXVHPLyvC7w/7mwVLK6PYN/6yyLAgGA8sumigSPxUvRSnzpDhBRaZH0/39pMFcY+XDjM0tVGj2ku/fdWwKHK8nwTEjNYVWGEjnFuJt9mGnacWOnyeEG9AAMvXYKrLkbKVWh+i4332F0YGqSmtzBn+2X9EQ753fujXd+s3jKkoKaYI58hb+A7BVPeVInDJOfDMmj6KklT6JFHM=
