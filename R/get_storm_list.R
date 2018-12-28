@@ -2,8 +2,23 @@
 #' @description Get storm list
 #' @export
 get_storm_list <- function() {
+
+  # 2018-12-29 - On Dec. 9, an update was made putting a newline at the
+  # beginning of the  text file. This threw off the original code generating
+  # warnings. Instead of reading directly as CSV, read in as character, trim
+  # whitespace, then read CSV.
+
+  # Read in file as string
+  txt <- readChar(
+    "ftp://ftp.nhc.noaa.gov/atcf/index/storm_list.txt",
+    nchars = 252928)
+
+  # Remove any trailing white space
+  clean_txt <- stringr::str_trim(txt)
+
+  # Return dataframe
   readr::read_csv(
-    file = "ftp://ftp.nhc.noaa.gov/atcf/index/storm_list.txt",
+    file = clean_txt,
     col_names = c(
       "STORM_NAME", "RE", "X", "R2", "R3", "R4", "R5", "CY", "YYYY", "TY",
       "I", "YYY1MMDDHH", "YYY2MMDDHH", "SIZE", "GENESIS_NUM", "PAR1", "PAR2",
