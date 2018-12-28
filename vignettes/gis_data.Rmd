@@ -242,35 +242,44 @@ gis_wsp(datetime = "2016100606", res = 0.5)
 ```
 
 ```{r, eval = FALSE}
-df.gis_wsp <- gis_wsp(datetime = "2016100606", res = 0.5) %>% gis_download()
+df.gis_wsp <- 
+  gis_download(
+    "https://www.nhc.noaa.gov/gis/forecast/archive/2016100606_wsp_120hrhalfDeg.zip"
+  )
 ```
 
 ### Cumulative Probability for >34kt Winds
 
 ```{r, fig.width = 7, fig.align = "center"}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`)
-(p5 <- p + 
-     geom_point(data = broom::tidy(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`), 
-                aes(x = coords.x1, y = coords.x2, color = PWIND120))) + 
-    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
+p + 
+  geom_sf(
+    data = sf::st_as_sf(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`), 
+    aes(color = PWIND120)
+  ) +
+  coord_sf(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
 ```
 
 Cumulative wind speed probability for >50kt winds:
 
 ```{r, fig.width = 7, fig.align = "center"}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`)
-(p6 <- p + 
-     geom_point(data = broom::tidy(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`), 
-                aes(x = coords.x1, y = coords.x2, color = PWIND120))) + 
-    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
+p + 
+  geom_sf(
+    data = sf::st_as_sf(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`), 
+    aes(color = PWIND120)
+  ) +
+  coord_sf(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
 ```
 
 Cumulative probability for >64kt winds:
 
 ```{r, fig.width = 7, fig.align = "center"}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`)
-(p7 <- p + 
-     geom_point(data = broom::tidy(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`), 
-                aes(x = coords.x1, y = coords.x2, color = PWIND120))) + 
-    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
+p + 
+  geom_sf(
+    data = sf::st_as_sf(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`), 
+    aes(color = PWIND120)
+  ) +
+  coord_sf(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
 ```
