@@ -176,9 +176,9 @@ get_ftp_storm_data <- function(stormid,
         path = destdir,
         pattern = sprintf(
           fmt = "^%s%s%s%s\\.\\d{3}$",
-          #' What product?
+          # What product?
           named_products[products],
-          #' Lower-case basin abbreviation
+          # Lower-case basin abbreviation
           stringr::str_to_lower(stringr::str_sub(stormid, 1L, 2L)),
           # storm number
           stringr::str_to_lower(stringr::str_sub(stormid, 3L, 4L)),
