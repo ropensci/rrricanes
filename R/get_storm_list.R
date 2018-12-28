@@ -59,8 +59,8 @@ get_ftp_dirs <- function(x) {
 #'     \item{CCCC}{Year with century)}
 #'   }
 #' @inheritParams get_storm_data
-#' @seealso \code{\link{get_storm_data}}
 #' @export
+#' @seealso \code{\link{get_storm_data}}
 get_ftp_storm_data <- function(stormid,
                                products = c("discus", "fstadv", "posest",
                                             "public", "prblty", "update",
