@@ -20,6 +20,7 @@ ByteCompile: TRUE
 Imports:
   broom (>= 0.4.2), 
   crul (>= 0.3.4),
+  curl (>= 3.2), 
   dplyr (>= 0.5.0), 
   ggplot2 (>= 2.2.1), 
   httr (>= 1.2.1), 
