@@ -3,8 +3,9 @@ warnings_are_errors: true
 addons:
   apt:
     packages:
-    - libgdal-dev
-    - libproj-dev
+      - libudunits2-dev
+      - libgdal-dev
+      - libproj-dev
 matrix:
   include:
   - os: linux
