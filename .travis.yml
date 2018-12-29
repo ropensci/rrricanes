@@ -2,6 +2,10 @@ language: r
 
 warnings_are_errors: true
 
+before_install:
+  - sudo add-apt-repository ppa:ubuntugis/ppa -y
+  - sudo apt-get update -q
+
 addons:
   apt:
     packages:
