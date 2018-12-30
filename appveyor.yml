@@ -43,7 +43,7 @@ environment:
 
 build_script:
   - travis-tool.sh install_deps
-  - Rscript -e 'install.packages("rrricanesdata", repos = "https://timtrice.github.io/drat/", type = "source");'
+  - Rscript -e 'install.packages("rrricanesdata", repos = "https://timtrice.github.io/drat/", type = "source")'
 #  - travis-tool.sh r_binary_install proto rgdal
 
 test_script:
