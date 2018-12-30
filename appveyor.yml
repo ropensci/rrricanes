@@ -62,13 +62,3 @@ artifacts:
 
   - path: '\*_*.zip'
     name: Bits
-
-#notifications:
-# - provider: Email
-#   to:
-#     - tim.trice@gmail.com
-#   subject: 'rrricanes build {{status}}'
-#   message: "https://ci.appveyor.com/project/ropensci/rrricanes"
-#   on_build_success: false
-#   on_build_failure: true
-#   on_build_status_changed: true
