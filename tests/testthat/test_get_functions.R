@@ -25,7 +25,6 @@ df.al_09_2008_public <- rrricanes:::get_public(al_2008[[9,4]])
 df.al_09_2008_update <- rrricanes:::get_update(al_2008[[9,4]])
 df.al_09_2008_wndprb <- rrricanes:::get_wndprb(al_2008[[9,4]])
 
-storm_list <- rrricanes::get_storm_list()
 ## ---- Get Storms -------------------------------------------------------------
 
 ## ---- * URL Status -----------------------------------------------------------
@@ -317,6 +316,7 @@ test_that("Test get_wndprb()", {
 ## get_storm_list ----
 test_that("Get Storm List", {
   skip_on_travis()
+  storm_list <- rrricanes::get_storm_list()
   expect_output(str(storm_list), "21 variables")
   expect_identical(
     names(storm_list),
