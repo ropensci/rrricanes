@@ -13,41 +13,38 @@ install:
 # Adapt as necessary starting from here
 
 environment:
-#  R_CHECK_ARGS: --no-build-vignettes --no-manual --no-tests # Disable tests due to issues w/ NHC archives.
   global:
-    WARNINGS_ARE_ERRORS: 1
+    USE_RTOOLS: true
+    WARNINGS_ARE_ERRORS: true
 
-  matrix:
-  - R_VERSION: oldrel
-    RTOOLS_VERSION: 333
-    CRAN: http://cran.rstudio.com
+#  matrix:
+#  - R_VERSION: oldrel
+#    RTOOLS_VERSION: 333
+#    CRAN: http://cran.rstudio.com
 
-  - R_VERSION: oldrel
-    RTOOLS_VERSION: 340
-    CRAN: http://cran.rstudio.com
+#  - R_VERSION: oldrel
+#    RTOOLS_VERSION: 340
+#    CRAN: http://cran.rstudio.com
 
-  - R_VERSION: oldrel
-    RTOOLS_VERSION: 341
-    CRAN: http://cran.rstudio.com
+#  - R_VERSION: oldrel
+#    RTOOLS_VERSION: 341
+#    CRAN: http://cran.rstudio.com
 
-  - R_VERSION: oldrel
-    RTOOLS_VERSION: 342
-    CRAN: http://cran.rstudio.com
+#  - R_VERSION: oldrel
+#    RTOOLS_VERSION: 342
+#    CRAN: http://cran.rstudio.com
 
-  - R_VERSION: oldrel
-    RTOOLS_VERSION: 343
-    CRAN: http://cran.rstudio.com
+#  - R_VERSION: oldrel
+#    RTOOLS_VERSION: 343
+#    CRAN: http://cran.rstudio.com
 
-  - R_VERSION: devel
-    GCC_PATH: mingw_32
-
-matrix:
-  fast_finish: true
+#  - R_VERSION: devel
+#    GCC_PATH: mingw_32
 
 build_script:
-  - travis-tool.sh install_github ropensci/rrricanesdata
-  - travis-tool.sh r_binary_install proto rgdal
   - travis-tool.sh install_deps
+#  - travis-tool.sh install_github ropensci/rrricanesdata
+#  - travis-tool.sh r_binary_install proto rgdal
 
 test_script:
   - travis-tool.sh run_tests
@@ -75,12 +72,12 @@ artifacts:
   - path: '\*_*.zip'
     name: Bits
 
-notifications:
- - provider: Email
-   to:
-     - tim.trice@gmail.com
-   subject: 'rrricanes build {{status}}'
-   message: "https://ci.appveyor.com/project/ropensci/rrricanes"
-   on_build_success: false
-   on_build_failure: true
-   on_build_status_changed: true
+#notifications:
+# - provider: Email
+#   to:
+#     - tim.trice@gmail.com
+#   subject: 'rrricanes build {{status}}'
+#   message: "https://ci.appveyor.com/project/ropensci/rrricanes"
+#   on_build_success: false
+#   on_build_failure: true
+#   on_build_status_changed: true
