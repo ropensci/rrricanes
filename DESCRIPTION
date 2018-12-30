@@ -48,5 +48,4 @@ Suggests:
   testthat
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
-Additional_repositories: https://timtrice.github.io/drat
 Encoding: UTF-8
