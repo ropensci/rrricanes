@@ -16,30 +16,21 @@ environment:
   global:
     USE_RTOOLS: true
     WARNINGS_ARE_ERRORS: true
+  matrix:
+  - R_VERSION: 3.3.3
+    R_ARCH: x64
+    GCC_PATH: mingw_64
+  - R_VERSION: 3.4.4
+    R_ARCH: x64
+    GCC_PATH: mingw_64
+  - R_VERSION: devel
+    R_ARCH: x64
+    GCC_PATH: mingw_64
+  - R_VERSION: patched
+    GCC_PATH: mingw_32
 
-#  matrix:
-#  - R_VERSION: oldrel
-#    RTOOLS_VERSION: 333
-#    CRAN: http://cran.rstudio.com
-
-#  - R_VERSION: oldrel
-#    RTOOLS_VERSION: 340
-#    CRAN: http://cran.rstudio.com
-
-#  - R_VERSION: oldrel
-#    RTOOLS_VERSION: 341
-#    CRAN: http://cran.rstudio.com
-
-#  - R_VERSION: oldrel
-#    RTOOLS_VERSION: 342
-#    CRAN: http://cran.rstudio.com
-
-#  - R_VERSION: oldrel
-#    RTOOLS_VERSION: 343
-#    CRAN: http://cran.rstudio.com
-
-#  - R_VERSION: devel
-#    GCC_PATH: mingw_32
+matrix:
+  fast_finish: true
 
 build_script:
   - travis-tool.sh install_deps
