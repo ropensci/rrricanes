@@ -4,11 +4,13 @@
 \alias{get_nhc_link}
 \title{get_nhc_link}
 \usage{
-get_nhc_link(withTrailingSlash = TRUE)
+get_nhc_link(withTrailingSlash = TRUE, protocol = "https")
 }
 \arguments{
 \item{withTrailingSlash}{True, by default. False returns URL without
 trailing slash.}
+
+\item{protocol}{https or http}
 }
 \description{
 Return root link of NHC archive pages.

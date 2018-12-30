@@ -2,8 +2,23 @@
 #' @description Get storm list
 #' @export
 get_storm_list <- function() {
+
+  # 2018-12-29 - On Dec. 9, an update was made putting a newline at the
+  # beginning of the  text file. This threw off the original code generating
+  # warnings. Instead of reading directly as CSV, read in as character, trim
+  # whitespace, then read CSV.
+
+  # Read in file as string
+  txt <- readChar(
+    "ftp://ftp.nhc.noaa.gov/atcf/index/storm_list.txt",
+    nchars = 252928)
+
+  # Remove any trailing white space
+  clean_txt <- stringr::str_trim(txt)
+
+  # Return dataframe
   readr::read_csv(
-    file = "ftp://ftp.nhc.noaa.gov/atcf/index/storm_list.txt",
+    file = clean_txt,
     col_names = c(
       "STORM_NAME", "RE", "X", "R2", "R3", "R4", "R5", "CY", "YYYY", "TY",
       "I", "YYY1MMDDHH", "YYY2MMDDHH", "SIZE", "GENESIS_NUM", "PAR1", "PAR2",
@@ -44,8 +59,8 @@ get_ftp_dirs <- function(x) {
 #'     \item{CCCC}{Year with century)}
 #'   }
 #' @inheritParams get_storm_data
-#' @seealso \code{\link{get_storm_data}}
 #' @export
+#' @seealso \code{\link{get_storm_data}}
 get_ftp_storm_data <- function(stormid,
                                products = c("discus", "fstadv", "posest",
                                             "public", "prblty", "update",
@@ -161,9 +176,9 @@ get_ftp_storm_data <- function(stormid,
         path = destdir,
         pattern = sprintf(
           fmt = "^%s%s%s%s\\.\\d{3}$",
-          #' What product?
+          # What product?
           named_products[products],
-          #' Lower-case basin abbreviation
+          # Lower-case basin abbreviation
           stringr::str_to_lower(stringr::str_sub(stormid, 1L, 2L)),
           # storm number
           stringr::str_to_lower(stringr::str_sub(stormid, 3L, 4L)),
@@ -184,7 +199,7 @@ get_ftp_storm_data <- function(stormid,
         links
       )
 
-      res <- rrricanes:::get_url_contents(links)
+      res <- get_url_contents(links)
       res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
       res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
 
@@ -234,7 +249,7 @@ get_ftp_storm_data <- function(stormid,
       links
     )
 
-    res <- rrricanes:::get_url_contents(links)
+    res <- get_url_contents(links)
     res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
     res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
 

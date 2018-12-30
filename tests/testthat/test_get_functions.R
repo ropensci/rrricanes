@@ -12,31 +12,30 @@ load(system.file("extdata", "al_01_2017_products.Rdata", package = "rrricanes"))
 load(system.file("extdata", "al_09_2008_wndprb.Rdata", package = "rrricanes"))
 
 ## ---- Get Data ---------------------------------------------------------------
-al_1998 <- get_storms(years = 1998, basins = "AL")
-al_2008 <- get_storms(years = 2008, basins = "AL")
-al_2017 <- get_storms(years = 2017, basins = "AL")
+al_1998 <- rrricanes::get_storms(years = 1998, basins = "AL")
+al_2008 <- rrricanes::get_storms(years = 2008, basins = "AL")
+al_2017 <- rrricanes::get_storms(years = 2017, basins = "AL")
 
-df.al_01_2017_products <- get_storm_data(al_2017[[1,4]],
+df.al_01_2017_products <- rrricanes:::get_storm_data(al_2017[[1,4]],
                                       products = c("discus", "fstadv"))
-df.al_09_2008_discus <- get_discus(al_2008[[9,4]])
-df.al_09_2008_posest <- get_posest(al_2008[[9,4]])
-df.al_01_1998_prblty <- get_prblty(al_1998[[1,4]])
-df.al_09_2008_public <- get_public(al_2008[[9,4]])
-df.al_09_2008_update <- get_update(al_2008[[9,4]])
-df.al_09_2008_wndprb <- get_wndprb(al_2008[[9,4]])
+df.al_09_2008_discus <- rrricanes:::get_discus(al_2008[[9,4]])
+df.al_09_2008_posest <- rrricanes:::get_posest(al_2008[[9,4]])
+df.al_01_1998_prblty <- rrricanes:::get_prblty(al_1998[[1,4]])
+df.al_09_2008_public <- rrricanes:::get_public(al_2008[[9,4]])
+df.al_09_2008_update <- rrricanes:::get_update(al_2008[[9,4]])
+df.al_09_2008_wndprb <- rrricanes:::get_wndprb(al_2008[[9,4]])
 
-storm_list <- get_storm_list()
 ## ---- Get Storms -------------------------------------------------------------
 
 ## ---- * URL Status -----------------------------------------------------------
 #' Test that annual archive links work. All results should return 'OK'.
 test_that("URL Status", {
   skip_on_cran()
-  url <- "http://www.nhc.noaa.gov/archive/1998/1998archive.shtml"
+  url <- sprintf("%sarchive/1998/1998archive.shtml", get_nhc_link())
   expect_identical(httr::http_status(httr::GET(url))$reason, "OK")
 
   #' 1999 to current all have nearly identical links (year changes)
-  url <- "http://www.nhc.noaa.gov/archive/%i/"
+  url <- sprintf("%sarchive/%%i/", get_nhc_link())
   urls <- sprintf(url, 1999:2016)
   lapply(urls, function(x) {
     expect_identical(httr::http_status(httr::GET(x))$reason, "OK")
@@ -72,58 +71,59 @@ test_that("HTML format", {
   ## ---- * * 1998 -------------------------------------------------------------
   #' 1998
   expect_identical(
-    v(1, 1, "http://www.nhc.noaa.gov/archive/1998/1998archive.shtml"),
+    v(1, 1, sprintf("%sarchive/1998/1998archive.shtml", get_nhc_link())),
     "TROPICAL STORM ALEX")
   expect_identical(
-    v(29, 2, "http://www.nhc.noaa.gov/archive/1998/1998archive.shtml"),
+    v(29, 2, sprintf("%sarchive/1998/1998archive.shtml", get_nhc_link())),
     "HURRICANE MADELINE")
   ## ---- * * 2005 -------------------------------------------------------------
   #' 2005
-  expect_identical(v(1, 1, "http://www.nhc.noaa.gov/archive/2005/"),
+  expect_identical(v(1, 1, sprintf("%sarchive/2005/", get_nhc_link())),
                    "Tropical Storm ARLENE")
-  expect_identical(v(31, 2, "http://www.nhc.noaa.gov/archive/2005/"),
+  expect_identical(v(31, 2, sprintf("%sarchive/2005/", get_nhc_link())),
                    "Tropical Depression SIXTEEN-E")
-  expect_identical(v(59, 1, "http://www.nhc.noaa.gov/archive/2005/"),
+  expect_identical(v(59, 1, sprintf("%sarchive/2005/", get_nhc_link())),
                    "Tropical Storm ZETA")
   ## ---- * * 2016 -------------------------------------------------------------
   #' 2016
-  expect_identical(v(29, 1, "http://www.nhc.noaa.gov/archive/2016/"),
+  expect_identical(v(29, 1, sprintf("%sarchive/2016/", get_nhc_link())),
                    "Hurricane NICOLE")
-  expect_identical(v(41, 2, "http://www.nhc.noaa.gov/archive/2016/"),
+  expect_identical(v(41, 2, sprintf("%sarchive/2016/", get_nhc_link())),
                    "Tropical Storm TINA")
 })
 
 ## ---- * Is Dataframe ---------------------------------------------------------
 test_that("Is Dataframe", {
   skip_on_cran()
-  expect_true(is.data.frame(get_storms(1998, basin = "AL")))
-  expect_true(is.data.frame(get_storms(1998, basin = "EP")))
+  expect_true(is.data.frame(rrricanes::get_storms(1998, basin = "AL")))
+  expect_true(is.data.frame(rrricanes::get_storms(1998, basin = "EP")))
 })
 
 ## ---- * Column Names ---------------------------------------------------------
 test_that('Column Names', {
   skip_on_cran()
-  expect_named(get_storms(2016, basin = "AL"),
+  expect_named(rrricanes::get_storms(2016, basin = "AL"),
                c("Year", "Name", "Basin", "Link"))
-  expect_named(get_storms(2016, basin = "EP"),
+  expect_named(rrricanes::get_storms(2016, basin = "EP"),
                c("Year", "Name", "Basin", "Link"))
 })
 
 ## ---- * Errors ---------------------------------------------------------------
 test_that("Errors", {
   skip_on_cran()
-  expect_error(get_storms(1997),
-               'Archives currently only available for 1998 to current year.')
+  expect_error(rrricanes::get_storms(1997),
+               sprintf("Param `years` must be between 1998 and %s.",
+                       lubridate::year(Sys.Date())))
 })
 
 ## ---- Get Storm Data ---------------------------------------------------------
-test_that("get_storm_data()", {
+test_that("rrricanes:::get_storm_data()", {
   skip_on_cran()
   ## ---- * 2017, AL, 01 -------------------------------------------------------
   expect_identical(al_01_2017_products, df.al_01_2017_products)
   ## ---- * Errors -------------------------------------------------------------
-  expect_error(get_storm_data(al_2017[[1,4]], products = "test"))
-  expect_error(get_storm_data(),
+  expect_error(rrricanes:::get_storm_data(al_2017[[1,4]], products = "test"))
+  expect_error(rrricanes:::get_storm_data(),
                "argument \"links\" is missing, with no default")
 })
 
@@ -132,7 +132,7 @@ test_that("get_storm_data()", {
 ## ---- * create_df_discus -----------------------------------------------------
 #' Test structure of dataframe skeleton
 test_that("Dataframe Skeleton", {
-  df <- create_df_discus()
+  df <- rrricanes:::create_df_discus()
   expect_true(is.data.frame(df))
   expect_true(tibble::is_tibble(df))
   expect_identical(class(df$Status), "character")
@@ -154,7 +154,7 @@ test_that("Test get_discus()", {
 
 ## ---- * create_df_fstadv -----------------------------------------------------
 test_that("Test create_df_fstadv", {
-  x <- create_df_fstadv()
+  x <- rrricanes:::create_df_fstadv()
   df <- tibble::data_frame(
     Status = character(), Name = character(), Adv = integer(),
     Date = as.POSIXct(character(), tz = "UTC"), Key = character(),
@@ -202,8 +202,7 @@ test_that("Test create_df_fstadv", {
 
 ## ---- * tidy_fstadv ----------------------------------------------------------
 test_that("Test tidy_fstadv()", {
-  expect_warning(x <- tidy_fstadv(al_09_2008_fstadv),
-                 "'tidy_fstadv' is deprecated.\nUse 'tidy_adv' instead.")
+  expect_warning(x <- rrricanes::tidy_fstadv(al_09_2008_fstadv))
   expect_identical(dim(x), c(53L, 18L))
   expect_identical(names(x), c("Key", "Adv", "Date", "Status", "Name", "Lat",
                                "Lon", "Wind", "Gust", "Pressure", "PosAcc",
@@ -213,7 +212,7 @@ test_that("Test tidy_fstadv()", {
 
 ## ---- * tidy_wr --------------------------------------------------------------
 test_that("Test tidy_wr()", {
-  x <- tidy_wr(al_09_2008_fstadv)
+  x <- rrricanes::tidy_wr(al_09_2008_fstadv)
   expect_identical(dim(x), c(138L, 8L))
   expect_identical(names(x), c("Key", "Adv", "Date", "WindField", "NE", "SE",
                                "SW", "NW"))
@@ -221,7 +220,7 @@ test_that("Test tidy_wr()", {
 
 ## ---- * tidy_fcst ------------------------------------------------------------
 test_that("Test tidy_fcst()", {
-  x <- tidy_fcst(al_09_2008_fstadv)
+  x <- rrricanes::tidy_fcst(al_09_2008_fstadv)
   expect_identical(dim(x), c(336L, 8L))
   expect_identical(names(x), c("Key", "Adv", "Date", "FcstDate", "Lat", "Lon",
                                "Wind", "Gust"))
@@ -229,7 +228,7 @@ test_that("Test tidy_fcst()", {
 
 ## ---- * tidy_fcst_wr ---------------------------------------------------------
 test_that("Test tidy_fcst_wr()", {
-  x <- tidy_fcst_wr(al_09_2008_fstadv)
+  x <- rrricanes::tidy_fcst_wr(al_09_2008_fstadv)
   expect_identical(dim(x), c(587L, 9L))
   expect_identical(names(x), c("Key", "Adv", "Date", "FcstDate", "WindField",
                                "NE", "SE", "SW", "NW"))
@@ -240,7 +239,7 @@ test_that("Test tidy_fcst_wr()", {
 ## ---- * create_df_posest -----------------------------------------------------
 #' Test structure of dataframe skeleton
 test_that("Dataframe Skeleton", {
-  df <- create_df_posest()
+  df <- rrricanes:::create_df_posest()
   expect_true(is.data.frame(df))
   expect_true(tibble::is_tibble(df))
   expect_identical(class(df$Status), "character")
@@ -283,7 +282,7 @@ test_that("get_update", {
 
 ## ---- * al_prblty_stations ---------------------------------------------------
 test_that("al_prblty_stations", {
-  expect_warning(x <- al_prblty_stations(),
+  expect_warning(x <- rrricanes::al_prblty_stations(),
                  "Expected 7 pieces. Additional pieces discarded in 1 rows [90].",
                  fixed = TRUE)
   expect_identical(dim(x), c(214L, 7L))
@@ -293,14 +292,14 @@ test_that("al_prblty_stations", {
 
 ## ---- * cp_prblty_stations ---------------------------------------------------
 test_that("cp_prblty_stations", {
-  expect_identical(dim(cp_prblty_stations()), c(168L, 7L))
-  expect_identical(names(cp_prblty_stations()),
+  expect_identical(dim(rrricanes::cp_prblty_stations()), c(168L, 7L))
+  expect_identical(names(rrricanes::cp_prblty_stations()),
                    c("X1", "Location", "Lat", "Lon", "X5", "X6", "X7"))
 })
 
 ## ---- * ep_prblty_stations ---------------------------------------------------
 test_that("ep_prblty_stations", {
-  expect_warning(x <- ep_prblty_stations(),
+  expect_warning(x <- rrricanes::ep_prblty_stations(),
                  "Expected 7 pieces. Missing pieces filled with `NA` in 1 rows [41].",
                  fixed = TRUE)
   expect_identical(dim(x), c(168L, 7L))
@@ -316,6 +315,8 @@ test_that("Test get_wndprb()", {
 
 ## get_storm_list ----
 test_that("Get Storm List", {
+  skip_on_travis()
+  storm_list <- rrricanes::get_storm_list()
   expect_output(str(storm_list), "21 variables")
   expect_identical(
     names(storm_list),

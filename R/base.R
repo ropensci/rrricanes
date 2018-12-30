@@ -124,7 +124,7 @@ NULL
   toset <- !(names(op.rrricanes) %in% names(op))
   if (any(toset)) options(op.rrricanes[toset])
   invisible()
-  has_data <- requireNamespace("rrricanesdata", quietly = TRUE)
+  has_data <- base::requireNamespace("rrricanesdata", quietly = TRUE)
   .pkgenv[["has_data"]] <- has_data
 }
 
@@ -188,11 +188,12 @@ get_url_contents <- function(links) {
 #' @description Return root link of NHC archive pages.
 #' @param withTrailingSlash True, by default. False returns URL without
 #' trailing slash.
+#' @param protocol https or http
 #' @keywords internal
-get_nhc_link <- function(withTrailingSlash = TRUE) {
+get_nhc_link <- function(withTrailingSlash = TRUE, protocol = "https") {
   if (withTrailingSlash)
-    return('https://www.nhc.noaa.gov/')
-  return('https://www.nhc.noaa.gov')
+    return(sprintf("%s://www.nhc.noaa.gov/", protocol))
+  return(sprintf("%s://www.nhc.noaa.gov", protocol))
 }
 
 #' @title get_nhc_ftp_link

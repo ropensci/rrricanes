@@ -6,7 +6,7 @@
 #' available to point to the NHC website.
 #' @export
 twoal <- function() {
-  url <- "http://www.nhc.noaa.gov/index-at.xml"
+  url <- sprintf("%sindex-at.xml", get_nhc_link())
   contents <- xml2::read_xml(url) %>% xml2::as_list()
   return(contents)
 }
@@ -19,7 +19,7 @@ twoal <- function() {
 #' available to point to the NHC website.
 #' @export
 twoep <- function() {
-  url <- "http://www.nhc.noaa.gov/xml/TWOEP.xml"
+  url <- sprintf("%sxml/TWOEP.xml", get_nhc_link())
   contents <- xml2::read_xml(url) %>% xml2::as_list()
   return(contents)
 }
