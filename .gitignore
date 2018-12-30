@@ -1,9 +1,10 @@
+..Rcheck
 .RData
 .Rhistory
 .Rproj.user
-rrricanes.wiki/
-..Rcheck
-rrricanes.Rcheck
+.rstudio
 datasets
 inst/doc
 rrricanes.code-workspace
+rrricanes.Rcheck
+rrricanes.wiki/

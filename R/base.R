@@ -124,7 +124,7 @@ NULL
   toset <- !(names(op.rrricanes) %in% names(op))
   if (any(toset)) options(op.rrricanes[toset])
   invisible()
-  has_data <- requireNamespace("rrricanesdata", quietly = TRUE)
+  has_data <- base::requireNamespace("rrricanesdata", quietly = TRUE)
   .pkgenv[["has_data"]] <- has_data
 }
 
@@ -188,11 +188,22 @@ get_url_contents <- function(links) {
 #' @description Return root link of NHC archive pages.
 #' @param withTrailingSlash True, by default. False returns URL without
 #' trailing slash.
+#' @param protocol https or http
 #' @keywords internal
-get_nhc_link <- function(withTrailingSlash = TRUE) {
+get_nhc_link <- function(withTrailingSlash = TRUE, protocol = "https") {
   if (withTrailingSlash)
-    return('https://www.nhc.noaa.gov/')
-  return('https://www.nhc.noaa.gov')
+    return(sprintf("%s://www.nhc.noaa.gov/", protocol))
+  return(sprintf("%s://www.nhc.noaa.gov", protocol))
+}
+
+#' @title get_nhc_ftp_link
+#' @description Return root of NHC FTP server
+#' @inheritParams get_nhc_link
+#' @keywords internal
+get_nhc_ftp_link <- function(withTrailingSlash = TRUE) {
+  if (withTrailingSlash)
+    return("ftp://ftp.nhc.noaa.gov/")
+  return("ftp://ftp.nhc.noaa.gov")
 }
 
 #' @title knots_to_mph
@@ -296,18 +307,5 @@ status_abbr_to_str <- function(x) {
   y[x == "LO"] <- "Low"
   y[x == "WV"] <- "Tropical Wave"
   y[x == "DB"] <- "Disturbance"
-  return(y)
-}
-
-#' @title validate_year
-#' @description Test if year is 4-digit numeric.
-#' @return numeric year(s)
-#' @keywords internal
-validate_year <- function(y) {
-  y <- as.numeric(y)
-  if (all(is.na(y)))
-    stop('Year must be numeric.')
-  if (any(nchar(y) != 4))
-    stop('Year must be 4 digits.')
   return(y)
 }

@@ -1,49 +1,74 @@
 #' @title al_prblty_stations
 #' @description Retrieve list of probability stations based in the Atlantic
 #' basin from the NHC. To be used in tandem with `wndprb` products.
-#' @details This function may be deprecated soon as the data sources may be
-#' removed from the National Hurricane Center.
+#' @details Originally it was believed this data source would be removed by the
+#' National Hurricane Center but it appears to have been updated. Additional
+#' columns have been added, one up front and three in the back. These columns
+#' all contain the same values each and I am unable to find documentation
+#' describing the values.
+#'
+#' Regardless, the data is kept, just in case.
+#'
+#' @section Warnings:
+#'
+#' Calling \code{al_prblty_stations} will generate a warning:
+#'
+#' > "Expected 7 pieces. Additional pieces discarded in 1 rows [90]."
+#'
+#' Station PATRICK AFB actually has eight columns. The data is kept for
+#' consistency; you decide if you want it or not.
+#'
 #' @export
 al_prblty_stations <- function() {
-  url <- "http://www.nhc.noaa.gov/data/wsp/al_prblty_station.lst.csv.txt"
-  df <- readr::read_csv(url,
-              col_names = c("Location", "Lat", "Lon"),
-              col_types = readr::cols(Location = "c",
-                          Lat = "n",
-                          Lon = "n")) %>%
-    dplyr::arrange_("Location")
+  url <- sprintf(
+    "%sdata/wsp/al_prblty_station.lst.csv.txt",
+    get_nhc_link(protocol = "http")
+  )
+  df <- parse_stations(url)
   return(df)
 }
 
 #' @title cp_prblty_stations
 #' @description Retrieve list of probability stations based in the central
 #' Pacific from the NHC. To be used in tandem with `wndprb` products.
-#' @details This function may be deprecated soon as the data sources may be
-#' removed from the National Hurricane Center.
 #' @export
 cp_prblty_stations <- function() {
-  url <- "http://www.nhc.noaa.gov/data/wsp/cp_prblty_station.lst.csv.txt"
-  df <- readr::read_csv(url,
-              col_names = c("Location", "Lat", "Lon"),
-              col_types = readr::cols(Location = "c",
-                          Lat = "n",
-                          Lon = "n")) %>%
-    dplyr::arrange_("Location")
+  url <-
+    sprintf(
+      "%sdata/wsp/cp_prblty_station.lst.csv.txt",
+      get_nhc_link(protocol = "http")
+    )
+  df <- parse_stations(url)
   return(df)
 }
 
 #' @title ep_prblty_stations
 #' @description Retrieve list of probability stations based in the eastern
 #' Pacific from the NHC. To be used in tandem with `wndprb` products.
-#' @details This is a placeholder function. The current listing does not match
-#' the format for Atlantic and central Pacific stations.
+#' @details Originally it was believed this data source would be removed by the
+#' National Hurricane Center but it appears to have been updated. Additional
+#' columns have been added, one up front and three in the back. These columns
+#' all contain the same values each and I am unable to find documentation
+#' describing the values.
 #'
-#' This function may be deprecated soon as the data sources may be
-#' removed from the National Hurricane Center.
+#' Regardless, the data is kept, just in case.
+#'
+#' @section Warnings:
+#'
+#' Calling \code{ep_prblty_stations} will generate a warning:
+#'
+#' > "Expected 7 pieces. Missing pieces filled with `NA` in 1 rows [41]."
+#'
+#' Station SALINA CRUZ actually has six columns.
+#'
 #' @export
 ep_prblty_stations <- function() {
-  url <- "http://www.nhc.noaa.gov/data/wsp/ep_prblty_station.lst.csv.txt"
-  return(FALSE)
+  url <- sprintf(
+    "%sdata/wsp/ep_prblty_station.lst.csv.txt",
+    get_nhc_link(protocol = "http")
+  )
+  df <- parse_stations(url)
+  return(df)
 }
 
 #' @title get_wndprb
@@ -79,6 +104,33 @@ ep_prblty_stations <- function() {
 get_wndprb <- function(links) {
   df <- get_storm_data(links, products = "wndprb")
   return(df$wndprb)
+}
+
+#' @title parse_stations
+#' @description Parse probability station listings for each basin.
+#' @details At the moment, documentation on the format is unavailable. The
+#' format changed during the 2017/2018 offseason and now includes a
+#' numeric first column and numeric fifth, sixth and seventh column. All
+#' values are identical per column.
+#'
+#' Additionally, as of publication, PATRICK AFB in the Atlantic data source
+#' actually contains eight columns; this is noted in
+#' \code{\link{al_prblty_stations}}. SALINA CRUZ in
+#' \code{\link{ep_prblty_stations}} is short one column.
+#'
+#' I see no issues with the extra or missing data as I am unsure the value of
+#' the data to begin with. A warning will be given so the user is aware,
+#' but the important pieces (Location, Lat, Lon) all seem good.
+#' @param x URL of station list
+#' @keywords internal
+parse_stations <- function(x) {
+  df <- readLines(x) %>%
+    tibble::as_tibble() %>%
+    tidyr::separate(value,
+                    c("X1", "Location", "Lat", "Lon", "X5", "X6", "X7"),
+                    sep = ",",
+                    extra = "warn") %>%
+    dplyr::arrange(Location)
 }
 
 #' @title wndprb

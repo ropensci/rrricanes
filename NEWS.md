@@ -3,40 +3,28 @@ rrricanes Unreleased (yyyy-mm-dd)
 
 ### NEW FEATURES
 
-* NA
+* Add `get_storm_list` that returns a list of, it would appear, all known storms for many basins (beyond AL, EP)
+
+* `get_ftp_storm_data`, given a `stormid` (key) and a product, will return a dataframe of the requested data if it exists for the current storm. This opens up cyclones earlier than 1998 **however** is not yet tested.
 
 ### MINOR IMPROVEMENTS
 
 * Add `nm_to_sm` to convert nautical miles to survey miles. (#99)
+
 * Allow parameters for rgdal::readOGR (#104)
-* Add `tidy_adv` to replace `tidy_fstadv`; `tidy_fstadv` will be removed in release 0.2.2 (#103)
 
-### BUG FIXES
+* Add `tidy_adv` to replace `tidy_fstadv`; `tidy_fstadv` will be removed in 
+  release 0.2.2 (#103)
 
-* `gis_wsp` now uses GET instead of POST to retrieve wind speed probability GIS datasets. (#108)
-
-### DEPRECATED AND DEFUNCT
-
-* NA
-
-rrricanes 0.2.0.7 (2017-09-06)
-==================================
-
-### NEW FEATURES
-
-* NA
-
-### MINOR IMPROVEMENTS
-
-* NA
-
-### BUG FIXES
-
-* NA
+* `al_prblty_stations` and `cp_prblty_stations` updated 
+  to accomodate new dataset. (#46)
+  
+* `ep_prblty_stations` now returns dataset of east Pacific stations. (#46)
 
 ### BUG FIXES
 
 * `tidy_fcst` only returned forecasts for hours 12:96. Now returns 120. (#107)
+* `gis_wsp` now uses GET instead of POST to retrieve wind speed probability GIS datasets. (#108)
 
 ### DEPRECATED AND DEFUNCT
 

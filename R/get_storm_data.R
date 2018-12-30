@@ -105,6 +105,7 @@ get_storm_content <- function(link) {
 #' @param products Products to retrieve; discus, fstadv, posest, public,
 #'   prblty, update, and windprb.
 #' @return list of dataframes for each of the products.
+#' @seealso \code{\link{get_ftp_storm_data}}
 #' @examples
 #' \dontrun{
 #' ## Get public advisories for first storm of 2016 Atlantic season.
