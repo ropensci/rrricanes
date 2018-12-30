@@ -124,7 +124,7 @@ NULL
   toset <- !(names(op.rrricanes) %in% names(op))
   if (any(toset)) options(op.rrricanes[toset])
   invisible()
-  has_data <- requireNamespace("rrricanesdata", quietly = TRUE)
+  has_data <- base::requireNamespace("rrricanesdata", quietly = TRUE)
   .pkgenv[["has_data"]] <- has_data
 }
 
