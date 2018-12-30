@@ -39,10 +39,10 @@ Imports:
   tidyr (>= 0.6.1), 
   xml2 (>= 1.1.1)
 Suggests:
+  covr, 
   devtools, 
   knitr, 
   rmarkdown,
-  rrricanesdata (>= 0.0.1),
   sf, 
   sp,
   testthat
