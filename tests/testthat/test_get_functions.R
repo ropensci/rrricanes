@@ -316,6 +316,7 @@ test_that("Test get_wndprb()", {
 
 ## get_storm_list ----
 test_that("Get Storm List", {
+  skip_on_cran()
   expect_output(str(storm_list), "21 variables")
   expect_identical(
     names(storm_list),
