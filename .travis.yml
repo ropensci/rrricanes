@@ -8,6 +8,7 @@ before_install:
   - sudo apt-get --yes --force-yes update -qq
   - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev
   - Rscript -e 'update.packages(ask = FALSE)'
+  - Rscript -e 'install.packages("rrricanesdata", repos = "https://timtrice.github.io/drat/", type = "source");'
 
 matrix:
   include:
@@ -22,9 +23,7 @@ env:
 
 r_packages:
   - covr
-
-r_github_packages:
-  - timtrice/rrricanesdata
+  - sf
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
