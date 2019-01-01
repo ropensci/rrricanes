@@ -13,10 +13,8 @@ extract_storms <- function(basin, contents) {
 
   link_xpath <- xpaths[[basin]]
 
-  contents <-
-    contents %>%
-    purrr::map(~.x$parse("UTF-8")) %>%
-    purrr::map(xml2::read_html)
+  # Read in contents as html
+  contents <- purrr::imap(contents, xml2::read_html)
 
   years <-
     contents %>%
@@ -99,10 +97,7 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
   links[grep("1998", links)] <- paste0(links[grep("1998", links)],
                                        "1998archive.shtml")
 
-  contents <-
-    links %>%
-    purrr::map(get_url_contents) %>%
-    purrr::flatten()
+  contents <- get_url_contents(links)
 
   purrr::map_df(basins, extract_storms, contents)
 

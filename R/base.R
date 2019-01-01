@@ -179,9 +179,58 @@ extract_year_archive_link <- function(link) {
 #' @param link URL to download
 #' @keywords internal
 get_url_contents <- function(links) {
-  links <- crul::Async$new(urls = links)
-  res <- links$get()
-  return(res)
+
+  download_text <- function(grouped_links) {
+
+    # Create a new Async object with `grouped_links`
+    grouped_links <- crul::Async$new(urls = grouped_links)
+
+    # Get `grouped_links`
+    results <- grouped_links$get()
+
+    # Do we have any bad `grouped_links`?
+    bad_results_ind <- which(purrr::map(results, ~.$success()) == FALSE)
+    if (length(bad_results_ind) > 0) {
+      warning(sprintf("URL %s was unsuccesful.\n",
+                      purrr::map(results[bad_results_ind], ~.$url)),
+              call. = FALSE)
+      # Remove bad `grouped_links`
+      results <- results[-bad_results_ind]
+    }
+    purrr::map_chr(results, ~.$parse("UTF-8"))
+  }
+
+  # Create groups of links divisible by 80. We are to allow no more than 80
+  # requests every 10 seconds. If length of `link` is less than 80, then will
+  # only have one group and should have no delay.
+  groups <- ceiling(seq_along(1:length(links))/80)
+  links <- split(links, groups)
+
+  # Set progress bar
+  p <- dplyr::progress_estimated(n = length(links))
+
+  contents <-
+    links %>%
+    purrr::imap(.f = function(x, y) {
+
+      if (as.numeric(y) != length(links)) {
+        # Send group of links to `download_txt`
+        txt <- download_text(x)
+        # We are not in the last group; apply a delay
+        # p$tick()$print()
+        if (getOption("rrricanes.working_msg"))
+          message("Waiting 10 seconds to retrieve large numbers of links.")
+        # p$pause(10)
+        txt
+      } else {
+        # Send group of links to `download_txt`
+        # p$tick()$print()
+        download_text(x)
+      }
+    })
+
+  purrr::flatten_chr(contents)
+
 }
 
 #' @title get_nhc_link

@@ -2,74 +2,55 @@
 #' @description Get and parse product contents for each links
 #' @param links URLs to storm products
 #' @param product specific product to parse
-#' @param p dplyr::progress_estimated object
 #' @keywords internal
-extract_product_contents <- function(links, product, p) {
+extract_product_contents <- function(links, product) {
 
-  p$pause(0.5)$tick()$print()
+  contents <-
+    links %>%
+    get_url_contents() %>%
+    # Read in contents as html
+    purrr::imap(xml2::read_html) %>%
+    # Extract text product from within html
+    purrr::map_chr(.f = function(x) {
+      if (is.na(txt <- rvest::html_text(rvest::html_node(x, xpath = "//pre"))))
+        txt <- rvest::html_text(x)
+      txt
+    })
 
-  res <- purrr::map(links, get_url_contents) %>% purrr::flatten()
-
-  res_parsed <- purrr::map(res, ~xml2::read_html(.$content)) %>%
-  purrr::map(.f = function(x) {
-    if (is.na(txt <- rvest::html_node(x, xpath = "//pre") %>%
-        rvest::html_text()))
-    txt <- rvest::html_text(x)
-    return(txt)
-  })
-
-  df <- purrr::invoke_map_df(product, .x = res_parsed)
-
-  return(df)
-
+  purrr::invoke_map(product, .x = list(list(contents)))
 }
 
 #' @title extract_storm_links
 #' @description Extract product links from a storm's archive page
 #' @param links URLs to a storm's archive page
-#' @param p dplyr::progress_estimated object
 #' @keywords internal
-extract_storm_links <- function(links, p) {
+extract_storm_links <- function(links) {
 
-  if (p$i > 0) p$pause(0.5)
-  p$tick()$print()
+  if (!is.vector(links))
+    stop("Links must be a character vector.", call. = FALSE)
 
-  res <- purrr::map(links, .f = function(x) {get_url_contents(x)}) %>%
-  purrr::flatten()
+  # Get links of text products from each `links`
+  product_links <-
+    links %>%
+    get_url_contents() %>%
+    purrr::imap(.f = xml2::read_html) %>%
+    # Extract the html tables from each link to get the storm's text products
+    purrr::imap(.f = ~rvest::html_nodes(.x, xpath = "//td//a")) %>%
+    # Extract the text product URLs from `nodes`
+    purrr::imap(.f = ~rvest::html_attr(.x, name = "href")) %>%
+    purrr::flatten_chr()
 
-  # Get contents of all storms
-  storm_contents <- purrr::map(res, ~.$parse("UTF-8")) %>%
-  purrr::map(xml2::read_html)
-
-  years <- purrr::map(res, ~.$url) %>%
-  purrr::flatten_chr() %>%
-  stringr::str_extract("[[:digit:]]{4}") %>%
-  as.numeric()
-
-  # Extract all links
-  product_links <- purrr::map(storm_contents,
-                ~rvest::html_nodes(x = .x, xpath = "//td//a")) %>%
-  purrr::map(~rvest::html_attr(x = .x, name = "href"))
+  # Extract years from `links`
+  years <- as.numeric(stringr::str_extract(product_links, "[[:digit:]]{4}"))
 
   # 1998 product links are relative and prefixed with "/archive/1998/" whereas
   # other years, product_links are absolute. If product_links exist for 1998
-  # they must be modified. After, all product_links must be prefixed with
-  # nhc_domain
-  nhc_domain <- get_nhc_link(withTrailingSlash = FALSE)
-  product_links[years == 1998] <- purrr::map(product_links[years == 1998],
-                       ~sprintf("/archive/1998/%s", .))
-  product_links <- purrr::map(product_links, ~sprintf("%s%s", nhc_domain, .))
-  return(product_links)
-}
-
-#' @title get_storm_content
-#' @description Extract content from a storm's archive page
-#' @param link of archive page
-#' @return page content of archive page
-#' @keywords internal
-get_storm_content <- function(link) {
-  contents <- get_url_contents(link) %>% rvest::html_nodes(xpath = "//td//a")
-  return(contents)
+  # they must be modified. All product_links must then be prefixed with
+  # NHC URL.
+  product_links[years == 1998] <- paste0("/archive/1998/",
+                                         product_links[years == 1998])
+  product_links <- paste0(get_nhc_link(withTrailingSlash = FALSE),
+                          product_links)
 }
 
 #' @title get_storm_data
@@ -126,41 +107,13 @@ get_storm_data <- function(links, products = c("discus", "fstadv", "posest",
 
   products <- match.arg(products, several.ok = TRUE)
 
-  # There is an 80-hit/10-second limit to the NHC pages (#94), or 8
-  # requests/second. The below request will process 4 links every 0.5 seconds.
-  links <- split(links, ceiling(seq_along(links)/4))
-
-  # Set progress bar
-  p <- dplyr::progress_estimated(n = length(links))
-
-  if (getOption("rrricanes.working_msg"))
-  message("Gathering storm product links.")
-
-  storm_links <- purrr::lmap(links, extract_storm_links, p)
+  product_links <- extract_storm_links(links)
 
   # Filter links based on products and make one-dimensional
   product_links <- purrr::invoke_map(.f = sprintf("filter_%s", products),
-                   .x = list(list(links = storm_links))) %>%
-  purrr::map(purrr::flatten_chr)
+                                     .x = list(list(links = product_links)))
+  product_links <- purrr::set_names(product_links, nm = products)
 
-  names(product_links) <- products
+  purrr::map2(product_links, products, extract_product_contents)
 
-  # Loop through each product getting link contents
-  if (getOption("rrricanes.working_msg"))
-  message("Working individual products.")
-
-  # group links by products
-  grouped_links <- purrr::map(product_links, ~split(., ceiling(seq_along(.)/4)))
-
-  # set progress based on grouped_links
-  p <- dplyr::progress_estimated(sum(purrr::map_int(grouped_links, length)))
-
-  ds <- purrr::map(products, .f = function(x) {
-  df <- purrr::map_df(grouped_links[[x]], extract_product_contents, x, p) %>%
-    dplyr::arrange(Date)
-  })
-
-  names(ds) <- products
-
-  return(ds)
 }
