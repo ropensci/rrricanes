@@ -61,52 +61,37 @@ gis_advisory <- function(key, advisory = as.character()) {
 
 #' @title gis_breakpoints
 #' @description Return link to breakpoints shapefile by year
-#' @param year Default is current year. Breakpoints only available >= 2008.
 #' @details Coastal areas placed under tropical storm and hurricane watches and
-#' warnings are identified through the use of "breakpoints." A tropical cyclone
-#' breakpoint is defined as an agreed upon coastal location that can be chosen
-#' as one of two specific end points or designated places between which a
-#' tropical storm/hurricane watch/warning is in effect. The U.S. National
-#' Weather Service designates the locations along the U.S. East, Gulf, and
-#' California coasts, Puerto Rico, and Hawaii. These points are listed in NWS
-#' Directive 10-605 (PDF). Individual countries across the Caribbean, Central
-#' America, and South America provide coastal locations for their areas of
-#' responsibility to the U.S. National Weather Service for the National
-#' Hurricane Center's use in tropical cyclone advisories when watches/warnings
-#' are issued by international partners. The National Hurricane Center maintains
-#' a list of pre-arranged breakpoints for the U.S. Atlantic and Gulf coasts,
-#' Mexico, Cuba and the Bahamas. Other sites are unofficial and sites not on the
-#' list can be selected if conditions warrant.
+#'   warnings are identified through the use of "breakpoints." A tropical
+#'   cyclone breakpoint is defined as an agreed upon coastal location that can
+#'   be chosen as one of two specific end points or designated places between
+#'   which a tropical storm/hurricane watch/warning is in effect. The U.S.
+#'   National Weather Service designates the locations along the U.S. East,
+#'   Gulf, and California coasts, Puerto Rico, and Hawaii. These points are
+#'   listed in NWS Directive 10-605 (PDF). Individual countries across the
+#'   Caribbean, Central America, and South America provide coastal locations
+#'   for their areas of responsibility to the U.S. National Weather Service for
+#'   the National Hurricane Center's use in tropical cyclone advisories when
+#'   watches/warnings are issued by international partners. The National
+#'   Hurricane Center maintains a list of pre-arranged breakpoints for the U.S.
+#'   Atlantic and Gulf coasts, Mexico, Cuba and the Bahamas. Other sites are
+#'   unofficial and sites not on the list can be selected if conditions warrant.
 #' @export
-gis_breakpoints <- function(year = as.numeric(strftime(Sys.Date(), "%Y"))) {
+gis_breakpoints <- function() {
 
-  # xpath pattern
-  xp <- "//a"
-
-
-  links <-
-    httr::POST(
-      sprintf(
-        "%sgis/archive_breakpoints.php",
-        get_nhc_link(protocol = "http")
-      ),
-      body = list(year = year), encode = "form") %>%
-    httr::content(as = "parsed", encoding = "UTF-8") %>%
-    rvest::html_nodes(xpath = xp) %>%
+  breakpoint_file <-
+    paste0(get_nhc_link, "gis/") %>%
+    xml2::read_html() %>%
+    rvest::html_nodes(
+      xpath = "//tr[(((count(preceding-sibling::*) + 1) = 12) and parent::*)]//td"
+    ) %>%
+    rvest::html_children() %>%
     rvest::html_attr("href") %>%
-    stringr::str_extract(sprintf("Breakpoints_%s\\.zip$", year)) %>%
-    .[stats::complete.cases(.)]
+    stringr::str_match("/gis/breakpoints/current/Breakpoints_\\d{4}\\.zip") %>%
+    .[complete.cases(.)]
 
-  if (purrr::is_empty(links))
-    return(NULL)
+  paste0(get_nhc_link(withTrailingSlash = FALSE), breakpoint_file)
 
-  links <- sprintf(
-    "%sgis/breakpoints/archive/%s",
-    get_nhc_link(protocol = "http"),
-    links
-  )
-
-  return(links)
 }
 
 #' @title gis_download
