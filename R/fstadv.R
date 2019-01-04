@@ -135,12 +135,10 @@ fstadv <- function(contents) {
 #' @return numeric
 #' @keywords internal
 fstadv_eye <- function(contents) {
-
   ptn <- paste0('EYE DIAMETER[ ]+',
-          '([0-9]{2,3})', # Eye diameter, integer
-          '[ ]+NM')
-  eye <- stringr::str_match(contents, ptn)[,2]
-  return(as.numeric(eye))
+                '([0-9]{2,3})', # Eye diameter, integer
+                '[ ]+NM')
+  as.numeric(stringr::str_match(contents, ptn)[,2])
 }
 
 #' @title fstadv_fcst
