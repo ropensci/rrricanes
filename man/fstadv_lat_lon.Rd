@@ -4,12 +4,10 @@
 \alias{fstadv_lat_lon}
 \title{fstadv_lat_lon}
 \usage{
-fstadv_lat_lon(contents, what = NULL)
+fstadv_lat_lon(contents)
 }
 \arguments{
 \item{contents}{text contents of FORECAST/ADVISORY}
-
-\item{what}{What are we returning? c("lat", "lon")}
 }
 \value{
 numeric
