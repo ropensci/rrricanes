@@ -14,7 +14,7 @@ Intermediate advisories are acceptable.}
 }
 \description{
 Advisory Forecast Track, Cone of Uncertainty, and
-Watches/Warnings
+  Watches/Warnings
 }
 \seealso{
 \code{\link{gis_download}}

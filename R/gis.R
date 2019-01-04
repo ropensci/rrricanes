@@ -1,62 +1,55 @@
 #' @title gis_advisory
 #' @description Advisory Forecast Track, Cone of Uncertainty, and
-#' Watches/Warnings
+#'   Watches/Warnings
 #' @param key Key of storm (i.e., AL012008, EP092015)
 #' @param advisory Advisory number. If NULL, all advisories are returned.
-#' Intermediate advisories are acceptable.
+#'   Intermediate advisories are acceptable.
 #' @seealso \code{\link{gis_download}}
 #' @export
 gis_advisory <- function(key, advisory = as.character()) {
 
   if (is.null(key))
-    stop("Please provide storm key")
+    stop("Please provide a `key`.", call. = FALSE)
 
   key <- stringr::str_to_lower(key)
 
   if (!grepl("^[[:lower:]]{2}[[:digit:]]{6}$", key))
-    stop("Invalid key")
+    stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
 
   key <- stringr::str_match(key,
                             pattern = paste0("([:lower:]{2})([:digit:]{2})",
                                              "([:digit:]{4})"))
-  names(key) <- c("original", "basin", "year_num", "year")
 
   # Get list of GIS forecast zips for storm and download
   url <- sprintf("%sgis/archive_forecast_results.php?id=%s%s&year=%s",
-                 get_nhc_link(), key[["basin"]], key[["year_num"]],
-                 key[["year"]])
+                 get_nhc_link(),
+                 key[,2],         # Basin
+                 key[,3],         # Storm number
+                 key[,4])         # Year
   contents <- readr::read_lines(url)
 
   # Match zip files. If advisory is empty then need to pull all zip files for
   # the storm. Otherwise, pull only selected advisory.
   if (purrr::is_empty(advisory)) {
     ptn <- sprintf(".+(forecast/archive/%s.*?\\.zip).+",
-                   stringr::str_to_lower(key[["original"]]))
+                   stringr::str_to_lower(key[,1]))
   } else {
     advisory <- stringr::str_match(advisory, "([:digit:]{1,3})([:alpha:]*)")
     names(advisory) <- c("original", "advisory", "int_adv")
     ptn <- sprintf(".+(forecast/archive/%s.*?%s%s\\.zip).+",
-                   stringr::str_to_lower(key["original"]),
+                   stringr::str_to_lower(key[,1]),
                    stringr::str_pad(string = advisory[["advisory"]],
                                     width = 3, side = "left", pad = "0"),
                    advisory[["int_adv"]])
   }
 
-  matches <- contents[stringr::str_detect(contents, pattern = ptn)]
-  # Extract link to zip files. Error gracefully if no matches.
-  tryCatch(links <- stringr::str_match(matches, pattern = ptn)[,2],
-           error = function(c) {
-             c$message <- "No data avaialable for requested storm/advisory"
-             stop(c$message, call. = FALSE)
-           })
+  matches <- stringr::str_match(contents, pattern = ptn)[,2]
+  matches <- matches[complete.cases(matches)]
+
+  if (purrr::is_empty(matches)) return(NULL)
+
   # Append website domain to links
-  links <- sprintf(
-    "%s/%s/%s",
-    get_nhc_link(withTrailingSlash = FALSE, protocol = "http"),
-    "gis",
-    links
-  )
-  return(links)
+  paste0(get_nhc_link(), "gis/", matches)
 }
 
 #' @title gis_breakpoints
@@ -109,53 +102,49 @@ gis_download <- function(url, ...) {
 
   utils::unzip(zip_file, exdir = destdir)
 
-  shp_files <- stringr::str_match(zip_contents, pattern = ".+shp$") %>%
-    .[!is.na(.)]
+  shp_files <- stringr::str_match(zip_contents, pattern = ".+shp$")
+  shp_files <- shp_files[complete.cases(shp_files)]
 
-  ds <- purrr::map2(.x = shp_files, .y = destdir, .f = function(f, d) {
-    shp_file <- stringr::str_match(f, "^(.+)\\.shp$")[,2]
-    sp_object <- rgdal::readOGR(dsn = d, layer = shp_file,
-                                encoding = "UTF-8",
-                                stringsAsFactors = FALSE,
-                                use_iconv = TRUE,
-                                ...)
-    return(sp_object)
-  })
+  ds <-
+    purrr::map2(
+      .x = destdir,
+      .y = stringr::str_replace(shp_files, "\\.shp", ""),
+      .f = rgdal::readOGR,
+      encoding = "UTF-8",
+      stringsAsFactors = FALSE,
+      use_iconv = TRUE,
+      ...
+    )
 
-  names(ds) <- stringr::str_match(shp_files, "^(.+)\\.shp$")[,2] %>%
-    stringr::str_replace_all("[[:punct:][:space:]]", "_")
+  purrr::set_names(ds, nm = stringr::str_replace(shp_files, "\\.shp", ""))
 
-  # clean up
-  x <- unlink(c(paste(destdir, zip_contents, sep = "/"), zip_file))
-
-  return(ds)
 }
 
 #' @title gis_latest
-#' @description Latest GIS datasets for active cyclones
+#' @description Latest GIS datasets for \strong{active} cyclones
 #' @param basins AL and/or EP.
 #' @param ... additional parameters for rgdal::readOGR
 #' @export
 gis_latest <- function(basins = c("AL", "EP"), ...) {
 
   if (!(all(basins %in% c("AL", "EP"))))
-    stop("Invalid basin")
+    stop("Basin must be one or both of AL or EP.", call. = FALSE)
 
-  urls <- list("AL" = sprintf("%sgis-at.xml", get_nhc_link(protocol = "http")),
-               "EP" = sprintf("%sgis-ep.xml", get_nhc_link(protocol = "http")))
+  urls <- list("AL" = paste0(get_nhc_link(), "gis-at.xml"),
+               "EP" = paste0(get_nhc_link(), "gis-ep.xml"))
 
-  gis_zips <- purrr::map(basins, ~ xml2::read_xml(urls[[.x]])) %>%
+  gis_zips <-
+    basins %>%
+    purrr::map(~xml2::read_xml(urls[[.x]])) %>%
     purrr::map(~ xml2::xml_find_all(.x, xpath = ".//link") %>%
                  xml2::xml_text()) %>%
     purrr::map(stringr::str_match, ".+\\.zip$") %>%
     purrr::flatten_chr() %>%
     .[!is.na(.)]
 
-  if (!purrr::is_empty(gis_zips)) {
-    ds <- purrr::map(gis_zips, gis_download, ...)
-    return(ds)
-  }
-  return(FALSE)
+  if (purrr::is_empty(gis_zips)) return(NULL)
+
+  purrr::map(gis_zips, gis_download, ...)
 }
 
 #' @title gis_outlook
@@ -163,8 +152,7 @@ gis_latest <- function(basins = c("AL", "EP"), ...) {
 #' @seealso \code{\link{gis_download}}
 #' @export
 gis_outlook <- function() {
-  url <- sprintf("%sxgtwo/gtwo_shapefiles.zip", get_nhc_link(protocol = "http"))
-  return(url)
+  paste0(get_nhc_link(), "xgtwo/gtwo_shapefiles.zip")
 }
 
 #' @title gis_prob_storm_surge
@@ -177,24 +165,22 @@ gis_outlook <- function() {
 #' @section Products:
 #' \describe{
 #'   \item{esurge}{The Tropical Cyclone Storm Surge Exceedances (P-Surge 2.5)
-#'       data shows the probability, in percent, of a specified storm surge,
-#'       including tides, exceeding the specified height, in feet, during
-#'       the forecast period indicated. The 10 percent exceedance height,
-#'       for example, is the storm surge height, including tides, above
-#'       ground level (AGL) such that there is a 10 percent chance of
-#'       exceeding it. The product is based upon an ensemble of Sea, Lake,
-#'       and Overland Surge from Hurricanes (SLOSH) model runs using the
-#'       National Hurricane Center (NHC) official advisory and accounts for
-#'       track, size, and intensity errors based on historical errors and
-#'       astronomical tide. Valid values are 10, 20, 30, 40 or 50.}
-#'   \item{psurge}{The Tropical Cyclone Storm Surge Probabilities (P-Surge
-#'       2.5) data shows the probability, in percent, of a specified storm
-#'       surge occurring during the forecast period indicated. The product
-#'       is based upon an ensemble of Sea, Lake, and Overland Surge from
-#'       Hurricanes (SLOSH) model runs using the National Hurricane Center
-#'       (NHC) official advisory and accounts for track, size, and intensity
-#'       errors based on historical errors and astronomical tide. Valid
-#'       values are 0:20.}
+#'     data shows the probability, in percent, of a specified storm surge,
+#'     including tides, exceeding the specified height, in feet, during the
+#'     forecast period indicated. The 10 percent exceedance height, for example,
+#'     is the storm surge height, including tides, aboveground level (AGL) such
+#'     that there is a 10 percent chance ofexceeding it. The product is based
+#'     upon an ensemble of Sea, Lake,and Overland Surge from Hurricanes (SLOSH)
+#'     model runs using theNational Hurricane Center (NHC) official advisory
+#'     and accounts fortrack, size, and intensity errors based on historical
+#'     errors andastronomical tide. Valid values are 10, 20, 30, 40 or 50.}
+#'   \item{psurge}{The Tropical Cyclone Storm Surge Probabilities (P-Surge 2.5)
+#'     data shows the probability, in percent, of a specified storm surge
+#'     occurring during the forecast period indicated. The productis based upon
+#'     an ensemble of Sea, Lake, and Overland Surge fromHurricanes (SLOSH)
+#'     model runs using the National Hurricane Center(NHC) official advisory
+#'     and accounts for track, size, and intensityerrors based on historical
+#'     errors and astronomical tide. Validvalues are 0:20.}
 #' }
 #' @seealso \href{http://www.nhc.noaa.gov/surge/psurge.php}{Tropical Cyclone Storm Surge Probabilities}
 #' @seealso \code{\link{gis_download}}
@@ -214,38 +200,40 @@ gis_outlook <- function() {
 gis_prob_storm_surge <- function(key, products, datetime = NULL) {
 
   if (is.null(key))
-    stop("Please provide storm key")
+    stop("Please provide a storm `key`.", call. = FALSE)
 
   # Validate products
   if (!(all(names(products) %in% c("psurge", "esurge"))))
-    stop("Invalid product. Must be psurge and/or esurge")
+    stop("`products` must be 'psurge' and/or 'esurge'.", call. = FALSE)
 
   if (!is.null(products[["psurge"]]))
     if (!(all(dplyr::between(products[["psurge"]], 0, 20))))
-      stop("psurge values must be between 0 and 20")
+      stop("'psurge' values must be between 0 and 20.", call. = FALSE)
 
   if (!is.null(products[["esurge"]]))
     if (!(all(products[["esurge"]] %in% seq(10, 50, by = 10))))
-      stop("esurge values must be 10, 20, 30, 40 or 50")
+      stop("'esurge' values must be 10, 20, 30, 40 or 50.", call. = FALSE)
 
   key <- stringr::str_to_lower(key)
 
   if (!grepl("^[[:lower:]]{2}[[:digit:]]{6}$", key))
-    stop("Invalid key")
+    stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
 
-  key <- stringr::str_match(key, pattern = paste0("([:lower:]{2})([:digit:]",
-                                                  "{2})([:digit:]{4})"))
-  names(key) <- c("original", "basin", "year_num", "year")
+  key <- stringr::str_match(key,
+                            pattern = paste0("([:lower:]{2})([:digit:]",
+                                             "{2})([:digit:]{4})"))
 
   # Get list of GIS forecast zips for storm and download
   url <- sprintf("%sgis/archive_psurge_results.php?id=%s%s&year=%s",
-                 get_nhc_link(), key[["basin"]], key[["year_num"]],
-                 key[["year"]])
+                 get_nhc_link(),
+                 key[,2],         # Basin
+                 key[,3],         # Storm number
+                 key[,4])         # Year
+
   contents <- readr::read_lines(url)
 
   # Build product pattern
-  ptn_product <- names(products) %>%
-    purrr::map(.f = function(x) paste0(x, products[[x]])) %>%
+  ptn_product <- purrr::map2(names(products), products, .f = paste0) %>%
     purrr::flatten_chr()
 
   # Build datetime pattern
@@ -264,82 +252,76 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
 
   # Match zip files.
   ptn <- sprintf(".+(storm_surge/%s_(%s)_(%s)\\.zip).+",
-                 stringr::str_to_lower(key[["original"]]),
+                 stringr::str_to_lower(key[,1]),
                  paste(ptn_product, collapse = "|"),
                  ptn_datetime)
 
-  ds <- contents[stringr::str_detect(contents, pattern = ptn)]
+  matches <- stringr::str_match(contents, pattern = ptn)[,2]
+  matches <- matches[complete.cases(matches)]
 
-  # Extract link to zip files. Error gracefully if no matches.
-  tryCatch(links <- stringr::str_match(ds, pattern = ptn)[,2],
-           error = function(c) {
-             c$message <- "No data available for requested storm/advisory"
-             stop(c$message, call. = FALSE)
-           })
-  # Prepend domains to links
-  links <- sprintf("%sgis/%s", get_nhc_link(protocol = "http"), links)
-  return(links)
+  if (purrr::is_empty(matches)) return(NULL)
+
+  paste0(get_nhc_link(), "gis/", matches)
 }
 
 #' @title gis_storm_surge_flood
 #' @description Potential Storm Surge Flooding (Inundation)
 #' @param key Key of storm (i.e., AL012008, EP092015)
-#' @param advisory Advisory number. If NULL, all available advisories are
-#' returned.
+#' @param advisory Advisory number.
 #' @param products indundation or tidalmask
 #' @seealso \code{\link{gis_download}}
-#' @keywords internal
-gis_storm_surge_flood <- function(key, advisory = as.numeric(),
+#' @export
+gis_storm_surge_flood <- function(key,
+                                  advisory = as.numeric(),
                                   products = c("inundation", "tidalmask")) {
-  warning("These are raster files, not shapefiles.")
-  if (is.null(key))
-    stop("Please provide storm key")
+
+  if (is.null(key)) stop("Please provide a storm `key`.", call. = FALSE)
 
   key <- stringr::str_to_upper(key)
 
   if (!grepl("^[[:alpha:]]{2}[[:digit:]]{6}$", key))
-    stop("Invalid key")
+    stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
 
   if (!(any(products %in% c("inundation", "tidalmask"))))
-    stop("Invalid products")
+    stop("`products` must be 'inundation' or 'tidalmask'.", call. = FALSE)
 
-  key <- stringr::str_match(key, pattern = paste0("([:alpha:]{2})([:digit:]",
-                                                  "{2})([:digit:]{4})"))
-  names(key) <- c("original", "basin", "year_num", "year")
+  key <- stringr::str_match(key,
+                            pattern = paste0("([:alpha:]{2})([:digit:]",
+                                             "{2})([:digit:]{4})"))
 
   # Get list of GIS zips for storm and download
   url <- sprintf("%sgis/archive_inundation_results.php?id=%s%s&year=%s",
-                 get_nhc_link(), key[["basin"]], key[["year_num"]],
-                 key[["year"]])
+                 get_nhc_link(),
+                 key[,2],         # Basin
+                 key[,3],         # Storm number
+                 key[,4])         # Year
+
   contents <- readr::read_lines(url)
 
   if (purrr::is_empty(advisory)) {
     ptn <- sprintf(".+(%s/%s%s%s_[:digit:]{1,2}_(%s)\\.zip).+",
                    "inundation/forecasts",
-                   key[["basin"]],
-                   key[["year_num"]],
-                   stringr::str_sub(key[["year"]], start = 3L, end = 4L),
+                   key[,2],
+                   key[,3],
+                   stringr::str_sub(key[,4], start = 3L, end = 4L),
                    paste(products, collapse = "|"))
   } else {
     ptn <- sprintf(".+(inundation/forecasts/%s%s%s_%s_(%s)\\.zip).+",
-                   key[["basin"]],
-                   key[["year_num"]],
-                   stringr::str_sub(key[["year"]], start = 3L, end = 4L),
+                   key[,2],
+                   key[,3],
+                   stringr::str_sub(key[,4], start = 3L, end = 4L),
                    stringr::str_pad(advisory, width = 2, side = "left",
                                     pad = "0"),
                    paste(products, collapse = "|"))
   }
 
-  matches <- contents[stringr::str_detect(contents, pattern = ptn)]
-  # Extract link to zip files. Error gracefully if no matches.
-  tryCatch(links <- stringr::str_match(matches, pattern = ptn)[,2],
-           error = function(c) {
-             c$message <- "No data avaialable for requested storm/advisory"
-             stop(c$message, call. = FALSE)
-           })
-  # Create sub directories for each zip file
-  links <- sprintf("%sgis/%s", get_nhc_link(protocol = "http"), links)
-  return(links)
+  matches <- stringr::str_match(contents, pattern = ptn)[,2]
+  matches <- matches[complete.cases(matches)]
+
+  if (purrr::is_empty(matches)) return(NULL)
+
+  paste0(get_nhc_link(), "gis/", matches)
+
 }
 
 #' @title gis_windfield
@@ -348,8 +330,8 @@ gis_storm_surge_flood <- function(key, advisory = as.numeric(),
 #' @param advisory Advisory number. If NULL, all advisories are returned.
 #' Intermediate advisories are acceptable.
 #' @details Tropical Cyclone Advisory Wind Field
-#' http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year=2016
-#' http://www.nhc.noaa.gov/gis/forecast/archive/
+#'  http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year=2016
+#'  http://www.nhc.noaa.gov/gis/forecast/archive/
 #' Example file name: al012017_fcst_001.zip
 #' [basin]{2}[year_num]{2}[year]{4}_fcst_[advisory]{3}.zip
 #' Many storms do not appear to have this data; especially earlier.
@@ -362,47 +344,47 @@ gis_storm_surge_flood <- function(key, advisory = as.numeric(),
 gis_windfield <- function(key, advisory = as.character()) {
 
   if (is.null(key))
-    stop("Please provide storm key")
+    stop("Please provide a storm `key`.", call. = FALSE)
 
   key <- stringr::str_to_lower(key)
 
   if (!grepl("^[[:lower:]]{2}[[:digit:]]{6}$", key))
-    stop("Invalid key")
+    stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
 
-  key <- stringr::str_match(key, pattern = paste0("([:lower:]{2})([:digit:]",
-                                                  "{2})([:digit:]{4})"))
-  names(key) <- c("original", "basin", "year_num", "year")
+  key <- stringr::str_match(key,
+                            pattern = paste0("([:lower:]{2})([:digit:]",
+                                             "{2})([:digit:]{4})"))
 
   # Get list of GIS forecast zips for storm and download
   url <- sprintf("%sgis/archive_forecast_info_results.php?id=%s%s&year=%s",
-                 get_nhc_link(), key[["basin"]], key[["year_num"]],
-                 key[["year"]])
+                 get_nhc_link(),
+                 key[,2],         # Basin
+                 key[,3],         # Storm number
+                 key[,4])         # Year
+
   contents <- readr::read_lines(url)
 
   # Match zip files. If advisory is empty then need to pull all zip files for
   # the storm. Otherwise, pull only selected advisory.
   if (purrr::is_empty(advisory)) {
     ptn <- sprintf(".+(forecast/archive/%s.*?\\.zip).+",
-                   stringr::str_to_lower(key[["original"]]))
+                   stringr::str_to_lower(key[,1]))
   } else {
     advisory <- stringr::str_match(advisory, "([:digit:]{1,3})([:alpha:]*)")
     names(advisory) <- c("original", "advisory", "int_adv")
     ptn <- sprintf(".+(forecast/archive/%s.*?%s%s\\.zip).+",
-                   stringr::str_to_lower(key["original"]),
+                   stringr::str_to_lower(key[,1]),
                    stringr::str_pad(string = advisory[["advisory"]],
                                     width = 3, side = "left", pad = "0"),
                    advisory[["int_adv"]])
   }
 
-  matches <- contents[stringr::str_detect(contents, pattern = ptn)]
-  # Extract link to zip files. Error gracefully if no matches.
-  tryCatch(links <- stringr::str_match(matches, pattern = ptn)[,2],
-           error = function(c) {
-             c$message <- "No data avaialable for requested storm/advisory"
-             stop(c$message, call. = FALSE)
-           })
-  links <- sprintf("%sgis/%s", get_nhc_link(protocol = "http"), links)
-  return(links)
+  matches <- stringr::str_match(contents, pattern = ptn)[,2]
+  matches <- matches[complete.cases(matches)]
+
+  if (purrr::is_empty(matches)) return(NULL)
+
+  paste0(get_nhc_link(), "gis/", matches)
 }
 
 #' @title gis_wsp
@@ -427,10 +409,10 @@ gis_windfield <- function(key, advisory = as.character()) {
 gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
 
   if (!grepl("[[:digit:]]{4,10}", datetime))
-    stop("Invalid datetime")
+    stop("`datetime` should be between 4 and 10 digits.", call. = FALSE)
 
   if (!(all(res %in% c(5.0, 0.5, 0.1))))
-    stop("Invalid resolution")
+    stop("`res` should be one or more of 5.0, 0.5, or 0.1.", call. = FALSE)
 
   res <- as.character(res)
   res <- stringr::str_replace(res, "^5$", "5km")
@@ -440,11 +422,8 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
   year <- stringr::str_sub(datetime, 0L, 4L)
 
   request <-
-    httr::GET(
-      sprintf("%sgis/archive_wsp.php", get_nhc_link()),
-      body = list(year = year),
-      encode = "form"
-    )
+    paste0(get_nhc_link(), "gis/archive_wsp.php") %>%
+    httr::GET(body = list(year = year), encode = "form")
 
   contents <- httr::content(request, as = "parsed", encoding = "UTF-8")
 
@@ -462,9 +441,10 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
   ptn_res <- paste(res, collapse = "|")
 
   ptn <- sprintf("%s_wsp_[:digit:]{1,3}hr(%s)", ptn_datetime, ptn_res)
+
   links <- ds[stringr::str_detect(ds, ptn)]
-  links <- sprintf("%sgis/%s", get_nhc_link(protocol = "http"), links)
-  return(links)
+
+  paste0(get_nhc_link(), "gis/", links)
 }
 
 #' @title shp_to_df
@@ -474,6 +454,9 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
 #' object and converts into a dataframe that can be plotted in ggplot2.
 #' @export
 shp_to_df <- function(obj) {
+
+  browser()
+
   if (class(obj) %in% c("SpatialLinesDataFrame", "SpatialPolygonsDataFrame")) {
     obj@data$id <- rownames(obj@data)
     obj <- dplyr::left_join(broom::tidy(obj, region = "id"),

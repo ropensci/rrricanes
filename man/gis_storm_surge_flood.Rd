@@ -10,8 +10,7 @@ gis_storm_surge_flood(key, advisory = as.numeric(),
 \arguments{
 \item{key}{Key of storm (i.e., AL012008, EP092015)}
 
-\item{advisory}{Advisory number. If NULL, all available advisories are
-returned.}
+\item{advisory}{Advisory number.}
 
 \item{products}{indundation or tidalmask}
 }
@@ -21,4 +20,3 @@ Potential Storm Surge Flooding (Inundation)
 \seealso{
 \code{\link{gis_download}}
 }
-\keyword{internal}
