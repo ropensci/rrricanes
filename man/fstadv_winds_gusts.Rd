@@ -4,12 +4,10 @@
 \alias{fstadv_winds_gusts}
 \title{fstadv_winds_gusts}
 \usage{
-fstadv_winds_gusts(contents, what = NULL)
+fstadv_winds_gusts(contents)
 }
 \arguments{
 \item{contents}{text contents of FORECAST/ADVISORY product}
-
-\item{what}{return wind or gust?}
 }
 \value{
 numeric
