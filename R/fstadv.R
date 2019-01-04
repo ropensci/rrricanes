@@ -514,7 +514,7 @@ tidy_adv <- function(df) {
   if (!is.data.frame(df))
     stop("Expecting a dataframe.")
   df <- dplyr::select_(df, "Key", "Adv:Date", "Status:Name", "Lat:Eye",
-             ~dplyr::starts_with("Seas"))
+                       ~dplyr::starts_with("Seas"))
   return(df)
 }
 
@@ -523,7 +523,8 @@ tidy_adv <- function(df) {
 #' @rdname tidy_adv
 #' @export
 tidy_fstadv <- function(df) {
-  .Deprecated("tidy_adv")
+  .Deprecated("tidy_adv",
+              msg = "`tidy_fstadv is deprecated and will be removed in v0.2.2")
   return(tidy_adv(df))
 }
 
@@ -560,22 +561,22 @@ tidy_wr <- function(df) {
     .x = c(34, 50, 64),
     .f = function(y) {
       dplyr::select_(df,
-               .dots = c("Key",
-                   "Adv",
-                   "Date",
-                   paste0(v, y))) %>%
+                     .dots = c("Key",
+                               "Adv",
+                               "Date",
+                               paste0(v, y))) %>%
         dplyr::rename_(
           .dots = list("Key" = "Key",
-                 "Adv" = "Adv",
-                 "Date" = "Date",
-                 "NE" = paste0("NE", y),
-                 "SE" = paste0("SE", y),
-                 "SW" = paste0("SW", y),
-                 "NW" = paste0("NW", y))) %>%
+                       "Adv" = "Adv",
+                       "Date" = "Date",
+                       "NE" = paste0("NE", y),
+                       "SE" = paste0("SE", y),
+                       "SW" = paste0("SW", y),
+                       "NW" = paste0("NW", y))) %>%
         dplyr::mutate_("WindField" = y)
     }) %>%
     dplyr::select_(.dots = c("Key", "Adv", "Date",
-                 "WindField","NE:NW")) %>%
+                             "WindField","NE:NW")) %>%
     # Order by Date then Adv since Adv is character. Results as expected.
     dplyr::arrange_("Key", "Date", "Adv", "WindField")
 
@@ -635,16 +636,16 @@ tidy_fcst <- function(df) {
         df,
         .dots = c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
         dplyr::rename_("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
-                 "FcstDate" = paste0("Hr", y, "FcstDate"),
-                 "Lat" = paste0("Hr", y, "Lat"),
-                 "Lon" = paste0("Hr", y, "Lon"),
-                 "Wind" = paste0("Hr", y, "Wind"),
-                 "Gust" = paste0("Hr", y, "Gust"))}) %>%
+                       "FcstDate" = paste0("Hr", y, "FcstDate"),
+                       "Lat" = paste0("Hr", y, "Lat"),
+                       "Lon" = paste0("Hr", y, "Lon"),
+                       "Wind" = paste0("Hr", y, "Wind"),
+                       "Gust" = paste0("Hr", y, "Gust"))}) %>%
     dplyr::arrange_("Key", "Date", "Adv", "FcstDate")
 
   # Remove NA rows
   df <- df[stats::complete.cases(df$FcstDate, df$Lat, df$Lon, df$Wind,
-                   df$Gust),]
+                                 df$Gust),]
   return(df)
 }
 
@@ -698,21 +699,21 @@ tidy_fcst_wr <- function(df) {
       if (x %in% c(96, 120)) return(NULL)
       y <- purrr::map_df(.x = fcst_wind_radii, .f = function(z) {
         dplyr::select_(df, .dots = c("Key", "Adv", "Date",
-                       paste0("Hr", x, "FcstDate"),
-                       paste0("Hr", x, v, z))) %>%
+                                     paste0("Hr", x, "FcstDate"),
+                                     paste0("Hr", x, v, z))) %>%
           dplyr::rename_(
             .dots = list("Key" = "Key",
-                   "Adv" = "Adv",
-                   "Date" = "Date",
-                   "FcstDate" = paste0("Hr", x,
-                             "FcstDate"),
-                   "NE" = paste0("Hr", x, "NE", z),
-                   "SE" = paste0("Hr", x, "SE", z),
-                   "SW" = paste0("Hr", x, "SW", z),
-                   "NW" = paste0("Hr", x, "NW", z))) %>%
+                         "Adv" = "Adv",
+                         "Date" = "Date",
+                         "FcstDate" = paste0("Hr", x,
+                                             "FcstDate"),
+                         "NE" = paste0("Hr", x, "NE", z),
+                         "SE" = paste0("Hr", x, "SE", z),
+                         "SW" = paste0("Hr", x, "SW", z),
+                         "NW" = paste0("Hr", x, "NW", z))) %>%
           dplyr::mutate_("WindField" = z) %>%
           dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
-                       "WindField", "NE:NW"))})
+                                   "WindField", "NE:NW"))})
       return(y)
     })
 
