@@ -165,7 +165,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
     df <-
       df %>%
       dplyr::filter(FcstPeriod == hr) %>%
-      select(Key, Adv, FcstDate, Lat, Lon, Wind:NW34) %>%
+      dplyr::select(Key, Adv, FcstDate, Lat, Lon, Wind:NW34) %>%
       rlang::set_names(
         # Prepend forecast variables with "Hr", the value of `hr`, and the
         # variable name.
@@ -253,7 +253,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       Forecasts = forecasts
     ) %>%
     tidyr::unnest() %>%
-    group_by(Key, Adv) %>%
+    dplyr::group_by(Key, Adv) %>%
     dplyr::mutate(
       # Add var for forecast periods, limited to size of each group
       FcstPeriod = forecast_periods[1:n()],
@@ -273,22 +273,17 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
     # Make Wind, Gust, relative wind/gust vars and sea vars all numeric
     dplyr::mutate_at(dplyr::vars(Wind:NW34), .funs = as.numeric)
 
-  hr12 <- rebuild_forecasts(12, df = df_forecasts)
-  hr24 <- rebuild_forecasts(24, df = df_forecasts)
-  hr36 <- rebuild_forecasts(36, df = df_forecasts)
-  hr48 <- rebuild_forecasts(48, df = df_forecasts)
-  hr72 <- rebuild_forecasts(72, df = df_forecasts)
-  hr96 <- rebuild_forecasts(96, df = df_forecasts)
-  hr120 <- rebuild_forecasts(120, df = df_forecasts)
+  df <- rebuild_forecasts(12, df = df_forecasts)
 
-  df <-
-    hr12 %>%
-    dplyr::left_join(hr24, by = c("Key", "Adv")) %>%
-    dplyr::left_join(hr36, by = c("Key", "Adv")) %>%
-    dplyr::left_join(hr48, by = c("Key", "Adv")) %>%
-    dplyr::left_join(hr72, by = c("Key", "Adv")) %>%
-    dplyr::left_join(hr96, by = c("Key", "Adv")) %>%
-    dplyr::left_join(hr120, by = c("Key", "Adv")) %>%
+  for (hr in forecast_periods[2:7]) {
+    df <-
+      df %>%
+      dplyr::left_join(
+        rebuild_forecasts(hr, df = df_forecasts), by = c("Key", "Adv")
+      )
+  }
+
+  df %>%
     dplyr::ungroup() %>%
     dplyr::select(-c(Key, Adv)) %>%
     split(seq(nrow(.)))
