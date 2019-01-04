@@ -186,8 +186,6 @@ scrape_header <- function(contents) {
 #' @seealso \code{\link{scrape_header}}
 #' @keywords internal
 scrape_key <- function(header) {
-  # Get year
-  y <- lubridate::year(scrape_header(header, ret = "date"))
 
   # There are several possibilities that can preceed Key in the storm header.
   # ptn should capture each possibility, but only one of.
@@ -195,35 +193,10 @@ scrape_key <- function(header) {
           "NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?",
           "[:blank:]+MIAMI FL[:blank:]+|",
           "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+|",
-          "NWS CENTRAL PACIFIC HURRICANE CENTER HONOLULU HI[:blank:]+)")
+          "NWS CENTRAL PACIFIC HURRICANE CENTER HONOLULU HI[:blank:]+)",
+          "([:alnum:]{6,8})")
 
-  # For <= 2003 Identifier is 6-digits with a 2-digit year. Append either
-  # option to ptn based on year of cyclone.
-  if (y <= 2003) {
-    ptn <- c(ptn, '([:alnum:]{6})')
-  } else {
-    ptn <- c(ptn, '([:alnum:]{8})')
-  }
   ptn <- paste0(ptn, collapse = '')
-  x <- stringr::str_match(header, ptn)[,2]
-
-  # If year is 1999 and Key is "EP9099", send warning.
-  # This is a temp correction for Issue #55 in GitHub repo.
-  if (all(y == 1999, x == "EP9099"))
-    warning(paste0("Known data quality error. Key for Advisory 1 ",
-             "is incorrect. See GitHub Issue #55"),
-        call. = FALSE)
-
-  # In some instances x is NA. Stop and research.
-  if (nchar(x) != 6 & nchar(x) != 8) {
-    stop('Identifier is improperly formatted.')
-  } else {
-    # Reformat Identifer to 8 digits, if necessary
-    if (nchar(x) == 6)
-      x <- paste0(substr(x, 0, 4), y)
-    return(x)
-  }
-}
-
+  stringr::str_match(header, ptn)[,2]
 
 }
