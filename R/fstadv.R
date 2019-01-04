@@ -325,8 +325,7 @@ fstadv_fwd_mvmt <- function(contents, what = NULL) {
 #' @keywords internal
 fstadv_pos_accuracy <- function(contents) {
   ptn <- paste0("POSITION ACCURATE WITHIN[:blank:]+([0-9]{2,3})[:blank:]+NM")
-  pos_acc <- stringr::str_match(contents, ptn)[,2]
-  return(as.numeric(pos_acc))
+  as.numeric(stringr::str_match(contents, ptn)[,2])
 }
 
 #' @title fstadv_pressure
