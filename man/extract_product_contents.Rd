@@ -4,14 +4,12 @@
 \alias{extract_product_contents}
 \title{extract_product_contents}
 \usage{
-extract_product_contents(links, product, p)
+extract_product_contents(links, product)
 }
 \arguments{
 \item{links}{URLs to storm products}
 
 \item{product}{specific product to parse}
-
-\item{p}{dplyr::progress_estimated object}
 }
 \description{
 Get and parse product contents for each links

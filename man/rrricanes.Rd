@@ -81,9 +81,11 @@ core GIS functions return URLs to help you refine the data you wish to view.
 (Some products will not exist for all storms/advisories). These products are:
 
 \describe{
-  \item{\code{\link{gis_advisory}}}{Past track, current position, forecast and wind radii}
+  \item{\code{\link{gis_advisory}}}{Past track, current position, forecast
+    and wind radii}
   \item{\code{\link{gis_breakpoints}}}{Breakpoints for watches and warnings}
-  \item{\code{\link{gis_latest}}}{All available GIS products for active cyclones}
+  \item{\code{\link{gis_latest}}}{All available GIS products for active
+    cyclones}
   \item{\code{\link{gis_outlook}}}{Tropical Weather Outlook}
   \item{\code{\link{gis_prob_storm_surge}}}{Probabilistic Storm Surge}
   \item{\code{\link{gis_windfield}}}{Wind Radii}

@@ -10,11 +10,11 @@ filter_orig(links)
 \item{links}{Vector of URLs retrieved from storm's archive page.}
 }
 \description{
-For Katrina, 2005, there are two identical discussions; one of which has
-  'orig' in the URL. Because this link is not captured above it will throw an
-  error. This function is an effort to capture it and pass
+For Katrina, 2005, there are two identical discussions; one of
+  which has 'orig' in the URL. Because this link is not captured above it
+  will throw an error. This function is an effort to capture it and pass
   it through the validation but, at least for this Katrina it is not
-  necessary. That being said, if there is output for any other storms it should
-  be reviewed as it is common for the NHC to issue UPDATED statements.
+  necessary. That being said, if there is output for any other storms it
+  should be reviewed as it is common for the NHC to issue UPDATED statements.
 }
 \keyword{internal}

@@ -4,12 +4,10 @@
 \alias{extract_storm_links}
 \title{extract_storm_links}
 \usage{
-extract_storm_links(links, p)
+extract_storm_links(links)
 }
 \arguments{
 \item{links}{URLs to a storm's archive page}
-
-\item{p}{dplyr::progress_estimated object}
 }
 \description{
 Extract product links from a storm's archive page
