@@ -93,61 +93,40 @@ fstadv <- function(contents) {
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
 
-  df <- create_df_fstadv()
-
-  status <- scrape_header(contents, ret = "status")
-  name <- scrape_header(contents, ret = "name")
-  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
-  date <- scrape_header(contents, ret = "date")
-
-  if (getOption("rrricanes.working_msg"))
-  message(sprintf("Working %s %s Forecast/Advisory #%s (%s)",
-          status, name, adv, date))
-
-  key <- scrape_header(contents, ret = "key")
-  lat <- fstadv_lat(contents)
-  lon <- fstadv_lon(contents)
+  status <- scrape_header(contents)
+  issue_date <- scrape_date(contents)
+  key <- scrape_key(contents)
+  lat_lon <- fstadv_lat_lon(contents)
   posacc <- fstadv_pos_accuracy(contents)
-  fwd_dir <- fstadv_fwd_dir(contents)
-  fwd_speed <- fstadv_fwd_speed(contents)
+  fwd_mvmt <- fstadv_fwd_mvmt(contents)
   pressure <- fstadv_pressure(contents)
   eye <- fstadv_eye(contents)
-  wind <- fstadv_winds(contents)
-  gust <- fstadv_gusts(contents)
-
-  df <- df %>%
-  tibble::add_row("Status" = status, "Name" = name, "Adv" = adv,
-          "Date" = date, "Key" = key, "Lat" = lat,
-          "Lon" = lon, "Wind" = wind, "Gust" = gust,
-          "Pressure" = pressure, "PosAcc" = posacc,
-          "FwdDir" = fwd_dir, "FwdSpeed" = fwd_speed,
-          "Eye" = eye)
-
-  # Add current wind radius
+  winds_gusts <- fstadv_winds_gusts(contents)
   wind_radius <- fstadv_wind_radius(contents, wind)
+  prev_pos <- fstadv_prev_pos(contents, issue_date)
+  seas <- fstadv_seas(contents)
+  forecasts <- fstadv_forecasts(contents, key, status[,3], issue_date)
 
-  df[, names(wind_radius)] <- wind_radius[, names(wind_radius)]
+  tibble::tibble(
+    Status = status[,1],
+    Name = status[,2],
+    Adv = as.numeric(status[,3]),
+    Date = issue_date,
+    Key = key,
+    Lat = lat_lon[,1],
+    Lon = lat_lon[,2],
+    Wind = winds_gusts[,1],
+    Gust = winds_gusts[,2],
+    Pressure = pressure,
+    PosAcc = posacc,
+    FwdDir = fwd_mvmt[,1],
+    FwdSpeed = fwd_mvmt[,2],
+    Eye = eye,
+    WindRadius = wind_radius,
+    Forecast = forecasts,
+    Seas = seas
+  )
 
-  # Add current sea radius
-  seas <- fstadv_seas(contents, wind)
-  # AL161999 has two rows of Seas data for advisory 5. The second row is
-  # within the forecast area where typically does not exist. Assumption is a
-  # typo. Would like to save this into attributes or something...
-  if (all(!is.null(seas), nrow(seas) > 1)) {
-  warning(sprintf("Too many rows of sea data for %s %s #%s.\n%s",
-          status, name, adv, seas[2:nrow(seas),]),
-      call. = FALSE)
-  seas <- seas[1,]
-  }
-
-  df[, names(seas)] <- seas[, names(seas)]
-
-  # Add forecast positions and wind radii
-  forecasts <- fstadv_forecasts(contents, date)
-
-  df[, names(forecasts)] <- forecasts[, names(forecasts)]
-
-  return(df)
 }
 
 #' @title fstadv_eye
