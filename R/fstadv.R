@@ -125,7 +125,8 @@ fstadv <- function(contents) {
     WindRadius = wind_radius,
     Forecast = forecasts,
     Seas = seas
-  )
+  ) %>%
+    tidyr::unnest(WindRadius, Seas, Forecast)
 
 }
 
@@ -193,13 +194,14 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
                       "Wind", "Gust", paste0(quads, "64"),
                       paste0(quads, "50"),
                       paste0(quads, "34")))
-  browser()
-  df <- tibble::tibble(
-    Key = key,
-    Adv = as.numeric(adv),
-    AdvDate = adv_date,
-    Forecasts = ldf
-  ) %>%
+
+  df <-
+    tibble::tibble(
+      Key = key,
+      Adv = as.numeric(adv),
+      AdvDate = adv_date,
+      Forecasts = ldf
+    ) %>%
     dplyr::group_by(Key, Adv) %>%
     tidyr::unnest(Forecasts) %>%
     dplyr::mutate(
@@ -216,15 +218,66 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
         TRUE           ~ as.numeric(Lon)
       )
     ) %>%
-    dplyr::mutate_at(
-      dplyr::vars(Wind:NW34),
-      .funs = as.numeric
-    ) %>%
-    dplyr::select(c(FcstDate, Lat, Lon, Wind:NW34))  %>%
-    {.}
-    # tidyr::nest(Key, Adv, .key = "Forecasts") %>%
-    # split(seq(nrow(.))) %>%
-    # purrr::map_df(`[`)
+    dplyr::mutate_at(dplyr::vars(Wind:NW34), .funs = as.numeric) %>%
+    dplyr::select(
+      c(Key, Adv, AdvDate, FcstPeriod, FcstDate, Lat, Lon, Wind:NW34)
+    )  %>%
+    tibble::glimpse()
+
+  forecast_12 <-
+    df %>%
+    dplyr::filter(FcstPeriod == 12) %>%
+    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr12", names(.)[5:21]))) %>%
+    dplyr::select(-FcstPeriod)
+
+  forecast_24 <-
+    df %>%
+    dplyr::filter(FcstPeriod == 24) %>%
+    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr24", names(.)[5:21]))) %>%
+    dplyr::select(-FcstPeriod)
+
+  forecast_36 <-
+    df %>%
+    dplyr::filter(FcstPeriod == 36) %>%
+    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr36", names(.)[5:21]))) %>%
+    dplyr::select(-FcstPeriod)
+
+  forecast_48 <-
+    df %>%
+    dplyr::filter(FcstPeriod == 48) %>%
+    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr48", names(.)[5:21]))) %>%
+    dplyr::select(-FcstPeriod)
+
+  forecast_72 <-
+    df %>%
+    dplyr::filter(FcstPeriod == 72) %>%
+    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr72", names(.)[5:21]))) %>%
+    dplyr::select(-FcstPeriod)
+
+  forecast_96 <-
+    df %>%
+    dplyr::filter(FcstPeriod == 96) %>%
+    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr96", names(.)[5:21]))) %>%
+    dplyr::select(-FcstPeriod)
+
+  forecast_120 <-
+    df %>%
+    dplyr::filter(FcstPeriod == 120) %>%
+    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr120", names(.)[5:21]))) %>%
+    dplyr::select(-FcstPeriod)
+
+  tmp <-
+    forecast_12 %>%
+    dplyr::left_join(forecast_24, by = c("Key", "Adv", "AdvDate")) %>%
+    dplyr::left_join(forecast_36, by = c("Key", "Adv", "AdvDate")) %>%
+    dplyr::left_join(forecast_48, by = c("Key", "Adv", "AdvDate")) %>%
+    dplyr::left_join(forecast_72, by = c("Key", "Adv", "AdvDate")) %>%
+    dplyr::left_join(forecast_96, by = c("Key", "Adv", "AdvDate")) %>%
+    dplyr::left_join(forecast_120, by = c("Key", "Adv", "AdvDate")) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(-c(Key, Adv, AdvDate))
+
+  split(tmp, seq(nrow(tmp)))
 
 }
 
