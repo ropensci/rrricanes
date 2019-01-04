@@ -126,7 +126,7 @@ fstadv <- function(contents) {
     Forecast = forecasts,
     Seas = seas
   ) %>%
-    tidyr::unnest(WindRadius, Seas, Forecast)
+    tidyr::unnest(Seas, WindRadius, Forecast)
 
 }
 
@@ -152,6 +152,43 @@ fstadv_eye <- function(contents) {
 #' @return boolean
 #' @keywords internal
 fstadv_forecasts <- function(content, key, adv, adv_date) {
+
+  # https://www.nhc.noaa.gov/help/tcm.shtml
+
+  #' @title rebuild_forecasts
+  #' @description Filter forecast dataframe, renaming variables with forecast
+  #'   period as prefix, eliminate some vars where necessary, and return a
+  #'   filtered dataframe.
+  #' @keywords internal
+  rebuild_forecasts <- function(hr, df) {
+
+    df <-
+      df %>%
+      dplyr::filter(FcstPeriod == hr) %>%
+      select(Key, Adv, FcstDate, Lat, Lon, Wind:NW34) %>%
+      rlang::set_names(
+        # Prepend forecast variables with "Hr", the value of `hr`, and the
+        # variable name.
+        nm = c(names(.)[1:2], stringr::str_c("Hr", hr, names(.)[3:19]))
+      )
+
+    # 64 knot wind radius forecasts are never provided beyond 48 hours.
+    # No wind radii data are provided for 96 and 120 hours
+    if (hr %in% c(48, 72)) {
+      dplyr::select(df, -tidyselect::ends_with("64"))
+    } else if (hr %in% c(96, 120)) {
+      dplyr::select(
+        df, -c(
+          tidyselect::ends_with("64"),
+          tidyselect::ends_with("50"),
+          tidyselect::ends_with("34")
+        )
+      )
+    } else {
+      df
+    }
+
+  }
 
   ptn <- paste0("([:digit:]{2})/([:digit:]{2})([:digit:]{2})Z",
                 "[:blank:]+([:digit:]{1,2}\\.[:digit:])([N|S])",
@@ -181,103 +218,80 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
 
   quads <- c("NE", "SE", "SW", "NW")
 
-  ldf <-
+  # Extract all forecasts from every text product. Some text products may have
+  # multiple forecasts (at 12 hours, 24, 36, 48, 72, and, for more recent years,
+  # 96 and 120 hours). Some text products may have no forecasts at all (if the
+  # storm is expected to degenerate or already has).
+  forecasts <-
     content %>%
     stringr::str_match_all(pattern = ptn) %>%
-    # If any list element is empty, populate all columns with NA
+    # # Get only the columns needed excluding the matched string
+    # purrr::map(`[`, , 2:22) %>%
+    # If any storm has 0 forecasts (i.e., the list element is empty), populate
+    # all columns with NA
     purrr::modify_if(.p = purrr::is_empty,
                      .f = ~matrix(data = NA_character_, ncol = 22)) %>%
+    # Convert to tibble cause God I hate working with lists like this though I
+    # know I need the practice...
     purrr::map(tibble::as_tibble) %>%
-    purrr::map(purrr::set_names,
+    purrr::map(rlang::set_names,
                nm = c("String", "Date", "Hour", "Minute",
                       "Lat", "LatHemi", "Lon", "LonHemi",
                       "Wind", "Gust", paste0(quads, "64"),
                       paste0(quads, "50"),
                       paste0(quads, "34")))
 
-  df <-
+  forecast_periods <- c(12, 24, 36, 48, 72, 96, 120)
+
+  # Take `key`, `adv`, `adv_date` and add nested tibble `forecasts` as a new
+  # dataframe/tibble.
+  df_forecasts <-
     tibble::tibble(
       Key = key,
       Adv = as.numeric(adv),
       AdvDate = adv_date,
-      Forecasts = ldf
+      Forecasts = forecasts
     ) %>%
-    dplyr::group_by(Key, Adv) %>%
-    tidyr::unnest(Forecasts) %>%
+    tidyr::unnest() %>%
+    group_by(Key, Adv) %>%
     dplyr::mutate(
       # Add var for forecast periods, limited to size of each group
-      FcstPeriod = c(12, 24, 36, 48, 72, 96, 120)[1:n()],
-      # Add var for forecast date time
+      FcstPeriod = forecast_periods[1:n()],
+      # Add var for forecast date time; make character for gathering
       FcstDate = AdvDate + lubridate::hours(FcstPeriod) - (60 * 60 * 3),
+      # If Lat is in southern hemisphere (unlikely, but possible), make negative
       Lat = dplyr::case_when(
         LatHemi == "S" ~ as.numeric(Lat) * -1,
         TRUE           ~ as.numeric(Lat)
       ),
+      # If Lon in western hemisphere (most likely), make negative.
       Lon = dplyr::case_when(
         LonHemi == "W" ~ as.numeric(Lon) * -1,
         TRUE           ~ as.numeric(Lon)
       )
     ) %>%
-    dplyr::mutate_at(dplyr::vars(Wind:NW34), .funs = as.numeric) %>%
-    dplyr::select(
-      c(Key, Adv, AdvDate, FcstPeriod, FcstDate, Lat, Lon, Wind:NW34)
-    )  %>%
-    tibble::glimpse()
+    # Make Wind, Gust, relative wind/gust vars and sea vars all numeric
+    dplyr::mutate_at(dplyr::vars(Wind:NW34), .funs = as.numeric)
 
-  forecast_12 <-
-    df %>%
-    dplyr::filter(FcstPeriod == 12) %>%
-    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr12", names(.)[5:21]))) %>%
-    dplyr::select(-FcstPeriod)
+  hr12 <- rebuild_forecasts(12, df = df_forecasts)
+  hr24 <- rebuild_forecasts(24, df = df_forecasts)
+  hr36 <- rebuild_forecasts(36, df = df_forecasts)
+  hr48 <- rebuild_forecasts(48, df = df_forecasts)
+  hr72 <- rebuild_forecasts(72, df = df_forecasts)
+  hr96 <- rebuild_forecasts(96, df = df_forecasts)
+  hr120 <- rebuild_forecasts(120, df = df_forecasts)
 
-  forecast_24 <-
-    df %>%
-    dplyr::filter(FcstPeriod == 24) %>%
-    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr24", names(.)[5:21]))) %>%
-    dplyr::select(-FcstPeriod)
-
-  forecast_36 <-
-    df %>%
-    dplyr::filter(FcstPeriod == 36) %>%
-    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr36", names(.)[5:21]))) %>%
-    dplyr::select(-FcstPeriod)
-
-  forecast_48 <-
-    df %>%
-    dplyr::filter(FcstPeriod == 48) %>%
-    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr48", names(.)[5:21]))) %>%
-    dplyr::select(-FcstPeriod)
-
-  forecast_72 <-
-    df %>%
-    dplyr::filter(FcstPeriod == 72) %>%
-    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr72", names(.)[5:21]))) %>%
-    dplyr::select(-FcstPeriod)
-
-  forecast_96 <-
-    df %>%
-    dplyr::filter(FcstPeriod == 96) %>%
-    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr96", names(.)[5:21]))) %>%
-    dplyr::select(-FcstPeriod)
-
-  forecast_120 <-
-    df %>%
-    dplyr::filter(FcstPeriod == 120) %>%
-    purrr::set_names(nm = c("Key", "Adv", "AdvDate", "FcstPeriod", stringr::str_c("Hr120", names(.)[5:21]))) %>%
-    dplyr::select(-FcstPeriod)
-
-  tmp <-
-    forecast_12 %>%
-    dplyr::left_join(forecast_24, by = c("Key", "Adv", "AdvDate")) %>%
-    dplyr::left_join(forecast_36, by = c("Key", "Adv", "AdvDate")) %>%
-    dplyr::left_join(forecast_48, by = c("Key", "Adv", "AdvDate")) %>%
-    dplyr::left_join(forecast_72, by = c("Key", "Adv", "AdvDate")) %>%
-    dplyr::left_join(forecast_96, by = c("Key", "Adv", "AdvDate")) %>%
-    dplyr::left_join(forecast_120, by = c("Key", "Adv", "AdvDate")) %>%
+  df <-
+    hr12 %>%
+    dplyr::left_join(hr24, by = c("Key", "Adv")) %>%
+    dplyr::left_join(hr36, by = c("Key", "Adv")) %>%
+    dplyr::left_join(hr48, by = c("Key", "Adv")) %>%
+    dplyr::left_join(hr72, by = c("Key", "Adv")) %>%
+    dplyr::left_join(hr96, by = c("Key", "Adv")) %>%
+    dplyr::left_join(hr120, by = c("Key", "Adv")) %>%
     dplyr::ungroup() %>%
-    dplyr::select(-c(Key, Adv, AdvDate))
-
-  split(tmp, seq(nrow(tmp)))
+    dplyr::select(-c(Key, Adv)) %>%
+    split(seq(nrow(.)))
 
 }
 
