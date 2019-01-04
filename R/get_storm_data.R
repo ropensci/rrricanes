@@ -112,7 +112,7 @@ get_storm_data <- function(links, products = c("discus", "fstadv", "posest",
   # Filter links based on products and make one-dimensional
   product_links <- purrr::invoke_map(.f = sprintf("filter_%s", products),
                                      .x = list(list(links = product_links)))
-  product_links <- purrr::set_names(product_links, nm = products)
+  product_links <- rlang::set_names(product_links, nm = products)
 
   purrr::map2(product_links, products, extract_product_contents)
 

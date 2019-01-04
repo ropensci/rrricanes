@@ -410,7 +410,7 @@ fstadv_seas <- function(content) {
   stringr::str_match(content, ptn)[,2:5] %>%
     apply(MARGIN = 2L, FUN = as.numeric) %>%
     tibble::as_tibble() %>%
-    purrr::set_names(nm = paste0("Seas", c("NE", "SE", "SW", "NW"))) %>%
+    rlang::set_names(nm = paste0("Seas", c("NE", "SE", "SW", "NW"))) %>%
     split(seq(nrow(.)))
 }
 
@@ -451,7 +451,7 @@ fstadv_wind_radius <- function(content, wind) {
   stringr::str_match(content, ptn)[,2:16] %>%
     apply(MARGIN = 2L, FUN = as.numeric) %>%
     tibble::as_tibble() %>%
-    purrr::set_names(nm = c("WindField64", "NE64", "SE64", "SW64", "NW64",
+    rlang::set_names(nm = c("WindField64", "NE64", "SE64", "SW64", "NW64",
                             "WindField50", "NE50", "SE50", "SW50", "NW50",
                             "WindField34", "NE34", "SE34", "SW34", "NW34")) %>%
     dplyr::select(-tidyselect::starts_with("WindField")) %>%

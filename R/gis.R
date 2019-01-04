@@ -116,7 +116,7 @@ gis_download <- function(url, ...) {
       ...
     )
 
-  purrr::set_names(ds, nm = stringr::str_replace(shp_files, "\\.shp", ""))
+  rlang::set_names(ds, nm = stringr::str_replace(shp_files, "\\.shp", ""))
 
 }
 
