@@ -430,48 +430,33 @@ fstadv_seas <- function(content) {
 #' @keywords internal
 fstadv_wind_radius <- function(content, wind) {
 
-  text <- fstadv_wind_radius_regex(content)
-
-  # Bail if no wind data
-  if (purrr::is_empty(text)) return(NULL)
-
-  df <- tibble::as_tibble(t(text))
-
-  names(df) <- c("WindField64", "NE64", "SE64", "SW64", "NW64",
-           "WindField50", "NE50", "SE50", "SW50", "NW50",
-           "WindField34", "NE34", "SE34", "SW34", "NW34")
-
-  df <- df %>% dplyr::select(-WindField34, -WindField50, -WindField64)
-
-  return(df)
-
-}
-
-#' @title fstadv_wind_radius_regex
-#' @description Extra current wind radius from Forecast/Advisory product.
-#' @keywords internal
-fstadv_wind_radius_regex <- function(content) {
   ptn <- paste0("MAX SUSTAINED WINDS[:blank:]+[:digit:]{1,3} KT ",
-          "WITH GUSTS TO[:blank:]+[:digit:]{1,3} ",
-          "KT[[:punct:][:space:][:upper:]]+",
-          "(?:(64) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
-          "NE[:blank:]+([:digit:]{1,3})",
-          "SE[:blank:]+([:digit:]{1,3})",
-          "SW[:blank:]+([:digit:]{1,3})",
-          "NW[[:punct:][:space:]]+)?",
-          "(?:(50) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
-          "NE[:blank:]+([:digit:]{1,3})",
-          "SE[:blank:]+([:digit:]{1,3})",
-          "SW[:blank:]+([:digit:]{1,3})",
-          "NW[[:punct:][:space:]]+)?",
-          "(?:(34) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
-          "NE[:blank:]+([:digit:]{1,3})",
-          "SE[:blank:]+([:digit:]{1,3})",
-          "SW[:blank:]+([:digit:]{1,3})",
-          "NW[[:punct:][:space:]]+)?")
-  x <- stringr::str_match_all(content, ptn)
-  return(as.numeric(x[[1]][,2:16]))
-}
+                "WITH GUSTS TO[:blank:]+[:digit:]{1,3} ",
+                "KT[[:punct:][:space:][:upper:]]+",
+                "(?:(64) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                "NE[:blank:]+([:digit:]{1,3})",
+                "SE[:blank:]+([:digit:]{1,3})",
+                "SW[:blank:]+([:digit:]{1,3})",
+                "NW[[:punct:][:space:]]+)?",
+                "(?:(50) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                "NE[:blank:]+([:digit:]{1,3})",
+                "SE[:blank:]+([:digit:]{1,3})",
+                "SW[:blank:]+([:digit:]{1,3})",
+                "NW[[:punct:][:space:]]+)?",
+                "(?:(34) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                "NE[:blank:]+([:digit:]{1,3})",
+                "SE[:blank:]+([:digit:]{1,3})",
+                "SW[:blank:]+([:digit:]{1,3})",
+                "NW[[:punct:][:space:]]+)?")
+
+  stringr::str_match(content, ptn)[,2:16] %>%
+    apply(MARGIN = 2L, FUN = as.numeric) %>%
+    tibble::as_tibble() %>%
+    purrr::set_names(nm = c("WindField64", "NE64", "SE64", "SW64", "NW64",
+                            "WindField50", "NE50", "SE50", "SW50", "NW50",
+                            "WindField34", "NE34", "SE34", "SW34", "NW34")) %>%
+    dplyr::select(-tidyselect::starts_with("WindField")) %>%
+    split(seq(nrow(.)))
 
 }
 
