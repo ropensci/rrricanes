@@ -95,7 +95,7 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
 
   # 1998 is only year with slightly different URL. Modify accordingly
   links[grep("1998", links)] <- stringr::str_c(links[grep("1998", links)],
-                                       "1998archive.shtml")
+                                               "1998archive.shtml")
 
   contents <- get_url_contents(links)
 

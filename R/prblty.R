@@ -71,7 +71,7 @@ prblty <- function(contents) {
 
   # If no strike probabilities, return NULL
   if (nrow(prblty) == 0)
-  return(NULL)
+    return(NULL)
 
   # Many values will have "X" for less than 1% chance. Make 0
   prblty[prblty == "X"] <- 0
@@ -79,23 +79,23 @@ prblty <- function(contents) {
   # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
   # accomodate usage of both 0.5.0 and >= 0.6.0.
   if (packageVersion("dplyr") > "0.5.0") {
-  prblty <- dplyr::mutate_at(.tbl = prblty,
-                 .vars = c(2:6),
-                 .funs = "as.numeric")
+    prblty <- dplyr::mutate_at(.tbl = prblty,
+                               .vars = c(2:6),
+                               .funs = "as.numeric")
   } else {
-  prblty <- dplyr::mutate_at(.tbl = prblty,
-                 .cols = c(2:6),
-                 .funs = "as.numeric")
+    prblty <- dplyr::mutate_at(.tbl = prblty,
+                               .cols = c(2:6),
+                               .funs = "as.numeric")
   }
 
   prblty <- prblty %>%
-  dplyr::mutate("Status" = status,
-          "Name" = name,
-          "Adv" = adv,
-          "Date" = date) %>%
-  dplyr::select_("Status", "Name", "Adv", "Date", "Location", "A", "B",
-           "C", "D", "E") %>%
-  dplyr::arrange_("Date", "Adv")
+    dplyr::mutate("Status" = status,
+                  "Name" = name,
+                  "Adv" = adv,
+                  "Date" = date) %>%
+    dplyr::select_("Status", "Name", "Adv", "Date", "Location", "A", "B",
+                   "C", "D", "E") %>%
+    dplyr::arrange_("Date", "Adv")
 
   return(prblty)
 }

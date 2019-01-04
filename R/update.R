@@ -5,10 +5,10 @@
 #' @keywords internal
 create_df_update <- function() {
   df <- tibble::data_frame("Status" = character(),
-               "Name" = character(),
-               "Date" = as.POSIXct(character(), tz = "UTC"),
-               "Key" = character(),
-               "Contents" = character())
+                           "Name" = character(),
+                           "Date" = as.POSIXct(character(), tz = "UTC"),
+                           "Key" = character(),
+                           "Contents" = character())
 
   return(df)
 }
@@ -53,21 +53,21 @@ update <- function(contents) {
   safely_scrape_header <- purrr::safely(scrape_header)
   key <- safely_scrape_header(contents, ret = "key")
   if (is.null(key$error)) {
-  key <- key$result
+    key <- key$result
   } else {
-  key <- NA
+    key <- NA
   }
 
   if (getOption("rrricanes.working_msg"))
-  message(sprintf("Working %s %s Update #%s (%s)",
-          status, name, date))
+    message(sprintf("Working %s %s Update #%s (%s)",
+                    status, name, date))
 
   df <- df %>%
-  tibble::add_row("Status" = status,
-          "Name" = name,
-          "Date" = date,
-          "Key" = key,
-          "Contents" = contents)
+    tibble::add_row("Status" = status,
+                    "Name" = name,
+                    "Date" = date,
+                    "Key" = key,
+                    "Contents" = contents)
 
   return(df)
 }

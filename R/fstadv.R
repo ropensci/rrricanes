@@ -137,8 +137,8 @@ fstadv <- function(contents) {
 #' @keywords internal
 fstadv_eye <- function(contents) {
   ptn <- stringr::str_c('EYE DIAMETER[ ]+',
-                '([0-9]{2,3})', # Eye diameter, integer
-                '[ ]+NM')
+                        '([0-9]{2,3})', # Eye diameter, integer
+                        '[ ]+NM')
   as.numeric(stringr::str_match(contents, ptn)[,2])
 }
 
@@ -191,30 +191,30 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
   }
 
   ptn <- stringr::str_c("([:digit:]{2})/([:digit:]{2})([:digit:]{2})Z",
-                "[:blank:]+([:digit:]{1,2}\\.[:digit:])([N|S])",
-                "[:blank:]+([:digit:]{1,3}\\.[:digit:]{1})([E|W])",
-                "[[:space:][:punct:][:alpha:]]+",
-                "MAX WIND[:blank:]+([:digit:]{1,3})[:blank:]*KT",
-                "[[:blank:][:punct:]]+GUSTS[:blank:]+",
-                "([:digit:]{1,3})[:blank:]*KT[[:space:][:punct:]]+",
-                "(?:64 KT[[:blank:][:punct:]]+",
-                "([:digit:]{1,3})NE",
-                "[:blank:]+([:digit:]{1,3})SE",
-                "[:blank:]+([:digit:]{1,3})SW",
-                "[:blank:]+([:digit:]{1,3})NW",
-                "[[:punct:][:space:]]+)?",
-                "(?:50 KT[[:blank:][:punct:]]+",
-                "([:digit:]{1,3})NE",
-                "[:blank:]+([:digit:]{1,3})SE",
-                "[:blank:]+([:digit:]{1,3})SW",
-                "[:blank:]+([:digit:]{1,3})NW",
-                "[[:punct:][:space:]]+)?",
-                "(?:34 KT[[:blank:][:punct:]]+",
-                "([:digit:]{1,3})NE",
-                "[:blank:]+([:digit:]{1,3})SE",
-                "[:blank:]+([:digit:]{1,3})SW",
-                "[:blank:]+([:digit:]{1,3})NW",
-                "[[:punct:][:space:]]+)?")
+                        "[:blank:]+([:digit:]{1,2}\\.[:digit:])([N|S])",
+                        "[:blank:]+([:digit:]{1,3}\\.[:digit:]{1})([E|W])",
+                        "[[:space:][:punct:][:alpha:]]+",
+                        "MAX WIND[:blank:]+([:digit:]{1,3})[:blank:]*KT",
+                        "[[:blank:][:punct:]]+GUSTS[:blank:]+",
+                        "([:digit:]{1,3})[:blank:]*KT[[:space:][:punct:]]+",
+                        "(?:64 KT[[:blank:][:punct:]]+",
+                        "([:digit:]{1,3})NE",
+                        "[:blank:]+([:digit:]{1,3})SE",
+                        "[:blank:]+([:digit:]{1,3})SW",
+                        "[:blank:]+([:digit:]{1,3})NW",
+                        "[[:punct:][:space:]]+)?",
+                        "(?:50 KT[[:blank:][:punct:]]+",
+                        "([:digit:]{1,3})NE",
+                        "[:blank:]+([:digit:]{1,3})SE",
+                        "[:blank:]+([:digit:]{1,3})SW",
+                        "[:blank:]+([:digit:]{1,3})NW",
+                        "[[:punct:][:space:]]+)?",
+                        "(?:34 KT[[:blank:][:punct:]]+",
+                        "([:digit:]{1,3})NE",
+                        "[:blank:]+([:digit:]{1,3})SE",
+                        "[:blank:]+([:digit:]{1,3})SW",
+                        "[:blank:]+([:digit:]{1,3})NW",
+                        "[[:punct:][:space:]]+)?")
 
   quads <- c("NE", "SE", "SW", "NW")
 
@@ -309,8 +309,8 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
 fstadv_fwd_mvmt <- function(contents, what = NULL) {
 
   ptn <- stringr::str_c("PRESENT MOVEMENT TOWARD[[:alpha:][:punct:][:space:]]+",
-                "([:digit:]{1,3})[:blank:]+DEGREES AT[:blank:]+",
-                "([:digit:]{1,3})[:blank:]KT")
+                        "([:digit:]{1,3})[:blank:]+DEGREES AT[:blank:]+",
+                        "([:digit:]{1,3})[:blank:]KT")
 
   matches <- stringr::str_match(contents, ptn)
   matrix(data = c(as.numeric(matches[,2]), as.numeric(matches[,3])), ncol = 2L)
@@ -335,7 +335,7 @@ fstadv_pos_accuracy <- function(contents) {
 #' @keywords internal
 fstadv_pressure <- function(contents) {
   ptn <- stringr::str_c("MINIMUM CENTRAL PRESSURE[:blank:]+",
-                "([:digit:]{3,4})[:blank:]*MB")
+                        "([:digit:]{3,4})[:blank:]*MB")
   as.numeric(stringr::str_match(contents, ptn)[,2])
 }
 
@@ -373,11 +373,11 @@ fstadv_prev_pos <- function(contents, adv_date) {
 fstadv_lat_lon <- function(contents) {
 
   ptn <- stringr::str_c("[CENTER LOCATED | DISSIPATING] NEAR[:blank:]+",
-                "([0-9\\.]{3,4})", # Latitude can be 9.9N or 99.9N
-                "([N|S]{1})", # Northern meisphere
-                "[:blank:]+([0-9\\.]{4,5})", #Longitude can be 0 to 180
-                "([E|W]){1}", # Hemisphere
-                "[:blank:]+")
+                        "([0-9\\.]{3,4})", # Latitude can be 9.9N or 99.9N
+                        "([N|S]{1})", # Northern meisphere
+                        "[:blank:]+([0-9\\.]{4,5})", #Longitude can be 0 to 180
+                        "([E|W]){1}", # Hemisphere
+                        "[:blank:]+")
 
   matches <- stringr::str_match(contents, ptn)
 
@@ -402,10 +402,10 @@ fstadv_seas <- function(content) {
 
   # 12 FT SEAS..125NE  90SE  90SW 175NW.
   ptn <- stringr::str_c("12 FT SEAS",
-                "[[:punct:][:blank:]]+([0-9]{1,3})NE",
-                "[:blank:]+([0-9]{1,3})SE",
-                "[:blank:]+([0-9]{1,3})SW",
-                "[:blank:]+([0-9]{1,3})NW")
+                        "[[:punct:][:blank:]]+([0-9]{1,3})NE",
+                        "[:blank:]+([0-9]{1,3})SE",
+                        "[:blank:]+([0-9]{1,3})SW",
+                        "[:blank:]+([0-9]{1,3})NW")
 
   stringr::str_match(content, ptn)[,2:5] %>%
     apply(MARGIN = 2L, FUN = as.numeric) %>%
@@ -430,23 +430,23 @@ fstadv_seas <- function(content) {
 fstadv_wind_radius <- function(content, wind) {
 
   ptn <- stringr::str_c("MAX SUSTAINED WINDS[:blank:]+[:digit:]{1,3} KT ",
-                "WITH GUSTS TO[:blank:]+[:digit:]{1,3} ",
-                "KT[[:punct:][:space:][:upper:]]+",
-                "(?:(64) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
-                "NE[:blank:]+([:digit:]{1,3})",
-                "SE[:blank:]+([:digit:]{1,3})",
-                "SW[:blank:]+([:digit:]{1,3})",
-                "NW[[:punct:][:space:]]+)?",
-                "(?:(50) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
-                "NE[:blank:]+([:digit:]{1,3})",
-                "SE[:blank:]+([:digit:]{1,3})",
-                "SW[:blank:]+([:digit:]{1,3})",
-                "NW[[:punct:][:space:]]+)?",
-                "(?:(34) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
-                "NE[:blank:]+([:digit:]{1,3})",
-                "SE[:blank:]+([:digit:]{1,3})",
-                "SW[:blank:]+([:digit:]{1,3})",
-                "NW[[:punct:][:space:]]+)?")
+                        "WITH GUSTS TO[:blank:]+[:digit:]{1,3} ",
+                        "KT[[:punct:][:space:][:upper:]]+",
+                        "(?:(64) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                        "NE[:blank:]+([:digit:]{1,3})",
+                        "SE[:blank:]+([:digit:]{1,3})",
+                        "SW[:blank:]+([:digit:]{1,3})",
+                        "NW[[:punct:][:space:]]+)?",
+                        "(?:(50) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                        "NE[:blank:]+([:digit:]{1,3})",
+                        "SE[:blank:]+([:digit:]{1,3})",
+                        "SW[:blank:]+([:digit:]{1,3})",
+                        "NW[[:punct:][:space:]]+)?",
+                        "(?:(34) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
+                        "NE[:blank:]+([:digit:]{1,3})",
+                        "SE[:blank:]+([:digit:]{1,3})",
+                        "SW[:blank:]+([:digit:]{1,3})",
+                        "NW[[:punct:][:space:]]+)?")
 
   stringr::str_match(content, ptn)[,2:16] %>%
     apply(MARGIN = 2L, FUN = as.numeric) %>%
@@ -467,10 +467,10 @@ fstadv_wind_radius <- function(content, wind) {
 fstadv_winds_gusts <- function(contents) {
 
   ptn <- stringr::str_c('MAX SUSTAINED WINDS[ ]+',
-                '([0-9]{2,3})', # Winds
-                '[ ]+KT WITH GUSTS TO[ ]+',
-                '([0-9]{2,3})', # Gusts
-                '[ ]+KT')
+                        '([0-9]{2,3})', # Winds
+                        '[ ]+KT WITH GUSTS TO[ ]+',
+                        '([0-9]{2,3})', # Gusts
+                        '[ ]+KT')
 
   matches <- stringr::str_match(contents, ptn)
 
@@ -705,7 +705,7 @@ tidy_fcst_wr <- function(df) {
                          "Adv" = "Adv",
                          "Date" = "Date",
                          "FcstDate" = stringr::str_c("Hr", x,
-                                             "FcstDate"),
+                                                     "FcstDate"),
                          "NE" = stringr::str_c("Hr", x, "NE", z),
                          "SE" = stringr::str_c("Hr", x, "SE", z),
                          "SW" = stringr::str_c("Hr", x, "SW", z),

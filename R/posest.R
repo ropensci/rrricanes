@@ -5,9 +5,9 @@
 #' @keywords internal
 create_df_posest <- function() {
   df <- tibble::data_frame("Status" = character(),
-               "Name" = character(),
-               "Date" = as.POSIXct(character(), tz = "UTC"),
-               "Contents" = character())
+                           "Name" = character(),
+                           "Date" = as.POSIXct(character(), tz = "UTC"),
+                           "Contents" = character())
 
   return(df)
 }
@@ -51,14 +51,14 @@ posest <- function(contents) {
   date <- scrape_header(contents, ret = "date")
 
   if (getOption("rrricanes.working_msg"))
-  message(sprintf("Working %s %s Position Estimate #%s (%s)",
-          status, name, date))
+    message(sprintf("Working %s %s Position Estimate #%s (%s)",
+                    status, name, date))
 
   df <- df %>%
-  tibble::add_row("Status" = status,
-          "Name" = name,
-          "Date" = date,
-          "Contents" = contents)
+    tibble::add_row("Status" = status,
+                    "Name" = name,
+                    "Date" = date,
+                    "Contents" = contents)
 
   return(df)
 }

@@ -126,13 +126,13 @@ tracking_chart <- function(countries = TRUE, states = TRUE, res = 110, ...) {
 
   p <- ggplot2::ggplot() +
     ggplot2::geom_polygon(data = base_map_data,
-                ggplot2::aes(long, lat, group = group), ...) +
+                          ggplot2::aes(long, lat, group = group), ...) +
     ggplot2::coord_equal()
 
   if (exists("state_map_data"))
     p <- p +
     ggplot2::geom_polygon(data = state_map_data,
-                ggplot2::aes(long, lat, group = group), ...)
+                          ggplot2::aes(long, lat, group = group), ...)
 
   return(p)
 }

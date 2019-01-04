@@ -41,65 +41,65 @@ scrape_date <- function(header) {
   # rather than "12 PM". This is documented in Issue #59. In these cases,
   # correct header.
   if (stringr::str_count(header,
-               pattern = stringr::str_c("\nNOON [:upper:]{3} [:upper:]{3} ",
-                      "[:upper:]{3} [:digit:]{2} ",
-                      "[:digit:]{4}\n")))
+                         pattern = stringr::str_c("\nNOON [:upper:]{3} [:upper:]{3} ",
+                                                  "[:upper:]{3} [:digit:]{2} ",
+                                                  "[:digit:]{4}\n")))
     header <- stringr::str_replace_all(header,
-                     pattern = stringr::str_c("\n(NOON)",
-                            "( [:upper:]{3}",
-                            " [:upper:]{3} ",
-                            "[:upper:]{3} ",
-                            "[:digit:]{2} ",
-                            "[:digit:]{4})\n"),
-                            "\n12 PM\\2\n")
+                                       pattern = stringr::str_c("\n(NOON)",
+                                                                "( [:upper:]{3}",
+                                                                " [:upper:]{3} ",
+                                                                "[:upper:]{3} ",
+                                                                "[:digit:]{2} ",
+                                                                "[:digit:]{4})\n"),
+                                       "\n12 PM\\2\n")
 
   # Same thing for "MIDNIGHT"
   if (stringr::str_count(header,
-               pattern = stringr::str_c("\nMIDNIGHT",
-                      " [:upper:]{3} [:upper:]{3} ",
-                      "[:upper:]{3} [:digit:]{2} ",
-                      "[:digit:]{4}\n")))
+                         pattern = stringr::str_c("\nMIDNIGHT",
+                                                  " [:upper:]{3} [:upper:]{3} ",
+                                                  "[:upper:]{3} [:digit:]{2} ",
+                                                  "[:digit:]{4}\n")))
     header <- stringr::str_replace(header,
-                     pattern = stringr::str_c("\n(MIDNIGHT)( ",
-                            "[:upper:]{3}",
-                            " [:upper:]{3} ",
-                            "[:upper:]{3} ",
-                            "[:digit:]{2} ",
-                            "[:digit:]{4})\n"),
-                     "\n12 AM\\2\n")
+                                   pattern = stringr::str_c("\n(MIDNIGHT)( ",
+                                                            "[:upper:]{3}",
+                                                            " [:upper:]{3} ",
+                                                            "[:upper:]{3} ",
+                                                            "[:digit:]{2} ",
+                                                            "[:digit:]{4})\n"),
+                                   "\n12 AM\\2\n")
 
   # And yes there is actually an entry of 12 NOON; see AL132002 public adv 49A
   if (stringr::str_count(header,
-               pattern = stringr::str_c("\n12 NOON",
-                      " [:upper:]{3} [:upper:]{3} ",
-                      "[:upper:]{3} [:digit:]{2} ",
-                      "[:digit:]{4}\n")))
+                         pattern = stringr::str_c("\n12 NOON",
+                                                  " [:upper:]{3} [:upper:]{3} ",
+                                                  "[:upper:]{3} [:digit:]{2} ",
+                                                  "[:digit:]{4}\n")))
     header <- stringr::str_replace(header,
-                     pattern = stringr::str_c("\n(12 NOON)( ",
-                            "[:upper:]{3}",
-                            " [:upper:]{3} ",
-                            "[:upper:]{3} ",
-                            "[:digit:]{2} ",
-                            "[:digit:]{4})\n"),
-                     "\n12 PM\\2\n")
+                                   pattern = stringr::str_c("\n(12 NOON)( ",
+                                                            "[:upper:]{3}",
+                                                            " [:upper:]{3} ",
+                                                            "[:upper:]{3} ",
+                                                            "[:digit:]{2} ",
+                                                            "[:digit:]{4})\n"),
+                                   "\n12 PM\\2\n")
   # I'll clean all that up later. Too tired right now...
 
   ptn <- stringr::str_c("(?<=(?:\n|\r))",
-          "([:digit:]{1,2})", # Hour
-          "(?<=[:digit:]{1})([:digit:]{2})?", # Minute
-          "(?:Z)?", # For forecast; Z is military, no offset for UTC
-          "[:blank:]",
-          "(?:AM|PM)?[:blank:]?",
-          "([:alpha:]{3})*?", # Time zone, optional
-          "[:blank:]?",
-          "(?:[:alpha:]{3})", # Day of week, no capture
-          "[:blank:]",
-          "([:alpha:]{3})", # Month, abbreviated uppercase
-          "[:blank:]",
-          "([:digit:]{1,2})", # Date
-          "[:blank:]",
-          "([:digit:]{4})",  # Year
-          "[[:blank:]\n\r]*")
+                        "([:digit:]{1,2})", # Hour
+                        "(?<=[:digit:]{1})([:digit:]{2})?", # Minute
+                        "(?:Z)?", # For forecast; Z is military, no offset for UTC
+                        "[:blank:]",
+                        "(?:AM|PM)?[:blank:]?",
+                        "([:alpha:]{3})*?", # Time zone, optional
+                        "[:blank:]?",
+                        "(?:[:alpha:]{3})", # Day of week, no capture
+                        "[:blank:]",
+                        "([:alpha:]{3})", # Month, abbreviated uppercase
+                        "[:blank:]",
+                        "([:digit:]{1,2})", # Date
+                        "[:blank:]",
+                        "([:digit:]{4})",  # Year
+                        "[[:blank:]\n\r]*")
 
   datetime.extracted <- stringr::str_match(header, ptn)
 
@@ -108,15 +108,15 @@ scrape_date <- function(header) {
 
   # Convert time values to 24-hour format, UTC
   t <- maketime(datetime.extracted[,2], # Hour
-          datetime.extracted[,3], # Minute
-          period[,2])
+                datetime.extracted[,3], # Minute
+                period[,2])
 
   # Format date
   d <- as.Date(paste(datetime.extracted[,5], # Month, abbreviated
-             datetime.extracted[,6], # Date, w/wo leading 0
-             datetime.extracted[,7], # Year, four-digit format
-             sep = "-"),
-         format = "%b-%d-%Y")
+                     datetime.extracted[,6], # Date, w/wo leading 0
+                     datetime.extracted[,7], # Year, four-digit format
+                     sep = "-"),
+               format = "%b-%d-%Y")
 
   # If time zone is NA, make UTC. Is NA because in forecast products time is
   # immeidately followed by Z which is not captured. Z is military code for
@@ -190,11 +190,11 @@ scrape_key <- function(header) {
   # There are several possibilities that can preceed Key in the storm header.
   # ptn should capture each possibility, but only one of.
   ptn <- stringr::str_c("(?:(?:NATIONAL HURRICANE CENTER|",
-          "NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?",
-          "[:blank:]+MIAMI FL[:blank:]+|",
-          "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+|",
-          "NWS CENTRAL PACIFIC HURRICANE CENTER HONOLULU HI[:blank:]+)",
-          "([:alnum:]{6,8})")
+                        "NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?",
+                        "[:blank:]+MIAMI FL[:blank:]+|",
+                        "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+|",
+                        "NWS CENTRAL PACIFIC HURRICANE CENTER HONOLULU HI[:blank:]+)",
+                        "([:alnum:]{6,8})")
 
   ptn <- stringr::str_c(ptn, collapse = '')
   stringr::str_match(header, ptn)[,2]

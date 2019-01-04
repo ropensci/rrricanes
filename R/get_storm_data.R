@@ -51,7 +51,7 @@ extract_storm_links <- function(links) {
   # they must be modified. All product_links must then be prefixed with
   # NHC URL.
   product_links[years == 1998] <- stringr::str_c("/archive/1998/",
-                                         product_links[years == 1998])
+                                                 product_links[years == 1998])
   product_links <- stringr::str_c(get_nhc_link(), product_links)
 }
 
@@ -104,8 +104,8 @@ extract_storm_links <- function(links) {
 #' }
 #' @export
 get_storm_data <- function(links, products = c("discus", "fstadv", "posest",
-                        "public", "prblty", "update",
-                        "wndprb")) {
+                                               "public", "prblty", "update",
+                                               "wndprb")) {
 
   products <- match.arg(products, several.ok = TRUE)
 
