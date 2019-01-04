@@ -343,10 +343,26 @@ fstadv_pressure <- function(contents) {
   return(as.numeric(pressure))
 }
 
+#' @title fstadv_prev_pos
+#' @description Get storm's previous position
 #' @keywords internal
-fstadv_lat <- function(contents) {
-  lat <- fstadv_lat_lon(contents, what = 'lat')
-  return(lat)
+fstadv_prev_pos <- function(contents, adv_date) {
+
+  ptn <- "AT \\d\\d/\\d{4}Z CENTER WAS LOCATED NEAR (\\d\\d\\.\\d)(\\w)\\s+(\\d{1,3}\\.\\d)(\\w)"
+  matches <- stringr::str_match(contents, ptn)[,2:5]
+
+  prev_pos_date <- adv_date - lubridate::hours(3)
+  prev_pos_lat <- ifelse(matches[,2] == "S",
+                         as.numeric(matches[,1]) * -1,
+                         as.numeric(matches[,1]))
+  prev_pos_lon <- ifelse(matches[,4] == "W",
+                         as.numeric(matches[,3]) * -1,
+                         as.numeric(matches[,3]))
+  tibble::tibble(
+    PrevPosDate = prev_pos_date,
+    PrevPosLat = prev_pos_lat,
+    PrevPosLon = prev_pos_lon) %>%
+    split(seq(nrow(.)))
 }
 
 #' @title fstadv_lat_lon
