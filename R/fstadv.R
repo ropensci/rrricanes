@@ -295,14 +295,6 @@ fstadv_forecasts <- function(content, date) {
   return(df)
 }
 
-#' @title fstadv_fwd_dir
-#' @description Extract forward direction from forecast/advisory product
-#' @param contents Contents of forecast/advisory product.
-#' @return integer or NA
-#' @keywords internal
-fstadv_fwd_dir <- function(contents) {
-  fwd_dir <- fstadv_fwd_mvmt(contents, what = 'fwd_dir')
-  return(fwd_dir)
 }
 
 #' @title fstadv_fwd_mvmt
@@ -318,31 +310,13 @@ fstadv_fwd_dir <- function(contents) {
 #' @keywords internal
 fstadv_fwd_mvmt <- function(contents, what = NULL) {
 
-  if (!is.character(what))
-    stop('\'what\' must contain \'fwd_dir\' or \'fwd_speed\'')
-
   ptn <- paste0("PRESENT MOVEMENT TOWARD[[:alpha:][:punct:][:space:]]+",
-          "([:digit:]{1,3})[:blank:]+DEGREES AT[:blank:]+",
-          "([:digit:]{1,3})[:blank:]KT")
+                "([:digit:]{1,3})[:blank:]+DEGREES AT[:blank:]+",
+                "([:digit:]{1,3})[:blank:]KT")
 
-  if (what == 'fwd_dir') {
-    return(as.numeric(stringr::str_match(contents, ptn)[,2]))
-  } else if (what == 'fwd_speed') {
-    return(as.numeric(stringr::str_match(contents, ptn)[,3]))
-  } else {
-    return(NA)
-  }
+  matches <- stringr::str_match(contents, ptn)
+  matrix(data = c(as.numeric(matches[,2]), as.numeric(matches[,3])), ncol = 2L)
 
-}
-
-#' @title fstadv_fwd_speed
-#' @description Extract forward speed from forecast/advisory product
-#' @param contents Contents of forecast/advisory product.
-#' @return integer or NA
-#' @keywords internal
-fstadv_fwd_speed <- function(contents) {
-  fwd_speed <- fstadv_fwd_mvmt(contents, what = 'fwd_speed')
-  return(fwd_speed)
 }
 
 #' @title fstadv_gusts
@@ -354,7 +328,6 @@ fstadv_gusts <- function(contents) {
   gust <- fstadv_winds_gusts(contents, what = 'gust')
   return(gust)
 }
-
 #' @title fstadv_pos_accuracy()
 #' @description Get position accuracy
 #' @param contents text contents of FORECAST/ADVISORY
