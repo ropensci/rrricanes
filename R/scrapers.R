@@ -1,18 +1,3 @@
-#' @title scrape_adv_num
-#' @description Scrape advisory number from header.
-#' @param header Header text of product.
-#' @seealso \code{\link{scrape_header}}
-#' @keywords internal
-scrape_adv_num <- function(header) {
-  ptn <- paste0("(?:ADVISORY|DISCUSSION|PROBABILITIES)*[:blank:]+",
-          "(?:INTERMEDIATE[:blank:])*NUMBER",
-          # Advisory number. Could alphanum; i.e., 1, 1A, 2, 2A, 2B
-          "[:blank:]+([:digit:]{1,3}[:alpha:]*)",
-          "(?:[[:space:][:punct:][:alpha:]]*)+")
-  adv <- trimws(stringr::str_match(header, ptn)[,2])
-  return(adv)
-}
-
 #' @title scrape_date
 #' @description Scrape date/time of product issuance from header.
 #' @param header Header text of product.
@@ -186,73 +171,23 @@ scrape_date <- function(header) {
   return(dt)
 }
 
-#' @title scrape_name_header
-#' @description Extract values from products header.
-#' @details A typical header will look like this:
-#' \preformatted{
-#'   ZCZC MIATCPAT1 ALL
-#'   TTAA00 KNHC DDHHMM
-#'   BULLETIN
-#'   TROPICAL DEPRESSION ONE ADVISORY NUMBER   1
-#'   NATIONAL WEATHER SERVICE MIAMI FL
-#'   11 AM AST MON JUL 27 1998
-#' }
-#' The first three lines are irrelevant. This function is only concerned about
-#' returning Status, Name, Advisory Number, and Date/Time values.
-#' @param contents text content of product
-#' @param ret Choose either status, name, adv or date to return.
-#' \describe{
-#'   \item{status}{status of cyclone (Hurricane, Tropical Storm, Subtropical
-#'   Storm...)}
-#'   \item{name}{return name of storm}
-#'   \item{adv}{return advisory number}
-#'   \item{date}{Date/Time of product issuance.}
-#'   \item{key}{Key, unique identifier for each storm. May not be available in
-#'   some packages}
-#' }
-#' @return Returns integer advisory number, character status or name, or date
-#'   in \%F \%R (yyyy-mm-dd hh:mm) format, UTC time zone.
+#' @title scrape_header
+#' @description Extract status, name, and advisory from products header.
 #' @keywords internal
-scrape_header <- function(contents, ret = NULL) {
+scrape_header <- function(contents) {
 
-  # Extract header. Use the format of the date/time line to close out header.
-  # There may be additional line breaks inside the header. Must account for.
-  # Use day, month, date and year which seems to be consistent across all
-  # products.
-  # (timtrice): Added backtick for AL162005 public #18
-  ptn_header <- paste0("^[[:alnum:][:blank:][:punct:]`\n\r]*?",
-             "[:alpha:]{3}", # Day of week
-             "[:blank:]*",
-             "[:alpha:]{3}", # Month, abbreviated
-             "[:blank:]*",
-             "[:digit:]{1,2}", # Date
-             "[:blank:]*",
-             "[:digit:]{4}", # Year
-             "[[:blank:]\n\r]*") # Close off date/time line
-  header <- stringr::str_extract(contents, ptn_header)
+  # See test_scrapers.R for patterns that must be matched.
+  # 2018-12-31 - FSTADV EP081991 #3 has no name
+  # "STOMR" is not a typo; exists in AL0593 Adv 16
 
-  # Convert header to upper as some products may use proper/lower case
-  header <- stringr::str_to_upper(header)
+  ptn <- sprintf(
+    fmt = "\n%s\\s+%s[:space:]+(?:SPECIAL )?(?:FORECAST/|MARINE )(?:SPECIAL )?ADVISORY NUMBER\\s+%s",
+    "((?:EXTRA|POST-|POTENTIAL |SUB)?TROPICAL (?:CYCLONE|DEPRESSION|DISTURBANCE|STOMR|STORM)|HURRICANE|REMNANTS)(?: OF)?", # status
+    "([\\w-]+)?", # name
+    "(\\d{1,3})" # advisory
+  )
 
-  if (is.null(ret)) {
-    return(header)
-  } else if (ret == "status") {
-    status <- scrape_status(header)
-    return(status)
-  } else if (ret == "name") {
-    name <- scrape_name(header)
-    return(name)
-  } else if (ret == "adv") {
-    adv <- scrape_adv_num(header)
-    return(adv)
-  } else if (ret == "date") {
-    date <- scrape_date(header)
-    return(date)
-  } else if (ret == "key") {
-    key <- scrape_key(header)
-    return(key)
-  }
-
+  stringr::str_match(contents, ptn)[,2:4]
 }
 
 #' @title scrape_key
@@ -300,38 +235,5 @@ scrape_key <- function(header) {
   }
 }
 
-#' @title scrape_name
-#' @description Scrape name from product header.
-#' @param header Header text of product.
-#' @seealso \code{\link{scrape_header}}
-#' @keywords internal
-scrape_name <- function(header) {
-  # Status helps to find name, so get status.
-  status <- scrape_status(header)
-  # Because status returns toproper() string, have to convert toupper() for
-  # pattern match.
-  ptn <- paste0(toupper(status), "[:blank:]([[:alpha:]-]*)[:blank:]")
-  name <- stringr::str_to_title(trimws(stringr::str_match(header, ptn)[,2]))
-  return(name)
-}
 
-#' @title scrape_status
-#' @description Scrape status from product header.
-#' @param header Header text of product.
-#' @seealso \code{\link{scrape_header}}
-#' @keywords internal
-scrape_status <- function(header) {
-  options <- c("SUBTROPICAL DEPRESSION",
-         "TROPICAL DISTURBANCE",
-         "TROPICAL DEPRESSION",
-         "TROPICAL STORM",
-         "HURRICANE",
-         "POST-TROPICAL CYCLONE",
-         "POTENTIAL TROPICAL CYCLONE",
-         "REMNANTS OF")
-  if (!any(stringr::str_count(header, paste(options, sep = "|"))))
-    stop(sprintf("Options not in header. %s", header))
-  ptn <- paste(options, collapse = "|")
-  status <- stringr::str_to_title(trimws(stringr::str_extract(header, ptn)))
-  return(status)
 }
