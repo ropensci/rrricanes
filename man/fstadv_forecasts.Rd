@@ -4,12 +4,16 @@
 \alias{fstadv_forecasts}
 \title{fstadv_fcst}
 \usage{
-fstadv_forecasts(content, date)
+fstadv_forecasts(content, key, adv, adv_date)
 }
 \arguments{
 \item{content}{text content of FORECAST/ADVISORY}
 
-\item{date}{Date value of current forecast/advisory product.}
+\item{key}{Storm ID}
+
+\item{adv}{Advisory Number}
+
+\item{adv_date}{Date value of forecast/advisory product.}
 }
 \value{
 boolean

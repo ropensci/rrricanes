@@ -38,7 +38,10 @@ extract_storm_links <- function(links) {
     purrr::imap(.f = ~rvest::html_nodes(.x, xpath = "//td//a")) %>%
     # Extract the text product URLs from `nodes`
     purrr::imap(.f = ~rvest::html_attr(.x, name = "href")) %>%
-    purrr::flatten_chr()
+    purrr::flatten_chr() %>%
+    # Ensure we're only capturing archive pages
+    stringr::str_match( "archive.+") %>%
+    .[complete.cases(.)]
 
   # Extract years from `links`
   years <- as.numeric(stringr::str_extract(product_links, "[[:digit:]]{4}"))
