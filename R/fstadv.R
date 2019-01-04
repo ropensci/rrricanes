@@ -400,28 +400,22 @@ fstadv_lat_lon <- function(contents) {
 #' @description There is only one line of sea data, 12FT seas in each quadrant.
 #' So this should go easier than the wind fields
 #' @param content text of product
-#' @param wind Wind value of current forecast/advisory product.
 #' @return boolean
 #' @keywords internal
-fstadv_seas <- function(content, wind) {
+fstadv_seas <- function(content) {
 
   # 12 FT SEAS..125NE  90SE  90SW 175NW.
   ptn <- paste0("12 FT SEAS",
-          "[[:punct:][:blank:]]+([0-9]{1,3})NE",
-          "[:blank:]+([0-9]{1,3})SE",
-          "[:blank:]+([0-9]{1,3})SW",
-          "[:blank:]+([0-9]{1,3})NW")
+                "[[:punct:][:blank:]]+([0-9]{1,3})NE",
+                "[:blank:]+([0-9]{1,3})SE",
+                "[:blank:]+([0-9]{1,3})SW",
+                "[:blank:]+([0-9]{1,3})NW")
 
-  x <- stringr::str_match_all(content, ptn)
-  # If there is Seas data, continue, otherwise ignore
-  if (purrr::is_empty(x[[1]])) return(NULL)
-  df <- tibble::as_data_frame(x[[1]])
-  df_names <- paste0("Seas", c("NE", "SE", "SW", "NW"))
-  names(df)[2:5] <- df_names
-  df <- df %>%
-    dplyr::mutate_at(df_names, .funs = as.numeric) %>%
-    dplyr::select_(.dots = df_names)
-  return(df)
+  stringr::str_match(content, ptn)[,2:5] %>%
+    apply(MARGIN = 2L, FUN = as.numeric) %>%
+    tibble::as_tibble() %>%
+    purrr::set_names(nm = paste0("Seas", c("NE", "SE", "SW", "NW"))) %>%
+    split(seq(nrow(.)))
 }
 
 #' @title fstadv_wind_radius

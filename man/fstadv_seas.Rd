@@ -4,12 +4,10 @@
 \alias{fstadv_seas}
 \title{fstadv_seas}
 \usage{
-fstadv_seas(content, wind)
+fstadv_seas(content)
 }
 \arguments{
 \item{content}{text of product}
-
-\item{wind}{Wind value of current forecast/advisory product.}
 }
 \value{
 boolean
