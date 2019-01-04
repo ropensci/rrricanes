@@ -99,26 +99,26 @@ tracking_chart <- function(countries = TRUE, states = TRUE, res = 110, ...) {
 
   pkg <- "rnaturalearth"
   if (res %in% c(110, 50)) {
-    pkg <- paste0(pkg, "data")
+    pkg <- stringr::str_c(pkg, "data")
   } else {
-    pkg <- paste0(pkg, "hires")
+    pkg <- stringr::str_c(pkg, "hires")
   }
 
   # A base map can be drawn off either coastlines data or countries data. If
   # countries is FALSE, return coastlines data. Otherwise, build countries w/
   # states if states is TRUE.
   if (!countries) {
-    dataset <- paste0("coastline", res)
+    dataset <- stringr::str_c("coastline", res)
     base_map_data <- getExportedValue(ns = pkg, name = dataset)
   } else {
-    dataset <- paste0("countries", res)
+    dataset <- stringr::str_c("countries", res)
     base_map_data <- getExportedValue(ns = pkg, name = dataset)
     if (states) {
       if (res >= 50) {
-        dataset <- paste0("states", 50)
+        dataset <- stringr::str_c("states", 50)
         state_map_data <- getExportedValue(ns = pkg, name = dataset)
       } else {
-        dataset <- paste0("states", res)
+        dataset <- stringr::str_c("states", res)
         state_map_data <- getExportedValue(ns = pkg, name = dataset)
       }
     }

@@ -33,7 +33,7 @@ extract_storms <- function(basin, contents) {
   links <-
     storms %>%
     purrr::map(rvest::html_attr, name = "href") %>%
-    purrr::map2(years, ~paste0(year_archives_link(.y), .x))
+    purrr::map2(years, ~stringr::str_c(year_archives_link(.y), .x))
 
   basins <- purrr::map(names, purrr::rep_along, basin)
 
@@ -94,7 +94,7 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
     purrr::flatten_chr()
 
   # 1998 is only year with slightly different URL. Modify accordingly
-  links[grep("1998", links)] <- paste0(links[grep("1998", links)],
+  links[grep("1998", links)] <- stringr::str_c(links[grep("1998", links)],
                                        "1998archive.shtml")
 
   contents <- get_url_contents(links)
@@ -109,6 +109,6 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
 #' @keywords internal
 year_archives_link <- function(year) {
   nhc_link <- get_nhc_link()
-  link <- sprintf(paste0(nhc_link, 'archive/%i/'), year)
+  link <- sprintf(stringr::str_c(nhc_link, 'archive/%i/'), year)
   return(link)
 }

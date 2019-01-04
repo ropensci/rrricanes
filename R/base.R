@@ -145,9 +145,9 @@ utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
              "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
              "WindField34", "WindField50", "WindField64", "lat",
              "long", "group", ".", "NW34", "name", "data", "Basin",
-             paste0(c("NE", "SE", "SW", "NW", "64")),
-             paste0(c("NE", "SE", "SW", "NW", "50")),
-             paste0(c("NE", "SE", "SW", "NW", "34"))))
+             stringr::str_c(c("NE", "SE", "SW", "NW", "64")),
+             stringr::str_c(c("NE", "SE", "SW", "NW", "50")),
+             stringr::str_c(c("NE", "SE", "SW", "NW", "34"))))
 
 #' @title convert_lat_lon
 #' @description Converts lat, lon to negative if in southern, western

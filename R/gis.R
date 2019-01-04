@@ -17,8 +17,8 @@ gis_advisory <- function(key, advisory = as.character()) {
     stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
 
   key <- stringr::str_match(key,
-                            pattern = paste0("([:lower:]{2})([:digit:]{2})",
-                                             "([:digit:]{4})"))
+                            pattern = stringr::str_c("([:lower:]{2})([:digit:]{2})",
+                                                     "([:digit:]{4})"))
 
   # Get list of GIS forecast zips for storm and download
   url <- sprintf("%sgis/archive_forecast_results.php?id=%s%s&year=%s",
@@ -49,7 +49,7 @@ gis_advisory <- function(key, advisory = as.character()) {
   if (purrr::is_empty(matches)) return(NULL)
 
   # Append website domain to links
-  paste0(get_nhc_link(), "gis/", matches)
+  stringr::str_c(get_nhc_link(), "gis/", matches)
 }
 
 #' @title gis_breakpoints
@@ -73,7 +73,7 @@ gis_advisory <- function(key, advisory = as.character()) {
 gis_breakpoints <- function() {
 
   breakpoint_file <-
-    paste0(get_nhc_link, "gis/") %>%
+    stringr::str_c(get_nhc_link, "gis/") %>%
     xml2::read_html() %>%
     rvest::html_nodes(
       xpath = "//tr[(((count(preceding-sibling::*) + 1) = 12) and parent::*)]//td"
@@ -83,7 +83,7 @@ gis_breakpoints <- function() {
     stringr::str_match("/gis/breakpoints/current/Breakpoints_\\d{4}\\.zip") %>%
     .[complete.cases(.)]
 
-  paste0(get_nhc_link(withTrailingSlash = FALSE), breakpoint_file)
+  stringr::str_c(get_nhc_link(withTrailingSlash = FALSE), breakpoint_file)
 
 }
 
@@ -130,8 +130,8 @@ gis_latest <- function(basins = c("AL", "EP"), ...) {
   if (!(all(basins %in% c("AL", "EP"))))
     stop("Basin must be one or both of AL or EP.", call. = FALSE)
 
-  urls <- list("AL" = paste0(get_nhc_link(), "gis-at.xml"),
-               "EP" = paste0(get_nhc_link(), "gis-ep.xml"))
+  urls <- list("AL" = stringr::str_c(get_nhc_link(), "gis-at.xml"),
+               "EP" = stringr::str_c(get_nhc_link(), "gis-ep.xml"))
 
   gis_zips <-
     basins %>%
@@ -152,7 +152,7 @@ gis_latest <- function(basins = c("AL", "EP"), ...) {
 #' @seealso \code{\link{gis_download}}
 #' @export
 gis_outlook <- function() {
-  paste0(get_nhc_link(), "xgtwo/gtwo_shapefiles.zip")
+  stringr::str_c(get_nhc_link(), "xgtwo/gtwo_shapefiles.zip")
 }
 
 #' @title gis_prob_storm_surge
@@ -220,8 +220,8 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
     stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
 
   key <- stringr::str_match(key,
-                            pattern = paste0("([:lower:]{2})([:digit:]",
-                                             "{2})([:digit:]{4})"))
+                            pattern = stringr::str_c("([:lower:]{2})([:digit:]",
+                                                     "{2})([:digit:]{4})"))
 
   # Get list of GIS forecast zips for storm and download
   url <- sprintf("%sgis/archive_psurge_results.php?id=%s%s&year=%s",
@@ -233,7 +233,7 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
   contents <- readr::read_lines(url)
 
   # Build product pattern
-  ptn_product <- purrr::map2(names(products), products, .f = paste0) %>%
+  ptn_product <- purrr::map2(names(products), products, .f = stringr::str_c) %>%
     purrr::flatten_chr()
 
   # Build datetime pattern
@@ -246,7 +246,7 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
       ptn_datetime <- datetime
     } else {
       # Otherwise, x$datetime is beginning of pattern with wildcard at end
-      ptn_datetime <- paste0(datetime, "[:digit:]+")
+      ptn_datetime <- stringr::str_c(datetime, "[:digit:]+")
     }
   }
 
@@ -261,7 +261,7 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
 
   if (purrr::is_empty(matches)) return(NULL)
 
-  paste0(get_nhc_link(), "gis/", matches)
+  stringr::str_c(get_nhc_link(), "gis/", matches)
 }
 
 #' @title gis_storm_surge_flood
@@ -286,8 +286,8 @@ gis_storm_surge_flood <- function(key,
     stop("`products` must be 'inundation' or 'tidalmask'.", call. = FALSE)
 
   key <- stringr::str_match(key,
-                            pattern = paste0("([:alpha:]{2})([:digit:]",
-                                             "{2})([:digit:]{4})"))
+                            pattern = stringr::str_c("([:alpha:]{2})([:digit:]",
+                                                     "{2})([:digit:]{4})"))
 
   # Get list of GIS zips for storm and download
   url <- sprintf("%sgis/archive_inundation_results.php?id=%s%s&year=%s",
@@ -320,7 +320,7 @@ gis_storm_surge_flood <- function(key,
 
   if (purrr::is_empty(matches)) return(NULL)
 
-  paste0(get_nhc_link(), "gis/", matches)
+  stringr::str_c(get_nhc_link(), "gis/", matches)
 
 }
 
@@ -352,8 +352,8 @@ gis_windfield <- function(key, advisory = as.character()) {
     stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
 
   key <- stringr::str_match(key,
-                            pattern = paste0("([:lower:]{2})([:digit:]",
-                                             "{2})([:digit:]{4})"))
+                            pattern = stringr::str_c("([:lower:]{2})([:digit:]",
+                                                     "{2})([:digit:]{4})"))
 
   # Get list of GIS forecast zips for storm and download
   url <- sprintf("%sgis/archive_forecast_info_results.php?id=%s%s&year=%s",
@@ -384,7 +384,7 @@ gis_windfield <- function(key, advisory = as.character()) {
 
   if (purrr::is_empty(matches)) return(NULL)
 
-  paste0(get_nhc_link(), "gis/", matches)
+  stringr::str_c(get_nhc_link(), "gis/", matches)
 }
 
 #' @title gis_wsp
@@ -422,7 +422,7 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
   year <- stringr::str_sub(datetime, 0L, 4L)
 
   request <-
-    paste0(get_nhc_link(), "gis/archive_wsp.php") %>%
+    stringr::str_c(get_nhc_link(), "gis/archive_wsp.php") %>%
     httr::GET(body = list(year = year), encode = "form")
 
   contents <- httr::content(request, as = "parsed", encoding = "UTF-8")
@@ -433,7 +433,7 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
     .[stats::complete.cases(.)]
 
   if (nchar(datetime) < 10) {
-    ptn_datetime <- paste0(datetime, "[:digit:]+")
+    ptn_datetime <- stringr::str_c(datetime, "[:digit:]+")
   } else {
     ptn_datetime <- datetime
   }
@@ -444,7 +444,7 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
 
   links <- ds[stringr::str_detect(ds, ptn)]
 
-  paste0(get_nhc_link(), "gis/", links)
+  stringr::str_c(get_nhc_link(), "gis/", links)
 }
 
 #' @title shp_to_df

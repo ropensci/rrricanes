@@ -136,7 +136,7 @@ fstadv <- function(contents) {
 #' @return numeric
 #' @keywords internal
 fstadv_eye <- function(contents) {
-  ptn <- paste0('EYE DIAMETER[ ]+',
+  ptn <- stringr::str_c('EYE DIAMETER[ ]+',
                 '([0-9]{2,3})', # Eye diameter, integer
                 '[ ]+NM')
   as.numeric(stringr::str_match(contents, ptn)[,2])
@@ -190,7 +190,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
 
   }
 
-  ptn <- paste0("([:digit:]{2})/([:digit:]{2})([:digit:]{2})Z",
+  ptn <- stringr::str_c("([:digit:]{2})/([:digit:]{2})([:digit:]{2})Z",
                 "[:blank:]+([:digit:]{1,2}\\.[:digit:])([N|S])",
                 "[:blank:]+([:digit:]{1,3}\\.[:digit:]{1})([E|W])",
                 "[[:space:][:punct:][:alpha:]]+",
@@ -237,9 +237,9 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
     purrr::map(rlang::set_names,
                nm = c("String", "Date", "Hour", "Minute",
                       "Lat", "LatHemi", "Lon", "LonHemi",
-                      "Wind", "Gust", paste0(quads, "64"),
-                      paste0(quads, "50"),
-                      paste0(quads, "34")))
+                      "Wind", "Gust", stringr::str_c(quads, "64"),
+                      stringr::str_c(quads, "50"),
+                      stringr::str_c(quads, "34")))
 
   forecast_periods <- c(12, 24, 36, 48, 72, 96, 120)
 
@@ -308,7 +308,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
 #' @keywords internal
 fstadv_fwd_mvmt <- function(contents, what = NULL) {
 
-  ptn <- paste0("PRESENT MOVEMENT TOWARD[[:alpha:][:punct:][:space:]]+",
+  ptn <- stringr::str_c("PRESENT MOVEMENT TOWARD[[:alpha:][:punct:][:space:]]+",
                 "([:digit:]{1,3})[:blank:]+DEGREES AT[:blank:]+",
                 "([:digit:]{1,3})[:blank:]KT")
 
@@ -323,7 +323,7 @@ fstadv_fwd_mvmt <- function(contents, what = NULL) {
 #' @return numeric
 #' @keywords internal
 fstadv_pos_accuracy <- function(contents) {
-  ptn <- paste0("POSITION ACCURATE WITHIN[:blank:]+([0-9]{2,3})[:blank:]+NM")
+  ptn <- stringr::str_c("POSITION ACCURATE WITHIN[:blank:]+([0-9]{2,3})[:blank:]+NM")
   as.numeric(stringr::str_match(contents, ptn)[,2])
 }
 
@@ -334,7 +334,7 @@ fstadv_pos_accuracy <- function(contents) {
 #' @return numeric
 #' @keywords internal
 fstadv_pressure <- function(contents) {
-  ptn <- paste0("MINIMUM CENTRAL PRESSURE[:blank:]+",
+  ptn <- stringr::str_c("MINIMUM CENTRAL PRESSURE[:blank:]+",
                 "([:digit:]{3,4})[:blank:]*MB")
   as.numeric(stringr::str_match(contents, ptn)[,2])
 }
@@ -372,7 +372,7 @@ fstadv_prev_pos <- function(contents, adv_date) {
 #' @keywords internal
 fstadv_lat_lon <- function(contents) {
 
-  ptn <- paste0("[CENTER LOCATED | DISSIPATING] NEAR[:blank:]+",
+  ptn <- stringr::str_c("[CENTER LOCATED | DISSIPATING] NEAR[:blank:]+",
                 "([0-9\\.]{3,4})", # Latitude can be 9.9N or 99.9N
                 "([N|S]{1})", # Northern meisphere
                 "[:blank:]+([0-9\\.]{4,5})", #Longitude can be 0 to 180
@@ -401,7 +401,7 @@ fstadv_lat_lon <- function(contents) {
 fstadv_seas <- function(content) {
 
   # 12 FT SEAS..125NE  90SE  90SW 175NW.
-  ptn <- paste0("12 FT SEAS",
+  ptn <- stringr::str_c("12 FT SEAS",
                 "[[:punct:][:blank:]]+([0-9]{1,3})NE",
                 "[:blank:]+([0-9]{1,3})SE",
                 "[:blank:]+([0-9]{1,3})SW",
@@ -410,7 +410,7 @@ fstadv_seas <- function(content) {
   stringr::str_match(content, ptn)[,2:5] %>%
     apply(MARGIN = 2L, FUN = as.numeric) %>%
     tibble::as_tibble() %>%
-    rlang::set_names(nm = paste0("Seas", c("NE", "SE", "SW", "NW"))) %>%
+    rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW"))) %>%
     split(seq(nrow(.)))
 }
 
@@ -429,7 +429,7 @@ fstadv_seas <- function(content) {
 #' @keywords internal
 fstadv_wind_radius <- function(content, wind) {
 
-  ptn <- paste0("MAX SUSTAINED WINDS[:blank:]+[:digit:]{1,3} KT ",
+  ptn <- stringr::str_c("MAX SUSTAINED WINDS[:blank:]+[:digit:]{1,3} KT ",
                 "WITH GUSTS TO[:blank:]+[:digit:]{1,3} ",
                 "KT[[:punct:][:space:][:upper:]]+",
                 "(?:(64) KT[[:blank:][:punct:]]+([:digit:]{1,3})",
@@ -466,7 +466,7 @@ fstadv_wind_radius <- function(content, wind) {
 #' @keywords internal
 fstadv_winds_gusts <- function(contents) {
 
-  ptn <- paste0('MAX SUSTAINED WINDS[ ]+',
+  ptn <- stringr::str_c('MAX SUSTAINED WINDS[ ]+',
                 '([0-9]{2,3})', # Winds
                 '[ ]+KT WITH GUSTS TO[ ]+',
                 '([0-9]{2,3})', # Gusts
@@ -563,15 +563,15 @@ tidy_wr <- function(df) {
                      .dots = c("Key",
                                "Adv",
                                "Date",
-                               paste0(v, y))) %>%
+                               stringr::str_c(v, y))) %>%
         dplyr::rename_(
           .dots = list("Key" = "Key",
                        "Adv" = "Adv",
                        "Date" = "Date",
-                       "NE" = paste0("NE", y),
-                       "SE" = paste0("SE", y),
-                       "SW" = paste0("SW", y),
-                       "NW" = paste0("NW", y))) %>%
+                       "NE" = stringr::str_c("NE", y),
+                       "SE" = stringr::str_c("SE", y),
+                       "SW" = stringr::str_c("SW", y),
+                       "NW" = stringr::str_c("NW", y))) %>%
         dplyr::mutate_("WindField" = y)
     }) %>%
     dplyr::select_(.dots = c("Key", "Adv", "Date",
@@ -633,13 +633,13 @@ tidy_fcst <- function(df) {
     .f = function(y) {
       dplyr::select_(
         df,
-        .dots = c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
+        .dots = c("Key", "Adv", "Date", stringr::str_c("Hr", y, v))) %>%
         dplyr::rename_("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
-                       "FcstDate" = paste0("Hr", y, "FcstDate"),
-                       "Lat" = paste0("Hr", y, "Lat"),
-                       "Lon" = paste0("Hr", y, "Lon"),
-                       "Wind" = paste0("Hr", y, "Wind"),
-                       "Gust" = paste0("Hr", y, "Gust"))}) %>%
+                       "FcstDate" = stringr::str_c("Hr", y, "FcstDate"),
+                       "Lat" = stringr::str_c("Hr", y, "Lat"),
+                       "Lon" = stringr::str_c("Hr", y, "Lon"),
+                       "Wind" = stringr::str_c("Hr", y, "Wind"),
+                       "Gust" = stringr::str_c("Hr", y, "Gust"))}) %>%
     dplyr::arrange_("Key", "Date", "Adv", "FcstDate")
 
   # Remove NA rows
@@ -698,18 +698,18 @@ tidy_fcst_wr <- function(df) {
       if (x %in% c(96, 120)) return(NULL)
       y <- purrr::map_df(.x = fcst_wind_radii, .f = function(z) {
         dplyr::select_(df, .dots = c("Key", "Adv", "Date",
-                                     paste0("Hr", x, "FcstDate"),
-                                     paste0("Hr", x, v, z))) %>%
+                                     stringr::str_c("Hr", x, "FcstDate"),
+                                     stringr::str_c("Hr", x, v, z))) %>%
           dplyr::rename_(
             .dots = list("Key" = "Key",
                          "Adv" = "Adv",
                          "Date" = "Date",
-                         "FcstDate" = paste0("Hr", x,
+                         "FcstDate" = stringr::str_c("Hr", x,
                                              "FcstDate"),
-                         "NE" = paste0("Hr", x, "NE", z),
-                         "SE" = paste0("Hr", x, "SE", z),
-                         "SW" = paste0("Hr", x, "SW", z),
-                         "NW" = paste0("Hr", x, "NW", z))) %>%
+                         "NE" = stringr::str_c("Hr", x, "NE", z),
+                         "SE" = stringr::str_c("Hr", x, "SE", z),
+                         "SW" = stringr::str_c("Hr", x, "SW", z),
+                         "NW" = stringr::str_c("Hr", x, "NW", z))) %>%
           dplyr::mutate_("WindField" = z) %>%
           dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
                                    "WindField", "NE:NW"))})

@@ -37,7 +37,7 @@ get_storm_list <- function() {
 #' @description Get a list of the FTP directors in /atcf/archive
 #' @keywords internal
 get_ftp_dirs <- function(x) {
-  url <- paste0(get_nhc_ftp_link(), x)
+  url <- stringr::str_c(get_nhc_ftp_link(), x)
   con <- curl::curl(url, "r")
   ftp_dirs <-
     con %>%
@@ -68,7 +68,7 @@ get_ftp_storm_data <- function(stormid,
 
   if (!grepl("(AL|EP)\\d{6}", stormid))
     stop(
-      paste0(
+      stringr::str_c(
         "stormid should be an alphanumeric string with the basin abbreviation ",
         "(AL or EP) followed by a two-digit storm number ending with a ",
         "four-digit year, e.g., AL092017",

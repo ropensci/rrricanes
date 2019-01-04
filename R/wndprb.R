@@ -153,7 +153,7 @@ wndprb <- function(contents) {
   message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
           status, name, adv, date))
 
-  ptn <- paste0("(?<=\n)", # Look-behind
+  ptn <- stringr::str_c("(?<=\n)", # Look-behind
         # Location - first value must be capital letter.
         "([:upper:]{1}[[:alnum:][:blank:][:punct:]]{14})",
         # Wind

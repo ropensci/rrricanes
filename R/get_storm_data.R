@@ -50,10 +50,9 @@ extract_storm_links <- function(links) {
   # other years, product_links are absolute. If product_links exist for 1998
   # they must be modified. All product_links must then be prefixed with
   # NHC URL.
-  product_links[years == 1998] <- paste0("/archive/1998/",
+  product_links[years == 1998] <- stringr::str_c("/archive/1998/",
                                          product_links[years == 1998])
-  product_links <- paste0(get_nhc_link(withTrailingSlash = FALSE),
-                          product_links)
+  product_links <- stringr::str_c(get_nhc_link(), product_links)
 }
 
 #' @title get_storm_data
