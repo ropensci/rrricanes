@@ -44,7 +44,7 @@ scrape_date <- function(header) {
                pattern = paste0("\nNOON [:upper:]{3} [:upper:]{3} ",
                       "[:upper:]{3} [:digit:]{2} ",
                       "[:digit:]{4}\n")))
-    header <- stringr::str_replace(header,
+    header <- stringr::str_replace_all(header,
                      pattern = paste0("\n(NOON)",
                             "( [:upper:]{3}",
                             " [:upper:]{3} ",
@@ -130,45 +130,35 @@ scrape_date <- function(header) {
   # Make date/time string
   x <- paste(d, t, sep = " ")
 
+  # TODO fix the timezone issues
+  return(lubridate::ymd_hm(x))
+
   # To ensure we get the proper timezone I'm going to use OlsonNames()
   # instead of the abbreviation. The timezones will need to be converted to
   # UTC/GMT for some products. But using EDT for example will not convert
   # properly whereas "America/New_York" will.
+  timezones <- c(
+    "UTC" = "UTC",
+    "GMT" = "UTC",
+    "ADT" = "Etc/GMT+3",
+    "AST" = "Etc/GMT+4",
+    "CDT" = "Etc/GMT+5",
+    "CST" = "Etc/GMT+6",
+    "EDT" = "Etc/GMT+4",
+    "EST" = "Etc/GMT+5",
+    "HDT" = "Etc/GMT+9",
+    "HST" = "Etc/GMT+10",
+    "MDT" = "Etc/GMT+6",
+    "MST" = "Etc/GMT+7",
+    "PDT" = "Etc/GMT+7",
+    "PST" = "Etc/GMT+8"
+  )
 
-  if (tz %in% c("GMT", "UTC")) {
-    dt <- as.POSIXct(x, tz = "UTC")
-  } else if (tz %in% c("ADT")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+3")
-  } else if (tz %in% c("AST")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+4")
-  } else if (tz %in% c("CDT")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+5")
-  } else if (tz %in% c("CST")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+6")
-  } else if (tz %in% c("EDT")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+4")
-  } else if (tz %in% c("EST")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+5")
-  } else if (tz %in% c("HDT")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+9")
-  } else if (tz %in% c("HST")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+10")
-  } else if (tz %in% c("MDT")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+6")
-  } else if (tz %in% c("MST")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+7")
-  } else if (tz %in% c("PDT")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+7")
-  } else if (tz %in% c("PST")) {
-    dt <- as.POSIXct(x, tz = "Etc/GMT+8")
-  } else {
-    stop(sprintf("Timezone %s not available.", tz), call. = TRUE)
-  }
-  # Now convert to UTC
-  # dt <- format(dt, tz = "UTC", usetz = TRUE)
-  dt <- lubridate::with_tz(dt, tzone = "UTC")
+  # Convert to posix with correct timestamp
+  x <- lubridate::ymd_hm(x, tz = unname(timezones[tz]))
 
-  return(dt)
+  # Convert to UTC
+  lubridate::with_tz(x, tzone = "UTC")
 }
 
 #' @title scrape_header
