@@ -129,20 +129,6 @@ test_that("rrricanes:::get_storm_data()", {
 
 ## ---- discus -----------------------------------------------------------------
 
-## ---- * create_df_discus -----------------------------------------------------
-#' Test structure of dataframe skeleton
-test_that("Dataframe Skeleton", {
-  df <- rrricanes:::create_df_discus()
-  expect_true(is.data.frame(df))
-  expect_true(tibble::is_tibble(df))
-  expect_identical(class(df$Status), "character")
-  expect_identical(class(df$Name), "character")
-  expect_identical(class(df$Adv), "integer")
-  expect_identical(class(df$Date), c("POSIXct", "POSIXt"))
-  expect_identical(class(df$Key), "character")
-  expect_identical(class(df$Contents), "character")
-})
-
 ## ---- * get_discus -----------------------------------------------------------
 #' Test return of get_discus()
 test_that("Test get_discus()", {

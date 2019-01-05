@@ -1,21 +1,3 @@
-#' @title create_df_discus
-#' @description Template for storm discussions dataframe
-#' @return empty dataframe
-#' @seealso \code{\link{get_discus}}
-#' @keywords internal
-create_df_discus <- function() {
-  df <- tibble::data_frame("Status" = character(),
-                           "Name" = character(),
-                           # Allow for intermediate advisories,
-                           # i.e., "1A", "2", "2A"...
-                           "Adv" = integer(),
-                           "Date" = as.POSIXct(character(), tz = "UTC"),
-                           "Key" = character(),
-                           "Contents" = character())
-
-  return(df)
-}
-
 #' @title get_discus
 #' @description Return dataframe of discussion data.
 #' \describe{
@@ -52,8 +34,6 @@ discus <- function(contents) {
 
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
-
-  df <- create_df_discus()
 
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")
