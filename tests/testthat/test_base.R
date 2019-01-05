@@ -32,20 +32,6 @@ test_that("Month Abbreviated String to Number Error", {
                  "JANN is not a valid month abbreviation")
 })
 
-## ---- convert_lat_lon() ------------------------------------------------------
-test_that("Convert Latitude, Longitude", {
-    expect_identical(convert_lat_lon(93.1, "N"), as.numeric(93.1))
-    expect_identical(convert_lat_lon(93.1, "S"), as.numeric(-93.1))
-    expect_identical(convert_lat_lon(179.0, "E"), as.numeric(179.0))
-    expect_identical(convert_lat_lon(179, "W"), as.numeric(-179))
-    expect_error(convert_lat_lon(179, "X"), "y must be")
-})
-
-## ---- * Errors ---------------------------------------------------------------
-test_that("Lat/Lon is not numeric", {
-    expect_error(convert_lat_lon("93.1N", "N"), "x is not numeric")
-})
-
 ## ---- knots_to_mph() ---------------------------------------------------------
 test_that("Knots to Miles per Hour", {
     expect_equal(knots_to_mph(91), 104.72093)

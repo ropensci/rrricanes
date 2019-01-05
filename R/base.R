@@ -149,19 +149,6 @@ utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
                          stringr::str_c(c("NE", "SE", "SW", "NW", "50")),
                          stringr::str_c(c("NE", "SE", "SW", "NW", "34"))))
 
-#' @title convert_lat_lon
-#' @description Converts lat, lon to negative if in southern, western
-#'   hemisphere, respectively
-#' @param x integer
-#' @param y character
-#' @return integer positive or negative
-#' @keywords internal
-convert_lat_lon <- function(x, y) {
-  if (!is.numeric(x)) {stop("x is not numeric!")}
-  if (!(y %in% c('N', 'S', 'E', 'W'))) {stop("y must be c('N','S','E','W')")}
-  ifelse(y == 'S' | y == 'W', return(x * -1), return(x))
-}
-
 #' @title extract_year_archive_link
 #' @description Extracts the year from the archive link.
 #' @param link URL of archive page
