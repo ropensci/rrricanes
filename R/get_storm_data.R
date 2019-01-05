@@ -5,19 +5,31 @@
 #' @keywords internal
 extract_product_contents <- function(links, product) {
 
+  contents <- get_url_contents(links)
+
+  # Some products may not exist within HTML but as strict text.
+  safely_read_html <- purrr::safely(xml2::read_html)
+  contents <- purrr::imap(contents, safely_read_html)
+
   contents <-
     links %>%
-    get_url_contents() %>%
-    # Read in contents as html
-    purrr::imap(xml2::read_html) %>%
-    # Extract text product from within html
+    get_url_contents() %>%  # Read in contents as html
+    # If text is not within html, then we simply need to return the text.
+    # Otherwise, extract the node from within the HTML and return the text of
+    # that node.
     purrr::map_chr(.f = function(x) {
-      if (is.na(txt <- rvest::html_text(rvest::html_node(x, xpath = "//pre"))))
-        txt <- rvest::html_text(x)
-      txt
+      txt <- safely_read_html(x)
+      if (is.null(txt$result)) {
+        x
+      } else if (is.null(txt$error)) {
+        txt$result %>%
+          rvest::html_node(xpath = "//pre") %>%
+          rvest::html_text()
+      }
     })
 
   purrr::invoke_map(product, .x = list(list(contents)))
+
 }
 
 #' @title extract_storm_links
