@@ -14,35 +14,48 @@ extract_storms <- function(basin, contents) {
   link_xpath <- xpaths[[basin]]
 
   # Read in contents as html
-  contents <- purrr::imap(contents, xml2::read_html)
+  html <- purrr::imap(contents, xml2::read_html)
+
+  storms <- purrr::map(html, rvest::html_nodes, xpath = link_xpath)
 
   years <-
-    contents %>%
+    html %>%
     purrr::map(rvest::html_nodes, xpath = "//title") %>%
     purrr::map(rvest::html_text) %>%
     stringr::str_sub(0L, 4L) %>%
     as.numeric()
 
-  storms <- purrr::map(contents, rvest::html_nodes, xpath = link_xpath)
+  links <-
+    storms %>%
+    purrr::map(rvest::html_attr, name = "href") %>%
+    purrr::map2(years, ~stringr::str_c(year_archives_link(.y), .x)) %>%
+    purrr::flatten_chr()
 
   names <-
     storms %>%
     purrr::map(rvest::html_text) %>%
-    purrr::map(stringr::str_to_title)
+    purrr::flatten_chr() %>%
+    stringr::str_to_title()
 
-  links <-
-    storms %>%
-    purrr::map(rvest::html_attr, name = "href") %>%
-    purrr::map2(years, ~stringr::str_c(year_archives_link(.y), .x))
+  # As of 2019-01-05, during the shutdown, a new table element exists at the
+  # top of the archive pages. This has broken the function. Easiest way I can
+  # see keeping as much of the current functionality as possible is by
+  # filtering names. I know that only letters, spaces and dashes will exist
+  # within the name values. So, if I can get indexes of those values that do
+  # not match that pattern, I can trim the links value as well, then continue
+  # as normal. This should also work after the shutdown ends.
+  idx <- grep("^[[:alpha:][:blank:]-]+$", names)
+  links <- links[idx]
+  names <- names[idx]
 
-  basins <- purrr::map(names, purrr::rep_along, basin)
+  basins <- purrr::map(names, purrr::rep_along, basin) %>% purrr::flatten_chr()
 
-  years <- purrr::map2(names, years, purrr::rep_along)
+  years <- purrr::map2(names, years, purrr::rep_along) %>% purrr::flatten_dbl()
 
-  tibble::data_frame("Year" = purrr::flatten_dbl(years),
-                     "Name" = purrr::flatten_chr(names),
-                     "Basin" = purrr::flatten_chr(basins),
-                     "Link" = purrr::flatten_chr(links))
+  tibble::data_frame("Year" = years,
+                     "Name" = names,
+                     "Basin" = basins,
+                     "Link" = links)
 }
 
 #' @title get_storms
