@@ -173,18 +173,6 @@ test_that("Test tidy_fcst_wr()", {
 
 ## ---- posest -----------------------------------------------------------------
 
-## ---- * create_df_posest -----------------------------------------------------
-#' Test structure of dataframe skeleton
-test_that("Dataframe Skeleton", {
-  df <- rrricanes:::create_df_posest()
-  expect_true(is.data.frame(df))
-  expect_true(tibble::is_tibble(df))
-  expect_identical(class(df$Status), "character")
-  expect_identical(class(df$Name), "character")
-  expect_identical(class(df$Date), c("POSIXct", "POSIXt"))
-  expect_identical(class(df$Contents), "character")
-})
-
 ## ---- * get_posest -----------------------------------------------------------
 test_that("Test get_posest()", {
   skip_on_cran()

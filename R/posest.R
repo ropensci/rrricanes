@@ -1,17 +1,3 @@
-#' @title create_df_posest
-#' @description Template for position estimates dataframe
-#' @return empty dataframe
-#' @seealso \code{\link{get_posest}}
-#' @keywords internal
-create_df_posest <- function() {
-  df <- tibble::data_frame("Status" = character(),
-                           "Name" = character(),
-                           "Date" = as.POSIXct(character(), tz = "UTC"),
-                           "Contents" = character())
-
-  return(df)
-}
-
 #' @title get_posest
 #' @description Return dataframe of position estimate data.
 #' @details This product was discontinued after the 2013 hurricane season and is
@@ -43,8 +29,6 @@ posest <- function(contents) {
 
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
-
-  df <- create_df_posest()
 
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")
