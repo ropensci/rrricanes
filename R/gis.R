@@ -253,7 +253,7 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
   # Match zip files.
   ptn <- sprintf(".+(storm_surge/%s_(%s)_(%s)\\.zip).+",
                  stringr::str_to_lower(key[,1]),
-                 paste(ptn_product, collapse = "|"),
+                 stringr::str_c(ptn_product, collapse = "|"),
                  ptn_datetime)
 
   matches <- stringr::str_match(contents, pattern = ptn)[,2]
@@ -304,7 +304,7 @@ gis_storm_surge_flood <- function(key,
                    key[,2],
                    key[,3],
                    stringr::str_sub(key[,4], start = 3L, end = 4L),
-                   paste(products, collapse = "|"))
+                   stringr::str_c(products, collapse = "|"))
   } else {
     ptn <- sprintf(".+(inundation/forecasts/%s%s%s_%s_(%s)\\.zip).+",
                    key[,2],
@@ -312,7 +312,7 @@ gis_storm_surge_flood <- function(key,
                    stringr::str_sub(key[,4], start = 3L, end = 4L),
                    stringr::str_pad(advisory, width = 2, side = "left",
                                     pad = "0"),
-                   paste(products, collapse = "|"))
+                   stringr::str_c(products, collapse = "|"))
   }
 
   matches <- stringr::str_match(contents, pattern = ptn)[,2]
@@ -438,7 +438,7 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
     ptn_datetime <- datetime
   }
 
-  ptn_res <- paste(res, collapse = "|")
+  ptn_res <- stringr::str_c(res, collapse = "|")
 
   ptn <- sprintf("%s_wsp_[:digit:]{1,3}hr(%s)", ptn_datetime, ptn_res)
 
