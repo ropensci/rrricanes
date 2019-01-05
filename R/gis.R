@@ -180,7 +180,7 @@ gis_outlook <- function() {
 #'     an ensemble of Sea, Lake, and Overland Surge fromHurricanes (SLOSH)
 #'     model runs using the National Hurricane Center(NHC) official advisory
 #'     and accounts for track, size, and intensityerrors based on historical
-#'     errors and astronomical tide. Validvalues are 0:20.}
+#'     errors and astronomical tide. Valid values are 0:20.}
 #' }
 #' @seealso \href{http://www.nhc.noaa.gov/surge/psurge.php}{Tropical Cyclone Storm Surge Probabilities}
 #' @seealso \code{\link{gis_download}}
@@ -233,7 +233,10 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
   contents <- readr::read_lines(url)
 
   # Build product pattern
-  ptn_product <- purrr::map2(names(products), products, .f = stringr::str_c) %>%
+  ptn_product <-
+    purrr::map2(.x = names(products),
+                .y = products,
+                .f = stringr::str_c) %>%
     purrr::flatten_chr()
 
   # Build datetime pattern

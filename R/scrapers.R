@@ -221,12 +221,14 @@ scrape_key <- function(header) {
 
   # There are several possibilities that can preceed Key in the storm header.
   # ptn should capture each possibility, but only one of.
-  ptn <- stringr::str_c("(?:(?:NATIONAL HURRICANE CENTER|",
-                        "NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?",
-                        "[:blank:]+MIAMI FL[:blank:]+|",
-                        "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+|",
-                        "NWS CENTRAL PACIFIC HURRICANE CENTER HONOLULU HI[:blank:]+)",
-                        "([:alnum:]{6,8})")
+  ptn <- stringr::str_c(
+    "(?:(?:NATIONAL HURRICANE CENTER|",
+    "NATIONAL[:blank:]WEATHER[:blank:]SERVICE)?",
+    "[:blank:]+MIAMI FL[:blank:]+|",
+    "NATIONAL WEATHER SERVICE HONOLULU HI[:blank:]+|",
+    "NWS CENTRAL PACIFIC HURRICANE CENTER HONOLULU HI[:blank:]+)",
+    "([:alnum:]{6,8})"
+  )
 
   ptn <- stringr::str_c(ptn, collapse = '')
   stringr::str_match(header, ptn)[,2]
