@@ -1,27 +1,5 @@
 context("Scrapers")
 
-## ---- Data -------------------------------------------------------------------
-links <- c("archive/1998/archive/mar/MAL0198.001",
-           "archive/1998/archive/mar/MAL0198.007",
-           "archive/1998/archive/mar/MAL0198.008",
-           "archive/1998/archive/mar/MAL0198.024",
-           "archive/1998/archive/mar/MAL0198.026",
-           "archive/1998/archive/mar/MAL0298.011",
-           "archive/1999/mar/MAL1599.001.html",
-           "archive/2017/al01/al012017.fstadv.009.shtml?",
-           "archive/1998/archive/mar/MEP0198.001")
-links <- sprintf("%s%s", get_nhc_link(), links)
-contents <- purrr::map(links, get_url_contents) %>%
-  purrr::flatten() %>%
-  purrr::map(~xml2::read_html(.$content)) %>%
-  purrr::map(.f = function(x) {
-    if (is.na(txt <- rvest::html_node(x, xpath = "//pre") %>%
-              rvest::html_text()))
-      txt <- rvest::html_text(x)
-    return(txt)
-  }) %>%
-  purrr::flatten_chr()
-
 ## ---- Status -----------------------------------------------------------------
 test_that("Status", {
   ## ---- * Tropical Storm Alex, Forecast/Advisory 1

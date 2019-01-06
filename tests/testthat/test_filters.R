@@ -1,17 +1,6 @@
 context("Filters")
 
 #' Filters are to help extract product URL's from a storm's archive pages.
-
-AL122005 <-
-  sprintf("%sarchive/2005/KATRINA.shtml?", get_nhc_link()) %>%
-  rrricanes:::extract_storm_links(p = dplyr::progress_estimated(1)) %>%
-  purrr::flatten_chr()
-
-AL092008 <-
-  sprintf("%sarchive/2008/IKE.shtml?", get_nhc_link()) %>%
-  rrricanes:::extract_storm_links(p = dplyr::progress_estimated(1)) %>%
-  purrr::flatten_chr()
-
 test_that("Get products from storm archive", {
   # Test number of products for Katrina, 2005
   expect_equal(length(AL122005),154)
