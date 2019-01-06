@@ -1,18 +1,3 @@
-#' @title create_df_update
-#' @description Template for cyclone update dataframe
-#' @return empty dataframe
-#' @seealso \code{\link{get_update}}
-#' @keywords internal
-create_df_update <- function() {
-  df <- tibble::data_frame("Status" = character(),
-                           "Name" = character(),
-                           "Date" = as.POSIXct(character(), tz = "UTC"),
-                           "Key" = character(),
-                           "Contents" = character())
-
-  return(df)
-}
-
 #' @title get_update
 #' @description Return dataframe of cyclone update data.
 #' \describe{
@@ -43,8 +28,6 @@ update <- function(contents) {
 
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
-
-  df <- create_df_update()
 
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")
