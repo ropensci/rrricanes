@@ -6,12 +6,11 @@ context("Get Functions")
 ## ---- * URL Status -----------------------------------------------------------
 #' Test that annual archive links work. All results should return 'OK'.
 test_that("URL Status", {
-  skip_on_cran()
-  url <- sprintf("%sarchive/1998/1998archive.shtml", get_nhc_link())
+  url <- sprintf("%sarchive/1998/1998archive.shtml", rrricanes:::get_nhc_link())
   expect_identical(httr::http_status(httr::GET(url))$reason, "OK")
 
   #' 1999 to current all have nearly identical links (year changes)
-  url <- sprintf("%sarchive/%%i/", get_nhc_link())
+  url <- sprintf("%sarchive/%%i/", rrricanes:::get_nhc_link())
   urls <- sprintf(url, 1999:2016)
   lapply(urls, function(x) {
     expect_identical(httr::http_status(httr::GET(x))$reason, "OK")
@@ -50,14 +49,12 @@ test_that("HTML format", {
 
 ## ---- * Is Dataframe ---------------------------------------------------------
 test_that("Is Dataframe", {
-  skip_on_cran()
   expect_true(is.data.frame(rrricanes::get_storms(1998, basin = "AL")))
   expect_true(is.data.frame(rrricanes::get_storms(1998, basin = "EP")))
 })
 
 ## ---- * Column Names ---------------------------------------------------------
 test_that('Column Names', {
-  skip_on_cran()
   expect_named(rrricanes::get_storms(2016, basin = "AL"),
                c("Year", "Name", "Basin", "Link"))
   expect_named(rrricanes::get_storms(2016, basin = "EP"),
@@ -66,7 +63,6 @@ test_that('Column Names', {
 
 ## ---- * Errors ---------------------------------------------------------------
 test_that("Errors", {
-  skip_on_cran()
   expect_error(rrricanes::get_storms(1997),
                sprintf("Param `years` must be between 1998 and %s.",
                        lubridate::year(Sys.Date())))
@@ -74,8 +70,7 @@ test_that("Errors", {
 
 ## ---- Get Storm Data ---------------------------------------------------------
 test_that("rrricanes:::get_storm_data()", {
-  skip_on_cran()
-  ## ---- * 2017, AL, 01 -------------------------------------------------------
+  # ## ---- * 2017, AL, 01 -------------------------------------------------------
   expect_identical(al_01_2017_products, df.al_01_2017_products)
   ## ---- * Errors -------------------------------------------------------------
   expect_error(rrricanes:::get_storm_data(al_2017[[1,4]], products = "test"))
