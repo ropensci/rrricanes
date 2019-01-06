@@ -1,21 +1,3 @@
-#' @title create_df_public
-#' @description Template for public advisory dataframe
-#' @return empty dataframe
-#' @seealso \code{\link{get_public}}
-#' @keywords internal
-create_df_public <- function() {
-  df <- tibble::data_frame("Status" = character(),
-                           "Name" = character(),
-                           # Allow for intermediate advisories,
-                           # i.e., "1A", "2", "2A"...
-                           "Adv" = character(),
-                           "Date" = as.POSIXct(character(), tz = "UTC"),
-                           "Key" = character(),
-                           "Contents" = character())
-
-  return(df)
-}
-
 #' @title get_public
 #' @description Return dataframe of public advisory data.
 #' \describe{
@@ -44,10 +26,9 @@ get_public <- function(links) {
 #' @seealso \code{\link{get_public}}
 #' @keywords internal
 public <- function(contents) {
+
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
-
-  df <- create_df_public()
 
   status <- scrape_header(contents, ret = "status")
   name <- scrape_header(contents, ret = "name")
