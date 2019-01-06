@@ -2,34 +2,45 @@ context("Test base functions.")
 
 ## ---- get_nhc_link() ---------------------------------------------------------
 test_that("NHC Link", {
-  expect_identical(get_nhc_link(), "https://www.nhc.noaa.gov/")
-  expect_identical(get_nhc_link(withTrailingSlash = FALSE),
-                   "https://www.nhc.noaa.gov")
-  expect_identical(get_nhc_link(protocol = "http"),
-                     "http://www.nhc.noaa.gov/")
-  expect_identical(get_nhc_link(withTrailingSlash = FALSE, protocol = "http"),
-                   "http://www.nhc.noaa.gov")
+  expect_identical(rrricanes:::get_nhc_link(), "https://www.nhc.noaa.gov/")
+
+  expect_identical(
+    rrricanes:::get_nhc_link(withTrailingSlash = FALSE),
+    "https://www.nhc.noaa.gov"
+  )
+
+  expect_identical(
+    rrricanes:::get_nhc_link(protocol = "http"),
+    "http://www.nhc.noaa.gov/"
+  )
+
+  expect_identical(
+    rrricanes:::get_nhc_link(withTrailingSlash = FALSE, protocol = "http"),
+    "http://www.nhc.noaa.gov"
+  )
 })
 
 ## ---- month_str_to_num() -----------------------------------------------------
 test_that("Month Abbreviated String to Number", {
-    expect_identical(month_str_to_num("JAN"), as.integer(1))
-    expect_identical(month_str_to_num("FEB"), as.integer(2))
-    expect_identical(month_str_to_num("MAR"), as.integer(3))
-    expect_identical(month_str_to_num("APR"), as.integer(4))
-    expect_identical(month_str_to_num("MAY"), as.integer(5))
-    expect_identical(month_str_to_num("JUN"), as.integer(6))
-    expect_identical(month_str_to_num("JUL"), as.integer(7))
-    expect_identical(month_str_to_num("AUG"), as.integer(8))
-    expect_identical(month_str_to_num("SEP"), as.integer(9))
-    expect_identical(month_str_to_num("OCT"), as.integer(10))
-    expect_identical(month_str_to_num("NOV"), as.integer(11))
-    expect_identical(month_str_to_num("DEC"), as.integer(12))
+    expect_identical(rrricanes:::month_str_to_num("JAN"), as.integer(1))
+    expect_identical(rrricanes:::month_str_to_num("FEB"), as.integer(2))
+    expect_identical(rrricanes:::month_str_to_num("MAR"), as.integer(3))
+    expect_identical(rrricanes:::month_str_to_num("APR"), as.integer(4))
+    expect_identical(rrricanes:::month_str_to_num("MAY"), as.integer(5))
+    expect_identical(rrricanes:::month_str_to_num("JUN"), as.integer(6))
+    expect_identical(rrricanes:::month_str_to_num("JUL"), as.integer(7))
+    expect_identical(rrricanes:::month_str_to_num("AUG"), as.integer(8))
+    expect_identical(rrricanes:::month_str_to_num("SEP"), as.integer(9))
+    expect_identical(rrricanes:::month_str_to_num("OCT"), as.integer(10))
+    expect_identical(rrricanes:::month_str_to_num("NOV"), as.integer(11))
+    expect_identical(rrricanes:::month_str_to_num("DEC"), as.integer(12))
 })
 
 test_that("Month Abbreviated String to Number Error", {
-    expect_error(month_str_to_num("JANN"),
-                 "JANN is not a valid month abbreviation")
+    expect_error(
+      rrricanes:::month_str_to_num("JANN"),
+      "JANN is not a valid month abbreviation"
+    )
 })
 
 ## ---- knots_to_mph() ---------------------------------------------------------
@@ -51,8 +62,10 @@ test_that("Nautical Miles to Survey Miles", {
 
 ## ---- saffir() ---------------------------------------------------------------
 test_that("test saffir()", {
-    expect_identical(saffir(c(32, 45, 70, 90, 110, 125, 140)),
-                     c("TD", "TS", "HU1", "HU2", "HU3", "HU4", "HU5"))
+    expect_identical(
+      saffir(c(32, 45, 70, 90, 110, 125, 140)),
+      c("TD", "TS", "HU1", "HU2", "HU3", "HU4", "HU5")
+    )
 })
 
 ## ---- status_abbr_to_str() ---------------------------------------------------
