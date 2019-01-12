@@ -182,7 +182,7 @@ scrape_date <- function(header) {
   )
 
   dt <- vector(mode = "integer", length = length(x))
-  class(dt) <- "POSIXct"
+  class(dt) <- c("POSIXct", "POSIXt")
 
   for (i in 1:(length(dt))) {
     dt[i] <- as.POSIXct(strftime(x[i], format = "%Y-%m-%d %H:%M"), tz = unname(timezones[tz[i]]))
