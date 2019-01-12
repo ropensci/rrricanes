@@ -199,17 +199,34 @@ scrape_date <- function(header) {
 scrape_header <- function(contents) {
 
   # See test_scrapers.R for patterns that must be matched.
-  # 2018-12-31 - FSTADV EP081991 #3 has no name
-  # "STOMR" is not a typo; exists in AL0593 Adv 16
 
-  ptn <- sprintf(
-    fmt = "\n%s\\s+%s[:space:]+(?:SPECIAL )?(?:FORECAST/|MARINE )(?:SPECIAL )?ADVISORY NUMBER\\s+%s",
-    "((?:EXTRA|POST-|POTENTIAL |SUB)?TROPICAL (?:CYCLONE|DEPRESSION|DISTURBANCE|STOMR|STORM)|HURRICANE|REMNANTS)(?: OF)?", # status
-    "([\\w-]+)?", # name
-    "(\\d{1,3})" # advisory
+  # Extract header. Use the format of the date/time line to close out header.
+  # There may be additional line breaks inside the header. Must account for.
+  # Use day, month, date and year which seems to be consistent across all
+  # products.
+  # (timtrice): Added backtick for AL162005 public #18
+  ptn_header <- paste0("^[\\w\\d\\s\\W]*?\\w{3}\\s*\\w{3}\\s*\\d{1,2}\\s*\\d{4}[\\s\n\r]*")
+
+  header <- stringr::str_extract(contents, ptn_header)
+
+  # Storm status patterns
+  ptn_status <- "((?:POST-|POTENTIAL\\s|SUB)?TROPICAL (?:CYCLONE|DEPRESSION|DISTURBANCE|STOMR|STORM)|HURRICANE|REMNANTS)(?: OF)?"
+
+  ptn_product_titles <- "(?:\n?SPECIAL )?(?:FORECAST/|MARINE )?ADVISORY"
+
+  # Pattern for storm names
+  ptn_names <- stringr::str_c("([\\w-]*?)")
+
+  # Pattern for advisory numbers
+  ptn_adv <- "NUMBER\\s+(\\d{1,3})"
+
+  # Combine patterns
+  ptn <- stringr::str_c(
+    ptn_status, ptn_names, ptn_product_titles, ptn_adv, sep = "\\s"
   )
 
-  stringr::str_match(contents, ptn)[,2:4]
+  stringr::str_match(header, ptn)[,2:4]
+
 }
 
 #' @title scrape_key

@@ -1,6 +1,14 @@
-#' Extract text value in row(r), column(c) at link. Cell count goes left to
-#' right, up to down starting at 1. There is a gap of 2 rowwise between each
-#' storm. So, if Atlantic storm NICOLE is (26, 1) then MADELINE is (28, 2)
+#' @title read_files
+#' @description Given a product test file, this function imports the file
+#'   contents and collapses into a string.
+#' @param x File name located in inst/extdata directory.
+read_files <- function(x) {
+
+  f <- system.file("extdata", x, package = "rrricanes", mustWork = TRUE)
+  readChar(f, file.info(f)$size
+  )
+}
+
 v <- function(r, c, link) {
 
   content <- xml2::read_html(link)
