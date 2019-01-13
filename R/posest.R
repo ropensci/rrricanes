@@ -29,19 +29,15 @@ posest <- function(contents) {
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
 
-  status <- scrape_header(contents, ret = "status")
-  name <- scrape_header(contents, ret = "name")
-  date <- scrape_header(contents, ret = "date")
+  status <- scrape_header(contents)
+  issue_date <- scrape_date(contents)
+  key <- scrape_key(contents)
 
-  if (getOption("rrricanes.working_msg"))
-    message(sprintf("Working %s %s Position Estimate #%s (%s)",
-                    status, name, date))
+  tibble::tibble(
+    Status = status[,1],
+    Name = status[,2],
+    Date = issue_date,
+    Contents = contents
+  )
 
-  df <- df %>%
-    tibble::add_row("Status" = status,
-                    "Name" = name,
-                    "Date" = date,
-                    "Contents" = contents)
-
-  return(df)
 }

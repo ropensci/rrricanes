@@ -34,33 +34,17 @@ discus <- function(contents) {
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
 
-  status <- scrape_header(contents, ret = "status")
-  name <- scrape_header(contents, ret = "name")
-  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
-  date <- scrape_header(contents, ret = "date")
+  status <- scrape_header(contents)
+  issue_date <- scrape_date(contents)
+  key <- scrape_key(contents)
 
-  # Keys were added to discus products beginning 2006. Prior, it doesn't
-  # exist. safely run scrape_header for key. If error, then use NA. Otherwise,
-  # add it.
-  safely_scrape_header <- purrr::safely(scrape_header)
-  key <- safely_scrape_header(contents, ret = "key")
-  if (is.null(key$error)) {
-    key <- key$result
-  } else {
-    key <- NA
-  }
+  tibble::tibble(
+    Status = status[,1],
+    Name = status[,2],
+    Adv = as.numeric(status[,3]),
+    Date = issue_date,
+    Key = key,
+    Contents = contents
+  )
 
-  if (getOption("rrricanes.working_msg"))
-    message(sprintf("Working %s %s Storm Discussion #%s (%s)",
-                    status, name, adv, date))
-
-  df <- df %>%
-    tibble::add_row("Status" = status,
-                    "Name" = name,
-                    "Adv" = adv,
-                    "Date" = date,
-                    "Key" = key,
-                    "Contents" = contents)
-
-  return(df)
 }
