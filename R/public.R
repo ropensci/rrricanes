@@ -13,8 +13,7 @@
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
 get_public <- function(links) {
-  df <- get_storm_data(links, products = "public")
-  return(df$public)
+  get_storm_data(links, products = "public")
 }
 
 #' @title public

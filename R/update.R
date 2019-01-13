@@ -12,8 +12,7 @@
 #' @seealso \code{\link{get_storms}}, \code{\link{update}}
 #' @export
 get_update <- function(links) {
-  df <- get_storm_data(links, products = "update")
-  return(df$update)
+  get_storm_data(links, products = "update")
 }
 
 #' @title update

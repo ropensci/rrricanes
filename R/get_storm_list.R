@@ -44,7 +44,7 @@ get_ftp_dirs <- function(x) {
     read.table(stringsAsFactors = FALSE, fill = TRUE) %>%
     dplyr::rename(Name = V9) # Name is the link
   close(con)
-  return(ftp_dirs)
+  ftp_dirs
 }
 
 #' @title get_ftp_storm_data

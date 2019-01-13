@@ -122,6 +122,5 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
 #' @keywords internal
 year_archives_link <- function(year) {
   nhc_link <- get_nhc_link()
-  link <- sprintf(stringr::str_c(nhc_link, 'archive/%i/'), year)
-  return(link)
+  sprintf(stringr::str_c(nhc_link, 'archive/%i/'), year)
 }

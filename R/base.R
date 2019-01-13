@@ -156,8 +156,7 @@ utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
 #' @keywords internal
 extract_year_archive_link <- function(link) {
   # Year is listed in link towards the end surrounded by slashes.
-  year <- as.numeric(stringr::str_match(link, '/([:digit:]{4})/')[,2])
-  return(year)
+  as.numeric(stringr::str_match(link, '/([:digit:]{4})/')[,2])
 }
 
 #' @title get_url_contents
@@ -231,7 +230,7 @@ get_url_contents <- function(links) {
 get_nhc_link <- function(withTrailingSlash = TRUE, protocol = "https") {
   if (withTrailingSlash)
     return(sprintf("%s://www.nhc.noaa.gov/", protocol))
-  return(sprintf("%s://www.nhc.noaa.gov", protocol))
+  sprintf("%s://www.nhc.noaa.gov", protocol)
 }
 
 #' @title get_nhc_ftp_link
@@ -241,7 +240,7 @@ get_nhc_link <- function(withTrailingSlash = TRUE, protocol = "https") {
 get_nhc_ftp_link <- function(withTrailingSlash = TRUE) {
   if (withTrailingSlash)
     return("ftp://ftp.nhc.noaa.gov/")
-  return("ftp://ftp.nhc.noaa.gov")
+  "ftp://ftp.nhc.noaa.gov"
 }
 
 #' @title knots_to_mph
@@ -252,7 +251,7 @@ get_nhc_ftp_link <- function(withTrailingSlash = TRUE) {
 #' knots_to_mph(65)
 #' @export
 knots_to_mph <- function(x) {
-  return(x * 1.15077945)
+  x * 1.15077945
 }
 
 #' @title mb_to_in
@@ -263,7 +262,7 @@ knots_to_mph <- function(x) {
 #' mb_to_in(999)
 #' @export
 mb_to_in <- function(x) {
-  return(x * 0.029529983071)
+  x * 0.029529983071
 }
 
 #' @title month_str_to_num
@@ -275,7 +274,6 @@ month_str_to_num <- function(m) {
   abbr <- which(month.abb == stringr::str_to_title(m))
   if (purrr::is_empty(abbr))
     stop(sprintf("%s is not a valid month abbreviation.", m))
-  return(abbr)
 }
 
 #' @title nm_to_sm
@@ -285,7 +283,7 @@ month_str_to_num <- function(m) {
 #' nm_to_sm(c(50, 100, 150))
 #' @export
 nm_to_sm <- function(x) {
-  return(x * 1.15078)
+  x * 1.15078
 }
 
 #' @title saffir
@@ -304,7 +302,7 @@ saffir <- function(x) {
   y[dplyr::between(x, 96, 113)] <- "HU3"
   y[dplyr::between(x, 114, 134)] <- "HU4"
   y[x >= 135] <- "HU5"
-  return(y)
+  y
 }
 
 #' @title status_abbr_to_str
@@ -345,5 +343,5 @@ status_abbr_to_str <- function(x) {
   y[x == "LO"] <- "Low"
   y[x == "WV"] <- "Tropical Wave"
   y[x == "DB"] <- "Disturbance"
-  return(y)
+  y
 }

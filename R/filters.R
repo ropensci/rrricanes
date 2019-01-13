@@ -3,8 +3,7 @@
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
 filter_discus <- function(links) {
-  ptn <- "/dis/N(AL|EP)|discus"
-  return(grep(ptn, x = links, value = TRUE))
+  grep("/dis/N(AL|EP)|discus", x = links, value = TRUE)
 }
 
 #' @title filter_fstadv
@@ -12,8 +11,7 @@ filter_discus <- function(links) {
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
 filter_fstadv <- function(links) {
-  ptn <- "/mar/M(AL|EP)|fstadv"
-  return(grep(ptn, x = links, value = TRUE))
+  grep("/mar/M(AL|EP)|fstadv", x = links, value = TRUE)
 }
 
 #' @title filter_orig
@@ -26,8 +24,7 @@ filter_fstadv <- function(links) {
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
 filter_orig <- function(links) {
-  ptn <- "orig"
-  return(grep(ptn, x = links, value = TRUE))
+  grep("orig", x = links, value = TRUE)
 }
 
 #' @title filter_posest
@@ -35,8 +32,7 @@ filter_orig <- function(links) {
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
 filter_posest <- function(links) {
-  ptn <- "posest"
-  return(grep(ptn, x = links, value = TRUE))
+  grep("posest", x = links, value = TRUE)
 }
 
 #' @title filter_public
@@ -44,8 +40,9 @@ filter_posest <- function(links) {
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
 filter_public <- function(links) {
-  ptn <- "/pub/P(AL|EP)|/pub/PA(AL|EP)|/pub/PB(AL|EP)|public"
-  return(grep(ptn, x = links, value = TRUE))
+  grep("/pub/P(AL|EP)|/pub/PA(AL|EP)|/pub/PB(AL|EP)|public",
+       x = links,
+       value = TRUE)
 }
 
 #' @title filter_prblty
@@ -56,8 +53,7 @@ filter_public <- function(links) {
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
 filter_prblty <- function(links) {
-  ptn <- "/prb/L(AL|EP)|prblty"
-  return(grep(ptn, x = links, value = TRUE))
+  grep("/prb/L(AL|EP)|prblty", x = links, value = TRUE)
 }
 
 #' @title filter_update
@@ -65,8 +61,7 @@ filter_prblty <- function(links) {
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
 filter_update <- function(links) {
-  ptn <- "update"
-  return(grep(ptn, x = links, value = TRUE))
+  grep("update", x = links, value = TRUE)
 }
 
 #' @title filter_wndprb
@@ -77,6 +72,5 @@ filter_update <- function(links) {
 #' @param links Vector of URLs retrieved from storm's archive page.
 #' @keywords internal
 filter_wndprb <- function(links) {
-  ptn <- "wndprb"
-  return(grep(ptn, x = links, value = TRUE))
+  grep("wndprb", x = links, value = TRUE)
 }

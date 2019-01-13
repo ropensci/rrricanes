@@ -507,9 +507,8 @@ fstadv_winds_gusts <- function(contents) {
 tidy_adv <- function(df) {
   if (!is.data.frame(df))
     stop("Expecting a dataframe.")
-  df <- dplyr::select_(df, "Key", "Adv:Date", "Status:Name", "Lat:Eye",
-                       ~dplyr::starts_with("Seas"))
-  return(df)
+  dplyr::select_(df, "Key", "Adv:Date", "Status:Name", "Lat:Eye",
+                 ~dplyr::starts_with("Seas"))
 }
 
 #' @title tidy_fstadv
@@ -519,7 +518,7 @@ tidy_adv <- function(df) {
 tidy_fstadv <- function(df) {
   .Deprecated("tidy_adv",
               msg = "`tidy_fstadv is deprecated and will be removed in v0.2.2")
-  return(tidy_adv(df))
+  tidy_adv(df)
 }
 
 #' @title tidy_wr
@@ -575,9 +574,7 @@ tidy_wr <- function(df) {
     dplyr::arrange_("Key", "Date", "Adv", "WindField")
 
   # Remove NA rows for windfield quadrants
-  df <- df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
-
-  return(df)
+  df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
 }
 
 #' @title tidy_fcst
@@ -638,9 +635,8 @@ tidy_fcst <- function(df) {
     dplyr::arrange_("Key", "Date", "Adv", "FcstDate")
 
   # Remove NA rows
-  df <- df[stats::complete.cases(df$FcstDate, df$Lat, df$Lon, df$Wind,
-                                 df$Gust),]
-  return(df)
+  df[stats::complete.cases(df$FcstDate, df$Lat, df$Lon, df$Wind,
+                           df$Gust),]
 }
 
 #' @title tidy_fcst_wr
@@ -713,8 +709,6 @@ tidy_fcst_wr <- function(df) {
 
   df <- df %>% dplyr::arrange_("Key", "Date", "Adv", "FcstDate", "WindField")
 
-  df <- df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
-
-  return(df)
+  df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
 
 }

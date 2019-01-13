@@ -24,8 +24,7 @@ al_prblty_stations <- function() {
     "%sdata/wsp/al_prblty_station.lst.csv.txt",
     get_nhc_link(protocol = "http")
   )
-  df <- parse_stations(url)
-  return(df)
+  parse_stations(url)
 }
 
 #' @title cp_prblty_stations
@@ -38,8 +37,7 @@ cp_prblty_stations <- function() {
       "%sdata/wsp/cp_prblty_station.lst.csv.txt",
       get_nhc_link(protocol = "http")
     )
-  df <- parse_stations(url)
-  return(df)
+  parse_stations(url)
 }
 
 #' @title ep_prblty_stations
@@ -67,8 +65,7 @@ ep_prblty_stations <- function() {
     "%sdata/wsp/ep_prblty_station.lst.csv.txt",
     get_nhc_link(protocol = "http")
   )
-  df <- parse_stations(url)
-  return(df)
+  parse_stations(url)
 }
 
 #' @title get_wndprb
@@ -102,8 +99,7 @@ ep_prblty_stations <- function() {
 #' @source \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 #' @export
 get_wndprb <- function(links) {
-  df <- get_storm_data(links, products = "wndprb")
-  return(df$wndprb)
+  get_storm_data(links, products = "wndprb")
 }
 
 #' @title parse_stations
@@ -140,18 +136,13 @@ parse_stations <- function(x) {
 #' @param contents Link to a storm's specific wind probability product.
 #' @keywords internal
 wndprb <- function(contents) {
+
   # Replace all carriage returns with empty string.
   contents <- stringr::str_replace_all(contents, "\r", "")
 
-  status <- scrape_header(contents, ret = "status")
-  key <- scrape_header(contents, ret = "key")
-  adv <- scrape_header(contents, ret = "adv") %>% as.numeric()
-  date <- scrape_header(contents, ret = "date")
-  name <- scrape_header(contents, ret = "name")
-
-  if (getOption("rrricanes.working_msg"))
-    message(sprintf("Working %s %s Wind Speed Probability #%s (%s)",
-                    status, name, adv, date))
+  status <- scrape_header(contents)
+  issue_date <- scrape_date(contents)
+  key <- scrape_key(contents)
 
   ptn <- stringr::str_c("(?<=\n)", # Look-behind
                         # Location - first value must be capital letter.
@@ -238,12 +229,12 @@ wndprb <- function(contents) {
   }
 
   # Add Key, Adv, Date and rearrange.
-  wndprb <- wndprb %>%
+  wndprb %>%
     dplyr::mutate("Key" = key,
                   "Adv" = adv,
                   "Date" = date) %>%
     dplyr::select_("Key:Date", "Location:Wind120Cum") %>%
     dplyr::arrange_("Key", "Date", "Adv")
 
-  return(wndprb)
+  wndprb
 }

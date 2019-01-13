@@ -17,8 +17,7 @@
 #' @param links URL to storm's archive page.
 #' @export
 get_prblty <- function(links) {
-  df <- get_storm_data(links, products = "prblty")
-  return(df$prblty)
+  get_storm_data(links, products = "prblty")
 }
 
 #' @title prblty
@@ -88,7 +87,7 @@ prblty <- function(contents) {
                                .funs = "as.numeric")
   }
 
-  prblty <- prblty %>%
+  prblty %>%
     dplyr::mutate("Status" = status,
                   "Name" = name,
                   "Adv" = adv,
@@ -97,5 +96,4 @@ prblty <- function(contents) {
                    "C", "D", "E") %>%
     dplyr::arrange_("Date", "Adv")
 
-  return(prblty)
 }

@@ -467,5 +467,6 @@ shp_to_df <- function(obj) {
       tibble::as_data_frame()
   }
 
-  return(obj)
+  obj
+
 }

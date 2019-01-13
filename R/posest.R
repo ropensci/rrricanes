@@ -13,8 +13,7 @@
 #' @seealso \code{\link{get_storms}}, \code{\link{posest}}
 #' @export
 get_posest <- function(links) {
-  df <- get_storm_data(links, products = "posest")
-  return(df$posest)
+  get_storm_data(links, products = "posest")
 }
 
 #' @title posest

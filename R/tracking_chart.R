@@ -24,8 +24,7 @@
 #' @export
 al_tracking_chart <- function(...) {
   p <- tracking_chart(...)
-  p <- p + ggplot2::coord_equal(xlim = c(-100, 0), ylim = c(0, 60))
-  return(p)
+  p + ggplot2::coord_equal(xlim = c(-100, 0), ylim = c(0, 60))
 }
 
 #' @title ep_tracking_chart
@@ -54,8 +53,7 @@ al_tracking_chart <- function(...) {
 #' @export
 ep_tracking_chart <- function(...) {
   p <- tracking_chart(...)
-  p <- p + ggplot2::coord_equal(xlim = c(-140, -80), ylim = c(0, 35))
-  return(p)
+  p + ggplot2::coord_equal(xlim = c(-140, -80), ylim = c(0, 35))
 }
 
 #' @title tracking_chart
@@ -134,5 +132,4 @@ tracking_chart <- function(countries = TRUE, states = TRUE, res = 110, ...) {
     ggplot2::geom_polygon(data = state_map_data,
                           ggplot2::aes(long, lat, group = group), ...)
 
-  return(p)
 }
