@@ -8,6 +8,7 @@ RUN apt-get update \
     vim
 
 RUN install2.r -e \
+    broom \
     crul \
     curl \
     dplyr \
