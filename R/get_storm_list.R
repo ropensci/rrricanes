@@ -24,7 +24,8 @@ get_storm_list <- function() {
       "I", "YYY1MMDDHH", "YYY2MMDDHH", "SIZE", "GENESIS_NUM", "PAR1", "PAR2",
       "PRIORITY", "STORM_STATE", "WT_NUMBER", "STORMID"
     ),
-    col_types = "ccccccciiccccciccicic") %>%
+    col_types = "ccccccciiccccciccicic"
+  ) %>%
     dplyr::mutate_at(
       .vars = c("YYY1MMDDHH", "YYY2MMDDHH"),
       .f = as.POSIXct,
