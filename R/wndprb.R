@@ -201,6 +201,9 @@ wndprb <- function(contents) {
 
   matches <- stringr::str_match_all(contents, pattern = ptn)
 
+  if (purrr::is_empty(matches[[1]]))
+    return (NULL)
+
   # Load matches into dataframe
   wndprb <- tibble::as_data_frame(matches[[1]][,2:16])
 
