@@ -190,30 +190,23 @@ wndprb <- function(contents) {
                         # End
                         "[[:blank:]\n]+")
 
-  matches <- stringr::str_match_all(contents, pattern = ptn)
-
-  if (purrr::is_empty(matches[[1]]))
-    return(NULL)
-
-  # Load matches into dataframe
-  wndprb <- tibble::as_tibble(matches[[1]][,2:16])
-
-  # If only one row, need to transpose wndprb
-  if (ncol(wndprb) == 1)
-  wndprb <- wndprb %>% t() %>% tibble::as_tibble()
-
-  # If no wnd speed probabilities, return NULL
-  if (nrow(wndprb) == 0)
-    return(NULL)
-
-  # Rename variables
-  names(wndprb) <- c("Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
-                     "Wind36", "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
-                     "Wind72Cum", "Wind96", "Wind96Cum", "Wind120",
-                     "Wind120Cum")
-
-  # Trim whitespace
-  wndprb <- purrr::map_df(.x = wndprb, .f = stringr::str_trim)
+  wndprb <-
+    contents %>%
+    stringr::str_match_all(ptn) %>%
+    purrr::map(tibble::as_tibble, .name_repair = "minimal") %>%
+    purrr::map(
+      .f = rlang::set_names,
+      nm = c("X1", "Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
+             "Wind36",  "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
+             "Wind72Cum", "Wind96", "Wind96Cum", "Wind120", "Wind120Cum")
+    ) %>%
+    purrr::map2(key, ~tibble::add_column(.x, Key = .y, .before = 1)) %>%
+    purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) %>%
+    purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) %>%
+    purrr::map_df(tibble::as_tibble) %>%
+    dplyr::select(-c("X1")) %>%
+    # Trim whitespace
+    dplyr::mutate_all(.funs = stringr::str_trim)
 
   # Make "X" values 0
   wndprb[wndprb == "X"] <- 0
@@ -221,23 +214,8 @@ wndprb <- function(contents) {
   # Make Wind:Wind120Cum numeric
   wndprb <- dplyr::mutate_at(
     .tbl = wndprb,
-    .vars = c(2:15),
+    .vars = c(2, 5:18),
     .funs = "as.numeric"
   )
 
-  quo_key <- rlang::parse_expr("Key")
-  quo_date <- rlang::parse_expr("Date")
-  quo_adv <- rlang::parse_expr("Adv")
-
-  # Add Key, Adv, Date and rearrange.
-  wndprb <- wndprb %>%
-    dplyr::mutate(
-      "Key" = key,
-      "Adv" = adv,
-      "Date" = date
-    ) %>%
-    dplyr::select(.data$Key:.data$Date, .data$Location:.data$Wind120Cum) %>%
-    dplyr::arrange(!!quo_key, !!quo_date, !!quo_adv)
-
-  return(wndprb)
 }
