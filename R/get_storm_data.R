@@ -53,7 +53,7 @@ extract_storm_links <- function(links) {
     purrr::flatten_chr() %>%
     # Ensure we're only capturing archive pages
     stringr::str_match( "archive.+") %>%
-    .[complete.cases(.)]
+    .[stats::complete.cases(.)]
 
   # Extract years from `links`
   years <- as.numeric(stringr::str_extract(product_links, "[[:digit:]]{4}"))

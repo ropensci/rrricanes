@@ -44,7 +44,7 @@ gis_advisory <- function(key, advisory = as.character()) {
   }
 
   matches <- stringr::str_match(contents, pattern = ptn)[,2]
-  matches <- matches[complete.cases(matches)]
+  matches <- matches[stats::complete.cases(matches)]
 
   if (purrr::is_empty(matches)) return(NULL)
 
@@ -81,7 +81,7 @@ gis_breakpoints <- function() {
     rvest::html_children() %>%
     rvest::html_attr("href") %>%
     stringr::str_match("/gis/breakpoints/current/Breakpoints_\\d{4}\\.zip") %>%
-    .[complete.cases(.)]
+    .[stats::complete.cases(.)]
 
   stringr::str_c(get_nhc_link(withTrailingSlash = FALSE), breakpoint_file)
 
@@ -103,7 +103,7 @@ gis_download <- function(url, ...) {
   utils::unzip(zip_file, exdir = destdir)
 
   shp_files <- stringr::str_match(zip_contents, pattern = ".+shp$")
-  shp_files <- shp_files[complete.cases(shp_files)]
+  shp_files <- shp_files[stats::complete.cases(shp_files)]
 
   ds <-
     purrr::map2(
@@ -260,7 +260,7 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
                  ptn_datetime)
 
   matches <- stringr::str_match(contents, pattern = ptn)[,2]
-  matches <- matches[complete.cases(matches)]
+  matches <- matches[stats::complete.cases(matches)]
 
   if (purrr::is_empty(matches)) return(NULL)
 
@@ -319,7 +319,7 @@ gis_storm_surge_flood <- function(key,
   }
 
   matches <- stringr::str_match(contents, pattern = ptn)[,2]
-  matches <- matches[complete.cases(matches)]
+  matches <- matches[stats::complete.cases(matches)]
 
   if (purrr::is_empty(matches)) return(NULL)
 
@@ -383,7 +383,7 @@ gis_windfield <- function(key, advisory = as.character()) {
   }
 
   matches <- stringr::str_match(contents, pattern = ptn)[,2]
-  matches <- matches[complete.cases(matches)]
+  matches <- matches[stats::complete.cases(matches)]
 
   if (purrr::is_empty(matches)) return(NULL)
 
