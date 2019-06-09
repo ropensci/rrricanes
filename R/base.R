@@ -274,6 +274,7 @@ month_str_to_num <- function(m) {
   abbr <- which(month.abb == stringr::str_to_title(m))
   if (purrr::is_empty(abbr))
     stop(sprintf("%s is not a valid month abbreviation.", m))
+  abbr
 }
 
 #' @title nm_to_sm
