@@ -77,7 +77,7 @@ prblty <- function(contents) {
   prblty <- dplyr::mutate_at(
     .tbl = prblty,
     .vars = c(3, 6:10),
-    .funs = "as.integer"
+    .funs = "as.numeric"
   )
 
 }

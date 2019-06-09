@@ -222,7 +222,13 @@ scrape_header <- function(contents) {
     ptn_status, ptn_names, ptn_product_titles, ptn_adv, sep = "\\s"
   )
 
-  stringr::str_match(header, ptn)[,2:4]
+  matches <- stringr::str_match(header, ptn)[,2:4]
+
+  # String-to-title Status and Name
+  matches[,1] <- stringr::str_to_title(matches[,1])
+  matches[,2] <- stringr::str_to_title(matches[,2])
+
+  return(matches)
 
 }
 
