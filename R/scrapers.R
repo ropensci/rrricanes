@@ -16,10 +16,7 @@ scrape_date <- function(header) {
     }
 
     # If !is.na(p), convert h appropriately
-    if (all(!is.na(p), p == "PM", h < 12)) {
-      i <- which(!is.na(p) | p == "PM" | h < 12)
-      h[i] <- h[i] + 12
-    }
+    h[which(p == "PM")] <- h[which(p == "PM")] + 12
 
     h <- stringr::str_pad(h, 2, side = "left", pad = "0")
     m <- stringr::str_pad(m, 2, side = "left", pad = "0")
