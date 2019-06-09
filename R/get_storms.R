@@ -52,10 +52,12 @@ extract_storms <- function(basin, contents) {
 
   years <- as.numeric(sub(".+(\\d{4}).+", "\\1", links))
 
-  tibble::data_frame("Year" = years,
-                     "Name" = names,
-                     "Basin" = basins,
-                     "Link" = links)
+  tibble::tibble(
+    "Year" = years,
+    "Name" = names,
+    "Basin" = basins,
+    "Link" = links
+  )
 }
 
 #' @title get_storms

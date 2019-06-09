@@ -200,7 +200,7 @@ wndprb <- function(contents) {
 
   # If only one row, need to transpose wndprb
   if (ncol(wndprb) == 1)
-  wndprb <- wndprb %>% t() %>% tibble::as_data_frame()
+  wndprb <- wndprb %>% t() %>% tibble::as_tibble()
 
   # If no wnd speed probabilities, return NULL
   if (nrow(wndprb) == 0)
