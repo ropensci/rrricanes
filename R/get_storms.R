@@ -41,7 +41,7 @@ extract_storms <- function(basin, contents) {
 
   years <- purrr::map2(names, years, purrr::rep_along)
 
-  tibble::data_frame("Year" = purrr::flatten_dbl(years),
+  tibble::tibble("Year" = purrr::flatten_dbl(years),
                      "Name" = purrr::flatten_chr(names),
                      "Basin" = purrr::flatten_chr(basins),
                      "Link" = purrr::flatten_chr(links))

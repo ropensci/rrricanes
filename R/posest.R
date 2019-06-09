@@ -4,7 +4,7 @@
 #' @seealso \code{\link{get_posest}}
 #' @keywords internal
 create_df_posest <- function() {
-  df <- tibble::data_frame("Status" = character(),
+  df <- tibble::tibble("Status" = character(),
                "Name" = character(),
                "Date" = as.POSIXct(character(), tz = "UTC"),
                "Contents" = character())

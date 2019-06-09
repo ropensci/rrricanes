@@ -4,7 +4,7 @@
 #' @seealso \code{\link{get_update}}
 #' @keywords internal
 create_df_update <- function() {
-  df <- tibble::data_frame("Status" = character(),
+  df <- tibble::tibble("Status" = character(),
                "Name" = character(),
                "Date" = as.POSIXct(character(), tz = "UTC"),
                "Key" = character(),

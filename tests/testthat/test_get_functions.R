@@ -155,7 +155,7 @@ test_that("Test get_discus()", {
 ## ---- * create_df_fstadv -----------------------------------------------------
 test_that("Test create_df_fstadv", {
   x <- rrricanes:::create_df_fstadv()
-  df <- tibble::data_frame(
+  df <- tibble::tibble(
     Status = character(), Name = character(), Adv = integer(),
     Date = as.POSIXct(character(), tz = "UTC"), Key = character(),
     Lat = numeric(), Lon = numeric(), Wind = integer(), Gust = integer(),

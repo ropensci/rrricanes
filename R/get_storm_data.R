@@ -155,9 +155,11 @@ get_storm_data <- function(links, products = c("discus", "fstadv", "posest",
   # set progress based on grouped_links
   p <- dplyr::progress_estimated(sum(purrr::map_int(grouped_links, length)))
 
+  quo_date <- rlang::parse_expr("Date")
+
   ds <- purrr::map(products, .f = function(x) {
   df <- purrr::map_df(grouped_links[[x]], extract_product_contents, x, p) %>%
-    dplyr::arrange(Date)
+    dplyr::arrange(!!quo_date)
   })
 
   names(ds) <- products

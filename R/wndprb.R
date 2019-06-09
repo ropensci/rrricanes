@@ -202,14 +202,14 @@ wndprb <- function(contents) {
   matches <- stringr::str_match_all(contents, pattern = ptn)
 
   if (purrr::is_empty(matches[[1]]))
-    return (NULL)
+    return(NULL)
 
   # Load matches into dataframe
-  wndprb <- tibble::as_data_frame(matches[[1]][,2:16])
+  wndprb <- tibble::as_tibble(matches[[1]][,2:16])
 
   # If only one row, need to transpose wndprb
   if (ncol(wndprb) == 1)
-  wndprb <- wndprb %>% t() %>% tibble::as_data_frame()
+  wndprb <- wndprb %>% t() %>% tibble::as_tibble()
 
   # If no wnd speed probabilities, return NULL
   if (nrow(wndprb) == 0)
@@ -228,25 +228,23 @@ wndprb <- function(contents) {
   wndprb[wndprb == "X"] <- 0
 
   # Make Wind:Wind120Cum numeric
-  # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
-  # accomodate usage of both 0.5.0 and >= 0.6.0.
-  if (packageVersion("dplyr") > "0.5.0") {
   wndprb <- dplyr::mutate_at(.tbl = wndprb,
                  .vars = c(2:15),
                  .funs = "as.numeric")
-  } else {
-  wndprb <- dplyr::mutate_at(.tbl = wndprb,
-                 .cols = c(2:15),
-                 .funs = "as.numeric")
-  }
+
+  quo_key <- rlang::parse_expr("Key")
+  quo_date <- rlang::parse_expr("Date")
+  quo_adv <- rlang::parse_expr("Adv")
 
   # Add Key, Adv, Date and rearrange.
   wndprb <- wndprb %>%
-  dplyr::mutate("Key" = key,
-          "Adv" = adv,
-          "Date" = date) %>%
-  dplyr::select_("Key:Date", "Location:Wind120Cum") %>%
-  dplyr::arrange_("Key", "Date", "Adv")
+    dplyr::mutate(
+      "Key" = key,
+      "Adv" = adv,
+      "Date" = date
+    ) %>%
+    dplyr::select(.data$Key:.data$Date, .data$Location:.data$Wind120Cum) %>%
+    dplyr::arrange(!!quo_key, !!quo_date, !!quo_adv)
 
   return(wndprb)
 }

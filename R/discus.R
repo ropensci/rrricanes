@@ -4,7 +4,7 @@
 #' @seealso \code{\link{get_discus}}
 #' @keywords internal
 create_df_discus <- function() {
-  df <- tibble::data_frame("Status" = character(),
+  df <- tibble::tibble("Status" = character(),
                "Name" = character(),
                # Allow for intermediate advisories,
                # i.e., "1A", "2", "2A"...

@@ -493,7 +493,7 @@ shp_to_df <- function(obj) {
     obj@data$id <- rownames(obj@data)
     obj <- dplyr::left_join(broom::tidy(obj, region = "id"),
                             obj@data, by = "id") %>%
-      tibble::as_data_frame()
+      tibble::as_tibble()
   }
 
   return(obj)
