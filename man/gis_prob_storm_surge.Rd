@@ -27,19 +27,19 @@ Probabilistic Storm Surge Forecasts
     data shows the probability, in percent, of a specified storm surge,
     including tides, exceeding the specified height, in feet, during the
     forecast period indicated. The 10 percent exceedance height, for example,
-    is the storm surge height, including tides, aboveground level (AGL) such
-    that there is a 10 percent chance ofexceeding it. The product is based
+    is the storm surge height, including tides, above ground level (AGL) such
+    that there is a 10 percent chance of exceeding it. The product is based
     upon an ensemble of Sea, Lake,and Overland Surge from Hurricanes (SLOSH)
-    model runs using theNational Hurricane Center (NHC) official advisory
-    and accounts fortrack, size, and intensity errors based on historical
-    errors andastronomical tide. Valid values are 10, 20, 30, 40 or 50.}
+    model runs using the National Hurricane Center (NHC) official advisory
+    and accounts for track, size, and intensity errors based on historical
+    errors and astronomical tide. Valid values are 10, 20, 30, 40 or 50.}
   \item{psurge}{The Tropical Cyclone Storm Surge Probabilities (P-Surge 2.5)
     data shows the probability, in percent, of a specified storm surge
-    occurring during the forecast period indicated. The productis based upon
-    an ensemble of Sea, Lake, and Overland Surge fromHurricanes (SLOSH)
+    occurring during the forecast period indicated. The product is based upon
+    an ensemble of Sea, Lake, and Overland Surge from Hurricanes (SLOSH)
     model runs using the National Hurricane Center(NHC) official advisory
-    and accounts for track, size, and intensityerrors based on historical
-    errors and astronomical tide. Validvalues are 0:20.}
+    and accounts for track, size, and intensity errors based on historical
+    errors and astronomical tide. Valid values are 0:20.}
 }
 }
 

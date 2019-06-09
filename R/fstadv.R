@@ -155,11 +155,9 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
 
   # https://www.nhc.noaa.gov/help/tcm.shtml
 
-  #' @title rebuild_forecasts
-  #' @description Filter forecast dataframe, renaming variables with forecast
-  #'   period as prefix, eliminate some vars where necessary, and return a
-  #'   filtered dataframe.
-  #' @keywords internal
+  #  Filter forecast dataframe, renaming variables with forecast period as
+  #  prefix, eliminate some vars where necessary, and return a filtered
+  #  dataframe.
   rebuild_forecasts <- function(hr, df) {
 
     df <-
