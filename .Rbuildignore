@@ -5,7 +5,7 @@
 ^\.rstudio$
 ^\.travis\.yml$
 ^_pkgdown\.yml$
-^_docker/
+^docker/
 ^appveyor\.yml$
 ^CHANGELOG\.md$
 ^data-raw$
