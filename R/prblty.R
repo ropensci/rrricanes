@@ -55,43 +55,29 @@ prblty <- function(contents) {
                         "[:blank:]+",                   # Delimiter
                         "([:digit:]{1,2}|X)")               # E
 
-  matches <- stringr::str_match_all(contents, ptn)
-
-  prblty <- tibble::as_tibble(matches[[1]])
-
-  names(prblty) <- c("Del", "Location", "A", "B", "C", "D", "E")
-
-  prblty$Del <- NULL
-
-  # Trim whitespace
-  prblty <- purrr::map_df(.x = prblty, .f = stringr::str_trim)
-
-  # If no strike probabilities, return NULL
-  if (nrow(prblty) == 0)
-    return(NULL)
+  prblty <-
+    contents %>%
+    stringr::str_match_all(ptn) %>%
+    purrr::map(tibble::as_tibble) %>%
+    purrr::map(
+      rlang::set_names, nm = c("X1", "Location", "A", "B", "C", "D", "E")
+    ) %>%
+    purrr::map2(status[,1], ~tibble::add_column(.x, Status = .y, .before = 1)) %>%
+    purrr::map2(status[,2], ~tibble::add_column(.x, Name = .y, .after = 1)) %>%
+    purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) %>%
+    purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) %>%
+    purrr::map_df(tibble::as_tibble) %>%
+    dplyr::select(-c("X1")) %>%
+    # Trim whitespace
+    dplyr::mutate_all(.funs = stringr::str_trim)
 
   # Many values will have "X" for less than 1% chance. Make 0
   prblty[prblty == "X"] <- 0
 
   prblty <- dplyr::mutate_at(
     .tbl = prblty,
-    .vars = c(2:6),
-    .funs = "as.numeric"
+    .vars = c(3, 6:10),
+    .funs = "as.integer"
   )
-
-  quo_date <- rlang::parse_expr("Date")
-  quo_adv <- rlang::parse_expr("Adv")
-
-  prblty <- prblty %>%
-    dplyr::mutate(
-      Status = status[,1],
-      Name = status[,2],
-      Adv = as.numeric(status[,3]),
-      Date = issue_date,
-    ) %>%
-    dplyr::select(
-      "Status", "Name", "Adv", "Date", "Location", "A", "B", "C", "D", "E"
-    ) %>%
-    dplyr::arrange(!!quo_date, !!quo_adv)
 
 }
