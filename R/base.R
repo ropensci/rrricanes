@@ -116,7 +116,6 @@
 NULL
 
 #' @importFrom magrittr %>%
-#' @importFrom utils packageVersion
 #' @importFrom rlang .data
 
 .pkgenv <- new.env(parent = emptyenv())
