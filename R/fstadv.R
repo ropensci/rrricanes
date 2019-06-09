@@ -451,7 +451,6 @@ fstadv_wind_radius <- function(content, wind) {
                             "WindField34", "NE34", "SE34", "SW34", "NW34")) %>%
     dplyr::select(-tidyselect::starts_with("WindField")) %>%
     split(seq(nrow(.)))
-
 }
 
 #' @title fstadv_winds_gusts
@@ -507,8 +506,14 @@ fstadv_winds_gusts <- function(contents) {
 tidy_adv <- function(df) {
   if (!is.data.frame(df))
     stop("Expecting a dataframe.")
-  dplyr::select_(df, "Key", "Adv:Date", "Status:Name", "Lat:Eye",
-                 ~dplyr::starts_with("Seas"))
+  df <- df %>%
+    dplyr::select(
+      "Key",
+      .data$Adv:.data$Date,
+      .data$Status:.data$Name,
+      .data$Lat:.data$Eye,
+      dplyr::starts_with("Seas"))
+  return(df)
 }
 
 #' @title tidy_fstadv
@@ -550,31 +555,36 @@ tidy_wr <- function(df) {
   # quadrants, keeping WindField as a variable.
   v <- c("NE", "SE", "SW", "NW")
 
-  df <- purrr::map_df(
+  quo_key <- rlang::parse_expr("Key")
+  quo_date <- rlang::parse_expr("Date")
+  quo_adv <- rlang::parse_expr("Adv")
+  quo_windfield <- rlang::parse_expr("WindField")
+
+  wr <- purrr::map_df(
     .x = c(34, 50, 64),
     .f = function(y) {
-      dplyr::select_(df,
-                     .dots = c("Key",
-                               "Adv",
-                               "Date",
-                               stringr::str_c(v, y))) %>%
-        dplyr::rename_(
-          .dots = list("Key" = "Key",
-                       "Adv" = "Adv",
-                       "Date" = "Date",
-                       "NE" = stringr::str_c("NE", y),
-                       "SE" = stringr::str_c("SE", y),
-                       "SW" = stringr::str_c("SW", y),
-                       "NW" = stringr::str_c("NW", y))) %>%
-        dplyr::mutate_("WindField" = y)
+      df %>%
+        dplyr::select(c("Key", "Adv", "Date", paste0(v, y))) %>%
+        dplyr::rename(
+          "Key" = "Key",
+          "Adv" = "Adv",
+          "Date" = "Date",
+          "NE" = paste0("NE", y),
+          "SE" = paste0("SE", y),
+          "SW" = paste0("SW", y),
+          "NW" = paste0("NW", y)) %>%
+        dplyr::mutate("WindField" = y)
     }) %>%
-    dplyr::select_(.dots = c("Key", "Adv", "Date",
-                             "WindField","NE:NW")) %>%
+    dplyr::select(c(
+      "Key", "Adv", "Date", "WindField", .data$NE:.data$NW
+    )) %>%
     # Order by Date then Adv since Adv is character. Results as expected.
-    dplyr::arrange_("Key", "Date", "Adv", "WindField")
+    dplyr::arrange(!!quo_key, !!quo_date, !!quo_adv, !!quo_windfield)
 
   # Remove NA rows for windfield quadrants
-  df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
+  wr <- wr[stats::complete.cases(wr$NE, wr$SE, wr$SW, wr$NW),]
+
+  return(wr)
 }
 
 #' @title tidy_fcst
@@ -620,23 +630,29 @@ tidy_fcst <- function(df) {
     .[!rlang::are_na(.)] %>%
     as.numeric()
 
-  df <- purrr::map_df(
+  quo_key <- rlang::parse_expr("Key")
+  quo_date <- rlang::parse_expr("Date")
+  quo_adv <- rlang::parse_expr("Adv")
+  quo_fcstdate <- rlang::parse_expr("FcstDate")
+
+  forecasts <- purrr::map_df(
     .x = fcst_periods,
     .f = function(y) {
-      dplyr::select_(
-        df,
-        .dots = c("Key", "Adv", "Date", stringr::str_c("Hr", y, v))) %>%
-        dplyr::rename_("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
-                       "FcstDate" = stringr::str_c("Hr", y, "FcstDate"),
-                       "Lat" = stringr::str_c("Hr", y, "Lat"),
-                       "Lon" = stringr::str_c("Hr", y, "Lon"),
-                       "Wind" = stringr::str_c("Hr", y, "Wind"),
-                       "Gust" = stringr::str_c("Hr", y, "Gust"))}) %>%
-    dplyr::arrange_("Key", "Date", "Adv", "FcstDate")
+      df %>%
+        dplyr::select(c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
+        dplyr::rename("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
+                      "FcstDate" = paste0("Hr", y, "FcstDate"),
+                      "Lat" = paste0("Hr", y, "Lat"),
+                      "Lon" = paste0("Hr", y, "Lon"),
+                      "Wind" = paste0("Hr", y, "Wind"),
+                      "Gust" = paste0("Hr", y, "Gust"))}) %>%
+    dplyr::arrange(!!quo_key, !!quo_date, !!quo_adv, !!quo_fcstdate)
 
   # Remove NA rows
-  df[stats::complete.cases(df$FcstDate, df$Lat, df$Lon, df$Wind,
-                           df$Gust),]
+  forecasts <- forecasts[stats::complete.cases(
+    forecasts$FcstDate, forecasts$Lat, forecasts$Lon, forecasts$Wind,
+    forecasts$Gust),]
+  return(forecasts)
 }
 
 #' @title tidy_fcst_wr
@@ -681,34 +697,51 @@ tidy_fcst_wr <- function(df) {
     .[!rlang::are_na(.)] %>%
     as.numeric()
 
-  df <- purrr::map_df(
+  fcst_wr <- purrr::map_df(
     .x = fcst_periods,
     .f = function(x) {
       if (x %in% c(12, 24, 36)) fcst_wind_radii <- c(34, 50, 64)
       if (x %in% c(48, 72)) fcst_wind_radii <- c(34, 50)
       if (x %in% c(96, 120)) return(NULL)
       y <- purrr::map_df(.x = fcst_wind_radii, .f = function(z) {
-        dplyr::select_(df, .dots = c("Key", "Adv", "Date",
-                                     stringr::str_c("Hr", x, "FcstDate"),
-                                     stringr::str_c("Hr", x, v, z))) %>%
-          dplyr::rename_(
-            .dots = list("Key" = "Key",
-                         "Adv" = "Adv",
-                         "Date" = "Date",
-                         "FcstDate" = stringr::str_c("Hr", x,
-                                                     "FcstDate"),
-                         "NE" = stringr::str_c("Hr", x, "NE", z),
-                         "SE" = stringr::str_c("Hr", x, "SE", z),
-                         "SW" = stringr::str_c("Hr", x, "SW", z),
-                         "NW" = stringr::str_c("Hr", x, "NW", z))) %>%
-          dplyr::mutate_("WindField" = z) %>%
-          dplyr::select_(.dots = c("Key", "Adv", "Date", "FcstDate",
-                                   "WindField", "NE:NW"))})
+
+        df %>%
+          dplyr::select(c(
+            "Key", "Adv", "Date", paste0("Hr", x, "FcstDate"),
+            paste0("Hr", x, v, z)
+          )) %>%
+          dplyr::rename(
+            "Key" = "Key",
+            "Adv" = "Adv",
+            "Date" = "Date",
+            "FcstDate" = paste0("Hr", x, "FcstDate"),
+            "NE" = paste0("Hr", x, "NE", z),
+            "SE" = paste0("Hr", x, "SE", z),
+            "SW" = paste0("Hr", x, "SW", z),
+            "NW" = paste0("Hr", x, "NW", z)) %>%
+          dplyr::mutate("WindField" = z) %>%
+          dplyr::select(c(
+            .data$Key:.data$FcstDate,
+            "WindField",
+            .data$NE:.data$NW))
+        })
       return(y)
     })
 
-  df <- df %>% dplyr::arrange_("Key", "Date", "Adv", "FcstDate", "WindField")
+  quo_key <- rlang::parse_expr("Key")
+  quo_date <- rlang::parse_expr("Date")
+  quo_adv <- rlang::parse_expr("Adv")
+  quo_fcstdate <- rlang::parse_expr("FcstDate")
+  quo_windfield <- rlang::parse_expr("WindField")
 
-  df[stats::complete.cases(df$NE, df$SE, df$SW, df$NW),]
+  fcst_wr <- dplyr::arrange(
+    fcst_wr,
+    !!quo_key, !!quo_date, !!quo_adv, !!quo_fcstdate, !!quo_windfield
+  )
+
+  fcst_wr <- fcst_wr[stats::complete.cases(
+    fcst_wr$NE, fcst_wr$SE, fcst_wr$SW, fcst_wr$NW),]
+
+  return(fcst_wr)
 
 }

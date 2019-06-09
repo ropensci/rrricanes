@@ -59,7 +59,7 @@ prblty <- function(contents) {
 
   matches <- stringr::str_match_all(contents, ptn)
 
-  prblty <- tibble::as_data_frame(matches[[1]])
+  prblty <- tibble::as_tibble(matches[[1]])
 
   names(prblty) <- c("Del", "Location", "A", "B", "C", "D", "E")
 
@@ -75,25 +75,25 @@ prblty <- function(contents) {
   # Many values will have "X" for less than 1% chance. Make 0
   prblty[prblty == "X"] <- 0
 
-  # dplyr 0.6.0 renames .cols parameter to .vars. For the time being,
-  # accomodate usage of both 0.5.0 and >= 0.6.0.
-  if (packageVersion("dplyr") > "0.5.0") {
-    prblty <- dplyr::mutate_at(.tbl = prblty,
-                               .vars = c(2:6),
-                               .funs = "as.numeric")
-  } else {
-    prblty <- dplyr::mutate_at(.tbl = prblty,
-                               .cols = c(2:6),
-                               .funs = "as.numeric")
-  }
+  prblty <- dplyr::mutate_at(
+    .tbl = prblty,
+    .vars = c(2:6),
+    .funs = "as.numeric"
+  )
 
-  prblty %>%
-    dplyr::mutate("Status" = status,
-                  "Name" = name,
-                  "Adv" = adv,
-                  "Date" = date) %>%
-    dplyr::select_("Status", "Name", "Adv", "Date", "Location", "A", "B",
-                   "C", "D", "E") %>%
-    dplyr::arrange_("Date", "Adv")
+  quo_date <- rlang::parse_expr("Date")
+  quo_adv <- rlang::parse_expr("Adv")
+
+  prblty <- prblty %>%
+    dplyr::mutate(
+      "Status" = status,
+      "Name" = name,
+      "Adv" = adv,
+      "Date" = date
+    ) %>%
+    dplyr::select(
+      "Status", "Name", "Adv", "Date", "Location", "A", "B", "C", "D", "E"
+    ) %>%
+    dplyr::arrange(!!quo_date, !!quo_adv)
 
 }

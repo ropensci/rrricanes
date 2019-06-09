@@ -4,6 +4,7 @@ rrricanes Unreleased (yyyy-mm-dd)
 ### NEW FEATURES
 
 * Add `get_storm_list` that returns a list of, it would appear, all known storms for many basins (beyond AL, EP)
+  + Currently only returns 2582 cyclones despite more storms present in the file. This is due to a currenty unknown issue in the raw CSV file.
 
 * `get_ftp_storm_data`, given a `stormid` (key) and a product, will return a dataframe of the requested data if it exists for the current storm. This opens up cyclones earlier than 1998 **however** is not yet tested.
 
