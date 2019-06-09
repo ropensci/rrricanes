@@ -49,21 +49,21 @@ test_that("HTML format", {
 
 ## ---- * Is Dataframe ---------------------------------------------------------
 test_that("Is Dataframe", {
-  expect_true(is.data.frame(rrricanes::get_storms(1998, basin = "AL")))
-  expect_true(is.data.frame(rrricanes::get_storms(1998, basin = "EP")))
+  expect_true(is.data.frame(get_storms(1998, basin = "AL")))
+  expect_true(is.data.frame(get_storms(1998, basin = "EP")))
 })
 
 ## ---- * Column Names ---------------------------------------------------------
 test_that('Column Names', {
-  expect_named(rrricanes::get_storms(2016, basin = "AL"),
+  expect_named(get_storms(2016, basin = "AL"),
                c("Year", "Name", "Basin", "Link"))
-  expect_named(rrricanes::get_storms(2016, basin = "EP"),
+  expect_named(get_storms(2016, basin = "EP"),
                c("Year", "Name", "Basin", "Link"))
 })
 
 ## ---- * Errors ---------------------------------------------------------------
 test_that("Errors", {
-  expect_error(rrricanes::get_storms(1997),
+  expect_error(get_storms(1997),
                sprintf("Param `years` must be between 1998 and %s.",
                        lubridate::year(Sys.Date())))
 })

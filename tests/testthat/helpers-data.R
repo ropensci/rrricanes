@@ -57,9 +57,9 @@ load(system.file("extdata", "al_01_2017_products.Rdata", package = "rrricanes"))
 load(system.file("extdata", "al_09_2008_wndprb.Rdata", package = "rrricanes"))
 
 ## ---- Get Data ---------------------------------------------------------------
-al_1998 <- rrricanes::get_storms(years = 1998, basins = "AL")
-al_2008 <- rrricanes::get_storms(years = 2008, basins = "AL")
-al_2017 <- rrricanes::get_storms(years = 2017, basins = "AL")
+al_1998 <- get_storms(years = 1998, basins = "AL")
+al_2008 <- get_storms(years = 2008, basins = "AL")
+al_2017 <- get_storms(years = 2017, basins = "AL")
 
 df.al_01_2017_products <- rrricanes:::get_storm_data(al_2017[[1,4]],
                                                      products = c("discus", "fstadv"))
