@@ -458,8 +458,6 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
 #' @export
 shp_to_df <- function(obj) {
 
-  browser()
-
   if (class(obj) %in% c("SpatialLinesDataFrame", "SpatialPolygonsDataFrame")) {
     obj@data$id <- rownames(obj@data)
     obj <- dplyr::left_join(broom::tidy(obj, region = "id"),
