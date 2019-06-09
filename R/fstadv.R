@@ -256,7 +256,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
     dplyr::group_by(Key, Adv) %>%
     dplyr::mutate(
       # Add var for forecast periods, limited to size of each group
-      FcstPeriod = forecast_periods[1:n()],
+      FcstPeriod = forecast_periods[1:dplyr::n()],
       # Add var for forecast date time; make character for gathering
       FcstDate = AdvDate + lubridate::hours(FcstPeriod) - (60 * 60 * 3),
       # If Lat is in southern hemisphere (unlikely, but possible), make negative
