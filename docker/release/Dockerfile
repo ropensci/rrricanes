@@ -18,12 +18,14 @@ RUN install2.r -e \
     lubridate \
     magrittr \
     maptools \
+    pkgdown \
     purrr \
     readr \
     rgdal \
     rgeos \
     rlang \
     rnaturalearthdata \
+    roxygen2 \
     rvest \
     sf \
     sp \
@@ -33,9 +35,6 @@ RUN install2.r -e \
     tidyr \
     remotes \
     xml2
-
-RUN installGithub.r \
-    r-lib/pkgdown
 
 RUN Rscript -e 'install.packages("rrricanesdata", repos = "https://timtrice.github.io/drat/", type = "source");'
 

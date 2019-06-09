@@ -13,15 +13,19 @@ RUN install2.r -e \
     curl \
     devtools \
     dplyr \
+    ggplot2 \
     httr \
     lubridate \
     magrittr \
     maptools \
+    pkgdown \
     purrr \
     readr \
     rgdal \
     rgeos \
+    rlang \
     rnaturalearthdata \
+    roxygen2 \
     rvest \
     sf \
     sp \
@@ -31,12 +35,6 @@ RUN install2.r -e \
     tidyr \
     remotes \
     xml2
-
-RUN installGithub.r \
-    klutometis/roxygen@v6.1.1 \
-    r-lib/rlang@v0.2.1 \
-    r-lib/pkgdown \
-    tidyverse/ggplot2@v3.1.0
 
 RUN Rscript -e 'install.packages("rrricanesdata", repos = "https://timtrice.github.io/drat/", type = "source");'
 
