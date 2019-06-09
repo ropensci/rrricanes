@@ -93,6 +93,7 @@ test_that("scrape_header", {
     rrricanes:::scrape_header(read_files(files$EP132014$fstadv[1])),
     c("TROPICAL DEPRESSION", "THIRTEEN-E", "1")
   )
+})
 
 ## ---- Key --------------------------------------------------------------------
 test_that("Key", {
