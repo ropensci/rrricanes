@@ -212,7 +212,7 @@ scrape_header <- function(contents) {
   # Storm status patterns
   ptn_status <- "((?:POST-|POTENTIAL\\s|SUB)?TROPICAL (?:CYCLONE|DEPRESSION|DISTURBANCE|STOMR|STORM)|HURRICANE|REMNANTS)(?: OF)?"
 
-  ptn_product_titles <- "(?:\n?SPECIAL )?(?:FORECAST/|MARINE )?(?:ADVISORY|PROBABILITIES)?"
+  ptn_product_titles <- "(?:\n?SPECIAL )?(?:FORECAST/|MARINE )?(?:ADVISORY|(?:WIND SPEED )?PROBABILITIES|DISCUSSION)?"
 
   # Pattern for storm names
   ptn_names <- stringr::str_c("([\\w-]*?)")
