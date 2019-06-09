@@ -42,7 +42,7 @@ get_ftp_dirs <- function(x) {
   con <- curl::curl(url, "r")
   ftp_dirs <-
     con %>%
-    read.table(stringsAsFactors = FALSE, fill = TRUE) %>%
+    utils::read.table(stringsAsFactors = FALSE, fill = TRUE) %>%
     dplyr::rename(Name = V9) # Name is the link
   close(con)
   ftp_dirs
@@ -257,7 +257,7 @@ get_ftp_storm_data <- function(stormid,
   }
 
   df <- purrr::invoke_map_df(
-    .f = getFromNamespace(x = products, ns = "rrricanes"),
+    .f = utils::getFromNamespace(x = products, ns = "rrricanes"),
     .x = res_txt
   )
 
