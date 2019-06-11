@@ -119,16 +119,8 @@ scrape_date <- function(header) {
 
   datetime.extracted <- stringr::str_match(header, ptn)
 
-  # TODO This does nothing and, in fact, is likely causing conversion issues
-  # in time. The point of capturing the AM/PM indicator was if a local time
-  # *only* was in the header. However, there are occasions where both a local
-  # time and a UTC time are provided. Since period will capture the AM or PM
-  # and a UTC time can also be captured, this means the UTC time is possibly
-  # being adjusted based on "PM". The pattern must be modified to capture only
-  # if local time and NO UTC is provided.
-
   # Capture period (AM|PM), if exists
-  period <- stringr::str_match(header, "[:blank:](AM|PM)[:blank:]")
+  period <- stringr::str_match(datetime.extracted, "[:blank:](AM|PM)[:blank:]")
 
   # Convert time values to 24-hour format, UTC
   t <- maketime(datetime.extracted[,2], # Hour

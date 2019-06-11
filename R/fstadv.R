@@ -241,6 +241,9 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
 
   forecast_periods <- c(12, 24, 36, 48, 72, 96, 120)
 
+  # The `FcstDate`` conversion in the call below is just inaccurate. The math
+  # is wrong!!!
+
   # Take `key`, `adv`, `adv_date` and add nested tibble `forecasts` as a new
   # dataframe/tibble.
   df_forecasts <-
@@ -252,11 +255,34 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
     ) %>%
     tidyr::unnest() %>%
     dplyr::group_by(Key, Adv) %>%
+    # If the date of the forecast is less than that of the advisory, the forecast
+    # period runs into the next month; so need to account for that. Otherwise,
+    # the month should be the same.
+    #
+    # Additionally, though rare, we need to account for storms that generate one
+    # year but degenerate the next. There is one instance of an EP cyclone doing
+    # this but I cannot recall which one. Oops... So, check for the year as well.
     dplyr::mutate(
       # Add var for forecast periods, limited to size of each group
       FcstPeriod = forecast_periods[1:dplyr::n()],
-      # Add var for forecast date time; make character for gathering
-      FcstDate = AdvDate + lubridate::hours(FcstPeriod) - (60 * 60 * 3),
+      FcstMonth = case_when(
+        as.numeric(Date) < lubridate::day(AdvDate) ~ lubridate::month(AdvDate) + 1,
+        TRUE                                       ~ lubridate::month(AdvDate)
+      ),
+      FcstYear = case_when(
+        FcstMonth < lubridate::month(AdvDate) ~ lubridate::year(AdvDate) + 1,
+        TRUE                                  ~ lubridate::year(AdvDate)
+      ),
+      FcstDate = lubridate::ymd_hms(
+        strftime(
+          paste(
+            paste(FcstYear, FcstMonth, Date, sep = "-"),
+            paste(Hour, Minute, "00", sep = ":"),
+            sep = " "
+          ),
+          format = "%Y-%m-%d %H:%M:%S"
+        )
+      ),
       # If Lat is in southern hemisphere (unlikely, but possible), make negative
       Lat = dplyr::case_when(
         LatHemi == "S" ~ as.numeric(Lat) * -1,
