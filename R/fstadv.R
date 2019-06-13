@@ -79,7 +79,7 @@
 #' }
 #' @export
 get_fstadv <- function(links) {
-  get_storm_data(links, products = "fstadv")
+  get_product(links = links, product = "fstadv")
 }
 
 #' @title fstadv

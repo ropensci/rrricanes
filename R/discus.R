@@ -18,7 +18,7 @@
 #' }
 #' @export
 get_discus <- function(links) {
-  get_storm_data(links, products = "discus")
+  get_product(links = links, product = "discus")
 }
 
 #' @title discus

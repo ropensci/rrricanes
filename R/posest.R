@@ -13,7 +13,7 @@
 #' @seealso \code{\link{get_storms}}, \code{\link{posest}}
 #' @export
 get_posest <- function(links) {
-  get_storm_data(links, products = "posest")
+  get_product(links = links, product = "posest")
 }
 
 #' @title posest

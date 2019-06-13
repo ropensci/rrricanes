@@ -17,7 +17,7 @@
 #' @param links URL to storm's archive page.
 #' @export
 get_prblty <- function(links) {
-  get_storm_data(links, products = "prblty")
+  get_product(links = links, product = "prblty")
 }
 
 #' @title prblty
