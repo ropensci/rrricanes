@@ -28,7 +28,7 @@ extract_product_contents <- function(links, product) {
       }
     })
 
-  purrr::invoke_map(product, .x = list(list(contents)))
+  purrr::invoke_map_df(product, .x = list(list(contents)))
 
 }
 
