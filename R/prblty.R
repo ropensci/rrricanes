@@ -74,9 +74,16 @@ prblty <- function(contents) {
   # Many values will have "X" for less than 1% chance. Make 0
   prblty[prblty == "X"] <- 0
 
+  # Convert date
   prblty <- dplyr::mutate_at(
     .tbl = prblty,
-    .vars = c(3, 6:10),
+    .vars = "Date",
+    .funs = lubridate::ymd_hms
+  )
+
+  prblty <- dplyr::mutate_at(
+    .tbl = prblty,
+    .vars = c(6:10),
     .funs = "as.numeric"
   )
 

@@ -198,16 +198,18 @@ scrape_header <- function(contents) {
 
   header <- stringr::str_extract(contents, ptn_header)
 
+  header <- stringr::str_to_upper(header)
+
   # Storm status patterns
   ptn_status <- "((?:POST-|POTENTIAL\\s|SUB)?TROPICAL (?:CYCLONE|DEPRESSION|DISTURBANCE|STOMR|STORM)|HURRICANE|REMNANTS)(?: OF)?"
 
-  ptn_product_titles <- "(?:\n?SPECIAL )?(?:FORECAST/|MARINE )?(?:ADVISORY|(?:WIND SPEED )?PROBABILITIES|DISCUSSION)?"
+  ptn_product_titles <- "(?:\n?SPECIAL )?(?:FORECAST/|MARINE |INTERMEDIATE )?(?:ADVISORY|(?:WIND SPEED )?PROBABILITIES|DISCUSSION)?"
 
   # Pattern for storm names
   ptn_names <- stringr::str_c("([\\w-]*?)")
 
   # Pattern for advisory numbers
-  ptn_adv <- "NUMBER\\s+(\\d{1,3})"
+  ptn_adv <- "NUMBER\\s+(\\d{1,3}\\w?)"
 
   # Combine patterns
   ptn <- stringr::str_c(
@@ -231,6 +233,8 @@ scrape_header <- function(contents) {
 #' @keywords internal
 scrape_key <- function(header) {
 
+  header <- stringr::str_to_upper(header)
+
   # There are several possibilities that can preceed Key in the storm header.
   # ptn should capture each possibility, but only one of.
   ptn <- stringr::str_c(
@@ -243,6 +247,7 @@ scrape_key <- function(header) {
   )
 
   ptn <- stringr::str_c(ptn, collapse = '')
+
   stringr::str_match(header, ptn)[,2]
 
 }
