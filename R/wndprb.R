@@ -99,7 +99,7 @@ ep_prblty_stations <- function() {
 #' @source \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
 #' @export
 get_wndprb <- function(links) {
-  get_storm_data(links, products = "wndprb")
+  get_product(links = links, product = "wndprb")
 }
 
 #' @title parse_stations

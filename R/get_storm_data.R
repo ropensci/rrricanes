@@ -28,7 +28,7 @@ extract_product_contents <- function(links, product) {
       }
     })
 
-  purrr::invoke_map(product, .x = list(list(contents)))
+  purrr::invoke_map_df(product, .x = list(list(contents)))
 
 }
 
@@ -65,6 +65,17 @@ extract_storm_links <- function(links) {
   product_links[years == 1998] <- stringr::str_c("/archive/1998/",
                                                  product_links[years == 1998])
   product_links <- stringr::str_c(get_nhc_link(), product_links)
+}
+
+#' @title get_product
+#' @description This funtion acts as a hub for the individual product extraction
+#'   functions. Given the product and links, it will begin the scraping
+#'   process and return a dataset for that product.
+#' @keywords internal
+get_product <- function(links, product) {
+  links %>%
+    purrr::map2(.y = product, .f = get_storm_data) %>%
+    purrr::flatten_df()
 }
 
 #' @title get_storm_data
