@@ -265,11 +265,11 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
     dplyr::mutate(
       # Add var for forecast periods, limited to size of each group
       FcstPeriod = forecast_periods[1:dplyr::n()],
-      FcstMonth = case_when(
+      FcstMonth = dplyr::case_when(
         as.numeric(Date) < lubridate::day(AdvDate) ~ lubridate::month(AdvDate) + 1,
         TRUE                                       ~ lubridate::month(AdvDate)
       ),
-      FcstYear = case_when(
+      FcstYear = dplyr::case_when(
         FcstMonth < lubridate::month(AdvDate) ~ lubridate::year(AdvDate) + 1,
         TRUE                                  ~ lubridate::year(AdvDate)
       ),
