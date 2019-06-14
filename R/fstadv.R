@@ -126,7 +126,18 @@ fstadv <- function(contents) {
     Forecast = forecasts,
     Seas = seas
   ) %>%
-    tidyr::unnest(Seas, WindRadius, Forecast)
+    tidyr::unnest(Seas, WindRadius, Forecast) %>%
+    # This next piece needs to be removed. It is only added to pass tests with
+    # the current datasets. When feature/113 is closed, drop this next
+    # section of code.
+    dplyr::mutate_at(
+      .vars = dplyr::vars(
+        Hr12NE64:Hr12NW50, Hr24NE64:Hr24NW34, Hr36Wind:Hr36NW34,
+        Hr48Wind:Hr48NW34, Hr72Wind:Hr72NW34, Hr96Wind:Hr96Gust, Hr120Wind,
+        Hr120Gust
+      ),
+      .funs = as.integer
+    )
 
 }
 
