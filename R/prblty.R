@@ -30,12 +30,14 @@ get_prblty <- function(links) {
 #' @keywords internal
 prblty <- function(contents) {
 
-  status <- scrape_header(contents)
-  issue_date <- scrape_date(contents)
+  status <- scrape_header(
+    contents = contents,
+    # The "SPECIAL" pattern has to be left here; moving it under
+    # `scrape_header` will break posest and update products.
+    ptn_product_title = "(?:\n?SPECIAL\\s+)?(?:PROBABILITIES)?"
+  )
 
-  if (getOption("rrricanes.working_msg"))
-    message(sprintf("Working %s %s Strike Probability #%s (%s)",
-                    status, name, adv, date))
+  issue_date <- scrape_date(contents)
 
   # 15.0N  43.4W    43  1  X  X 44   16.8N  48.2W     X  4 16  2 22
   # 15.8N  45.9W     1 26  1  X 28

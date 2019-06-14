@@ -26,11 +26,14 @@ get_posest <- function(links) {
 #' @keywords internal
 posest <- function(contents) {
 
-  # Replace all carriage returns with empty string.
-  contents <- stringr::str_replace_all(contents, "\r", "")
+  status <- scrape_header(
+    contents = contents,
+    ptn_product_title = "(?:POSITION ESTIMATE)?",
+    advisory_number = FALSE
+  )
 
-  status <- scrape_header(contents)
   issue_date <- scrape_date(contents)
+
   key <- scrape_key(contents)
 
   tibble::tibble(

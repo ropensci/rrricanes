@@ -90,7 +90,13 @@ get_fstadv <- function(links) {
 #' @keywords internal
 fstadv <- function(contents) {
 
-  status <- scrape_header(contents)
+  status <- scrape_header(
+    contents = contents,
+    # The "SPECIAL" pattern has to be left here; moving it under
+    # `scrape_header` will break posest and update products.
+    ptn_product_title = "(?:\n?SPECIAL\\s+)?(?:FORECAST/|MARINE\\s+)?(?:ADVISORY)?"
+  )
+
   issue_date <- scrape_date(contents)
   key <- scrape_key(contents)
   lat_lon <- fstadv_lat_lon(contents)

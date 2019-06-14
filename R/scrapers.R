@@ -184,11 +184,15 @@ scrape_date <- function(header) {
 
 #' @title scrape_header
 #' @description Extract status, name, and advisory from products header.
+#' @param contents Text product
+#' @param ptn_product_title Pattern of product title to match
+#' @param advisory_number Default is true; set to false if product does not
+#'   have an advisory number.
 #' @keywords internal
-scrape_header <- function(contents) {
+scrape_header <- function(contents, ptn_product_title,
+                          advisory_number = TRUE) {
 
   # See test_scrapers.R for patterns that must be matched.
-
   # Extract header. Use the format of the date/time line to close out header.
   # There may be additional line breaks inside the header. Must account for.
   # Use day, month, date and year which seems to be consistent across all
@@ -201,20 +205,23 @@ scrape_header <- function(contents) {
   # Storm status patterns
   ptn_status <- "((?:POST-|POTENTIAL\\s|SUB)?TROPICAL (?:CYCLONE|DEPRESSION|DISTURBANCE|STOMR|STORM)|HURRICANE|REMNANTS)(?: OF)?"
 
-  ptn_product_titles <- "(?:\n?SPECIAL )?(?:FORECAST/|MARINE |INTERMEDIATE )?(?:ADVISORY|(?:WIND SPEED )?PROBABILITIES|DISCUSSION)?"
-
   # Pattern for storm names
   ptn_names <- stringr::str_c("([\\w-]*?)")
 
-  # Pattern for advisory numbers
-  ptn_adv <- "NUMBER\\s+(\\d{1,3}\\w?)"
+  ptn_adv = "NUMBER\\s+(\\d{1,3}\\w?)"
 
   # Combine patterns
   ptn <- stringr::str_c(
-    ptn_status, ptn_names, ptn_product_titles, ptn_adv, sep = "\\s"
+    ptn_status, ptn_names, ptn_product_title, sep = "\\s"
   )
 
-  matches <- stringr::str_match(header, ptn)[,2:4]
+  if (advisory_number) {
+    ptn <-  stringr::str_c(ptn, ptn_adv, sep = "\\s")
+    matches <- stringr::str_match(header, ptn)[,2:4]
+  } else {
+    matches <- stringr::str_match(header, ptn)[,2:3]
+    status <- apply(stringr::str_match(header, ptn)[,2:3], 2, stringr::str_to_title)
+  }
 
   # String-to-title Status and Name
 
@@ -253,3 +260,4 @@ scrape_key <- function(header) {
   stringr::str_match(header, ptn)[,2]
 
 }
+
