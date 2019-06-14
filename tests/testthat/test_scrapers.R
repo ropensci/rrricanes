@@ -98,7 +98,15 @@ test_that("scrape_header", {
 ## ---- Key --------------------------------------------------------------------
 test_that("Key", {
   ## ---- * Tropical Storm Alex, Forecast/Advisory 1
-  expect_identical(rrricanes:::scrape_key(contents[1]), "AL011998")
+  expect_identical(
+    rrricanes:::scrape_key(read_files(files$AL011998$fstadv[1])),
+    "AL0198"
+  )
+
   ## ---- * Tropical Storm Katrina, Forecast/Advisory 1
-  expect_identical(rrricanes:::scrape_key(contents[7]), "AL151999")
+  expect_identical(
+    rrricanes:::scrape_key(read_files(files$AL151999$fstadv[1])),
+    "AL1599"
+  )
+
 })

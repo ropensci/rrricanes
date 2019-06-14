@@ -2,9 +2,16 @@ AL122005 <-
   "%sarchive/2005/KATRINA.shtml?" %>%
   sprintf(rrricanes:::get_nhc_link()) %>%
   rrricanes:::extract_storm_links()
+
 files <- list(
   "AL011991" = list(
     "fstadv" = c("mal0191.001")
+  ),
+  "AL011998" = list(
+    "fstadv" = c("mal0198.001")
+  ),
+  "AL151999" = list(
+    "fstadv" = c("mal1599.001")
   ),
   "AL012001" = list(
     "fstadv" = c("al012001.fstadv.001", "al012001.fstadv.004")
