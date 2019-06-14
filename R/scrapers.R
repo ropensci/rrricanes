@@ -198,8 +198,6 @@ scrape_header <- function(contents) {
 
   header <- stringr::str_extract(contents, ptn_header)
 
-  header <- stringr::str_to_upper(header)
-
   # Storm status patterns
   ptn_status <- "((?:POST-|POTENTIAL\\s|SUB)?TROPICAL (?:CYCLONE|DEPRESSION|DISTURBANCE|STOMR|STORM)|HURRICANE|REMNANTS)(?: OF)?"
 
@@ -238,8 +236,6 @@ scrape_header <- function(contents) {
 #' @seealso \code{\link{scrape_header}}
 #' @keywords internal
 scrape_key <- function(header) {
-
-  header <- stringr::str_to_upper(header)
 
   # There are several possibilities that can preceed Key in the storm header.
   # ptn should capture each possibility, but only one of.

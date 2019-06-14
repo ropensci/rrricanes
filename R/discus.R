@@ -31,9 +31,6 @@ get_discus <- function(links) {
 #' @keywords internal
 discus <- function(contents) {
 
-  # Replace all carriage returns with empty string.
-  contents <- stringr::str_replace_all(contents, "\r", "")
-
   status <- scrape_header(contents)
   issue_date <- scrape_date(contents)
   key <- scrape_key(contents)

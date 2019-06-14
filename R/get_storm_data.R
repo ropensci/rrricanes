@@ -24,7 +24,9 @@ extract_product_contents <- function(links, product) {
       } else if (is.null(txt$error)) {
         txt$result %>%
           rvest::html_node(xpath = "//pre") %>%
-          rvest::html_text()
+          rvest::html_text() %>%
+          stringr::str_replace_all("\r", "") %>%
+          stringr::str_to_upper()
       }
     })
 
