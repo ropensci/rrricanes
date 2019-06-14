@@ -219,8 +219,14 @@ scrape_header <- function(contents) {
   matches <- stringr::str_match(header, ptn)[,2:4]
 
   # String-to-title Status and Name
-  matches[,1] <- stringr::str_to_title(matches[,1])
-  matches[,2] <- stringr::str_to_title(matches[,2])
+
+  if (is.null(ncol(matches))) {
+    # working with a vector
+    matches[1:2] <- stringr::str_to_title(matches[1:2])
+  } else {
+    # Working with a matrix
+    matches[,c(1:2)] <- apply(matches[,c(1:2)], 2, stringr::str_to_title)
+  }
 
   return(matches)
 
