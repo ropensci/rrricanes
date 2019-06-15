@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# rrricanes
+# rrricanes <img src='man/figures/logo.png' align="right" height="138" />
 
 `rrricanes` is a R library that extracts information from [available archives](http://www.nhc.noaa.gov/archive/1998/1998archive.shtml) on past and current tropical cyclones. Currently, archives date back to 1998. 
 
