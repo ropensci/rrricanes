@@ -43,7 +43,7 @@ get_ftp_dirs <- function(x) {
   ftp_dirs <-
     con %>%
     utils::read.table(stringsAsFactors = FALSE, fill = TRUE) %>%
-    dplyr::rename(Name = V9) # Name is the link
+    dplyr::rename(Name = .data$V9) # Name is the link
   close(con)
   ftp_dirs
 }
@@ -124,10 +124,10 @@ get_ftp_storm_data <- function(stormid,
               stringr::str_to_lower(stormid),
               products
             ),
-          x = Name
+          x = .data$Name
         )
       ) %>%
-      dplyr::pull(Name)
+      dplyr::pull(.data$Name)
 
     if (purrr::is_empty(links)) {
       # For years previous 1998, text products are wrapped into zip files. In
@@ -139,10 +139,10 @@ get_ftp_storm_data <- function(stormid,
         dplyr::filter(
           grepl(
             pattern = sprintf("^%s_msg.zip", stringr::str_to_lower(stormid)),
-            x = Name
+            x = .data$Name
           )
         ) %>%
-        dplyr::pull(Name)
+        dplyr::pull(.data$Name)
 
       pkg <- sprintf(
         fmt = "ftp://ftp.nhc.noaa.gov/atcf/archive/%s/messages/%s",
@@ -239,10 +239,10 @@ get_ftp_storm_data <- function(stormid,
               stringr::str_to_lower(stormid),
               products
             ),
-          x = Name
+          x = .data$Name
         )
       ) %>%
-      dplyr::pull(Name)
+      dplyr::pull(.data$Name)
 
     links <- sprintf(
       fmt = "ftp://ftp.nhc.noaa.gov/atcf/%s/%s",

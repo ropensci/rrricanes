@@ -4,7 +4,7 @@
 \alias{fstadv_wind_radius}
 \title{fstadv_wind_radius}
 \usage{
-fstadv_wind_radius(content, wind)
+fstadv_wind_radius(content)
 }
 \arguments{
 \item{contents}{text of product}

@@ -105,7 +105,7 @@ fstadv <- function(contents) {
   pressure <- fstadv_pressure(contents)
   eye <- fstadv_eye(contents)
   winds_gusts <- fstadv_winds_gusts(contents)
-  wind_radius <- fstadv_wind_radius(contents, wind)
+  wind_radius <- fstadv_wind_radius(contents)
   prev_pos <- fstadv_prev_pos(contents, issue_date)
   seas <- fstadv_seas(contents)
   forecasts <- fstadv_forecasts(contents, key, status[,3], issue_date)
@@ -125,11 +125,11 @@ fstadv <- function(contents) {
     FwdDir = fwd_mvmt[,1],
     FwdSpeed = fwd_mvmt[,2],
     Eye = eye,
+    Seas = seas,
     WindRadius = wind_radius,
-    Forecast = forecasts,
-    Seas = seas
+    Forecast = forecasts
   ) %>%
-    tidyr::unnest(Seas, WindRadius, Forecast)
+    tidyr::unnest()
 
 }
 
@@ -165,8 +165,19 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
 
     df <-
       df %>%
-      dplyr::filter(FcstPeriod == hr) %>%
-      dplyr::select(Key, Adv, FcstDate, Lat, Lon, Wind:NW34) %>%
+      dplyr::filter(.data$FcstPeriod == hr) %>%
+      dplyr::select(
+        .data$Key,
+        .data$Adv,
+        .data$FcstDate,
+        .data$Lat,
+        .data$Lon,
+        .data$Wind,
+        .data$Gust,
+        tidyselect::ends_with("64"),
+        tidyselect::ends_with("50"),
+        tidyselect::ends_with("34")
+      ) %>%
       rlang::set_names(
         # Prepend forecast variables with "Hr", the value of `hr`, and the
         # variable name.
@@ -257,7 +268,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       Forecasts = forecasts
     ) %>%
     tidyr::unnest() %>%
-    dplyr::group_by(Key, Adv) %>%
+    dplyr::group_by(.data$Key, .data$Adv) %>%
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
     # the month should be the same.
@@ -269,18 +280,18 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       # Add var for forecast periods, limited to size of each group
       FcstPeriod = forecast_periods[1:dplyr::n()],
       FcstMonth = dplyr::case_when(
-        as.numeric(Date) < lubridate::day(AdvDate) ~ lubridate::month(AdvDate) + 1,
-        TRUE                                       ~ lubridate::month(AdvDate)
+        as.numeric(.data$Date) < lubridate::day(.data$AdvDate) ~ lubridate::month(.data$AdvDate) + 1,
+        TRUE                                       ~ lubridate::month(.data$AdvDate)
       ),
       FcstYear = dplyr::case_when(
-        FcstMonth < lubridate::month(AdvDate) ~ lubridate::year(AdvDate) + 1,
-        TRUE                                  ~ lubridate::year(AdvDate)
+        FcstMonth < lubridate::month(.data$AdvDate) ~ lubridate::year(.data$AdvDate) + 1,
+        TRUE                                  ~ lubridate::year(.data$AdvDate)
       ),
       FcstDate = lubridate::ymd_hms(
         strftime(
           paste(
-            paste(FcstYear, FcstMonth, Date, sep = "-"),
-            paste(Hour, Minute, "00", sep = ":"),
+            paste(.data$FcstYear, .data$FcstMonth, .data$Date, sep = "-"),
+            paste(.data$Hour, .data$Minute, "00", sep = ":"),
             sep = " "
           ),
           format = "%Y-%m-%d %H:%M:%S"
@@ -288,17 +299,17 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       ),
       # If Lat is in southern hemisphere (unlikely, but possible), make negative
       Lat = dplyr::case_when(
-        LatHemi == "S" ~ as.numeric(Lat) * -1,
-        TRUE           ~ as.numeric(Lat)
+        LatHemi == "S" ~ as.numeric(.data$Lat) * -1,
+        TRUE           ~ as.numeric(.data$Lat)
       ),
       # If Lon in western hemisphere (most likely), make negative.
       Lon = dplyr::case_when(
-        LonHemi == "W" ~ as.numeric(Lon) * -1,
-        TRUE           ~ as.numeric(Lon)
+        LonHemi == "W" ~ as.numeric(.data$Lon) * -1,
+        TRUE           ~ as.numeric(.data$Lon)
       )
     ) %>%
     # Make Wind, Gust, relative wind/gust vars and sea vars all numeric
-    dplyr::mutate_at(dplyr::vars(Wind:NW34), .funs = as.numeric)
+    dplyr::mutate_at(dplyr::vars(.data$Wind:.data$NW34), .funs = as.numeric)
 
   df <- rebuild_forecasts(12, df = df_forecasts)
 
@@ -312,7 +323,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
 
   df %>%
     dplyr::ungroup() %>%
-    dplyr::select(-c(Key, Adv)) %>%
+    dplyr::select(-c(.data$Key, .data$Adv)) %>%
     split(seq(nrow(.)))
 
 }
@@ -449,7 +460,7 @@ fstadv_seas <- function(content) {
 #' @param contents text of product
 #' @return dataframe
 #' @keywords internal
-fstadv_wind_radius <- function(content, wind) {
+fstadv_wind_radius <- function(content) {
 
   ptn <- stringr::str_c("MAX SUSTAINED WINDS[:blank:]+[:digit:]{1,3} KT ",
                         "WITH GUSTS TO[:blank:]+[:digit:]{1,3} ",
@@ -582,11 +593,6 @@ tidy_wr <- function(df) {
   # quadrants, keeping WindField as a variable.
   v <- c("NE", "SE", "SW", "NW")
 
-  quo_key <- rlang::parse_expr("Key")
-  quo_date <- rlang::parse_expr("Date")
-  quo_adv <- rlang::parse_expr("Adv")
-  quo_windfield <- rlang::parse_expr("WindField")
-
   wr <- purrr::map_df(
     .x = c(34, 50, 64),
     .f = function(y) {
@@ -606,7 +612,7 @@ tidy_wr <- function(df) {
       "Key", "Adv", "Date", "WindField", .data$NE:.data$NW
     )) %>%
     # Order by Date then Adv since Adv is character. Results as expected.
-    dplyr::arrange(!!quo_key, !!quo_date, !!quo_adv, !!quo_windfield)
+    dplyr::arrange(.data$Key, .data$Date, .data$Adv, .data$WindField)
 
   # Remove NA rows for windfield quadrants
   wr <- wr[stats::complete.cases(wr$NE, wr$SE, wr$SW, wr$NW),]
@@ -657,11 +663,6 @@ tidy_fcst <- function(df) {
     .[!rlang::are_na(.)] %>%
     as.numeric()
 
-  quo_key <- rlang::parse_expr("Key")
-  quo_date <- rlang::parse_expr("Date")
-  quo_adv <- rlang::parse_expr("Adv")
-  quo_fcstdate <- rlang::parse_expr("FcstDate")
-
   forecasts <- purrr::map_df(
     .x = fcst_periods,
     .f = function(y) {
@@ -673,7 +674,7 @@ tidy_fcst <- function(df) {
                       "Lon" = paste0("Hr", y, "Lon"),
                       "Wind" = paste0("Hr", y, "Wind"),
                       "Gust" = paste0("Hr", y, "Gust"))}) %>%
-    dplyr::arrange(!!quo_key, !!quo_date, !!quo_adv, !!quo_fcstdate)
+    dplyr::arrange(.data$Key, .data$Date, .data$Adv, .data$FcstDate)
 
   # Remove NA rows
   forecasts <- forecasts[stats::complete.cases(
@@ -755,15 +756,8 @@ tidy_fcst_wr <- function(df) {
       return(y)
     })
 
-  quo_key <- rlang::parse_expr("Key")
-  quo_date <- rlang::parse_expr("Date")
-  quo_adv <- rlang::parse_expr("Adv")
-  quo_fcstdate <- rlang::parse_expr("FcstDate")
-  quo_windfield <- rlang::parse_expr("WindField")
-
   fcst_wr <- dplyr::arrange(
-    fcst_wr,
-    !!quo_key, !!quo_date, !!quo_adv, !!quo_fcstdate, !!quo_windfield
+    fcst_wr, .data$Key, .data$Date, .data$Adv, .data$FcstDate, .data$WindField
   )
 
   fcst_wr <- fcst_wr[stats::complete.cases(

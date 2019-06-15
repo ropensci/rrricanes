@@ -122,11 +122,12 @@ get_wndprb <- function(links) {
 parse_stations <- function(x) {
   df <- readLines(x) %>%
     tibble::as_tibble() %>%
-    tidyr::separate(value,
+    tidyr::separate(.data$value,
                     c("X1", "Location", "Lat", "Lon", "X5", "X6", "X7"),
                     sep = ",",
                     extra = "warn") %>%
-    dplyr::arrange(Location)
+    dplyr::arrange(.data$Location)
+  return(df)
 }
 
 #' @title wndprb
