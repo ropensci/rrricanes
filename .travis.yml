@@ -15,7 +15,7 @@ addons:
 
 before_install:
   - Rscript -e ".libPaths()"
-  - Rscript -e "install.packages('rrricanesdata', repos = 'https://timtrice.github.io/drat/', type = 'source', lib = .libPaths()[1]);"
+  - Rscript -e "install.packages('rrricanesdata', repos = 'https://timtrice.github.io/drat/', type = 'source', lib = .libPaths()[2]);"
 
 matrix:
   include:
