@@ -32,8 +32,10 @@ reference:
     contents:
     - al_prblty_stations
     - cp_prblty_stations
+    - ep_prblty_stations
     - knots_to_mph
     - mb_to_in
+    - nm_to_sm
     - saffir
     - status_abbr_to_str
     - starts_with("tidy_")
@@ -52,20 +54,13 @@ reference:
       - df.gis_wsp
 
 articles:
-  - title: Vignettes
-    desc: >
-      Using `rrricanes` to get current and past cyclone advisory products.
+  - title: Articles
     contents:
-    - getting_started
-    - gis_data
-    - installing_rrricanesdata
-  - title: Tutorials
-    desc: >
-      Additional examples of using `rrricanes` to get storm-related data and
-      plotting.
-    contents:
-    - accumulated_cyclone_energy
-    - forecast_advisory
-    - probabilistic_storm_surge
-    - wind_pressure
-    - wind_speed_probabilities
+      - getting_started
+      - installing_rrricanesdata
+      - forecast_advisory
+      - wind_pressure
+      - wind_speed_probabilities
+      - gis_data
+      - probabilistic_storm_surge
+      - accumulated_cyclone_energy
