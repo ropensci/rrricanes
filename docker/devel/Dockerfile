@@ -5,10 +5,12 @@ RUN apt-get update \
     libudunits2-dev \
     libgdal-dev \
     libproj-dev \
+    qpdf \
     vim
 
 RUN install2.r -e \
     broom \
+    covr \
     crul \
     curl \
     devtools \
