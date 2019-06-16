@@ -54,14 +54,7 @@ AL092008 <-
   rrricanes:::extract_storm_links()
 
 ## ---- Saved Data -------------------------------------------------------------
-data(al_01_2017_products, package = "rrricanes")
-data(al_01_1998_prblty, package = "rrricanes")
-data(al_09_2008_discus, package = "rrricanes")
-data(al_09_2008_fstadv, package = "rrricanes")
-data(al_09_2008_posest, package = "rrricanes")
-data(al_09_2008_public, package = "rrricanes")
-data(al_09_2008_update, package = "rrricanes")
-data(al_09_2008_wndprb, package = "rrricanes")
+df.tests <- system.file("extdta", "test_datasets.RData", package = "rrricanes")
 
 ## ---- Get Data ---------------------------------------------------------------
 al_1998 <- get_storms(years = 1998, basins = "AL")
