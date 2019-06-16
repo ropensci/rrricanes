@@ -2,6 +2,7 @@ FROM rocker/rstudio:devel
 
 RUN apt-get update \
   && apt-get install -y \
+    libmagick++-dev \
     libudunits2-dev \
     libgdal-dev \
     libproj-dev \
@@ -15,9 +16,12 @@ RUN install2.r -e \
     curl \
     devtools \
     dplyr \
+    gganimate \
     ggplot2 \
     httr \
+    HURDAT \
     lubridate \
+    magick \
     magrittr \
     maptools \
     pkgdown \
