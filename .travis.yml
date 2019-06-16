@@ -14,7 +14,10 @@ addons:
       - libgdal-dev
 
 before_install:
-  - Rscript -e 'install.packages("rrricanesdata", repos = "https://timtrice.github.io/drat/", type = "source");'
+  - sudo mkdir -p /usr/lib/R/library
+  - echo 'R_LIBS=/usr/lib/R/library:/usr/lib/R/site-library/' > ~/.Renviron
+  - sudo chmod 2777 /usr/lib/R/library
+  - sudo Rscript -e 'install.packages("rrricanesdata", repos = "https://timtrice.github.io/drat/", type = "source");'
 
 matrix:
   include:
