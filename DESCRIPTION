@@ -44,7 +44,6 @@ Suggests:
   devtools, 
   knitr, 
   rmarkdown,
-  rrricanesdata, 
   sf, 
   sp,
   testthat
