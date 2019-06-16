@@ -97,13 +97,13 @@ For this particular storm and advisory, included are the base line, point and po
 ### Line track
 
 ```{r}
-str(df.gis_adv$al182012_018_5day_lin)
+str(df.gis_adv$al182012.018_5day_lin)
 ```
 
 As we're dealing with a SpatialLinesDataFrame which needs to be modified, you can use the helper function `shp_to_df` for plotting.
 
 ```{r}
-fcst_line <- shp_to_df(df.gis_adv$al182012_018_5day_lin)
+fcst_line <- shp_to_df(df.gis_adv$al182012.018_5day_lin)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
@@ -115,7 +115,7 @@ There are two groups of data in the set: one for 72-hour forecast period and one
 There is a pretty wide field of view on the map above. You can use `sp::bbox` to "zoom in" on the map.
 
 ```{r}
-(bb <- sp::bbox(df.gis_adv$al182012_018_5day_lin))
+(bb <- sp::bbox(df.gis_adv$al182012.018_5day_lin))
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
@@ -126,10 +126,10 @@ There is a pretty wide field of view on the map above. You can use `sp::bbox` to
 
 ### Point track
 
-Each forecast position is also included in the points dataframe. You can access this in the `df.gis_adv$al182012_018_5day_pts@data` object; no conversion necessary.
+Each forecast position is also included in the points dataframe. You can access this in the `df.gis_adv$al182012.018_5day_pts@data` object; no conversion necessary.
 
 ```{r, fig.width = 7, fig.align = "center"}
-(p3 <- p2 + geom_point(data = df.gis_adv$al182012_018_5day_pts@data, aes(LON, LAT)))
+(p3 <- p2 + geom_point(data = df.gis_adv$al182012.018_5day_pts@data, aes(LON, LAT)))
 ```
 
 ## Forecast Cone
@@ -137,7 +137,7 @@ Each forecast position is also included in the points dataframe. You can access 
 Forecast cone data is contained in the polygon dataset. To deal with this dataset you can use the `shp_to_df` function again or take the slightly longer way:
 
 ```{r}
-fcst_cone <- df.gis_adv$al182012_018_5day_pgn
+fcst_cone <- df.gis_adv$al182012.018_5day_pgn
 fcst_cone@data$id <- rownames(fcst_cone@data)
 fcst_cone.points <- broom::tidy(fcst_cone, region = "id")
 fcst_cone <- dplyr::left_join(fcst_cone.points, fcst_cone@data, by = "id")
@@ -159,7 +159,7 @@ Note that in some GIS packages the forecast cones may be identical (though they 
 You can also plot watches and warnings if any are in effect for the package release time. 
 
 ```{r}
-ww_line <- shp_to_df(df.gis_adv$al182012_018_ww_wwlin)
+ww_line <- shp_to_df(df.gis_adv$al182012.018_ww_wwlin)
 ```
 
 
