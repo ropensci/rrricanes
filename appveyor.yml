@@ -13,10 +13,9 @@ install:
 # Adapt as necessary starting from here
 
 environment:
-  USE_RTOOLS: true
-  R_REMOTES_STANDALONE: true
   global:
-    WARNINGS_ARE_ERRORS: 1
+    USE_RTOOLS: true
+    WARNINGS_ARE_ERRORS: true
   matrix:
   - R_VERSION: 3.5.3
     R_ARCH: x64
@@ -34,8 +33,7 @@ matrix:
 
 build_script:
   - travis-tool.sh install_deps
-  - travis-tool.sh install_github timtrice/rrricanesdata
-#  - travis-tool.sh r_binary_install proto rgdal
+  - Rscript -e "install.packages('rrricanesdata', repos = 'https://timtrice.github.io/drat/', type = 'source');"
 
 test_script:
   - travis-tool.sh run_tests
