@@ -30,7 +30,6 @@ get_discus <- function(links) {
 #' @seealso \code{\link{get_discus}}
 #' @keywords internal
 discus <- function(contents) {
-
   status <- scrape_header(
     contents = contents,
     # The "SPECIAL" pattern has to be left here; moving it under
@@ -43,12 +42,11 @@ discus <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
-    Status = status[,1],
-    Name = status[,2],
-    Adv = as.numeric(status[,3]),
+    Status = status[, 1],
+    Name = status[, 2],
+    Adv = as.numeric(status[, 3]),
     Date = issue_date,
     Key = key,
     Contents = contents
   )
-
 }

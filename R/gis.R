@@ -7,46 +7,61 @@
 #' @seealso \code{\link{gis_download}}
 #' @export
 gis_advisory <- function(key, advisory = as.character()) {
-
-  if (is.null(key))
+  if (is.null(key)) {
     stop("Please provide a `key`.", call. = FALSE)
+  }
 
   key <- stringr::str_to_lower(key)
 
-  if (!grepl("^[[:lower:]]{2}[[:digit:]]{6}$", key))
+  if (!grepl("^[[:lower:]]{2}[[:digit:]]{6}$", key)) {
     stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
+  }
 
-  key <- stringr::str_match(key,
-                            pattern = stringr::str_c("([:lower:]{2})([:digit:]{2})",
-                                                     "([:digit:]{4})"))
+  key <- stringr::str_match(
+    key,
+    pattern = stringr::str_c(
+      "([:lower:]{2})([:digit:]{2})",
+      "([:digit:]{4})"
+    )
+  )
 
   # Get list of GIS forecast zips for storm and download
-  url <- sprintf("%sgis/archive_forecast_results.php?id=%s%s&year=%s",
-                 get_nhc_link(),
-                 key[,2],         # Basin
-                 key[,3],         # Storm number
-                 key[,4])         # Year
+  url <- sprintf(
+    "%sgis/archive_forecast_results.php?id=%s%s&year=%s",
+    get_nhc_link(),
+    key[, 2], # Basin
+    key[, 3], # Storm number
+    key[, 4]
+  ) # Year
   contents <- readr::read_lines(url)
 
   # Match zip files. If advisory is empty then need to pull all zip files for
   # the storm. Otherwise, pull only selected advisory.
   if (purrr::is_empty(advisory)) {
-    ptn <- sprintf(".+(forecast/archive/%s.*?\\.zip).+",
-                   stringr::str_to_lower(key[,1]))
+    ptn <- sprintf(
+      ".+(forecast/archive/%s.*?\\.zip).+",
+      stringr::str_to_lower(key[, 1])
+    )
   } else {
     advisory <- stringr::str_match(advisory, "([:digit:]{1,3})([:alpha:]*)")
     names(advisory) <- c("original", "advisory", "int_adv")
-    ptn <- sprintf(".+(forecast/archive/%s.*?%s%s\\.zip).+",
-                   stringr::str_to_lower(key[,1]),
-                   stringr::str_pad(string = advisory[["advisory"]],
-                                    width = 3, side = "left", pad = "0"),
-                   advisory[["int_adv"]])
+    ptn <- sprintf(
+      ".+(forecast/archive/%s.*?%s%s\\.zip).+",
+      stringr::str_to_lower(key[, 1]),
+      stringr::str_pad(
+        string = advisory[["advisory"]],
+        width = 3, side = "left", pad = "0"
+      ),
+      advisory[["int_adv"]]
+    )
   }
 
-  matches <- stringr::str_match(contents, pattern = ptn)[,2]
+  matches <- stringr::str_match(contents, pattern = ptn)[, 2]
   matches <- matches[stats::complete.cases(matches)]
 
-  if (purrr::is_empty(matches)) return(NULL)
+  if (purrr::is_empty(matches)) {
+    return(NULL)
+  }
 
   # Append website domain to links
   stringr::str_c(get_nhc_link(), "gis/", matches)
@@ -71,7 +86,6 @@ gis_advisory <- function(key, advisory = as.character()) {
 #'   unofficial and sites not on the list can be selected if conditions warrant.
 #' @export
 gis_breakpoints <- function() {
-
   breakpoint_file <-
     stringr::str_c(get_nhc_link, "gis/") %>%
     xml2::read_html() %>%
@@ -84,7 +98,6 @@ gis_breakpoints <- function() {
     .[stats::complete.cases(.)]
 
   stringr::str_c(get_nhc_link(withTrailingSlash = FALSE), breakpoint_file)
-
 }
 
 #' @title gis_download
@@ -93,7 +106,6 @@ gis_breakpoints <- function() {
 #' @param ... additional parameters for rgdal::readOGR
 #' @export
 gis_download <- function(url, ...) {
-
   destdir <- tempdir()
 
   utils::download.file(file.path(url), zip_file <- tempfile())
@@ -117,7 +129,6 @@ gis_download <- function(url, ...) {
     )
 
   rlang::set_names(ds, nm = stringr::str_replace(shp_files, "\\.shp", ""))
-
 }
 
 #' @title gis_latest
@@ -126,23 +137,27 @@ gis_download <- function(url, ...) {
 #' @param ... additional parameters for rgdal::readOGR
 #' @export
 gis_latest <- function(basins = c("AL", "EP"), ...) {
-
-  if (!(all(basins %in% c("AL", "EP"))))
+  if (!(all(basins %in% c("AL", "EP")))) {
     stop("Basin must be one or both of AL or EP.", call. = FALSE)
+  }
 
-  urls <- list("AL" = stringr::str_c(get_nhc_link(), "gis-at.xml"),
-               "EP" = stringr::str_c(get_nhc_link(), "gis-ep.xml"))
+  urls <- list(
+    "AL" = stringr::str_c(get_nhc_link(), "gis-at.xml"),
+    "EP" = stringr::str_c(get_nhc_link(), "gis-ep.xml")
+  )
 
   gis_zips <-
     basins %>%
-    purrr::map(~xml2::read_xml(urls[[.x]])) %>%
+    purrr::map(~ xml2::read_xml(urls[[.x]])) %>%
     purrr::map(~ xml2::xml_find_all(.x, xpath = ".//link") %>%
-                 xml2::xml_text()) %>%
+      xml2::xml_text()) %>%
     purrr::map(stringr::str_match, ".+\\.zip$") %>%
     purrr::flatten_chr() %>%
     .[!is.na(.)]
 
-  if (purrr::is_empty(gis_zips)) return(NULL)
+  if (purrr::is_empty(gis_zips)) {
+    return(NULL)
+  }
 
   purrr::map(gis_zips, gis_download, ...)
 }
@@ -193,50 +208,65 @@ gis_outlook <- function() {
 #' gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10))
 #'
 #' # Return all psurge0 products for Sep 2, 2016, storm AL092016
-#' gis_prob_storm_surge("AL092016", products = list("psurge" = 0),
-#'            datetime = "20160902")
+#' gis_prob_storm_surge("AL092016",
+#'   products = list("psurge" = 0),
+#'   datetime = "20160902"
+#' )
 #' }
 #' @export
 gis_prob_storm_surge <- function(key, products, datetime = NULL) {
-
-  if (is.null(key))
+  if (is.null(key)) {
     stop("Please provide a storm `key`.", call. = FALSE)
+  }
 
   # Validate products
-  if (!(all(names(products) %in% c("psurge", "esurge"))))
+  if (!(all(names(products) %in% c("psurge", "esurge")))) {
     stop("`products` must be 'psurge' and/or 'esurge'.", call. = FALSE)
+  }
 
-  if (!is.null(products[["psurge"]]))
-    if (!(all(dplyr::between(products[["psurge"]], 0, 20))))
+  if (!is.null(products[["psurge"]])) {
+    if (!(all(dplyr::between(products[["psurge"]], 0, 20)))) {
       stop("'psurge' values must be between 0 and 20.", call. = FALSE)
+    }
+  }
 
-  if (!is.null(products[["esurge"]]))
-    if (!(all(products[["esurge"]] %in% seq(10, 50, by = 10))))
+  if (!is.null(products[["esurge"]])) {
+    if (!(all(products[["esurge"]] %in% seq(10, 50, by = 10)))) {
       stop("'esurge' values must be 10, 20, 30, 40 or 50.", call. = FALSE)
+    }
+  }
 
   key <- stringr::str_to_lower(key)
 
-  if (!grepl("^[[:lower:]]{2}[[:digit:]]{6}$", key))
+  if (!grepl("^[[:lower:]]{2}[[:digit:]]{6}$", key)) {
     stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
+  }
 
   key <- stringr::str_match(key,
-                            pattern = stringr::str_c("([:lower:]{2})([:digit:]",
-                                                     "{2})([:digit:]{4})"))
+    pattern = stringr::str_c(
+      "([:lower:]{2})([:digit:]",
+      "{2})([:digit:]{4})"
+    )
+  )
 
   # Get list of GIS forecast zips for storm and download
-  url <- sprintf("%sgis/archive_psurge_results.php?id=%s%s&year=%s",
-                 get_nhc_link(),
-                 key[,2],         # Basin
-                 key[,3],         # Storm number
-                 key[,4])         # Year
+  url <- sprintf(
+    "%sgis/archive_psurge_results.php?id=%s%s&year=%s",
+    get_nhc_link(),
+    key[, 2], # Basin
+    key[, 3], # Storm number
+    key[, 4]
+  ) # Year
 
   contents <- readr::read_lines(url)
 
   # Build product pattern
   ptn_product <-
-    purrr::map2(.x = names(products),
-                .y = products,
-                .f = stringr::str_c) %>%
+    purrr::map2(
+      .x = names(products),
+      .y = products,
+      .f = stringr::str_c
+    ) %>%
     purrr::flatten_chr()
 
   # Build datetime pattern
@@ -254,15 +284,19 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
   }
 
   # Match zip files.
-  ptn <- sprintf(".+(storm_surge/%s_(%s)_(%s)\\.zip).+",
-                 stringr::str_to_lower(key[,1]),
-                 stringr::str_c(ptn_product, collapse = "|"),
-                 ptn_datetime)
+  ptn <- sprintf(
+    ".+(storm_surge/%s_(%s)_(%s)\\.zip).+",
+    stringr::str_to_lower(key[, 1]),
+    stringr::str_c(ptn_product, collapse = "|"),
+    ptn_datetime
+  )
 
-  matches <- stringr::str_match(contents, pattern = ptn)[,2]
+  matches <- stringr::str_match(contents, pattern = ptn)[, 2]
   matches <- matches[stats::complete.cases(matches)]
 
-  if (purrr::is_empty(matches)) return(NULL)
+  if (purrr::is_empty(matches)) {
+    return(NULL)
+  }
 
   stringr::str_c(get_nhc_link(), "gis/", matches)
 }
@@ -277,54 +311,67 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
 gis_storm_surge_flood <- function(key,
                                   advisory = as.numeric(),
                                   products = c("inundation", "tidalmask")) {
-
   if (is.null(key)) stop("Please provide a storm `key`.", call. = FALSE)
 
   key <- stringr::str_to_upper(key)
 
-  if (!grepl("^[[:alpha:]]{2}[[:digit:]]{6}$", key))
+  if (!grepl("^[[:alpha:]]{2}[[:digit:]]{6}$", key)) {
     stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
+  }
 
-  if (!(any(products %in% c("inundation", "tidalmask"))))
+  if (!(any(products %in% c("inundation", "tidalmask")))) {
     stop("`products` must be 'inundation' or 'tidalmask'.", call. = FALSE)
+  }
 
   key <- stringr::str_match(key,
-                            pattern = stringr::str_c("([:alpha:]{2})([:digit:]",
-                                                     "{2})([:digit:]{4})"))
+    pattern = stringr::str_c(
+      "([:alpha:]{2})([:digit:]",
+      "{2})([:digit:]{4})"
+    )
+  )
 
   # Get list of GIS zips for storm and download
-  url <- sprintf("%sgis/archive_inundation_results.php?id=%s%s&year=%s",
-                 get_nhc_link(),
-                 key[,2],         # Basin
-                 key[,3],         # Storm number
-                 key[,4])         # Year
+  url <- sprintf(
+    "%sgis/archive_inundation_results.php?id=%s%s&year=%s",
+    get_nhc_link(),
+    key[, 2], # Basin
+    key[, 3], # Storm number
+    key[, 4]
+  ) # Year
 
   contents <- readr::read_lines(url)
 
   if (purrr::is_empty(advisory)) {
-    ptn <- sprintf(".+(%s/%s%s%s_[:digit:]{1,2}_(%s)\\.zip).+",
-                   "inundation/forecasts",
-                   key[,2],
-                   key[,3],
-                   stringr::str_sub(key[,4], start = 3L, end = 4L),
-                   stringr::str_c(products, collapse = "|"))
+    ptn <- sprintf(
+      ".+(%s/%s%s%s_[:digit:]{1,2}_(%s)\\.zip).+",
+      "inundation/forecasts",
+      key[, 2],
+      key[, 3],
+      stringr::str_sub(key[, 4], start = 3L, end = 4L),
+      stringr::str_c(products, collapse = "|")
+    )
   } else {
-    ptn <- sprintf(".+(inundation/forecasts/%s%s%s_%s_(%s)\\.zip).+",
-                   key[,2],
-                   key[,3],
-                   stringr::str_sub(key[,4], start = 3L, end = 4L),
-                   stringr::str_pad(advisory, width = 2, side = "left",
-                                    pad = "0"),
-                   stringr::str_c(products, collapse = "|"))
+    ptn <- sprintf(
+      ".+(inundation/forecasts/%s%s%s_%s_(%s)\\.zip).+",
+      key[, 2],
+      key[, 3],
+      stringr::str_sub(key[, 4], start = 3L, end = 4L),
+      stringr::str_pad(advisory,
+        width = 2, side = "left",
+        pad = "0"
+      ),
+      stringr::str_c(products, collapse = "|")
+    )
   }
 
-  matches <- stringr::str_match(contents, pattern = ptn)[,2]
+  matches <- stringr::str_match(contents, pattern = ptn)[, 2]
   matches <- matches[stats::complete.cases(matches)]
 
-  if (purrr::is_empty(matches)) return(NULL)
+  if (purrr::is_empty(matches)) {
+    return(NULL)
+  }
 
   stringr::str_c(get_nhc_link(), "gis/", matches)
-
 }
 
 #' @title gis_windfield
@@ -345,47 +392,61 @@ gis_storm_surge_flood <- function(key,
 #' @seealso \code{\link{gis_download}}
 #' @export
 gis_windfield <- function(key, advisory = as.character()) {
-
-  if (is.null(key))
+  if (is.null(key)) {
     stop("Please provide a storm `key`.", call. = FALSE)
+  }
 
   key <- stringr::str_to_lower(key)
 
-  if (!grepl("^[[:lower:]]{2}[[:digit:]]{6}$", key))
+  if (!grepl("^[[:lower:]]{2}[[:digit:]]{6}$", key)) {
     stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
+  }
 
   key <- stringr::str_match(key,
-                            pattern = stringr::str_c("([:lower:]{2})([:digit:]",
-                                                     "{2})([:digit:]{4})"))
+    pattern = stringr::str_c(
+      "([:lower:]{2})([:digit:]",
+      "{2})([:digit:]{4})"
+    )
+  )
 
   # Get list of GIS forecast zips for storm and download
-  url <- sprintf("%sgis/archive_forecast_info_results.php?id=%s%s&year=%s",
-                 get_nhc_link(),
-                 key[,2],         # Basin
-                 key[,3],         # Storm number
-                 key[,4])         # Year
+  url <- sprintf(
+    "%sgis/archive_forecast_info_results.php?id=%s%s&year=%s",
+    get_nhc_link(),
+    key[, 2], # Basin
+    key[, 3], # Storm number
+    key[, 4]
+  ) # Year
 
   contents <- readr::read_lines(url)
 
   # Match zip files. If advisory is empty then need to pull all zip files for
   # the storm. Otherwise, pull only selected advisory.
   if (purrr::is_empty(advisory)) {
-    ptn <- sprintf(".+(forecast/archive/%s.*?\\.zip).+",
-                   stringr::str_to_lower(key[,1]))
+    ptn <- sprintf(
+      ".+(forecast/archive/%s.*?\\.zip).+",
+      stringr::str_to_lower(key[, 1])
+    )
   } else {
     advisory <- stringr::str_match(advisory, "([:digit:]{1,3})([:alpha:]*)")
     names(advisory) <- c("original", "advisory", "int_adv")
-    ptn <- sprintf(".+(forecast/archive/%s.*?%s%s\\.zip).+",
-                   stringr::str_to_lower(key[,1]),
-                   stringr::str_pad(string = advisory[["advisory"]],
-                                    width = 3, side = "left", pad = "0"),
-                   advisory[["int_adv"]])
+    ptn <- sprintf(
+      ".+(forecast/archive/%s.*?%s%s\\.zip).+",
+      stringr::str_to_lower(key[, 1]),
+      stringr::str_pad(
+        string = advisory[["advisory"]],
+        width = 3, side = "left", pad = "0"
+      ),
+      advisory[["int_adv"]]
+    )
   }
 
-  matches <- stringr::str_match(contents, pattern = ptn)[,2]
+  matches <- stringr::str_match(contents, pattern = ptn)[, 2]
   matches <- matches[stats::complete.cases(matches)]
 
-  if (purrr::is_empty(matches)) return(NULL)
+  if (purrr::is_empty(matches)) {
+    return(NULL)
+  }
 
   stringr::str_c(get_nhc_link(), "gis/", matches)
 }
@@ -410,12 +471,13 @@ gis_windfield <- function(key, advisory = as.character()) {
 #' }
 #' @export
 gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
-
-  if (!grepl("[[:digit:]]{4,10}", datetime))
+  if (!grepl("[[:digit:]]{4,10}", datetime)) {
     stop("`datetime` should be between 4 and 10 digits.", call. = FALSE)
+  }
 
-  if (!(all(res %in% c(5.0, 0.5, 0.1))))
+  if (!(all(res %in% c(5.0, 0.5, 0.1)))) {
     stop("`res` should be one or more of 5.0, 0.5, or 0.1.", call. = FALSE)
+  }
 
   res <- as.character(res)
   res <- stringr::str_replace(res, "^5$", "5km")
@@ -457,14 +519,14 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
 #' object and converts into a dataframe that can be plotted in ggplot2.
 #' @export
 shp_to_df <- function(obj) {
-
   if (class(obj) %in% c("SpatialLinesDataFrame", "SpatialPolygonsDataFrame")) {
     obj@data$id <- rownames(obj@data)
     obj <- dplyr::left_join(broom::tidy(obj, region = "id"),
-                            obj@data, by = "id") %>%
+      obj@data,
+      by = "id"
+    ) %>%
       tibble::as_tibble()
   }
 
   obj
-
 }

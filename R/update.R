@@ -24,7 +24,6 @@ get_update <- function(links) {
 #' @seealso \code{\link{get_update}}
 #' @keywords internal
 update <- function(contents) {
-
   status <- scrape_header(
     contents = contents,
     ptn_product_title = "(?:UPDATE )?",
@@ -36,11 +35,10 @@ update <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
-    Status = status[,1],
-    Name = status[,2],
+    Status = status[, 1],
+    Name = status[, 2],
     Date = issue_date,
     Key = key,
     Contents = contents
   )
-
 }

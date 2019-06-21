@@ -31,12 +31,16 @@ Build base tracking chart using ggplot
 tracking_chart(color = "black", size = 0.1, fill = "white")
 
 # 50nm resolution, no states
-tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
-       fill = "white")
+tracking_chart(
+  res = 50, states = FALSE, color = "black", size = 0.1,
+  fill = "white"
+)
 
 # 50nm resolution, coastlines only
-tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
-       fill = "white")
+tracking_chart(
+  countries = FALSE, res = 50, color = "black", size = 0.1,
+  fill = "white"
+)
 
 # Adding and modifying with ggplot functions
 tracking_chart(color = "black", size = 0.1, fill = "white") +

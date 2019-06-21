@@ -41,8 +41,9 @@ filter_posest <- function(links) {
 #' @keywords internal
 filter_public <- function(links) {
   grep("/pub/P(AL|EP)|/pub/PA(AL|EP)|/pub/PB(AL|EP)|public",
-       x = links,
-       value = TRUE)
+    x = links,
+    value = TRUE
+  )
 }
 
 #' @title filter_prblty

@@ -4,4 +4,3 @@
 test_that("get_update", {
   expect_identical(al_09_2008_update, df.al_09_2008_update)
 })
-

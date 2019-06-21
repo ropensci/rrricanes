@@ -4,4 +4,3 @@
 test_that("Test get_posest()", {
   expect_identical(al_09_2008_posest, df.al_09_2008_posest)
 })
-

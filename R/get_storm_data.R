@@ -4,7 +4,6 @@
 #' @param product specific product to parse
 #' @keywords internal
 extract_product_contents <- function(links, product) {
-
   contents <- get_url_contents(links)
 
   # Some products may not exist within HTML but as strict text.
@@ -13,7 +12,7 @@ extract_product_contents <- function(links, product) {
 
   contents <-
     links %>%
-    get_url_contents() %>%  # Read in contents as html
+    get_url_contents() %>% # Read in contents as html
     # If text is not within html, then we simply need to return the text.
     # Otherwise, extract the node from within the HTML and return the text of
     # that node.
@@ -31,7 +30,6 @@ extract_product_contents <- function(links, product) {
     })
 
   purrr::invoke_map_df(product, .x = list(list(contents)))
-
 }
 
 #' @title extract_storm_links
@@ -39,9 +37,9 @@ extract_product_contents <- function(links, product) {
 #' @param links URLs to a storm's archive page
 #' @keywords internal
 extract_storm_links <- function(links) {
-
-  if (!is.vector(links))
+  if (!is.vector(links)) {
     stop("Links must be a character vector.", call. = FALSE)
+  }
 
   # Get links of text products from each `links`
   product_links <-
@@ -49,12 +47,12 @@ extract_storm_links <- function(links) {
     get_url_contents() %>%
     purrr::imap(.f = xml2::read_html) %>%
     # Extract the html tables from each link to get the storm's text products
-    purrr::imap(.f = ~rvest::html_nodes(.x, xpath = "//td//a")) %>%
+    purrr::imap(.f = ~ rvest::html_nodes(.x, xpath = "//td//a")) %>%
     # Extract the text product URLs from `nodes`
-    purrr::imap(.f = ~rvest::html_attr(.x, name = "href")) %>%
+    purrr::imap(.f = ~ rvest::html_attr(.x, name = "href")) %>%
     purrr::flatten_chr() %>%
     # Ensure we're only capturing archive pages
-    stringr::str_match( "archive.+") %>%
+    stringr::str_match("archive.+") %>%
     .[stats::complete.cases(.)]
 
   # Extract years from `links`
@@ -64,8 +62,10 @@ extract_storm_links <- function(links) {
   # other years, product_links are absolute. If product_links exist for 1998
   # they must be modified. All product_links must then be prefixed with
   # NHC URL.
-  product_links[years == 1998] <- stringr::str_c("/archive/1998/",
-                                                 product_links[years == 1998])
+  product_links[years == 1998] <- stringr::str_c(
+    "/archive/1998/",
+    product_links[years == 1998]
+  )
   product_links <- stringr::str_c(get_nhc_link(), product_links)
 }
 
@@ -128,10 +128,11 @@ get_product <- function(links, product) {
 #'   get_storm_data(products = c("discus", "public"))
 #' }
 #' @export
-get_storm_data <- function(links, products = c("discus", "fstadv", "posest",
-                                               "public", "prblty", "update",
-                                               "wndprb")) {
-
+get_storm_data <- function(links, products = c(
+                             "discus", "fstadv", "posest",
+                             "public", "prblty", "update",
+                             "wndprb"
+                           )) {
   products <- match.arg(products, several.ok = TRUE)
 
   product_links <- extract_storm_links(links)
@@ -145,5 +146,4 @@ get_storm_data <- function(links, products = c("discus", "fstadv", "posest",
   product_links <- rlang::set_names(product_links, nm = products)
 
   purrr::map2(product_links, products, extract_product_contents)
-
 }

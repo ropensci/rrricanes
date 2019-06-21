@@ -3,14 +3,11 @@
 #'   contents and collapses into a string.
 #' @param x File name located in inst/extdata directory.
 read_files <- function(x) {
-
   f <- system.file("extdata", x, package = "rrricanes", mustWork = TRUE)
-  readChar(f, file.info(f)$size
-  )
+  readChar(f, file.info(f)$size)
 }
 
 v <- function(r, c, link) {
-
   content <- xml2::read_html(link)
 
   path <- sprintf(

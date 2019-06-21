@@ -11,7 +11,8 @@ get_storm_list <- function() {
   # Read in file as string
   txt <- readChar(
     "ftp://ftp.nhc.noaa.gov/atcf/index/storm_list.txt",
-    nchars = 252928)
+    nchars = 252928
+  )
 
   # Remove any trailing white space
   clean_txt <- stringr::str_trim(txt)
@@ -63,11 +64,12 @@ get_ftp_dirs <- function(x) {
 #' @export
 #' @seealso \code{\link{get_storm_data}}
 get_ftp_storm_data <- function(stormid,
-                               products = c("discus", "fstadv", "posest",
-                                            "public", "prblty", "update",
-                                            "wndprb")) {
-
-  if (!grepl("(AL|EP)\\d{6}", stormid))
+                               products = c(
+                                 "discus", "fstadv", "posest",
+                                 "public", "prblty", "update",
+                                 "wndprb"
+                               )) {
+  if (!grepl("(AL|EP)\\d{6}", stormid)) {
     stop(
       stringr::str_c(
         "stormid should be an alphanumeric string with the basin abbreviation ",
@@ -76,9 +78,10 @@ get_ftp_storm_data <- function(stormid,
         .call = FALSE
       )
     )
+  }
 
   # What year is the storm?
-  yyyy <- as.integer(stringr::str_match(stormid, "^.+(\\d{4})$")[,2])
+  yyyy <- as.integer(stringr::str_match(stormid, "^.+(\\d{4})$")[, 2])
 
   # List all directories in the ftp's archives
   archives <- get_ftp_dirs(x = "/atcf/archive/")
@@ -192,7 +195,6 @@ get_ftp_storm_data <- function(stormid,
       files_length <- purrr::map(.x = files, .f = file.info) %>%
         purrr::map_dbl("size")
       res_txt <- purrr::map2_chr(.x = files, .y = files_length, readChar)
-
     } else {
       links <- sprintf(
         fmt = "ftp://ftp.nhc.noaa.gov/atcf/archive/%s/messages/%s",
@@ -201,9 +203,8 @@ get_ftp_storm_data <- function(stormid,
       )
 
       res <- get_url_contents(links)
-      res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
+      res_parsed <- purrr::map(res, ~ xml2::read_html(.$content))
       res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
-
     }
   } else {
     # If the `yyyy` value is not in the ftp archives, then it is in a product
@@ -251,14 +252,12 @@ get_ftp_storm_data <- function(stormid,
     )
 
     res <- get_url_contents(links)
-    res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
+    res_parsed <- purrr::map(res, ~ xml2::read_html(.$content))
     res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
-
   }
 
   df <- purrr::invoke_map_df(
     .f = utils::getFromNamespace(x = products, ns = "rrricanes"),
     .x = res_txt
   )
-
 }

@@ -9,17 +9,23 @@
 #' al_tracking_chart(color = "black", size = 0.1, fill = "white")
 #'
 #' # 50nm resolution, no states
-#' al_tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
-#'           fill = "white")
+#' al_tracking_chart(
+#'   res = 50, states = FALSE, color = "black", size = 0.1,
+#'   fill = "white"
+#' )
 #'
 #' # 50nm resolution, coastlines only
-#' al_tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
-#'           fill = "white")
+#' al_tracking_chart(
+#'   countries = FALSE, res = 50, color = "black", size = 0.1,
+#'   fill = "white"
+#' )
 #'
 #' # Adding and modifying with ggplot functions
 #' al_tracking_chart(color = "black", size = 0.1, fill = "white") +
-#'   ggplot2::labs(x = "Lon", y = "Lat",
-#'   title = "Base Atlantic Tracking Chart")
+#'   ggplot2::labs(
+#'     x = "Lon", y = "Lat",
+#'     title = "Base Atlantic Tracking Chart"
+#'   )
 #' }
 #' @export
 al_tracking_chart <- function(...) {
@@ -38,17 +44,23 @@ al_tracking_chart <- function(...) {
 #' ep_tracking_chart(color = "black", size = 0.1, fill = "white")
 #'
 #' # 50nm resolution, no states
-#' ep_tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
-#'           fill = "white")
+#' ep_tracking_chart(
+#'   res = 50, states = FALSE, color = "black", size = 0.1,
+#'   fill = "white"
+#' )
 #'
 #' # 50nm resolution, coastlines only
-#' ep_tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
-#'           fill = "white")
+#' ep_tracking_chart(
+#'   countries = FALSE, res = 50, color = "black", size = 0.1,
+#'   fill = "white"
+#' )
 #'
 #' # Adding and modifying with ggplot functions
 #' ep_tracking_chart(color = "black", size = 0.1, fill = "white") +
-#'   ggplot2::labs(x = "Lon", y = "Lat",
-#'   title = "Base East Pacific Tracking Chart")
+#'   ggplot2::labs(
+#'     x = "Lon", y = "Lat",
+#'     title = "Base East Pacific Tracking Chart"
+#'   )
 #' }
 #' @export
 ep_tracking_chart <- function(...) {
@@ -74,12 +86,16 @@ ep_tracking_chart <- function(...) {
 #' tracking_chart(color = "black", size = 0.1, fill = "white")
 #'
 #' # 50nm resolution, no states
-#' tracking_chart(res = 50, states = FALSE, color = "black", size = 0.1,
-#'        fill = "white")
+#' tracking_chart(
+#'   res = 50, states = FALSE, color = "black", size = 0.1,
+#'   fill = "white"
+#' )
 #'
 #' # 50nm resolution, coastlines only
-#' tracking_chart(countries = FALSE, res = 50, color = "black", size = 0.1,
-#'        fill = "white")
+#' tracking_chart(
+#'   countries = FALSE, res = 50, color = "black", size = 0.1,
+#'   fill = "white"
+#' )
 #'
 #' # Adding and modifying with ggplot functions
 #' tracking_chart(color = "black", size = 0.1, fill = "white") +
@@ -92,8 +108,9 @@ tracking_chart <- function(countries = TRUE, states = TRUE, res = 110, ...) {
   res <- as.integer(res)
 
   # Validate res
-  if (!(res %in% c(110, 50, 10)))
+  if (!(res %in% c(110, 50, 10))) {
     stop("Chart resolution must be 110, 50, 10")
+  }
 
   pkg <- "rnaturalearth"
   if (res %in% c(110, 50)) {
@@ -123,15 +140,18 @@ tracking_chart <- function(countries = TRUE, states = TRUE, res = 110, ...) {
   }
 
   p <- ggplot2::ggplot() +
-    ggplot2::geom_polygon(data = base_map_data,
-                          ggplot2::aes(long, lat, group = group), ...) +
-    ggplot2::coord_equal()
+    ggplot2::geom_polygon(
+      data = base_map_data,
+      ggplot2::aes(.data$long, .data$lat, group = .data$group), ...
+    )
 
-  if (exists("state_map_data"))
+  if (exists("state_map_data")) {
     p <- p +
-    ggplot2::geom_polygon(data = state_map_data,
-                          ggplot2::aes(long, lat, group = group), ...)
+      ggplot2::geom_polygon(
+        data = state_map_data,
+        ggplot2::aes(.data$long, .data$lat, group = .data$group), ...
+      )
+  }
 
   return(p)
-
 }

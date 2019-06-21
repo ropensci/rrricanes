@@ -3,7 +3,7 @@ context("Filters")
 #' Filters are to help extract product URL's from a storm's archive pages.
 test_that("Get products from storm archive", {
   # Test number of products for Katrina, 2005
-  expect_equal(length(AL122005),154)
+  expect_equal(length(AL122005), 154)
   expect_equal(length(rrricanes:::filter_discus(AL122005)), 32)
   expect_equal(length(rrricanes:::filter_fstadv(AL122005)), 31)
   expect_equal(length(rrricanes:::filter_orig(AL122005)), 1)

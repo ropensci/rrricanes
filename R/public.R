@@ -25,7 +25,6 @@ get_public <- function(links) {
 #' @seealso \code{\link{get_public}}
 #' @keywords internal
 public <- function(contents) {
-
   status <- scrape_header(
     contents = contents,
     # The "SPECIAL" pattern has to be left here; moving it under
@@ -38,12 +37,11 @@ public <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
-    Status = status[,1],
-    Name = status[,2],
-    Adv = status[,3],
+    Status = status[, 1],
+    Name = status[, 2],
+    Adv = status[, 3],
     Date = issue_date,
     Key = key,
     Contents = contents
   )
-
 }
