@@ -34,6 +34,7 @@ matrix:
 build_script:
   - travis-tool.sh install_deps
   - Rscript -e "install.packages('rrricanesdata', repos = 'https://timtrice.github.io/drat/', type = 'source');"
+  - Rscript -e "install.packages('rnaturalearthhires', repos = 'http://packages.ropensci.org', type = 'source');"
 
 test_script:
   - travis-tool.sh run_tests
