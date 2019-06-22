@@ -498,22 +498,3 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
 
   stringr::str_c(get_nhc_link(), "gis/", links)
 }
-
-#' @title shp_to_df
-#' @description Convert shapefile object to dataframe
-#' @param obj Spatial object to convert. See details.
-#' @details Takes a SpatialLinesDataFrame object or SpatialPolygonsDataFrame
-#' object and converts into a dataframe that can be plotted in ggplot2.
-#' @export
-shp_to_df <- function(obj) {
-  if (class(obj) %in% c("SpatialLinesDataFrame", "SpatialPolygonsDataFrame")) {
-    obj@data$id <- rownames(obj@data)
-    obj <- dplyr::left_join(broom::tidy(obj, region = "id"),
-      obj@data,
-      by = "id"
-    ) %>%
-      tibble::as_tibble()
-  }
-
-  obj
-}

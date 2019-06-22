@@ -14,16 +14,22 @@ project adheres to [Semantic Versioning](http://semver.org/).
   - `get_storm_list` returns dataframe of all known cyclones. (#114)
 
 ### Changed
-  - `gis_download` and `gis_latest` can accept parameters for rgdal::readOGR 
-    (#104).
+  - `gis_latest` can accept parameters for rgdal::readOGR (#104).
     
+  - `gis_download` modified to download zip files and extract contents 
+    returning a vector of files within the zip.
+  
   - `ep_prblty_stations` now returns all stations.
   
   - `al_prblty_stations`, `cp_prblty_stations` and `ep_prblty_stations` 
     datasets were modified with additional columns. Changes are documented.
 
 ### Removed
-  - NA
+  - `tracking_chart`, `al_tracking_chart`, and `ep_tracking_chart` all removed 
+    in favor of using `rnaturalearth` and associated data packages, or other 
+    mapping packages.
+    
+  - `shp_to_df` removed; users can use `sf::st_read`
 
 ### Deprecated
   - NA

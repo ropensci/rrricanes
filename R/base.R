@@ -83,11 +83,6 @@
 #' \code{\link{gis_download}} will download the datasets from the above
 #' functions.
 #'
-#' Some GIS datasets will need to be converted to dataframes to plot geoms. Use
-#' \code{\link{shp_to_df}} to convert SpatialLinesDataFrames and
-#' SpatialPolygonsDataFrames. SpatialPointsDataFrames can be converted using
-#' \code{tibble::as_data_frame} targeting the @data object.
-#'
 #' @section Package Options:
 #'
 #' \code{dplyr.show_progress} displays the dplyr progress bar when scraping raw

@@ -25,6 +25,8 @@ rrricanes Unreleased (yyyy-mm-dd)
 
 * `gis_download` no longer reads in the shapefiles; only downloads and extracts the zip files.
 
+* `shp_to_df` also removed in favor of built-in `sf` and `ggplot2` functions.
+
 ### BUG FIXES
 
 * `tidy_fcst` only returned forecasts for hours 12:96. Now returns 120. (#107)
