@@ -42,6 +42,7 @@ Imports:
 Suggests:
   covr, 
   devtools, 
+  gganimate, 
   HURDAT, 
   knitr, 
   rmarkdown,
