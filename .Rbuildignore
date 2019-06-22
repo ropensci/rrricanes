@@ -5,6 +5,7 @@
 ^\.rstudio$
 ^\.travis\.yml$
 ^_pkgdown\.yml$
+^doc$
 ^docker$
 ^appveyor\.yml$
 ^CHANGELOG\.md$
@@ -12,13 +13,11 @@
 ^data-raw$
 ^datasets/
 ^deploy\.sh$
-^docs$
+^Meta$
 ^NEWS\.md$
 ^README\.Rmd$
 ^reports$
 ^rrricanes\.code-workspace
-^doc$
-^Meta$
 ^vignettes/accumulated_cyclone_energy.Rmd$
 ^vignettes/forecast_advisory.Rmd$
 ^vignettes/probabilistic_storm_surge.Rmd$
