@@ -46,6 +46,8 @@ RUN Rscript -e 'remotes::install_github("ropensci/rrricanesdata");'
 
 RUN Rscript -e 'remotes::install_github("ropensci/rnaturalearthhires");'
 
+RUN Rscript -e 'remotes::install_github("ropenscilabs/travis");'
+
 RUN cd /home/rstudio/.rstudio/monitored/user-settings/ \
   && mv user-settings user-settings.copy \
   && wget https://gist.githubusercontent.com/timtrice/94a679b51388faf99ef7918c7bdaff8d/raw/9a52ffebd1e2e8587918a31ff8e962110b816936/user-settings \
