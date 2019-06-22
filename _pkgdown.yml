@@ -1,5 +1,6 @@
 url: https://ropensci.github.io/rrricanes/
-
+toc:
+  depth: 3
 reference:
   - title: About `rrricanes`
     contents:
@@ -14,17 +15,10 @@ reference:
     contents:
     - twoal
     - twoep
-  - title: Tracking charts
-    desc: Helper functions to plot storm data through `ggplot2`.
-    contents:
-    - al_tracking_chart
-    - ep_tracking_chart
-    - tracking_chart
   - title: GIS Data
     desc: Gathering GIS data from the National Hurricane Center.
     contents:
     - starts_with("gis_")
-    - shp_to_df
   - title: Helpers
     desc: >
       Helper functions. Please note `al_prblty_stations` and
@@ -58,9 +52,6 @@ articles:
     contents:
       - getting_started
       - installing_rrricanesdata
-      - forecast_advisory
       - wind_pressure
-      - wind_speed_probabilities
       - gis_data
-      - probabilistic_storm_surge
       - accumulated_cyclone_energy

@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rrricanes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.6.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.6.9002</span>
       </span>
     </div>
 
@@ -91,25 +91,16 @@
       <a href="../articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
     </li>
     <li>
-      <a href="../articles/forecast_advisory.html">Forecast/Advisory GIS</a>
-    </li>
-    <li>
       <a href="../articles/getting_started.html">Getting Started</a>
     </li>
     <li>
-      <a href="../articles/gis_data.html">GIS data</a>
+      <a href="../articles/gis_data.html">Retrieving and Plotting GIS Data</a>
     </li>
     <li>
       <a href="../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
     </li>
     <li>
-      <a href="../articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
-    </li>
-    <li>
       <a href="../articles/wind_pressure.html">Wind and Pressure</a>
-    </li>
-    <li>
-      <a href="../articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
     </li>
   </ul>
 </li>
@@ -148,7 +139,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>gis_download</span>(<span class='no'>url</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>gis_download</span>(<span class='no'>url</span>, <span class='kw'>destdir</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,8 +149,12 @@
       <td><p>link to GIS dataset to download.</p></td>
     </tr>
     <tr>
+      <th>destdir</th>
+      <td><p>The destination directory to download and extract the zip file</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>additional parameters for rgdal::readOGR</p></td>
+      <td><p>additional parameters for file.path</p></td>
     </tr>
     </table>
     

@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rrricanes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.6.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.6.9002</span>
       </span>
     </div>
 
@@ -89,25 +89,16 @@
       <a href="articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
     </li>
     <li>
-      <a href="articles/forecast_advisory.html">Forecast/Advisory GIS</a>
-    </li>
-    <li>
       <a href="articles/getting_started.html">Getting Started</a>
     </li>
     <li>
-      <a href="articles/gis_data.html">GIS data</a>
+      <a href="articles/gis_data.html">Retrieving and Plotting GIS Data</a>
     </li>
     <li>
       <a href="articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
     </li>
     <li>
-      <a href="articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
-    </li>
-    <li>
       <a href="articles/wind_pressure.html">Wind and Pressure</a>
-    </li>
-    <li>
-      <a href="articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
     </li>
   </ul>
 </li>
@@ -161,7 +152,8 @@
 <h3 class="hasAnchor">
 <a href="#changed" class="anchor"></a>Changed</h3>
 <ul>
-<li><p><code>gis_download</code> and <code>gis_latest</code> can accept parameters for rgdal::readOGR (#104).</p></li>
+<li><p><code>gis_latest</code> can accept parameters for rgdal::readOGR (#104).</p></li>
+<li><p><code>gis_download</code> modified to download zip files and extract contents returning a vector of files within the zip.</p></li>
 <li><p><code>ep_prblty_stations</code> now returns all stations.</p></li>
 <li><p><code>al_prblty_stations</code>, <code>cp_prblty_stations</code> and <code>ep_prblty_stations</code> datasets were modified with additional columns. Changes are documented.</p></li>
 </ul>
@@ -170,7 +162,8 @@
 <h3 class="hasAnchor">
 <a href="#removed" class="anchor"></a>Removed</h3>
 <ul>
-<li>NA</li>
+<li><p><code>tracking_chart</code>, <code>al_tracking_chart</code>, and <code>ep_tracking_chart</code> all removed in favor of using <code>rnaturalearth</code> and associated data packages, or other mapping packages.</p></li>
+<li><p><code>shp_to_df</code> removed; users can use <code><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">sf::st_read</a></code></p></li>
 </ul>
 </div>
 <div id="deprecated" class="section level3">
@@ -600,7 +593,7 @@
 <li>dplyr.progress_bar for all products</li>
 <li>rrricanes.working_msg option to show current working advisory.</li>
 <li>
-<code><a href="reference/tracking_chart.html">tracking_chart()</a></code> for a base world plot. <code><a href="reference/al_tracking_chart.html">al_tracking_chart()</a></code> for chart centered on Atlantic basin. <code><a href="reference/ep_tracking_chart.html">ep_tracking_chart()</a></code> for chart centered on northeast Pacific.</li>
+<code>tracking_chart()</code> for a base world plot. <code>al_tracking_chart()</code> for chart centered on Atlantic basin. <code>ep_tracking_chart()</code> for chart centered on northeast Pacific.</li>
 <li>
 <code>load_storm_data()</code> helps get datasets that have already been scraped and processed. Designed to make it more efficient to get data faster.</li>
 <li>

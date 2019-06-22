@@ -73,7 +73,7 @@ made to add prior data as available." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rrricanes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.6.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.6.9002</span>
       </span>
     </div>
 
@@ -99,25 +99,16 @@ made to add prior data as available." />
       <a href="../articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
     </li>
     <li>
-      <a href="../articles/forecast_advisory.html">Forecast/Advisory GIS</a>
-    </li>
-    <li>
       <a href="../articles/getting_started.html">Getting Started</a>
     </li>
     <li>
-      <a href="../articles/gis_data.html">GIS data</a>
+      <a href="../articles/gis_data.html">Retrieving and Plotting GIS Data</a>
     </li>
     <li>
       <a href="../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
     </li>
     <li>
-      <a href="../articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
-    </li>
-    <li>
       <a href="../articles/wind_pressure.html">Wind and Pressure</a>
-    </li>
-    <li>
-      <a href="../articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
     </li>
   </ul>
 </li>
@@ -231,10 +222,6 @@ core GIS functions return URLs to help you refine the data you wish to view.
 </dl>
     <p><code><a href='gis_download.html'>gis_download</a></code> will download the datasets from the above
 functions.</p>
-<p>Some GIS datasets will need to be converted to dataframes to plot geoms. Use
-<code><a href='shp_to_df.html'>shp_to_df</a></code> to convert SpatialLinesDataFrames and
-SpatialPolygonsDataFrames. SpatialPointsDataFrames can be converted using
-<code><a href='https://tibble.tidyverse.org/reference/deprecated.html'>tibble::as_data_frame</a></code> targeting the @data object.</p>
     
     <h2 class="hasAnchor" id="package-options"><a class="anchor" href="#package-options"></a>Package Options</h2>
 

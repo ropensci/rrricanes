@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rrricanes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.6.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.6.9002</span>
       </span>
     </div>
 
@@ -91,25 +91,16 @@
       <a href="../articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
     </li>
     <li>
-      <a href="../articles/forecast_advisory.html">Forecast/Advisory GIS</a>
-    </li>
-    <li>
       <a href="../articles/getting_started.html">Getting Started</a>
     </li>
     <li>
-      <a href="../articles/gis_data.html">GIS data</a>
+      <a href="../articles/gis_data.html">Retrieving and Plotting GIS Data</a>
     </li>
     <li>
       <a href="../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
     </li>
     <li>
-      <a href="../articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
-    </li>
-    <li>
       <a href="../articles/wind_pressure.html">Wind and Pressure</a>
-    </li>
-    <li>
-      <a href="../articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
     </li>
   </ul>
 </li>
@@ -210,8 +201,10 @@ esurge (10, 20, 30, 40, 50).</p></td>
 <span class='fu'>gis_prob_storm_surge</span>(<span class='st'>"AL092016"</span>, <span class='kw'>products</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"psurge"</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='st'>"esurge"</span> <span class='kw'>=</span> <span class='fl'>10</span>))
 
 <span class='co'># Return all psurge0 products for Sep 2, 2016, storm AL092016</span>
-<span class='fu'>gis_prob_storm_surge</span>(<span class='st'>"AL092016"</span>, <span class='kw'>products</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"psurge"</span> <span class='kw'>=</span> <span class='fl'>0</span>),
-           <span class='kw'>datetime</span> <span class='kw'>=</span> <span class='st'>"20160902"</span>)
+<span class='fu'>gis_prob_storm_surge</span>(<span class='st'>"AL092016"</span>,
+  <span class='kw'>products</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"psurge"</span> <span class='kw'>=</span> <span class='fl'>0</span>),
+  <span class='kw'>datetime</span> <span class='kw'>=</span> <span class='st'>"20160902"</span>
+)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

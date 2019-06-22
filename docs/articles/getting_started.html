@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rrricanes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.6.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.6.9002</span>
       </span>
     </div>
 
@@ -57,25 +57,16 @@
       <a href="../articles/accumulated_cyclone_energy.html">Accumulated Cyclone Energy (ACE)</a>
     </li>
     <li>
-      <a href="../articles/forecast_advisory.html">Forecast/Advisory GIS</a>
-    </li>
-    <li>
       <a href="../articles/getting_started.html">Getting Started</a>
     </li>
     <li>
-      <a href="../articles/gis_data.html">GIS data</a>
+      <a href="../articles/gis_data.html">Retrieving and Plotting GIS Data</a>
     </li>
     <li>
       <a href="../articles/installing_rrricanesdata.html">Installing rrricanesdata</a>
     </li>
     <li>
-      <a href="../articles/probabilistic_storm_surge.html">Probabilistic Storm Surge</a>
-    </li>
-    <li>
       <a href="../articles/wind_pressure.html">Wind and Pressure</a>
-    </li>
-    <li>
-      <a href="../articles/wind_speed_probabilities.html">Wind Speed Probabilities</a>
     </li>
   </ul>
 </li>
@@ -105,7 +96,7 @@
       <h1>Getting Started</h1>
                         <h4 class="author">Tim Trice</h4>
             
-            <h4 class="date">2019-06-16</h4>
+            <h4 class="date">2019-06-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/rrricanes/blob/master/vignettes/getting_started.Rmd"><code>vignettes/getting_started.Rmd</code></a></small>
       <div class="hidden name"><code>getting_started.Rmd</code></div>
@@ -396,7 +387,14 @@
 <li><a href="#general-introduction">General Introduction</a></li>
       <li><a href="#get-storms">Get Storms</a></li>
       <li><a href="#getting-storm-data">Getting Storm Data</a></li>
-      <li><a href="#forecastadvisory-product-fstadv">Forecast/Advisory Product (<code>fstadv</code>)</a></li>
+      <li>
+<a href="#forecastadvisory-product-fstadv">Forecast/Advisory Product (<code>fstadv</code>)</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#current-details">Current Details</a></li>
+      <li><a href="#wind-radius">Wind Radius</a></li>
+      <li><a href="#forecast">Forecast</a></li>
+      <li><a href="#forecast-wind-radius">Forecast Wind Radius</a></li>
+      </ul>
+</li>
       <li><a href="#strike-probabilities-prblty">Strike Probabilities (<code>prblty</code>)</a></li>
       <li><a href="#wind-speed-probabilities-wndprb">Wind Speed Probabilities (<code>wndprb</code>)</a></li>
       <li><a href="#other-products">Other products</a></li>
