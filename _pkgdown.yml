@@ -1,6 +1,33 @@
 url: https://ropensci.github.io/rrricanes/
 toc:
   depth: 3
+
+authors:
+  Tim Trice:
+    href: https://timtrice.net
+
+navbar:
+  type: default
+  left:
+  - icon: fa-home fa-lg
+    href: index.html
+  - text: Getting Started
+    href: articles/getting_started.html
+  - text: Reference
+    href: reference/index.html
+  - text: Tutorials
+    menu:
+    - text: Accumulated Cyclone Energy
+      href: accumulated_cyclone_energy.html
+    - text: GIS Data
+      href: gis_data.html
+    - text: Wind and Pressure
+      href: wind_pressure.html
+    - text: rrricanesdata
+      href: installing_rrricanesdata.html
+  - text: "News"
+    href: news/index.html
+
 reference:
   - title: About `rrricanes`
     contents:
@@ -46,12 +73,3 @@ reference:
       - df.gis_storm_surge
       - df.gis_wind_radii
       - df.gis_wsp
-
-articles:
-  - title: Articles
-    contents:
-      - getting_started
-      - installing_rrricanesdata
-      - wind_pressure
-      - gis_data
-      - accumulated_cyclone_energy
