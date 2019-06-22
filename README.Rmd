@@ -73,17 +73,13 @@ Linux users must also have the `libgdal-dev`, `libproj-dev` and `libxml2-dev` pa
 To add `rrricanesdata`, a [package of post-scraped datasets](https://github.com/ropensci/rrricanesdata), 
 
 ```r
-install.packages("rrricanesdata", 
-                 repos = "https://timtrice.github.io/drat/", 
-                 type = "source")
+remotes::install_github("ropensci/rrricanesdata")
 ```
 
 To use high resolution tracking maps you will need to install the `rnaturalearthhires` package. 
 
 ```r
-install.packages("rnaturalearthhires",
-                 repos = "http://packages.ropensci.org",
-                 type = "source")
+remotes::install_github("ropensci/rnaturalearthhires")
 ```
 
 ### Installing

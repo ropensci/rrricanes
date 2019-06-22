@@ -54,9 +54,7 @@
 #' To install \code{rrricanesdata}, run
 #'
 #' \code{
-#' install.packages("rrricanesdata",
-#'          repos = "https://timtrice.github.io/drat/",
-#'          type = "source")
+#' remotes::install_github("ropensci/rrricanesdata")
 #' }
 #'
 #' See \code{vignette("installing_rrricanesdata", package = "rrricanes")} for
