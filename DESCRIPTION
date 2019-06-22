@@ -45,6 +45,7 @@ Suggests:
   gganimate, 
   HURDAT, 
   knitr, 
+  magick, 
   rmarkdown,
   rnaturalearthhires, 
   rrricanesdata, 
