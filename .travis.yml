@@ -14,8 +14,8 @@ addons:
       - libgdal-dev
 
 before_install:
-  - Rscript -e "install.packages('rrricanesdata', repos = 'https://timtrice.github.io/drat/', type = 'source', lib = .libPaths()[3]);"
-  - Rscript -e "install.packages('rnaturalearthhires', repos = 'http://packages.ropensci.org', type = 'source', lib = .libPaths()[3]);"
+  - Rscript -e "remotes::install_github('ropensci/rrricanesdata')"
+  - Rscript -e "remotes::install_github('ropensci/rnaturalearthhires')"
 
 matrix:
   include:
