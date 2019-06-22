@@ -18,13 +18,13 @@ navbar:
   - text: Tutorials
     menu:
     - text: Accumulated Cyclone Energy
-      href: accumulated_cyclone_energy.html
+      href: articles/accumulated_cyclone_energy.html
     - text: GIS Data
-      href: gis_data.html
+      href: articles/gis_data.html
     - text: Wind and Pressure
-      href: wind_pressure.html
+      href: articles/wind_pressure.html
     - text: rrricanesdata
-      href: installing_rrricanesdata.html
+      href: articles/installing_rrricanesdata.html
   - text: "News"
     href: news/index.html
 
