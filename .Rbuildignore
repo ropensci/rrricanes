@@ -8,6 +8,7 @@
 ^docker$
 ^appveyor\.yml$
 ^CHANGELOG\.md$
+^codecov.yml$
 ^data-raw$
 ^datasets/
 ^deploy\.sh$
