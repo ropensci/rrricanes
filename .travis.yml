@@ -8,6 +8,7 @@ addons:
     sources:
       - sourceline: 'ppa:ubuntugis/ppa'
     packages:
+      - libmagick++-dev
       - libudunits2-dev
       - libproj-dev
       - libgeos-dev
