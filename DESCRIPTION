@@ -42,6 +42,7 @@ Imports:
 Suggests:
   covr, 
   devtools, 
+  HURDAT, 
   knitr, 
   rmarkdown,
   rnaturalearthhires, 
