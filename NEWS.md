@@ -14,8 +14,7 @@ rrricanes Unreleased (yyyy-mm-dd)
 
 * Allow parameters for rgdal::readOGR (#104)
 
-* Add `tidy_adv` to replace `tidy_fstadv`; `tidy_fstadv` will be removed in 
-  release 0.2.2 (#103)
+* Add `tidy_adv` to replace `tidy_fstadv`; `tidy_fstadv` will be removed in release 0.2.2 (#103)
 
 * `al_prblty_stations` and `cp_prblty_stations` updated 
   to accomodate new dataset. (#46)
