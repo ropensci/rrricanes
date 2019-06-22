@@ -22,20 +22,19 @@ matrix:
   - r: oldrel
   - r: release
     after_success: Rscript -e "covr::codecov()"
-    before_deploy: Rscript -e "remotes::install_cran('pkgdown')"
+    before_cache: Rscript -e "remotes::install_cran('pkgdown')"
     deploy:
       provider: script
-      script: Rscript -e "pkgdown::deploy_site_github()""
+      script: Rscript -e "pkgdown::deploy_site_github(verbose = TRUE)""
       skip_cleanup: true
+      on:
+        all_branches: true
+        condition: $TRAVIS_BRANCH =~ ^master|develop$
   - r: devel
 
 env:
   global:
   - _R_CHECK_FORCE_SUGGESTS_=false
-
-r_packages:
-  - covr
-  - sf
 
 env:
   global:
