@@ -24,6 +24,8 @@ rrricanes Unreleased (yyyy-mm-dd)
 
 * `tracking_chart` and associated functions have been removed in favor of rnaturalearth and related packages. See `vignette("gis_data", package = "rrricanes") for details.
 
+* `gis_download` no longer reads in the shapefiles; only downloads and extracts the zip files.
+
 ### BUG FIXES
 
 * `tidy_fcst` only returned forecasts for hours 12:96. Now returns 120. (#107)

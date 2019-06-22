@@ -103,32 +103,19 @@ gis_breakpoints <- function() {
 #' @title gis_download
 #' @description Get GIS data for storm.
 #' @param url link to GIS dataset to download.
-#' @param ... additional parameters for rgdal::readOGR
+#' @param destdir The destination directory to download and extract the zip file
+#' @param ... additional parameters for file.path
 #' @export
-gis_download <- function(url, ...) {
-  destdir <- tempdir()
+gis_download <- function(url, destdir = tempdir(), ...) {
 
-  utils::download.file(file.path(url), zip_file <- tempfile())
+  utils::download.file(file.path(url), zip_file <- tempfile(), ...)
 
   zip_contents <- utils::unzip(zip_file, list = TRUE)$Name
 
   utils::unzip(zip_file, exdir = destdir)
 
-  shp_files <- stringr::str_match(zip_contents, pattern = ".+shp$")
-  shp_files <- shp_files[stats::complete.cases(shp_files)]
+  return(zip_contents)
 
-  ds <-
-    purrr::map2(
-      .x = destdir,
-      .y = stringr::str_replace(shp_files, "\\.shp", ""),
-      .f = rgdal::readOGR,
-      encoding = "UTF-8",
-      stringsAsFactors = FALSE,
-      use_iconv = TRUE,
-      ...
-    )
-
-  rlang::set_names(ds, nm = stringr::str_replace(shp_files, "\\.shp", ""))
 }
 
 #' @title gis_latest
