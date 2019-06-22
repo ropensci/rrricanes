@@ -32,9 +32,11 @@ matrix:
   fast_finish: true
 
 build_script:
+#  - Rscript -e "install.packages('rrricanesdata', repos = 'https://timtrice.github.io/drat/', type = 'source', lib = .libPaths()[3]);"
+#  - Rscript -e "install.packages('rnaturalearthhires', repos = 'http://packages.ropensci.org', type = 'source', lib = .libPaths()[3]);"
+  - travis-tool.sh install_github ropensci/rrricanesdata
+  - travis-tool.sh install_github ropensci/rnaturalearthhires
   - travis-tool.sh install_deps
-  - Rscript -e "install.packages('rrricanesdata', repos = 'https://timtrice.github.io/drat/', type = 'source', lib = .libPaths()[3]);"
-  - Rscript -e "install.packages('rnaturalearthhires', repos = 'http://packages.ropensci.org', type = 'source', lib = .libPaths()[3]);"
 
 test_script:
   - travis-tool.sh run_tests
