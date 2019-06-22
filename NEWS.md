@@ -22,6 +22,8 @@ rrricanes Unreleased (yyyy-mm-dd)
   
 * `ep_prblty_stations` now returns dataset of east Pacific stations. (#46)
 
+* `tracking_chart` and associated functions have been removed in favor of rnaturalearth and related packages. See `vignette("gis_data", package = "rrricanes") for details.
+
 ### BUG FIXES
 
 * `tidy_fcst` only returned forecasts for hours 12:96. Now returns 120. (#107)
