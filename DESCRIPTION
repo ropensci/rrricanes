@@ -44,6 +44,8 @@ Suggests:
   devtools, 
   knitr, 
   rmarkdown,
+  rnaturalearthhires, 
+  scales, 
   sf, 
   testthat
 RoxygenNote: 6.1.1

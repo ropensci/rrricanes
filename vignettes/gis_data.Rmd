@@ -1,15 +1,20 @@
 ---
-title: "GIS data"
+title: "Retrieving and Plotting GIS Data"
 author: "Tim Trice"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
 vignette: >
   %\VignetteIndexEntry{GIS data}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
-```{r, message = FALSE}
+```{r libraries, message = FALSE}
 library(dplyr)
 library(ggplot2)
 library(rrricanes)
@@ -26,48 +31,49 @@ Some datasets require the use of the storm key and an optional advisory. Other p
 
 ## Build a Tracking Chart
 
-There are three functions available to help you plot GIS data; `tracking_chart`, `al_tracking_chart` and `ep_tracking_chart`. `al_tracking_chart` and `ep_tracking_chart` are just helpers centered on the Atlantic and northeast Pacific ocean, respectively. 
+As of version 0.2.7, the built-in tracking chart functions have been removed. Users are encouraged to use the `rnaturalearthdata` and associated packages to build tracking charts.
 
-```{r}
-args(rrricanes::tracking_chart)
+The `rnaturalearthdata` package has many shapefile datasets that can be used to make maps. For this article I will only need countries and states. I will use the resolution of 10 nautical miles (available in the `rnaturalearthhires` package). Each dataset is named `countries10` and `states10`. 
+
+```{r base-plot, fig.width = 7, fig.asp = 0.75, fig.align = "center"}
+p <- 
+  ggplot() + 
+  geom_sf(
+    data = sf::st_as_sf(rnaturalearthhires::countries10), 
+    fill = "gray95", 
+    color = "black", 
+    size = 0.1
+  )  + 
+  geom_sf(
+    data = sf::st_as_sf(rnaturalearthhires::states10), 
+    fill = "gray95",
+    size = 0.1
+  )
+p
 ```
 
-The `countries` and `states` parameters are TRUE by default. This means a basic call to `tracking_chart` will return a map with country and state borders. The `res` parameter is resolution; one of 110, 50 or 10 nautical miles. Resolutions 110nm and 50nm can be used immediately. To use lower resolution you must install the `rnaturalearthdatahires` package from ropensci:
+I'll also remove the padding around the plot and change the color of the seas (`panel.background`).
 
-```{r, eval = FALSE}
-install.packages("rnaturalearthhires",
-                 repos = "http://packages.ropensci.org",
-                 type = "source")
+```{r base-plot-plus-scale, fig.width = 7, fig.asp = 0.75, fig.align = "center"}
+p <- 
+  p + 
+  scale_x_continuous(
+    expand = c(0, 0)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0)
+  ) +
+  theme(
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major = element_line(color = "black", size = 0.1)
+  ) +
+  labs(
+    x = "", 
+    y = "", 
+    caption = sprintf("rrricanes %s", packageVersion("rrricanes"))
+  )
+p
 ```
-
-`tracking_chart` will print a basic tracking chart (a map of the planet).
-
-```{r, fig.width = 7, fig.align = "center"}
-tracking_chart()
-```
-
-You can pass typical `aes` parameters to refine the color and fill of the plot; remember the tracking chart is a ggplot object.
-
-```{r, fig.width = 7, fig.align = "center"}
-tracking_chart(color = "black", fill = "white", size = 0.1)
-```
-
-You may choose to only show coastline data instead. In this case, just set the countries parameter to FALSE.
-
-```{r, fig.width = 7, fig.align = "center"}
-tracking_chart(countries = FALSE, res = 50, color = "black", fill = "white", 
-               size = 0.1)
-```
-
-For the purposes of this vignette we'll focus on Atlantic storms.
-
-```{r, fig.width = 7, fig.align = "center"}
-(p <- al_tracking_chart(color = "black", fill = "white", size = 0.1, res = 50))
-```
-
-The `res` parameter defines the resolution of the chart presented. Options are in 110nm, 50nm and 10nm. The lower the resolution the longer the chart takes to be built. 
-
-States cannot be drawn on resolution greater than 50nm. 
 
 ## GIS Datasets
 
@@ -76,211 +82,592 @@ There are several datasets that are published for active cyclones. The following
 * `gis_advisory`
 * `gis_prob_storm_surge`
 * `gis_windfield`
-* `gis_latest`
+* `gis_latest` (only for active storms)
 
-## Advisory Package
+It's important to note that not every storm will have a dataset available. Nor are datasets consistent from one storm to the next. For example, as we'll see below, a forecast cone should have two polygons for a 72-hour and 120-hour forecast; in this example, they are both 120-hours. 
 
-```{r}
-gis_advisory(key = "AL182012", advisory = "18")
+Let's take a look at Hurricane Matthew (AL142016) and focus on advisory 37.
+
+```{r vars}
+key <- "AL142016"
+adv <- 37
 ```
 
-```{r, eval = FALSE}
-df.gis_adv <- gis_advisory(key = "AL182012", advisory = "18") %>% gis_download()
+### Data Scraping
+
+The functions listed above do not retrieve the data. They only return the URLs. This is to give you the opportunity to modify your requests to get the specific data needed, if it exists. 
+
+#### `gis_advisory`
+
+The `gis_advisory` function returns the URL for the GIS dataset by `key` and `advisory` number. Remember, a storm's key should always be eight alphanumeric characters;
+
+  + Basin identifier ("AL", "CP", or "EP")
+  
+  + Storm number for the year
+  
+  + The four digit year
+  
+The `fstadv` product will always have the storm key. In earlier years, the "year" portion of the key was only the year without the century; you will need to add it.
+
+```{r gis-advisory-args}
+args(gis_advisory)
 ```
 
-```{r}
-names(df.gis_adv)
+We can test that an advisory package does exist for our specific advisory.
+
+```{r gis-advisory}
+gis_advisory(key = key, advisory = adv)
 ```
 
-For this particular storm and advisory, included are the base line, point and polygon datasets along with a dataset for watches and warnings. The objects returned are spatial dataframes contained within the list of dataframes, `df.gis_adv`.
+This should work.
 
-### Line track
+#### `gis_windfield`
 
-```{r}
-str(df.gis_adv$al182012.018_5day_lin)
+The `gis_windfield` product is relatively new so it may not exist for some storms. As with `gis_advisory`, we only need the storms' key and advisory.
+
+```{r gis-windfield-args}
+args(gis_windfield)
 ```
 
-As we're dealing with a SpatialLinesDataFrame which needs to be modified, you can use the helper function `shp_to_df` for plotting.
-
-```{r}
-fcst_line <- shp_to_df(df.gis_adv$al182012.018_5day_lin)
+```{r gis-windfield}
+gis_windfield(key = key, advisory = adv)
 ```
 
-```{r, fig.width = 7, fig.align = "center"}
-p + geom_path(data = fcst_line, aes(long, lat, group = FCSTPRD))
+#### `gis_prob_storm_surge`
+
+The function `gis_prob_storm_surge` also uses the `key` variable, but not the advisory; instead, it uses `datetime`. 
+
+There are two types of products that can be retrieved, "esurge" and "psurge". psurge shows the probability of a specific height (in feet) of storm surge affecting an area. Values between 0 and 20 can be used. 
+
+```r
+gis_prob_storm_surge(
+  key = key, 
+  datetime = "2016100706", 
+  products = list(
+    # esurge = 10
+    psurge = 5
+  )
+)
 ```
 
-There are two groups of data in the set: one for 72-hour forecast period and one for 120-hour. Grouping by `FCSTPRD` will show the forecast track correctly.
+In the example above, we are requesting the probabilities of a 5-foot storm surge affecting the coastline and inland waterways. 
 
-There is a pretty wide field of view on the map above. You can use `sp::bbox` to "zoom in" on the map.
+esurge shows the probability of a specific storm surge height exceeding the forecast height. Valid values are 10, 20, 30, 04, and 50. Note the commented section in the code above. 
 
-```{r}
-(bb <- sp::bbox(df.gis_adv$al182012.018_5day_lin))
+The `products` parameter expects a list, though you do not need to include both products. Additionally, each product expects a numeric or numeric vector. If you make a broad general request, the National Hurricane Center requests no more than 80 requests per 10 seconds, so please be respectful. Unlike retrieving text products, there is no throttle in this package to download GIS datasets.
+
+Regarding `datetime`, this value should be that of the advisory time minus 3 hours not including minutes and seconds. Let's get that value for Matthew's #37 advisory.
+
+```{r datetime}
+datetime <- 
+  get_storms(years = "2016", basins = "AL") %>% 
+  filter(Name == "Hurricane Matthew") %>% 
+  pull(Link) %>% 
+  get_fstadv() %>% 
+  filter(Adv == adv) %>% 
+  pull(Date)
+
+# Subtract 3 hours
+datetime <- datetime - 3 * 60 * 60
+
+# Turn into string without the seconds. Format is YYYYMMDDHH
+datetime <- as.character.Date(datetime, "%Y%m%d%H")
+
+datetime
 ```
 
-```{r, fig.width = 7, fig.align = "center"}
-(p2 <- p + geom_path(data = fcst_line, aes(long, lat, group = FCSTPRD)) + 
-    coord_equal(xlim = c(bb[1,1] - 5, bb[1,2] + 5), 
-                ylim = c(bb[2,1] - 5, bb[2,2] + 5)))
+Let's make sure we can get a psurge 5 product for this datetime value.
+
+```{r gis-prob-storm-surge}
+gis_prob_storm_surge(key = key, products = list(psurge = 5), datetime = datetime)
 ```
 
-### Point track
+Looks good.
 
-Each forecast position is also included in the points dataframe. You can access this in the `df.gis_adv$al182012.018_5day_pts@data` object; no conversion necessary.
+##### `gis_wsp`
 
-```{r, fig.width = 7, fig.align = "center"}
-(p3 <- p2 + geom_point(data = df.gis_adv$al182012.018_5day_pts@data, aes(LON, LAT)))
+Wind speed probabilities exist in the `gis_wsp` datasets. Like `gis_prob_storm_surge`, we will need `datetime`, but we will not need `key`. The last parameter is `res` (resolution). Valid values are 5, 0.5, and 0.1 degrees. The default is all three. Not all resolutions will be available for all storms.
+
+```{r gis-wsp-args}
+args(gis_wsp)
 ```
 
-## Forecast Cone
-
-Forecast cone data is contained in the polygon dataset. To deal with this dataset you can use the `shp_to_df` function again or take the slightly longer way:
-
-```{r}
-fcst_cone <- df.gis_adv$al182012.018_5day_pgn
-fcst_cone@data$id <- rownames(fcst_cone@data)
-fcst_cone.points <- broom::tidy(fcst_cone, region = "id")
-fcst_cone <- dplyr::left_join(fcst_cone.points, fcst_cone@data, by = "id")
+```{r gis-wsp}
+# List of datasets for 5-degree resolution
+gis_wsp(datetime = datetime, res = 0.5)
 ```
 
-```{r, fig.width = 7, fig.align = "center"}
-p3 + geom_polygon(data = fcst_cone %>% filter(FCSTPRD == 120), 
-                 aes(long, lat, group = group, fill = factor(FCSTPRD)), 
-                 alpha = 0.5) + 
-    geom_polygon(data = fcst_cone %>% filter(FCSTPRD == 72), 
-                 aes(long, lat, group = group, fill = factor(FCSTPRD)), 
-                 alpha = 0.5)
+#### Downloading Data
+
+Now that we've explored the various functions, let's go about downloading the datasets to plot. For efficiency, I use a lot of `purrr` mapping functions here, loading each step into one variable.
+
+First, I want to load all of my URLs into one vector.
+
+```{r get-urls}
+# Get URLs of GIS datasets to analyze
+urls <- c(
+  # Advisory package
+  gis_advisory(key = key, advisory = adv), 
+  
+  # Wind field (initial and forecast) package
+  gis_windfield(key = key, advisory = adv), 
+  
+  # Storm surge probability package
+  gis_prob_storm_surge(
+    key = key, 
+    products = list(psurge = 5), 
+    datetime = datetime
+  ), 
+  
+  # Wind speed probability package
+  gis_wsp(datetime = datetime, res = 0.5)
+)
 ```
 
-Note that in some GIS packages the forecast cones may be identical (though they shouldn't be). I've noticed it with Hurricanes Ike and Matthew; it's in the raw dataset.
+Previously, `gis_download` would download the datasets, extract the shapefiles and convert them, if possible, into dataframes. Thankfully, this is no longer necessary with various improvements in the `sp` and `ggplot2` packages. Now, the `gis_download` function will only download the zip files into a specified directory. For this vignette, we'll use a temporary directory, `tempdir`.
 
-## Watches and Warnings
+```{r download-data}
+# Set our download directory
+destdir <- tempdir()
 
-You can also plot watches and warnings if any are in effect for the package release time. 
+# Download datasets
+file_list <- 
+  urls %>% 
+  purrr::map(gis_download, destdir) %>% 
+  purrr::flatten_chr()
 
-```{r}
-ww_line <- shp_to_df(df.gis_adv$al182012.018_ww_wwlin)
+file_list
 ```
 
+There are a lot of files here. Thankfully, we only care about the shapefiles (marked by the ".shp" extension). Let's filter those.
 
-```{r, fig.width = 7, fig.align = "center"}
-p3 + geom_path(data = ww_line, 
-               aes(x = long, y = lat, group = group, color = TCWW), size = 1)
+```{r filter-shapefiles}
+# Filter out shapefiles
+shp_files <- grep(".shp$", file_list, value = TRUE)
+shp_files
 ```
 
-In the example above you can see tropical storm warnings issued for the Bahamas, North Carolina and portions of the South Carolina and Florida coast while tropical storm watches are in effect for northern Florida and South Carolina.
+We can use `sf::st_read` to read in each shapefile as a shapefile dataframe. The output is quite verbose; you can pass the parameter `quiet` as TRUE.
 
-## Probabilistic Storm Surge
-
-The Tropical Cyclone Storm Surge Probabilities data shows the probability, in percent, of a specified storm surge occurring during the forecast period indicated. The product is based upon an ensemble of Sea, Lake, and Overland Surge from Hurricanes (SLOSH) model runs using the National Hurricane Center (NHC) official advisory and accounts for track, size, and intensity errors based on historical errors.
-
-```{r}
-gis_prob_storm_surge(key = "AL142016", products = list(psurge = 0), 
-                     datetime = "20161006")
+```{r read-shapefiles}
+# Read in shapefiles
+shp_df <- purrr::map(shp_files, ~ sf::st_read(file.path(destdir, .x)))
 ```
 
-```{r, eval = FALSE}
-df.gis_storm_surge <- gis_prob_storm_surge(key = "AL142016", 
-                           products = list(psurge = 0), 
-                           datetime = "20161006") %>% 
-    last() %>% 
-    gis_download()
+And, while not necessary, I will rename the list of dataframes, `shp_df`, to the names of their respective shapefiles minus the file extension. 
+
+```{r name-shapefiles}
+# Create names from shapefiles by removing file extension
+shp_df <- rlang::set_names(shp_df, nm = tools::file_path_sans_ext(shp_files))
+names(shp_df)
 ```
 
-```{r}
-prob_surge <- shp_to_df(df.gis_storm_surge$al142016_2016100618_gt0)
-bb <- sp::bbox(df.gis_storm_surge$al142016_2016100618_gt0)
+This next stop is also not necessary. I actually found it a bit broad and rarely used it but will leave it here as an example.
+
+Each shapefile has a bounding box; this box is a zoomed-in coordinate map of each dataset. We can access the bounding box of each dataset with the `sf::st_bbox` function. 
+
+For example, in our advisory package we have the forecast cones (a polygon shapefile). Let's see what the bounding box is for that dataset.
+
+```{r st-bbox}
+sf::st_bbox(shp_df$`al142016-037_5day_pgn`)
 ```
 
-```{r, fig.width = 7, fig.align = "center"}
-p + geom_path(data = prob_surge, 
-               aes(x = long, y = lat, group = group, color = PSurge00c), 
-              size = 1, alpha = 0.5) + 
-    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
-```
+Our data is contained between approximately 71&deg;W and 81&deg;W (note the negatives -- the western hemisphere), and between 23&deg;N and 34&deg;N. Let's see where that is.
 
-## Current and Forecast Wind Field Radii
-
-Wind radii data may also be available for some cyclone advisory packages. This is the radius to which a minimum sustained wind speed may be felt from the center of circulation.
-
-```{r}
-gis_windfield("AL142016", advisory = "33")
-```
-
-```{r, eval = FALSE}
-df.gis_wind_radii <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
-```
-
-```{r}
-wf_init <- shp_to_df(df.gis_wind_radii$al142016_2016100606_initialradii)
-bb <- sp::bbox(df.gis_wind_radii$al142016_2016100606_forecastradii)
-```
-
-```{r, fig.width = 7, fig.align = "center"}
-(p4 <- p + geom_polygon(data = wf_init, 
-                  aes(x = long, y = lat, fill = factor(RADII)), alpha = 0.5) + 
-    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2])))
-```
-
-Additionally, forecast wind radii data is also generally available in some packages
-
-```{r}
-wf_fcst <- shp_to_df(df.gis_wind_radii$al142016_2016100606_forecastradii)
-```
-
-```{r, fig.width = 7, fig.align = "center"}
-p4 + geom_polygon(data = wf_fcst, 
-                  aes(x = long, y = lat, group = group, fill = factor(RADII)), 
-                  alpha = 0.5)
-```
-
-## Wind Speed Probabilities
-
-Wind Speed probabilities show the chance of experiencing a minimum-sustained winds of 34, 50 and 64 knots with a given period of time (typically, 120 hours). These products are not storm-specific but are global so other active cyclones in other basins may also appear.
-
-```{r}
-gis_wsp(datetime = "2016100606", res = 0.5)
-```
-
-```{r, eval = FALSE}
-df.gis_wsp <- 
-  gis_download(
-    "https://www.nhc.noaa.gov/gis/forecast/archive/2016100606_wsp_120hrhalfDeg.zip"
+```{r zoom-base-plot, fig.width = 7, fig.asp = 0.75, fig.align = "center"}
+p + 
+  coord_sf(
+    xlim = c(
+      sf::st_bbox(shp_df$`al142016-037_5day_pgn`)$xmin, 
+      sf::st_bbox(shp_df$`al142016-037_5day_pgn`)$xmax
+    ), 
+    ylim = c(
+      sf::st_bbox(shp_df$`al142016-037_5day_pgn`)$ymin, 
+      sf::st_bbox(shp_df$`al142016-037_5day_pgn`)$ymax
+    )
   )
 ```
 
-### Cumulative Probability for >34kt Winds
+Nice!
 
-```{r, fig.width = 7, fig.align = "center"}
-bb <- sp::bbox(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`)
-p + 
-  geom_sf(
-    data = st_as_sf(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`), 
-    aes(color = PWIND120)
-  ) +
-  coord_sf(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
+I want to find the largest bounding box within the datasets for my map. For this, I calculate the area for each box of each dataset, identify which has the largest area then extract the bounding box for that dataset. 
+
+Notice I only search the advisory package datasets for a bounding box. The probability datasets may contain data for other cyclones across the world making our bounding box (and subsequent maps) quite wide. I have no interest in that so kept the focus only on Matthew.
+
+```{r calculate-max-bbox}
+# Find which shapefile has the largest bounding box. Proability datasets are 
+# excluded as they may contain data for other cyclones. This may depend on 
+# the storm.
+x <- purrr::map(shp_df[c(1:4)], sf::st_bbox) %>% 
+  # Calculate the coverage for each bbox
+  purrr::map_dbl(~(.x$xmax - .x$xmin) * (.x$ymax - .x$ymin)) %>% 
+  # Extract which shapefile has the largest coverage area 
+  which.max()
+
+# Get the bounding box
+(bbox <- sf::st_bbox(shp_df[[x]]))
 ```
 
-Cumulative wind speed probability for >50kt winds:
+### Advisory Package
 
-```{r, fig.width = 7, fig.align = "center"}
-bb <- sp::bbox(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`)
+Each dataset returned by the `gis_advisory` function should contain four datasets.
+
+  + 5day_lin - A line plot of the forecast (previous track not included)
+  
+  + 5day_pgn - A polygon identifying the forecast cone or area the center of the storm could travel within a given period of time.
+  
+  + 5day_pts - A points dataframe identifying the current location and each forecast position.
+  
+  + ww_wwlin - Any existing watches and warnings.
+  
+Let's go ahead and create a plot and then I'll explain in detail what I'm doing here.
+
+```{r plot-gis-advisory, fig.width = 7, fig.asp = 1, fig.align = "center", class.source = c("numberLines")}
 p + 
+  # Despite two forecast periods, the cones are identical for both.
   geom_sf(
-    data = st_as_sf(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`), 
-    aes(color = PWIND120)
+    data = shp_df$`al142016-037_5day_lin`,
+    aes(geometry = geometry)
   ) +
-  coord_sf(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
+  geom_point(
+    data = shp_df$`al142016-037_5day_pts`,
+    aes(
+      x = .data$LON,
+      y = .data$LAT,
+      fill = .data$DVLBL,
+      shape = .data$DVLBL,
+      size = .data$MAXWIND
+    )
+  ) +
+  geom_sf(
+    data = shp_df$`al142016-037_ww_wwlin`,
+    aes(
+      geometry = .data$geometry,
+      color = factor(.data$TCWW)
+    ),
+    size = 2,
+    # key_glyph available as of ggplot 3.2.0
+    key_glyph = draw_key_path
+  ) +
+  geom_sf(
+    data = shp_df$`al142016-037_5day_pgn`, 
+    aes(
+      geometry = geometry,
+    ), 
+    color = "antiquewhite3", 
+    fill = "transparent"
+  ) +
+  scale_shape_manual(name = "Status", values = c(rep(21, 4))) +
+  scale_fill_discrete(name = "Status") +
+  scale_size_continuous(name = "Wind (kts)") +
+  scale_color_manual(
+    name = "Watches/Warnings",
+    limits = c("TWA", "TWR", "HWA", "HWR"),
+    values = c("orange", "blue", "pink", "red"),
+    labels = c(
+      "Tropical Storm Watch",
+      "Tropical Storm Warning",
+      "Hurricane Watch",
+      "Hurricane Warning"
+    ),
+    drop = FALSE
+  ) +
+  coord_sf(
+    # Give some more breathing room on the x axis
+    xlim = c(scales::expand_range(c(bbox$xmax, bbox$xmin), mul = 0.25)), 
+    ylim = c(
+      bbox$ymin, 
+      bbox$ymax
+    ), 
+    expand = FALSE
+  ) + 
+  guides(
+    color = guide_legend(nrow = 2, byrow = TRUE)
+  ) + 
+  theme(
+    panel.ontop = TRUE,
+    panel.background = element_blank(), 
+    panel.grid.major = element_line(color = "lightgray", size = 0.1),
+    legend.position = "bottom", 
+    legend.box = "vertical"
+  ) +
+  labs(title = "Hurricane Matthew Advisory #37")
 ```
 
-Cumulative probability for >64kt winds:
+#### Forecast Line
 
-```{r, fig.width = 7, fig.align = "center"}
-bb <- sp::bbox(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`)
+```{r shp-lin-str}
+str(shp_df$`al142016-037_5day_lin`)
+```
+
+Plotting the forecast line is nothing fancy though you could define different linestyles depending on the status of the storm (`STORMTYPE`) or the forecast period (`FCSTPRD`). Additional variables are pretty self-explanatory; `STORMNAME`, `ADVDATE`, `ADVISNUM`, `STORMNUM`, and `BASIN`.
+
+```{r forecast-line, ref.label = "plot-gis-advisory", echo = c(3:6), eval = FALSE, attr.source = c(".numberLines", "startFrom='3'")}
+```
+
+#### Forecast Points
+
+```{r shp-pts-str}
+str(shp_df$`al142016-037_5day_pts`)
+```
+
+The points shapefile contains the same variables as the line shapefile and more. I am unable to find official documentation so let me give my best here to explain some of the added variables.
+
+  + `TAU` - This appears to be the time period in hours for each forecast point, gruoped by `FCSTPRD`
+  
+  + `MSLP` - Forecast minimum sea level pressure. "9999" values simply indicate no forecast MSLP was provided.
+  
+  + `TCDVLP` - The forecast status of the cyclone.
+  
+  + `DVLBL` - A shorter label for `TCDVLP`
+  
+  + `SSNUM` - Sorry, no idea...
+  
+  + `TCDIR` - Foreward direction of the storm
+  
+  + `TCSPD` - Foreward speed of the storm
+  
+```{r forecast-points-geom, ref.label = "plot-gis-advisory", echo = c(7:16), eval = FALSE, attr.source = c(".numberLines", "startFrom='7'")}
+```
+
+Since we have the added variables `LAT` and `LON`, and I wanted to customize the aesthetics a bit, I chose to use the layer `geom_point`. I set fill and shape to `DVLBL` and size to `MAXWIND`. I also wanted to customize the appearance of each point and, since I'll be using the color aesthetic for watches and warnings as well, I needed to customize these scales.
+
+```{r forecast-points-scale, ref.label = "plot-gis-advisory", echo = c(35:37), eval = FALSE, attr.source = c(".numberLines", "startFrom='35'")}
+```
+
+#### Watches and Warnings
+
+```{r wwlin-shp-str}
+str(shp_df$`al142016-037_ww_wwlin`)
+```
+
+In the watches and warnings dataset we have the `TCWW` variable which identifies the watch/warning issued for each line. There are only four possible candidates here:
+
+  + `TWA` - Tropical storm watch
+  
+  + `TWR` - Tropical storm warning
+  
+  + `HWA` - Hurricane watch
+  
+  + `HWR` - Hurricane warning
+
+I use the `geom_sf` layer and set the color aesthetic. I also increased the size of the lines to stand out a bit and, with the introduction of key glyphs in ggplot 3.2.0, changed the legend style.
+
+```{r wwlin-geom, ref.label = "plot-gis-advisory", echo = c(17:26), eval = FALSE, attr.source = c(".numberLines", "startFrom='17'")}
+```
+
+Since I'm already using color in the points layer, I needed to add an additional legend to identify the watches and warnings. I set the `drop` parameter to FALSE to ensure that all four keys show regardless of what is in the dataset.
+
+```{r wwlin-scale, ref.label = "plot-gis-advisory", echo = c(38:49), eval = FALSE, attr.source = c(".numberLines", "startFrom='38'")}
+```
+
+Below, I break the legend into two rows.
+
+```{r wwlin-guide, ref.label = "plot-gis-advisory", echo = c(59:61), eval = FALSE, attr.source = c(".numberLines", "startFrom='59'")}
+```
+
+#### Forecast Cone
+
+The forecast cone is contained in the polygon dataset of the advisory package. Take a look at the structure.
+
+```{r pgn-shp-str}
+str(shp_df$`al142016-037_5day_pgn`)
+```
+
+The geometry should be slightly different depending on the `FCSTPRD`. However, for this dataset, that is not the case.
+
+```{r pgn-identical}
+identical(
+  shp_df$`al142016-037_5day_pgn`$geometry[1], 
+  shp_df$`al142016-037_5day_pgn`$geometry[2]
+)
+```
+
+I could have filled differently depending on different geometries; unfortunately it was just not possible. So I kept the `geom_sf` call simple.
+
+```{r pgn-plot, ref.label = "plot-gis-advisory", echo = c(27:34), eval = FALSE, attr.source = c(".numberLines", "startFrom='27'")}
+```
+
+### Forecast Wind Radii
+
+The forecast wind radii dataset should contain two datasets; one for the current wind radius and another for the forecast wind radii. 
+
+```{r wind-radii-str}
+str(shp_df$al142016_2016100706_initialradii)
+str(shp_df$al142016_2016100706_forecastradii)
+```
+
+The "initialradii" dataset will contain up to three observations for each radii: 34 knots, 50 knots, and 64 knots. This is the expected distance from the center of circulation that minimum n-force winds can be expected. 
+
+The "forecastradii" can have many observations. For forecast periods up to 36 hours, all wind radii may be provided if the storm is strong enough. At 48 and 72 hours, only 34 and 50 knot wind radii are provided. No forecast wind radii are provided beyond 72 hours. 
+
+```{r plot-forecast-wind-radii, fig.width = 7, fig.asp = 1, fig.align = "center", class.source = c("numberLines")}
 p + 
   geom_sf(
-    data = st_as_sf(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`), 
-    aes(color = PWIND120)
+    data = shp_df$al142016_2016100706_forecastradii, 
+    aes(
+      geometry = geometry, 
+      fill = factor(RADII)
+    ), 
+    alpha = 0.25
+  ) + 
+  geom_sf(
+    data = shp_df$`al142016-037_5day_lin`, 
+    aes(geometry = geometry)
   ) +
-  coord_sf(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
+  geom_point(
+    data = shp_df$`al142016-037_5day_pts`,
+    aes(
+      x = .data$LON, 
+      y = .data$LAT
+    )
+  ) +
+  coord_sf(
+    xlim = c(-85, -70), 
+    ylim = c(24, 37), 
+    expand = FALSE
+  ) +
+  scale_fill_discrete(
+    name = "Forecast Wind Radii"
+  ) + 
+  theme(
+    panel.ontop = TRUE,
+    panel.background = element_blank(),
+    panel.grid.major = element_line(color = "lightgray", size = 0.1),
+    legend.position = "bottom", 
+    legend.box = "vertical"
+  ) +
+  labs(title = "Hurricane Matthew Forecast Wind Radii, Adv #37")
 ```
+
+In the plot above I take the same approach as the advisory package but only keep the line track and points to keep the graph simple. To add the forecast wind radii, I again use the `geom_sf` layer providing the `fill` aesthetic based on `RADII`. Outside of the aesthetic, I set alpha to 0.25 to make underlying radii visible as well as land areas. 
+
+```{r forecast-radii-geom, ref.label = "plot-forecast-wind-radii", echo = c(2:9), eval = FALSE, attr.source = c(".numberLines", "startFrom='2'")}
+```
+
+The initialradii dataset was intentionally left out; as you can see it is included in the forecastradii package.
+
+### Wind Speed Probabilities
+
+As noted previously, wind speed probabilities can be provided in different resolutions. Recall that I went with the 0.5&deg; resolution dataset. There are three packages in this dataset; proabilities of at least 34 knot winds, 50 knot winds, and 64 knot winds. 
+
+```{r wsp-prb-str}
+str(shp_df$`2016100706_wsp34knt120hr_halfDeg`)
+str(shp_df$`2016100706_wsp50knt120hr_halfDeg`)
+str(shp_df$`2016100706_wsp64knt120hr_halfDeg`)
+```
+
+Each dataset contains the variable `PWIND120`; the probability of n-speed winds up to 120 hours. 
+
+```{r plot-wind-speed-probabilities, fig.width = 7, fig.asp = 1, fig.align = "center"}
+p + 
+  geom_sf(
+    data = shp_df$`2016100706_wsp64knt120hr_halfDeg`,
+    aes(
+      geometry = geometry,
+      # A little math to add % to legend
+      color = PWIND120/100, 
+      size = PWIND120, 
+      alpha = PWIND120
+    ), 
+  ) +
+  coord_sf(
+    xlim = c(
+      -85, 
+      bbox$xmax
+    ), 
+    ylim = c(
+      bbox$ymin, 
+      37.5
+    ), 
+    expand = FALSE
+  ) + 
+  scale_color_continuous(
+    name = "", 
+    breaks = c(0.25, 0.75), 
+    labels = scales::percent, 
+    low = "white", 
+    high = "red"
+  ) + 
+  scale_size_continuous(guide = "none") + 
+  scale_alpha_continuous(guide = "none") + 
+  theme(
+    panel.ontop = TRUE,
+    panel.background = element_blank(),
+    panel.grid.major = element_line(color = "lightgray", size = 0.1),
+    legend.position = "bottom", 
+    legend.box = "vertical"
+  ) +
+  labs(title = "Wind Speed Probabilities (>34kts), Adv #37")
+```
+
+The plot above focuses only on the wind speed probabilities. The forecast track of the cyclone is quite clear. I made the size and alpha aesthetic based on `PWIND120` but removed those legends. I kept the color `aesthetic` which I divided by 100 to make a fraction (default is a real). With that, I applied `scales::percent` to the legend to show a percentage and changed the breaks.
+
+### Storm Surge Probabilities
+
+```{r prob-storm-surge-str}
+str(shp_df$al142016_2016100706_gt5)
+```
+
+Similar to the wind speed probabilities, storm surge probabilties only has three variables, the `POINTID`, `geometry`, and, because we requested the psurge product for 5-feet, `PSurge05c` (this name changes depending on the product and value).
+
+Note that unlike wind speed probabilities which is a point shapefile, this dataset is a polygon shapefile. 
+
+```{r psurge, fig.width = 7, fig.asp = 1, fig.align = "center"}
+p + 
+  geom_sf(
+    data = shp_df$al142016_2016100706_gt5, 
+    aes(
+      geometry = geometry, 
+      color = PSurge05c/100
+    ), 
+  ) +
+  # Show Lake George, FL
+  geom_curve(
+    aes(
+      x = -82, 
+      y = 28, 
+      xend = -81.58, 
+      yend = 29.2
+    ), 
+    curvature = -0.5, 
+    arrow = arrow(length = unit(0.01, "npc"))
+  ) + 
+  annotate(
+    "text", 
+    x = -81.5, 
+    y = 27.9, 
+    label = "Lake George, FL", 
+    size = 3
+  ) + 
+  coord_sf(
+    xlim = c(
+      -85, 
+      -74
+    ), 
+    ylim = c(
+      25, 
+      36
+    ), 
+    expand = FALSE
+  ) + 
+  scale_color_continuous(
+    name = "", 
+    breaks = c(0.25, 0.75), 
+    labels = scales::percent, 
+    low = "white", 
+    high = "red"
+  ) + 
+  theme(
+    panel.ontop = TRUE,
+    panel.background = element_blank(),
+    panel.grid.major = element_line(color = "lightgray", size = 0.1),
+    legend.position = "bottom", 
+    legend.box = "vertical"
+  ) +
+  labs(title = "Hurricane Matthew Storm Surge Probabilities (>5ft), Adv #37")
+```
+
+I took similar steps to creating this plot as I did with wind speed probabilties. 
+
+Note what appears to be storm surge well inland from the coast in Lake George, St. Johns River, and elsewhere. 
