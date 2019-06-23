@@ -6,6 +6,12 @@ authors:
   Tim Trice:
     href: https://timtrice.net
 
+template:
+  params:
+    docsearch:
+      api_key: 5aeb8a5c28f12c523e08f69cf1aab431
+      index_name: rrricanes
+
 navbar:
   type: default
   left:
