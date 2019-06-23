@@ -112,6 +112,7 @@ test_that("rrricanes:::get_storm_data()", {
 # was prior, that will be the failure point.
 test_that("Get Storm List", {
   skip_on_travis()
+  skip_on_appveyor()
   quietly_get_storm_list <- purrr::quietly(.f = rrricanes::get_storm_list)
   storm_list <- quietly_get_storm_list()
   expect_output(str(storm_list$result), "21 variables")
