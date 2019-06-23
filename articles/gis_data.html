@@ -9,7 +9,9 @@
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Retrieving and Plotting GIS Data">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Retrieving and Plotting GIS Data">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://ropensci.github.io/rrricanes/logo.png">
 <meta name="twitter:card" content="summary">
@@ -82,7 +84,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -96,7 +104,7 @@
       <h1>Retrieving and Plotting GIS Data</h1>
                         <h4 class="author">Tim Trice</h4>
             
-            <h4 class="date">2019-06-22</h4>
+            <h4 class="date">2019-06-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/rrricanes/blob/master/vignettes/gis_data.Rmd"><code>vignettes/gis_data.Rmd</code></a></small>
       <div class="hidden name"><code>gis_data.Rmd</code></div>
@@ -362,70 +370,70 @@
 <p>We can use <code><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">sf::st_read</a></code> to read in each shapefile as a shapefile dataframe. The output is quite verbose; you can pass the parameter <code>quiet</code> as TRUE.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># Read in shapefiles</span></a>
 <a class="sourceLine" id="cb29-2" data-line-number="2">shp_df &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(shp_files, <span class="op">~</span><span class="st"> </span>sf<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">st_read</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(destdir, .x)))</a></code></pre></div>
-<pre><code>## Reading layer `al142016-037_5day_lin' from data source `/tmp/RtmplZad4M/al142016-037_5day_lin.shp' using driver `ESRI Shapefile'
+<pre><code>## Reading layer `al142016-037_5day_lin' from data source `/tmp/RtmpJUR6rN/al142016-037_5day_lin.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 2 features and 7 fields
 ## geometry type:  LINESTRING
 ## dimension:      XY
 ## bbox:           xmin: -80.6 ymin: 27 xmax: -74.5 ymax: 33.1
 ## epsg (SRID):    NA
 ## proj4string:    +proj=longlat +a=6371200 +b=6371200 +no_defs
-## Reading layer `al142016-037_5day_pgn' from data source `/tmp/RtmplZad4M/al142016-037_5day_pgn.shp' using driver `ESRI Shapefile'
+## Reading layer `al142016-037_5day_pgn' from data source `/tmp/RtmpJUR6rN/al142016-037_5day_pgn.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 2 features and 7 fields
 ## geometry type:  POLYGON
 ## dimension:      XY
 ## bbox:           xmin: -81.4783 ymin: 23.15623 xmax: -71.83253 ymax: 34.47927
 ## epsg (SRID):    NA
 ## proj4string:    +proj=longlat +a=6371200 +b=6371200 +no_defs
-## Reading layer `al142016-037_5day_pts' from data source `/tmp/RtmplZad4M/al142016-037_5day_pts.shp' using driver `ESRI Shapefile'
+## Reading layer `al142016-037_5day_pts' from data source `/tmp/RtmpJUR6rN/al142016-037_5day_pts.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 14 features and 23 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: -80.6 ymin: 27 xmax: -74.5 ymax: 33.1
 ## epsg (SRID):    NA
 ## proj4string:    +proj=longlat +a=6371200 +b=6371200 +no_defs
-## Reading layer `al142016-037_ww_wwlin' from data source `/tmp/RtmplZad4M/al142016-037_ww_wwlin.shp' using driver `ESRI Shapefile'
+## Reading layer `al142016-037_ww_wwlin' from data source `/tmp/RtmpJUR6rN/al142016-037_ww_wwlin.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 10 features and 8 fields
 ## geometry type:  LINESTRING
 ## dimension:      XY
 ## bbox:           xmin: -83.17 ymin: 23.75 xmax: -76.13 ymax: 34.44
 ## epsg (SRID):    NA
 ## proj4string:    +proj=longlat +a=6371200 +b=6371200 +no_defs
-## Reading layer `al142016_2016100706_forecastradii' from data source `/tmp/RtmplZad4M/al142016_2016100706_forecastradii.shp' using driver `ESRI Shapefile'
+## Reading layer `al142016_2016100706_forecastradii' from data source `/tmp/RtmpJUR6rN/al142016_2016100706_forecastradii.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 16 features and 11 fields
 ## geometry type:  POLYGON
 ## dimension:      XY
 ## bbox:           xmin: -82.89683 ymin: 25.85747 xmax: -71.57337 ymax: 35.94275
 ## epsg (SRID):    NA
 ## proj4string:    +proj=longlat +a=6371200 +b=6371200 +no_defs
-## Reading layer `al142016_2016100706_initialradii' from data source `/tmp/RtmplZad4M/al142016_2016100706_initialradii.shp' using driver `ESRI Shapefile'
+## Reading layer `al142016_2016100706_initialradii' from data source `/tmp/RtmpJUR6rN/al142016_2016100706_initialradii.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 3 features and 11 fields
 ## geometry type:  POLYGON
 ## dimension:      XY
 ## bbox:           xmin: -82.01794 ymin: 26.16483 xmax: -77.13445 ymax: 30.62306
 ## epsg (SRID):    NA
 ## proj4string:    +proj=longlat +a=6371200 +b=6371200 +no_defs
-## Reading layer `al142016_2016100706_gt5' from data source `/tmp/RtmplZad4M/al142016_2016100706_gt5.shp' using driver `ESRI Shapefile'
+## Reading layer `al142016_2016100706_gt5' from data source `/tmp/RtmpJUR6rN/al142016_2016100706_gt5.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 99 features and 2 fields
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY
 ## bbox:           xmin: -82.75004 ymin: 27.54227 xmax: -76.7436 ymax: 35.57721
 ## epsg (SRID):    NA
 ## proj4string:    +proj=longlat +a=6371200 +b=6371200 +no_defs
-## Reading layer `2016100706_wsp34knt120hr_halfDeg' from data source `/tmp/RtmplZad4M/2016100706_wsp34knt120hr_halfDeg.shp' using driver `ESRI Shapefile'
+## Reading layer `2016100706_wsp34knt120hr_halfDeg' from data source `/tmp/RtmpJUR6rN/2016100706_wsp34knt120hr_halfDeg.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 4367 features and 2 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: -87 ymin: 6 xmax: 128.5 ymax: 43.5
 ## epsg (SRID):    NA
 ## proj4string:    +proj=longlat +a=6371.229 +b=6371.229 +no_defs
-## Reading layer `2016100706_wsp50knt120hr_halfDeg' from data source `/tmp/RtmplZad4M/2016100706_wsp50knt120hr_halfDeg.shp' using driver `ESRI Shapefile'
+## Reading layer `2016100706_wsp50knt120hr_halfDeg' from data source `/tmp/RtmpJUR6rN/2016100706_wsp50knt120hr_halfDeg.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 2302 features and 2 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: -86 ymin: 8 xmax: 127 ymax: 42
 ## epsg (SRID):    NA
 ## proj4string:    +proj=longlat +a=6371.229 +b=6371.229 +no_defs
-## Reading layer `2016100706_wsp64knt120hr_halfDeg' from data source `/tmp/RtmplZad4M/2016100706_wsp64knt120hr_halfDeg.shp' using driver `ESRI Shapefile'
+## Reading layer `2016100706_wsp64knt120hr_halfDeg' from data source `/tmp/RtmpJUR6rN/2016100706_wsp64knt120hr_halfDeg.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 1367 features and 2 fields
 ## geometry type:  POINT
 ## dimension:      XY
@@ -1200,6 +1208,20 @@
 </div>
 
   
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '5aeb8a5c28f12c523e08f69cf1aab431',
+    indexName: 'rrricanes',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>
