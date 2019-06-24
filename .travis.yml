@@ -26,7 +26,17 @@ matrix:
     before_cache: Rscript -e "remotes::install_cran('pkgdown')"
     deploy:
       provider: script
-      script: Rscript -e "pkgdown::deploy_site_github(verbose = TRUE)"
+      script:
+        - Rscript -e ./data-raw/update-rrricanesdata.
+        - Rscript -e "pkgdown::deploy_site_github(verbose = TRUE)"
+        - git clone https://github.com/ropensci/rrricanesdata.git
+        - cd rrricanesdata
+        - GH_REPO="@github.com/$TRAVIS_REPO_SLUG.git"
+        - FULL_REPO="https://$GH_TOKEN$GH_REPO"
+        - Rscript -e ./data-raw/update.R
+        - git add .
+        - git commit -m 'Update data packages'
+        - git push --force -quiet $FULL_REPO
       skip_cleanup: true
       on:
         all_branches: true
