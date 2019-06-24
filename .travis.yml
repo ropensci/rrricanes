@@ -27,7 +27,6 @@ matrix:
     deploy:
       provider: script
       script:
-        - Rscript -e ./data-raw/update-rrricanesdata.
         - Rscript -e "pkgdown::deploy_site_github(verbose = TRUE)"
         - git clone https://github.com/ropensci/rrricanesdata.git
         - cd rrricanesdata
