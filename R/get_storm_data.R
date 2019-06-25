@@ -145,5 +145,8 @@ get_storm_data <- function(links, products = c(
 
   product_links <- rlang::set_names(product_links, nm = products)
 
-  purrr::map2(product_links, products, extract_product_contents)
+  # Filter out empty list elements
+  product_links <- Filter(length, product_links)
+
+  purrr::map2(product_links, names(product_links), extract_product_contents)
 }
