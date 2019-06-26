@@ -11,7 +11,9 @@ Status](https://img.shields.io/travis/ropensci/rrricanes/master.svg)](https://tr
 Status](https://img.shields.io/appveyor/ci/timtrice/rrricanes-g4dos/master.svg)](https://ci.appveyor.com/project/timtrice/rrricanes-g4dos)
 [![codecov](https://codecov.io/gh/ropensci/rrricanes/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/rrricanes)
 
-# rrricanes <img src='man/figures/logo.png' align="right" height="138" />
+# rrricanes (0.2.0.6.9002) <img src='man/figures/logo.png' align="right" height="138" />
+
+## Web scraper for Atlantic and east Pacific hurricanes and tropical storms
 
 `rrricanes` is a R library that extracts information from [available
 archives](http://www.nhc.noaa.gov/archive/1998/1998archive.shtml) on
@@ -35,11 +37,7 @@ I wrote this package with the goal of consolidating messy text data into
 well-organized formats that can easily be saved to CSV, SQL and other
 data formats.
 
-You may explore some features of the package through the
-[shinycanes](https://timtrice.shinyapps.io/shinycanes/) beta web
-application (built with R Shiny).
-
-## Advisory Products
+### Advisory Products
 
 Generally speaking, there are five products available for tropical
 cyclones issued at 03:00, 09:00, 15:00 and 21:00 UTC;
@@ -85,7 +83,7 @@ discontinued at some point:
     After the 2011 hurricane season, this product was discontinued;
     Updates are now issued in their place.
 
-## Getting Started
+### Getting Started
 
 Please view the vignette ‘Getting Started’:
 
@@ -96,7 +94,7 @@ vignette("getting_started", package = "rrricanes")
 [Online documentation](https://timtrice.github.io/rrricanes/) is also
 available.
 
-### Prerequisites
+#### Prerequisites
 
 `rrricanes` requires an active internet connection as data is extracted
 from online sources.
@@ -118,7 +116,7 @@ To use high resolution tracking maps you will need to install the
 remotes::install_github("ropensci/rnaturalearthhires")
 ```
 
-### Installing
+#### Installing
 
 `rrricanes` is currently only available in GitHub. It can be installed
 using the `devtools` package:
@@ -127,25 +125,25 @@ using the `devtools` package:
 devtools::install_github("ropensci/rrricanes", build_vignettes = TRUE)
 ```
 
-## Built With
+### Built With
 
-  - [R 3.3.3](https://www.r-project.org/) - The R Project for
+  - [R 3.5.0](https://www.r-project.org/) - The R Project for
     Statistical Computing
 
-## Contributing
+### Contributing
 
 Please read
 [CONTRIBUTING.md](https://github.com/ropensci/rrricanes/blob/master/.github/CONTRIBUTING.md)
 for details on our code of conduct, and the process for submitting pull
 requests to us.
 
-## Versioning
+### Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions
 available, see the [tags on this
 repository](https://github.com/ropensci/rrricanes/tags).
 
-## Authors
+### Authors
 
   - **Tim Trice** - *Initial work* -
     [timtrice](https://github.com/timtrice)
@@ -154,12 +152,12 @@ See also the list of
 [contributors](https://github.com/ropensci/rrricanes/contributors) who
 participated in this project.
 
-## License
+### License
 
 This project is licensed under the MIT License - see the
 [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
+### Acknowledgments
 
   - [Molyneux, James](https://github.com/jimmylovestea)
   - [Padgham, Mark](https://github.com/mpadge)
@@ -168,7 +166,7 @@ This project is licensed under the MIT License - see the
   - [Salmon, Maëlle](https://github.com/maelle)
   - [Stachelek, Joseph](https://github.com/jsta)
 
-## Known Data Quality Issues
+### Known Data Quality Issues
 
 1.  Hurricane Juan (AL152003), Adv 15; no status leads to improper
     `Status` and `Name` values in some datasets.
