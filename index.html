@@ -115,19 +115,21 @@
     
     
 
-<div id="rrricanes" class="section level1">
+<div id="rrricanes-0-2-0-6-9002" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#rrricanes" class="anchor"></a>rrricanes <img src="reference/figures/logo.png" align="right" height="138">
+<a href="#rrricanes-0-2-0-6-9002" class="anchor"></a>rrricanes (0.2.0.6.9002) <img src="reference/figures/logo.png" align="right" height="138">
 </h1></div>
+<div id="web-scraper-for-atlantic-and-east-pacific-hurricanes-and-tropical-storms" class="section level2">
+<h2 class="hasAnchor">
+<a href="#web-scraper-for-atlantic-and-east-pacific-hurricanes-and-tropical-storms" class="anchor"></a>Web scraper for Atlantic and east Pacific hurricanes and tropical storms</h2>
 <p><code>rrricanes</code> is a R library that extracts information from <a href="http://www.nhc.noaa.gov/archive/1998/1998archive.shtml">available archives</a> on past and current tropical cyclones. Currently, archives date back to 1998.</p>
 <p>Data can be obtained for cyclones in the north Atlantic (considered the Atlantic Basin) and north-eastern Pacific (the East Pacific Basin from 140°W and eastward.</p>
 <p>Central Pacific data (140°W to 180°W) is included if issued by the <a href="http://www.nhc.noaa.gov/">National Hurricane Center</a> (generally they’re issued by the <a href="http://www.prh.noaa.gov/cphc/">Central Pacific Hurricane Center</a>).</p>
 <p>This library parses the text advisories of all tropical cyclones since 1998. Over the years the formats of the text products have changed and many are loosely formatted.</p>
 <p>I wrote this package with the goal of consolidating messy text data into well-organized formats that can easily be saved to CSV, SQL and other data formats.</p>
-<p>You may explore some features of the package through the <a href="https://timtrice.shinyapps.io/shinycanes/">shinycanes</a> beta web application (built with R Shiny).</p>
-<div id="advisory-products" class="section level2">
-<h2 class="hasAnchor">
-<a href="#advisory-products" class="anchor"></a>Advisory Products</h2>
+<div id="advisory-products" class="section level3">
+<h3 class="hasAnchor">
+<a href="#advisory-products" class="anchor"></a>Advisory Products</h3>
 <p>Generally speaking, there are five products available for tropical cyclones issued at 03:00, 09:00, 15:00 and 21:00 UTC;</p>
 <ol style="list-style-type: decimal">
 <li><p>Storm Discussion - These are technical discussions centered on the current structure of the cyclone, satellite presentation, computer forecast model tendencies and more.</p></li>
@@ -143,15 +145,15 @@
 <li><p>Position Estimates - Typically issued as a storm is threatening land but generally rare (see Hurricane Ike 2008, Key AL092008). It is generally just an update of the current location of the cyclone. After the 2011 hurricane season, this product was discontinued; Updates are now issued in their place.</p></li>
 </ol>
 </div>
-<div id="getting-started" class="section level2">
-<h2 class="hasAnchor">
-<a href="#getting-started" class="anchor"></a>Getting Started</h2>
+<div id="getting-started" class="section level3">
+<h3 class="hasAnchor">
+<a href="#getting-started" class="anchor"></a>Getting Started</h3>
 <p>Please view the vignette ‘Getting Started’:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/vignette">vignette</a></span>(<span class="st">"getting_started"</span>, <span class="dt">package =</span> <span class="st">"rrricanes"</span>)</a></code></pre></div>
 <p><a href="https://timtrice.github.io/rrricanes/">Online documentation</a> is also available.</p>
-<div id="prerequisites" class="section level3">
-<h3 class="hasAnchor">
-<a href="#prerequisites" class="anchor"></a>Prerequisites</h3>
+<div id="prerequisites" class="section level4">
+<h4 class="hasAnchor">
+<a href="#prerequisites" class="anchor"></a>Prerequisites</h4>
 <p><code>rrricanes</code> requires an active internet connection as data is extracted from online sources.</p>
 <p>Linux users must also have the <code>libgdal-dev</code>, <code>libproj-dev</code> and <code>libxml2-dev</code> packages installed.</p>
 <p>To add <code>rrricanesdata</code>, a <a href="https://github.com/ropensci/rrricanesdata">package of post-scraped datasets</a>,</p>
@@ -159,34 +161,34 @@
 <p>To use high resolution tracking maps you will need to install the <code>rnaturalearthhires</code> package.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ropensci/rnaturalearthhires"</span>)</a></code></pre></div>
 </div>
-<div id="installing" class="section level3">
-<h3 class="hasAnchor">
-<a href="#installing" class="anchor"></a>Installing</h3>
+<div id="installing" class="section level4">
+<h4 class="hasAnchor">
+<a href="#installing" class="anchor"></a>Installing</h4>
 <p><code>rrricanes</code> is currently only available in GitHub. It can be installed using the <code>devtools</code> package:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/rrricanes"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 </div>
-<div id="built-with" class="section level2">
-<h2 class="hasAnchor">
-<a href="#built-with" class="anchor"></a>Built With</h2>
+<div id="built-with" class="section level3">
+<h3 class="hasAnchor">
+<a href="#built-with" class="anchor"></a>Built With</h3>
 <ul>
 <li>
-<a href="https://www.r-project.org/">R 3.3.3</a> - The R Project for Statistical Computing</li>
+<a href="https://www.r-project.org/">R 3.5.0</a> - The R Project for Statistical Computing</li>
 </ul>
 </div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
+<div id="contributing" class="section level3">
+<h3 class="hasAnchor">
+<a href="#contributing" class="anchor"></a>Contributing</h3>
 <p>Please read <a href="https://github.com/ropensci/rrricanes/blob/master/.github/CONTRIBUTING.md">CONTRIBUTING.md</a> for details on our code of conduct, and the process for submitting pull requests to us.</p>
 </div>
-<div id="versioning" class="section level2">
-<h2 class="hasAnchor">
-<a href="#versioning" class="anchor"></a>Versioning</h2>
+<div id="versioning" class="section level3">
+<h3 class="hasAnchor">
+<a href="#versioning" class="anchor"></a>Versioning</h3>
 <p>We use <a href="http://semver.org/">SemVer</a> for versioning. For the versions available, see the <a href="https://github.com/ropensci/rrricanes/tags">tags on this repository</a>.</p>
 </div>
-<div id="authors" class="section level2">
-<h2 class="hasAnchor">
-<a href="#authors" class="anchor"></a>Authors</h2>
+<div id="authors" class="section level3">
+<h3 class="hasAnchor">
+<a href="#authors" class="anchor"></a>Authors</h3>
 <ul>
 <li>
 <strong>Tim Trice</strong> - <em>Initial work</em> - <a href="https://github.com/timtrice">timtrice</a>
@@ -194,14 +196,14 @@
 </ul>
 <p>See also the list of <a href="https://github.com/ropensci/rrricanes/contributors">contributors</a> who participated in this project.</p>
 </div>
-<div id="license" class="section level2">
-<h2 class="hasAnchor">
-<a href="#license" class="anchor"></a>License</h2>
+<div id="license" class="section level3">
+<h3 class="hasAnchor">
+<a href="#license" class="anchor"></a>License</h3>
 <p>This project is licensed under the MIT License - see the <a href="LICENSE.html" class="uri">LICENSE.md</a> file for details</p>
 </div>
-<div id="acknowledgments" class="section level2">
-<h2 class="hasAnchor">
-<a href="#acknowledgments" class="anchor"></a>Acknowledgments</h2>
+<div id="acknowledgments" class="section level3">
+<h3 class="hasAnchor">
+<a href="#acknowledgments" class="anchor"></a>Acknowledgments</h3>
 <ul>
 <li><a href="https://github.com/jimmylovestea">Molyneux, James</a></li>
 <li><a href="https://github.com/mpadge">Padgham, Mark</a></li>
@@ -211,12 +213,13 @@
 <li><a href="https://github.com/jsta">Stachelek, Joseph</a></li>
 </ul>
 </div>
-<div id="known-data-quality-issues" class="section level2">
-<h2 class="hasAnchor">
-<a href="#known-data-quality-issues" class="anchor"></a>Known Data Quality Issues</h2>
+<div id="known-data-quality-issues" class="section level3">
+<h3 class="hasAnchor">
+<a href="#known-data-quality-issues" class="anchor"></a>Known Data Quality Issues</h3>
 <ol style="list-style-type: decimal">
 <li>Hurricane Juan (AL152003), Adv 15; no status leads to improper <code>Status</code> and <code>Name</code> values in some datasets. (<a href="https://github.com/ropensci/rrricanes/issues/82">#82</a>)</li>
 </ol>
+</div>
 </div>
 </div>
   </div>
