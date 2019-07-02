@@ -171,3 +171,9 @@ This project is licensed under the MIT License - see the
 1.  Hurricane Juan (AL152003), Adv 15; no status leads to improper
     `Status` and `Name` values in some datasets.
     ([\#82](https://github.com/ropensci/rrricanes/issues/82))
+
+<center>
+
+[![](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+
+</center>
