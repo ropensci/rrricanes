@@ -185,15 +185,15 @@
 ##    Key      Name      ACE
 ##    &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt;
 ##  1 AL031899 UNNAMED  73.6
-##  2 AL092004 IVAN     71.5
-##  3 AL112017 IRMA     64.9
-##  4 AL091893 UNNAMED  63.5
-##  5 AL132003 ISABEL   63.3
-##  6 AL041926 UNNAMED  60.9
-##  7 AL141932 UNNAMED  59.8
-##  8 AL041906 UNNAMED  56.0
-##  9 AL041957 CARRIE   55.8
-## 10 AL091966 INEZ     54.6</code></pre>
+##  2 AL091893 UNNAMED  63.5
+##  3 AL141932 UNNAMED  59.8
+##  4 AL041906 UNNAMED  56.0
+##  5 AL031915 UNNAMED  41.3
+##  6 AL041898 UNNAMED  40.1
+##  7 AL061893 UNNAMED  39.8
+##  8 AL061915 UNNAMED  37.7
+##  9 AL061886 UNNAMED  37.1
+## 10 AL021915 UNNAMED  36.9</code></pre>
 <p>A couple of things to notice here:</p>
 <ol style="list-style-type: decimal">
 <li>in <code>HURDAT</code>, the common times used are 00:00, 06:00, 12:00 and 18:00 UTC</li>
@@ -214,16 +214,16 @@
 <pre><code>## # A tibble: 10 x 2
 ##     Year   ACE
 ##    &lt;dbl&gt; &lt;dbl&gt;
-##  1  1933  259.
-##  2  2005  246.
-##  3  1893  231.
-##  4  1926  230.
-##  5  1995  228.
-##  6  2004  226.
-##  7  2017  225.
-##  8  1950  211.
-##  9  1961  205.
-## 10  1998  182.</code></pre>
+##  1  1893  231.
+##  2  1887  181.
+##  3  1886  166.
+##  4  1906  163.
+##  5  1899  151.
+##  6  1916  144.
+##  7  1896  136.
+##  8  1894  135.
+##  9  1915  130.
+## 10  1891  116.</code></pre>
 <p>This also matches relatively well with that on <a href="https://en.wikipedia.org/wiki/Accumulated_cyclone_energy#Atlantic_hurricane_seasons.2C_1950.E2.80.932017">Wikipedia</a> and other sources.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(df, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> ACE)) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span>(<span class="dt">stat =</span> <span class="st">"identity"</span>) <span class="op">+</span><span class="st"> </span></a>
