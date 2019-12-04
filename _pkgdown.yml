@@ -64,3 +64,6 @@ articles:
       - gis_data
       - probabilistic_storm_surge
       - accumulated_cyclone_energy
+
+extra_packages:
+  - HURDAT
