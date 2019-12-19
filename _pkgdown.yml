@@ -69,3 +69,5 @@ extra_packages:
   - HURDAT
   - rrricanesdata
   - gganimate
+  - magick
+
