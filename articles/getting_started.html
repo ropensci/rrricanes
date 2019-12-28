@@ -6,9 +6,16 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Getting Started • rrricanes</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Getting Started">
@@ -85,12 +92,12 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/ropensci/rrricanes">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
-<form class="navbar-form navbar-right" role="search">
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
@@ -104,13 +111,14 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Getting Started</h1>
                         <h4 class="author">Tim Trice</h4>
             
-            <h4 class="date">2019-07-29</h4>
+            <h4 class="date">2019-12-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/rrricanes/blob/master/vignettes/getting_started.Rmd"><code>vignettes/getting_started.Rmd</code></a></small>
       <div class="hidden name"><code>getting_started.Rmd</code></div>
@@ -119,8 +127,8 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rrricanes)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rrricanes)</a></code></pre></div>
 <div id="general-introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general-introduction" class="anchor"></a>General Introduction</h2>
@@ -145,7 +153,7 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">df.al_<span class="dv">18</span>_<span class="dv">2012</span> &lt;-<span class="st"> </span>df.al_<span class="dv">2012</span> <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Name <span class="op">==</span><span class="st"> "Hurricane Sandy"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">    </span>.<span class="op">$</span>Link <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">    </span><span class="kw"><a href="../reference/get_storm_data.html">get_storm_data</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"fstadv"</span>, <span class="st">"wndprb"</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">    </span><span class="kw"><a href="../reference/get_storm_data.html">get_storm_data</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"fstadv"</span>, <span class="st">"wndprb"</span>))</a></code></pre></div>
 <p><code>df.al_18_2012</code> now contains two dataframes for Hurricane Sandy; <code>fstadv</code> and <code>wndprb</code>.</p>
 </div>
 <div id="forecastadvisory-product-fstadv" class="section level2">
@@ -162,7 +170,7 @@
 <h3 class="hasAnchor">
 <a href="#current-details" class="anchor"></a>Current Details</h3>
 <p>Let’s look at an example of the current details.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(Status<span class="op">:</span>Eye, SeasNE<span class="op">:</span>SeasNW))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(Status<span class="op">:</span>Eye, SeasNE<span class="op">:</span>SeasNW))</a></code></pre></div>
 <pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    31 obs. of  18 variables:
 ##  $ Status  : chr  "Tropical Depression" "Tropical Storm" "Tropical Storm" "Tropical Storm" ...
 ##  $ Name    : chr  "Eighteen" "Sandy" "Sandy" "Sandy" ...
@@ -196,27 +204,27 @@
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/tidy_adv.html">tidy_fstadv</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv)</a></code></pre></div>
 <pre><code>## Warning: `tidy_fstadv is deprecated and will be removed in v0.2.2</code></pre>
 <pre><code>## # A tibble: 31 x 18
-##    Key     Adv Date                Status Name    Lat   Lon  Wind  Gust
-##    &lt;chr&gt; &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 AL18…     1 2012-10-22 15:00:00 Tropi… Eigh…  13.5 -78      25    35
-##  2 AL18…     2 2012-10-22 21:00:00 Tropi… Sandy  12.5 -78.5    35    45
-##  3 AL18…     3 2012-10-23 03:00:00 Tropi… Sandy  12.7 -78.6    40    50
-##  4 AL18…     4 2012-10-23 09:00:00 Tropi… Sandy  13.3 -78.6    40    50
-##  5 AL18…     5 2012-10-23 15:00:00 Tropi… Sandy  13.8 -77.8    45    55
-##  6 AL18…     6 2012-10-23 21:00:00 Tropi… Sandy  14.3 -77.6    45    55
-##  7 AL18…     7 2012-10-24 03:00:00 Tropi… Sandy  15.2 -77.2    50    60
-##  8 AL18…     8 2012-10-24 09:00:00 Tropi… Sandy  16.3 -77      60    75
-##  9 AL18…     9 2012-10-24 15:00:00 Hurri… Sandy  17.1 -76.7    70    85
-## 10 AL18…    10 2012-10-24 21:00:00 Hurri… Sandy  18.3 -76.6    70    85
-## # … with 21 more rows, and 9 more variables: Pressure &lt;dbl&gt;, PosAcc &lt;dbl&gt;,
-## #   FwdDir &lt;dbl&gt;, FwdSpeed &lt;dbl&gt;, Eye &lt;dbl&gt;, SeasNE &lt;dbl&gt;, SeasSE &lt;dbl&gt;,
-## #   SeasSW &lt;dbl&gt;, SeasNW &lt;dbl&gt;</code></pre>
+##    Key     Adv Date                Status Name    Lat   Lon  Wind  Gust Pressure
+##    &lt;chr&gt; &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+##  1 AL18…     1 2012-10-22 15:00:00 Tropi… Eigh…  13.5 -78      25    35     1003
+##  2 AL18…     2 2012-10-22 21:00:00 Tropi… Sandy  12.5 -78.5    35    45      999
+##  3 AL18…     3 2012-10-23 03:00:00 Tropi… Sandy  12.7 -78.6    40    50      998
+##  4 AL18…     4 2012-10-23 09:00:00 Tropi… Sandy  13.3 -78.6    40    50      998
+##  5 AL18…     5 2012-10-23 15:00:00 Tropi… Sandy  13.8 -77.8    45    55      993
+##  6 AL18…     6 2012-10-23 21:00:00 Tropi… Sandy  14.3 -77.6    45    55      993
+##  7 AL18…     7 2012-10-24 03:00:00 Tropi… Sandy  15.2 -77.2    50    60      989
+##  8 AL18…     8 2012-10-24 09:00:00 Tropi… Sandy  16.3 -77      60    75      986
+##  9 AL18…     9 2012-10-24 15:00:00 Hurri… Sandy  17.1 -76.7    70    85      973
+## 10 AL18…    10 2012-10-24 21:00:00 Hurri… Sandy  18.3 -76.6    70    85      970
+## # … with 21 more rows, and 8 more variables: PosAcc &lt;dbl&gt;, FwdDir &lt;dbl&gt;,
+## #   FwdSpeed &lt;dbl&gt;, Eye &lt;dbl&gt;, SeasNE &lt;dbl&gt;, SeasSE &lt;dbl&gt;, SeasSW &lt;dbl&gt;,
+## #   SeasNW &lt;dbl&gt;</code></pre>
 </div>
 <div id="wind-radius" class="section level3">
 <h3 class="hasAnchor">
 <a href="#wind-radius" class="anchor"></a>Wind Radius</h3>
 <p>Any cyclone of at least tropical storm-strength will have associated wind radius values. This is the distance from the center of circulation that a specified wind speed (34kts, 50kts, 64kts) can be found in each quadrant. Measurement is in nautical miles.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(NE64<span class="op">:</span>NW34))</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(NE64<span class="op">:</span>NW34))</a></code></pre></div>
 <pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    31 obs. of  12 variables:
 ##  $ NE64: num  NA NA NA NA NA NA NA NA 20 25 ...
 ##  $ SE64: num  NA NA NA NA NA NA NA NA 20 20 ...
@@ -251,24 +259,24 @@
 <h3 class="hasAnchor">
 <a href="#forecast" class="anchor"></a>Forecast</h3>
 <p>Most Forecast/Advisory products will have forecast data associated with it unless the storm has dissipated or is no longer tropical. There may be up to seven forecast positions. These positions are issued by 12-hour intervals through 48 hours where they are then at 24-hour intervals; 12, 24, 36, 48, 72, 96 and 120 hours.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(Hr12FcstDate<span class="op">:</span>Hr12Gust))</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(Hr12FcstDate<span class="op">:</span>Hr12Gust))</a></code></pre></div>
 <p>Notice each variable begins with the prefix “Hrn” where n is the forecast period as noted above. Only Date, Lat, Lon, Wind, Gust and wind radius (will discuss shortly) are given for forecast periods.</p>
 <p>Use <code>tidy_fcst</code> to tidy forecast data.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="../reference/tidy_fcst.html">tidy_fcst</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv)</a></code></pre></div>
 <pre><code>## # A tibble: 216 x 8
-##    Key     Adv Date                FcstDate              Lat   Lon  Wind
-##    &lt;chr&gt; &lt;dbl&gt; &lt;dttm&gt;              &lt;dttm&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 AL18…     1 2012-10-22 15:00:00 2012-10-23 00:00:00  13.7 -78.3    35
-##  2 AL18…     1 2012-10-22 15:00:00 2012-10-23 12:00:00  14.3 -78.1    45
-##  3 AL18…     1 2012-10-22 15:00:00 2012-10-24 00:00:00  15.7 -77.6    55
-##  4 AL18…     1 2012-10-22 15:00:00 2012-10-24 12:00:00  17.4 -77      60
-##  5 AL18…     1 2012-10-22 15:00:00 2012-10-25 12:00:00  20.5 -76      55
-##  6 AL18…     1 2012-10-22 15:00:00 2012-10-26 12:00:00  24.5 -74.5    55
-##  7 AL18…     1 2012-10-22 15:00:00 2012-10-27 12:00:00  27   -73      50
-##  8 AL18…     2 2012-10-22 21:00:00 2012-10-23 06:00:00  13.6 -78.5    35
-##  9 AL18…     2 2012-10-22 21:00:00 2012-10-23 18:00:00  14.9 -78.3    45
-## 10 AL18…     2 2012-10-22 21:00:00 2012-10-24 06:00:00  16.4 -77.8    55
-## # … with 206 more rows, and 1 more variable: Gust &lt;dbl&gt;</code></pre>
+##    Key       Adv Date                FcstDate              Lat   Lon  Wind  Gust
+##    &lt;chr&gt;   &lt;dbl&gt; &lt;dttm&gt;              &lt;dttm&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 AL1820…     1 2012-10-22 15:00:00 2012-10-23 00:00:00  13.7 -78.3    35    45
+##  2 AL1820…     1 2012-10-22 15:00:00 2012-10-23 12:00:00  14.3 -78.1    45    55
+##  3 AL1820…     1 2012-10-22 15:00:00 2012-10-24 00:00:00  15.7 -77.6    55    65
+##  4 AL1820…     1 2012-10-22 15:00:00 2012-10-24 12:00:00  17.4 -77      60    75
+##  5 AL1820…     1 2012-10-22 15:00:00 2012-10-25 12:00:00  20.5 -76      55    65
+##  6 AL1820…     1 2012-10-22 15:00:00 2012-10-26 12:00:00  24.5 -74.5    55    65
+##  7 AL1820…     1 2012-10-22 15:00:00 2012-10-27 12:00:00  27   -73      50    60
+##  8 AL1820…     2 2012-10-22 21:00:00 2012-10-23 06:00:00  13.6 -78.5    35    45
+##  9 AL1820…     2 2012-10-22 21:00:00 2012-10-23 18:00:00  14.9 -78.3    45    55
+## 10 AL1820…     2 2012-10-22 21:00:00 2012-10-24 06:00:00  16.4 -77.8    55    65
+## # … with 206 more rows</code></pre>
 <div id="forecast-datestimes" class="section level4">
 <h4 class="hasAnchor">
 <a href="#forecast-datestimes" class="anchor"></a>Forecast Dates/Times</h4>
@@ -286,24 +294,24 @@
 <h3 class="hasAnchor">
 <a href="#forecast-wind-radius" class="anchor"></a>Forecast Wind Radius</h3>
 <p>Some forecast positions may also contain wind radius information (only up to 72 hours).</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(Hr12NE64<span class="op">:</span>Hr12NW34))</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(Hr12NE64<span class="op">:</span>Hr12NW34))</a></code></pre></div>
 <p>Again, these variables are prepended with the prefix prefix “Hrn” where n notes the forecast period.</p>
 <p><code>tidy_fcst_wr</code> will tidy this subset of data.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw"><a href="../reference/tidy_fcst_wr.html">tidy_fcst_wr</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_fstadv)</a></code></pre></div>
 <pre><code>## # A tibble: 337 x 9
-##    Key     Adv Date                FcstDate            WindField    NE
-##    &lt;chr&gt; &lt;dbl&gt; &lt;dttm&gt;              &lt;dttm&gt;                  &lt;dbl&gt; &lt;dbl&gt;
-##  1 AL18…     1 2012-10-22 15:00:00 2012-10-23 00:00:00        34    40
-##  2 AL18…     1 2012-10-22 15:00:00 2012-10-23 12:00:00        34    50
-##  3 AL18…     1 2012-10-22 15:00:00 2012-10-24 00:00:00        34    80
-##  4 AL18…     1 2012-10-22 15:00:00 2012-10-24 00:00:00        50    30
-##  5 AL18…     1 2012-10-22 15:00:00 2012-10-24 12:00:00        34    90
-##  6 AL18…     1 2012-10-22 15:00:00 2012-10-24 12:00:00        50    40
-##  7 AL18…     1 2012-10-22 15:00:00 2012-10-25 12:00:00        34   200
-##  8 AL18…     1 2012-10-22 15:00:00 2012-10-25 12:00:00        50    50
-##  9 AL18…     2 2012-10-22 21:00:00 2012-10-23 06:00:00        34    50
-## 10 AL18…     2 2012-10-22 21:00:00 2012-10-23 18:00:00        34    50
-## # … with 327 more rows, and 3 more variables: SE &lt;dbl&gt;, SW &lt;dbl&gt;, NW &lt;dbl&gt;</code></pre>
+##    Key     Adv Date                FcstDate            WindField    NE    SE
+##    &lt;chr&gt; &lt;dbl&gt; &lt;dttm&gt;              &lt;dttm&gt;                  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 AL18…     1 2012-10-22 15:00:00 2012-10-23 00:00:00        34    40    30
+##  2 AL18…     1 2012-10-22 15:00:00 2012-10-23 12:00:00        34    50    60
+##  3 AL18…     1 2012-10-22 15:00:00 2012-10-24 00:00:00        34    80    80
+##  4 AL18…     1 2012-10-22 15:00:00 2012-10-24 00:00:00        50    30    40
+##  5 AL18…     1 2012-10-22 15:00:00 2012-10-24 12:00:00        34    90    90
+##  6 AL18…     1 2012-10-22 15:00:00 2012-10-24 12:00:00        50    40    40
+##  7 AL18…     1 2012-10-22 15:00:00 2012-10-25 12:00:00        34   200   180
+##  8 AL18…     1 2012-10-22 15:00:00 2012-10-25 12:00:00        50    50    40
+##  9 AL18…     2 2012-10-22 21:00:00 2012-10-23 06:00:00        34    50    60
+## 10 AL18…     2 2012-10-22 21:00:00 2012-10-23 18:00:00        34    50    60
+## # … with 327 more rows, and 2 more variables: SW &lt;dbl&gt;, NW &lt;dbl&gt;</code></pre>
 <p>Please see the National Hurricane Center’s website for more information on understanding the <a href="http://www.nhc.noaa.gov/help/tcm.shtml?">Forecast/Advisory product</a>.</p>
 </div>
 </div>
@@ -315,7 +323,7 @@
 <a class="sourceLine" id="cb23-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Name <span class="op">==</span><span class="st"> "Hurricane Katrina"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb23-3" data-line-number="3"><span class="st">    </span>.<span class="op">$</span>Link <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb23-4" data-line-number="4"><span class="st">    </span><span class="kw"><a href="../reference/get_prblty.html">get_prblty</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(df.al_<span class="dv">12</span>_<span class="dv">2005</span>_prblty)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(df.al_<span class="dv">12</span>_<span class="dv">2005</span>_prblty)</a></code></pre></div>
 <pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    937 obs. of  10 variables:
 ##  $ Status  : chr  "Tropical Depression" "Tropical Depression" "Tropical Depression" "Tropical Depression" ...
 ##  $ Name    : chr  "Twelve" "Twelve" "Twelve" "Twelve" ...
@@ -351,7 +359,7 @@
 <a class="sourceLine" id="cb26-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Name <span class="op">==</span><span class="st"> "Hurricane Sandy"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb26-3" data-line-number="3"><span class="st">    </span>.<span class="op">$</span>Link <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb26-4" data-line-number="4"><span class="st">    </span><span class="kw"><a href="../reference/get_wndprb.html">get_wndprb</a></span>()</a></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_wndprb)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(df.al_<span class="dv">18</span>_<span class="dv">2012</span>_wndprb)</a></code></pre></div>
 <pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    2227 obs. of  18 variables:
 ##  $ Key       : chr  "AL182012" "AL182012" "AL182012" "AL182012" ...
 ##  $ Adv       : num  1 1 1 1 1 1 1 1 1 1 ...
@@ -394,6 +402,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -419,13 +428,15 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by <a href="https://timtrice.net">Tim Trice</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
