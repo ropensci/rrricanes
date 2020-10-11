@@ -251,7 +251,7 @@ df.gis_wsp <-
 
 ### Cumulative Probability for >34kt Winds
 
-```{r, fig.width = 7, fig.align = "center"}
+```{r, fig.width = 7, fig.align = "center", eval=T}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`)
 p + 
   geom_sf(
@@ -263,7 +263,7 @@ p +
 
 Cumulative wind speed probability for >50kt winds:
 
-```{r, fig.width = 7, fig.align = "center"}
+```{r, fig.width = 7, fig.align = "center", error=T}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`)
 p + 
   geom_sf(
@@ -275,7 +275,7 @@ p +
 
 Cumulative probability for >64kt winds:
 
-```{r, fig.width = 7, fig.align = "center"}
+```{r, fig.width = 7, fig.align = "center", error=T}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`)
 p + 
   geom_sf(
