@@ -71,3 +71,6 @@ extra_packages:
   - gganimate
   - magick
 
+# Temp workaround for ragg/gganimate problem
+figures:
+   dev: grDevices::png
