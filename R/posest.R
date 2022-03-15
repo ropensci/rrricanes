@@ -25,7 +25,6 @@ get_posest <- function(links) {
 #' @seealso \code{\link{get_posest}}
 #' @keywords internal
 posest <- function(contents) {
-
   status <- scrape_header(
     contents = contents,
     ptn_product_title = "(?:POSITION ESTIMATE)?",
@@ -37,10 +36,9 @@ posest <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
-    Status = status[,1],
-    Name = status[,2],
+    Status = status[, 1],
+    Name = status[, 2],
     Date = issue_date,
     Contents = contents
   )
-
 }

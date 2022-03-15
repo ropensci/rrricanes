@@ -42,10 +42,15 @@ Imports:
 Suggests:
   covr, 
   devtools, 
+  gganimate, 
+  HURDAT, 
   knitr, 
+  magick, 
   rmarkdown,
+  rnaturalearthhires, 
+  rrricanesdata, 
+  scales, 
   sf, 
-  sp,
   testthat
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr

@@ -52,8 +52,10 @@ gis_prob_storm_surge("AL092016", products = list("psurge" = 0))
 gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10))
 
 # Return all psurge0 products for Sep 2, 2016, storm AL092016
-gis_prob_storm_surge("AL092016", products = list("psurge" = 0),
-           datetime = "20160902")
+gis_prob_storm_surge("AL092016",
+  products = list("psurge" = 0),
+  datetime = "20160902"
+)
 }
 }
 \seealso{

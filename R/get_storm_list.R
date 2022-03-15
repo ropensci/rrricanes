@@ -3,29 +3,17 @@
 #' @export
 get_storm_list <- function() {
 
-  # 2018-12-29 - On Dec. 9, an update was made putting a newline at the
-  # beginning of the  text file. This threw off the original code generating
-  # warnings. Instead of reading directly as CSV, read in as character, trim
-  # whitespace, then read CSV.
-
-  # Read in file as string
-  txt <- readChar(
-    "ftp://ftp.nhc.noaa.gov/atcf/index/storm_list.txt",
-    nchars = 252928)
-
-  # Remove any trailing white space
-  clean_txt <- stringr::str_trim(txt)
-
   # Return dataframe
-  readr::read_csv(
-    file = clean_txt,
-    col_names = c(
-      "STORM_NAME", "RE", "X", "R2", "R3", "R4", "R5", "CY", "YYYY", "TY",
-      "I", "YYY1MMDDHH", "YYY2MMDDHH", "SIZE", "GENESIS_NUM", "PAR1", "PAR2",
-      "PRIORITY", "STORM_STATE", "WT_NUMBER", "STORMID"
-    ),
-    col_types = "ccccccciiccccciccicic"
-  ) %>%
+  storm_list <-
+    readr::read_csv(
+      file = "ftp://ftp.nhc.noaa.gov/atcf/index/storm_list.txt",
+      col_names = c(
+        "STORM_NAME", "RE", "X", "R2", "R3", "R4", "R5", "CY", "YYYY", "TY",
+        "I", "YYY1MMDDHH", "YYY2MMDDHH", "SIZE", "GENESIS_NUM", "PAR1", "PAR2",
+        "PRIORITY", "STORM_STATE", "WT_NUMBER", "STORMID"
+      ),
+      col_types = "ccccccciiccccciccicic"
+    ) %>%
     dplyr::mutate_at(
       .vars = c("YYY1MMDDHH", "YYY2MMDDHH"),
       .f = as.POSIXct,
@@ -63,11 +51,12 @@ get_ftp_dirs <- function(x) {
 #' @export
 #' @seealso \code{\link{get_storm_data}}
 get_ftp_storm_data <- function(stormid,
-                               products = c("discus", "fstadv", "posest",
-                                            "public", "prblty", "update",
-                                            "wndprb")) {
-
-  if (!grepl("(AL|EP)\\d{6}", stormid))
+                               products = c(
+                                 "discus", "fstadv", "posest",
+                                 "public", "prblty", "update",
+                                 "wndprb"
+                               )) {
+  if (!grepl("(AL|EP)\\d{6}", stormid)) {
     stop(
       stringr::str_c(
         "stormid should be an alphanumeric string with the basin abbreviation ",
@@ -76,9 +65,10 @@ get_ftp_storm_data <- function(stormid,
         .call = FALSE
       )
     )
+  }
 
   # What year is the storm?
-  yyyy <- as.integer(stringr::str_match(stormid, "^.+(\\d{4})$")[,2])
+  yyyy <- as.integer(stringr::str_match(stormid, "^.+(\\d{4})$")[, 2])
 
   # List all directories in the ftp's archives
   archives <- get_ftp_dirs(x = "/atcf/archive/")
@@ -145,7 +135,8 @@ get_ftp_storm_data <- function(stormid,
         dplyr::pull(.data$Name)
 
       pkg <- sprintf(
-        fmt = "ftp://ftp.nhc.noaa.gov/atcf/archive/%s/messages/%s",
+        fmt = "%satcf/archive/%s/messages/%s",
+        get_nhc_ftp_link(),
         yyyy,
         links
       )
@@ -192,18 +183,17 @@ get_ftp_storm_data <- function(stormid,
       files_length <- purrr::map(.x = files, .f = file.info) %>%
         purrr::map_dbl("size")
       res_txt <- purrr::map2_chr(.x = files, .y = files_length, readChar)
-
     } else {
       links <- sprintf(
-        fmt = "ftp://ftp.nhc.noaa.gov/atcf/archive/%s/messages/%s",
+        fmt = "%satcf/archive/%s/messages/%s",
+        get_nhc_ftp_link(),
         yyyy,
         links
       )
 
       res <- get_url_contents(links)
-      res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
+      res_parsed <- purrr::map(res, ~ xml2::read_html(.$content))
       res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
-
     }
   } else {
     # If the `yyyy` value is not in the ftp archives, then it is in a product
@@ -226,39 +216,53 @@ get_ftp_storm_data <- function(stormid,
       "wndprb" = "wndprb"
     )
 
+    # Because some products may be requested that do not exist (i.e., update,
+    # posest, filter out, just in case)
+    products <- products[which(products %in% names(named_products))]
     ftp_subdir <- sprintf("atcf/%s/", named_products[products])
-    ftp_contents <- get_ftp_dirs(ftp_subdir)
+    ftp_contents <- purrr::map(ftp_subdir, get_ftp_dirs)
 
-    links <-
+    ftp_content_links <-
       ftp_contents %>%
-      dplyr::filter(
-        grepl(
-          pattern =
-            sprintf(
-              fmt = "^%s\\.%s\\.\\d{3}$",
-              stringr::str_to_lower(stormid),
-              products
-            ),
-          x = .data$Name
-        )
-      ) %>%
-      dplyr::pull(.data$Name)
+      purrr::map2(ftp_subdir, ~paste0(.y, .x$Name))
 
-    links <- sprintf(
-      fmt = "ftp://ftp.nhc.noaa.gov/atcf/%s/%s",
-      named_products[products],
-      links
+    # Make sure we're only using the links for the requested storm; filter out
+    # all others.
+    filtered_links <-
+      purrr::map(
+        .x = seq_along(ftp_content_links),
+        .f = ~grep(
+          pattern = paste0(".+", stormid, ".+"),
+          x = ftp_content_links[[.x]],
+          ignore.case = TRUE,
+          value = TRUE
+        )
+      )
+
+    # Set names of list to products
+    names(filtered_links) <- products
+
+    # Make full links
+    full_links <- purrr::map(
+      .x = filtered_links,
+      .f = ~sprintf(
+        fmt = "%s%s",
+        get_nhc_ftp_link(),
+        .x
+      )
     )
 
-    res <- get_url_contents(links)
-    res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
-    res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
-
+    res_txt <- purrr::map(full_links, get_url_contents)
   }
 
-  df <- purrr::invoke_map_df(
-    .f = utils::getFromNamespace(x = products, ns = "rrricanes"),
-    .x = res_txt
-  )
+  df <-
+    purrr::map(
+      .x = names(res_txt),
+      .f = ~rlang::exec(
+        .fn = utils::getFromNamespace(x = .x, ns = "rrricanes"),
+        contents = res_txt[[.x]]
+      )
+    ) %>%
+    rlang::set_names(nm = names(res_txt))
 
 }

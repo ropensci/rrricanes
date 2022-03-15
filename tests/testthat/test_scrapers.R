@@ -108,5 +108,4 @@ test_that("Key", {
     rrricanes:::scrape_key(read_files(files$AL151999$fstadv[1])),
     "AL1599"
   )
-
 })
