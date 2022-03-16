@@ -3,11 +3,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.rstudio$
-^\.travis\.yml$
 ^_pkgdown\.yml$
 ^doc$
 ^docker$
-^appveyor\.yml$
 ^CHANGELOG\.md$
 ^codecov.yml$
 ^data-raw$
@@ -23,3 +21,5 @@
 ^vignettes/probabilistic_storm_surge.Rmd$
 ^vignettes/wind_pressure.Rmd$
 ^vignettes/wind_speed_probabilities.Rmd$
+^vignettes/installing_rrricanesdata.Rmd$
+\.pre-commit-config\.yml
