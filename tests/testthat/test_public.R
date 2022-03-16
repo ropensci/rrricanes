@@ -4,4 +4,3 @@
 test_that("get_public", {
   expect_equal(al_09_2008_public, df.al_09_2008_public)
 })
-

@@ -4,4 +4,3 @@
 test_that("get_prblty()", {
   expect_identical(al_01_1998_prblty, df.al_01_1998_prblty)
 })
-

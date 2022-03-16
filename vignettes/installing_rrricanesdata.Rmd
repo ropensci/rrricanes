@@ -19,9 +19,7 @@ With `rrricanes` you can access current and archived advisories as-issued from t
 Installing `rrricanesdata` is simple:
 
 ```{r, eval = FALSE}
-install.packages("rrricanesdata", 
-                 repos = "https://timtrice.github.io/drat/", 
-                 type = "source")
+remotes::install_github("ropensci/rrricanesdata")
 ```
 
 Data in `rrricanesdata` will be updated on the first of every month with a cutoff date of midnight on the last day of the month. So, advisories issued at any time during the current month will not be available; you will need to use any of `rrricanes` `get_*` functions. 

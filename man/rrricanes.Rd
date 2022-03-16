@@ -64,9 +64,7 @@ of the current month, use the \code{rrricanesdata} package.
 To install \code{rrricanesdata}, run
 
 \code{
-install.packages("rrricanesdata",
-         repos = "https://timtrice.github.io/drat/",
-         type = "source")
+remotes::install_github("ropensci/rrricanesdata")
 }
 
 See \code{vignette("installing_rrricanesdata", package = "rrricanes")} for
@@ -94,11 +92,6 @@ core GIS functions return URLs to help you refine the data you wish to view.
 
 \code{\link{gis_download}} will download the datasets from the above
 functions.
-
-Some GIS datasets will need to be converted to dataframes to plot geoms. Use
-\code{\link{shp_to_df}} to convert SpatialLinesDataFrames and
-SpatialPolygonsDataFrames. SpatialPointsDataFrames can be converted using
-\code{tibble::as_data_frame} targeting the @data object.
 }
 
 \section{Package Options}{

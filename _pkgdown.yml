@@ -1,4 +1,39 @@
 url: https://ropensci.github.io/rrricanes/
+toc:
+  depth: 3
+
+authors:
+  Tim Trice:
+    href: https://timtrice.net
+
+template:
+  params:
+    docsearch:
+      api_key: 5aeb8a5c28f12c523e08f69cf1aab431
+      index_name: rrricanes
+    ganalytics: UA-1507390-27
+
+navbar:
+  type: default
+  left:
+  - icon: fa-home fa-lg
+    href: index.html
+  - text: Getting Started
+    href: articles/getting_started.html
+  - text: Reference
+    href: reference/index.html
+  - text: Tutorials
+    menu:
+    - text: Accumulated Cyclone Energy
+      href: articles/accumulated_cyclone_energy.html
+    - text: GIS Data
+      href: articles/gis_data.html
+    - text: Wind and Pressure
+      href: articles/wind_pressure.html
+    - text: rrricanesdata
+      href: articles/installing_rrricanesdata.html
+  - text: "News"
+    href: news/index.html
 
 reference:
   - title: About `rrricanes`
@@ -14,17 +49,10 @@ reference:
     contents:
     - twoal
     - twoep
-  - title: Tracking charts
-    desc: Helper functions to plot storm data through `ggplot2`.
-    contents:
-    - al_tracking_chart
-    - ep_tracking_chart
-    - tracking_chart
   - title: GIS Data
     desc: Gathering GIS data from the National Hurricane Center.
     contents:
     - starts_with("gis_")
-    - shp_to_df
   - title: Helpers
     desc: >
       Helper functions. Please note `al_prblty_stations` and
@@ -52,6 +80,7 @@ reference:
       - df.gis_storm_surge
       - df.gis_wind_radii
       - df.gis_wsp
+<<<<<<< HEAD
 
 articles:
   - title: Articles
@@ -74,3 +103,5 @@ extra_packages:
 # Temp workaround for ragg/gganimate problem
 figures:
    dev: grDevices::png
+=======
+>>>>>>> 77991c4d27277d70396af597475ea5480bc3b42c

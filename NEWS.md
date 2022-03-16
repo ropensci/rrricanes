@@ -14,13 +14,18 @@ rrricanes Unreleased (yyyy-mm-dd)
 
 * Allow parameters for rgdal::readOGR (#104)
 
-* Add `tidy_adv` to replace `tidy_fstadv`; `tidy_fstadv` will be removed in 
-  release 0.2.2 (#103)
+* Add `tidy_adv` to replace `tidy_fstadv`; `tidy_fstadv` will be removed in release 0.2.2 (#103)
 
 * `al_prblty_stations` and `cp_prblty_stations` updated 
   to accomodate new dataset. (#46)
   
 * `ep_prblty_stations` now returns dataset of east Pacific stations. (#46)
+
+* `tracking_chart` and associated functions have been removed in favor of rnaturalearth and related packages. See `vignette("gis_data", package = "rrricanes") for details.
+
+* `gis_download` no longer reads in the shapefiles; only downloads and extracts the zip files.
+
+* `shp_to_df` also removed in favor of built-in `sf` and `ggplot2` functions.
 
 ### BUG FIXES
 

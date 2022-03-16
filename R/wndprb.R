@@ -123,9 +123,10 @@ parse_stations <- function(x) {
   df <- readLines(x) %>%
     tibble::as_tibble() %>%
     tidyr::separate(.data$value,
-                    c("X1", "Location", "Lat", "Lon", "X5", "X6", "X7"),
-                    sep = ",",
-                    extra = "warn") %>%
+      c("X1", "Location", "Lat", "Lon", "X5", "X6", "X7"),
+      sep = ",",
+      extra = "warn"
+    ) %>%
     dplyr::arrange(.data$Location)
   return(df)
 }
@@ -137,7 +138,6 @@ parse_stations <- function(x) {
 #' @param contents Link to a storm's specific wind probability product.
 #' @keywords internal
 wndprb <- function(contents) {
-
   status <- scrape_header(
     contents = contents,
     # The "SPECIAL" pattern has to be left here; moving it under
@@ -149,51 +149,53 @@ wndprb <- function(contents) {
 
   key <- scrape_key(contents)
 
-  ptn <- stringr::str_c("(?<=\n)", # Look-behind
-                        # Location - first value must be capital letter.
-                        "([:upper:]{1}[[:alnum:][:blank:][:punct:]]{14})",
-                        # Wind
-                        "([[:digit:]]{2})",
-                        # Wind12
-                        "[:blank:]+([:digit:]{1,2}|X)",
-                        # Delim
-                        "[:blank:]+",
-                        # Wind24
-                        "([:digit:]{1,2}|X)",
-                        # Wind24 cumulative
-                        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                        # Delim
-                        "[:blank:]+",
-                        # Wind36
-                        "([:digit:]{1,2}|X)",
-                        # Wind36 cumulative
-                        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                        # Delim
-                        "[:blank:]+",
-                        # Wind48
-                        "([:digit:]{1,2}|X)",
-                        # Wind48 cumulative
-                        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                        # Delim
-                        "[:blank:]+",
-                        # Wind72
-                        "([:digit:]{1,2}|X)",
-                        # Wind72 cumulative
-                        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                        # Delim
-                        "[:blank:]+",
-                        # Wind96
-                        "([:digit:]{1,2}|X)",
-                        # Wind96 cumulative
-                        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                        # Delim
-                        "[:blank:]+",
-                        # Wind120
-                        "([:digit:]{1,2}|X)",
-                        # Wind120 cumulative
-                        "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
-                        # End
-                        "[[:blank:]\n]+")
+  ptn <- stringr::str_c(
+    "(?<=\n)", # Look-behind
+    # Location - first value must be capital letter.
+    "([:upper:]{1}[[:alnum:][:blank:][:punct:]]{14})",
+    # Wind
+    "([[:digit:]]{2})",
+    # Wind12
+    "[:blank:]+([:digit:]{1,2}|X)",
+    # Delim
+    "[:blank:]+",
+    # Wind24
+    "([:digit:]{1,2}|X)",
+    # Wind24 cumulative
+    "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+    # Delim
+    "[:blank:]+",
+    # Wind36
+    "([:digit:]{1,2}|X)",
+    # Wind36 cumulative
+    "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+    # Delim
+    "[:blank:]+",
+    # Wind48
+    "([:digit:]{1,2}|X)",
+    # Wind48 cumulative
+    "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+    # Delim
+    "[:blank:]+",
+    # Wind72
+    "([:digit:]{1,2}|X)",
+    # Wind72 cumulative
+    "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+    # Delim
+    "[:blank:]+",
+    # Wind96
+    "([:digit:]{1,2}|X)",
+    # Wind96 cumulative
+    "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+    # Delim
+    "[:blank:]+",
+    # Wind120
+    "([:digit:]{1,2}|X)",
+    # Wind120 cumulative
+    "+\\([:blank:]*([:digit:]{1,2}|X)\\)",
+    # End
+    "[[:blank:]\n]+"
+  )
 
   wndprb <-
     contents %>%
@@ -201,13 +203,15 @@ wndprb <- function(contents) {
     purrr::map(tibble::as_tibble, .name_repair = "minimal") %>%
     purrr::map(
       .f = rlang::set_names,
-      nm = c("X1", "Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
-             "Wind36",  "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
-             "Wind72Cum", "Wind96", "Wind96Cum", "Wind120", "Wind120Cum")
+      nm = c(
+        "X1", "Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
+        "Wind36", "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
+        "Wind72Cum", "Wind96", "Wind96Cum", "Wind120", "Wind120Cum"
+      )
     ) %>%
-    purrr::map2(key, ~tibble::add_column(.x, Key = .y, .before = 1)) %>%
-    purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) %>%
-    purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) %>%
+    purrr::map2(key, ~ tibble::add_column(.x, Key = .y, .before = 1)) %>%
+    purrr::map2(status[, 3], ~ tibble::add_column(.x, Adv = .y, .after = 2)) %>%
+    purrr::map2(issue_date, ~ tibble::add_column(.x, Date = .y, .after = 3)) %>%
     purrr::map_df(tibble::as_tibble) %>%
     dplyr::select(-c("X1")) %>%
     # Trim whitespace
@@ -228,5 +232,4 @@ wndprb <- function(contents) {
     .vars = c(2, 5:18),
     .funs = "as.numeric"
   )
-
 }

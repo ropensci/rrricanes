@@ -42,7 +42,11 @@ RUN install2.r -e \
     remotes \
     xml2
 
-RUN Rscript -e 'install.packages("rrricanesdata", repos = "https://timtrice.github.io/drat/", type = "source");'
+RUN Rscript -e 'remotes::install_github("ropensci/rrricanesdata");'
+
+RUN Rscript -e 'remotes::install_github("ropensci/rnaturalearthhires");'
+
+RUN Rscript -e 'remotes::install_github("ropenscilabs/travis");'
 
 RUN cd /home/rstudio/.rstudio/monitored/user-settings/ \
   && mv user-settings user-settings.copy \
