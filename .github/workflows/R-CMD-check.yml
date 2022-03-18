@@ -8,7 +8,7 @@ on:
   pull_request:
     branches:
       - develop
-      - master
+      - main
 
 name: R-CMD-check
 
