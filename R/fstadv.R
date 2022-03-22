@@ -245,7 +245,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
                      .f = ~matrix(data = NA_character_, ncol = 22)) %>%
     # Convert to tibble cause God I hate working with lists like this though I
     # know I need the practice...
-    purrr::map(tibble::as_tibble) %>%
+    purrr::map(tibble::as_tibble, .name_repair = "minimal") %>%
     purrr::map(rlang::set_names,
                nm = c("String", "Date", "Hour", "Minute",
                       "Lat", "LatHemi", "Lon", "LonHemi",
