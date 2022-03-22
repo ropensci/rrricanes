@@ -129,7 +129,7 @@ fstadv <- function(contents) {
     WindRadius = wind_radius,
     Forecast = forecasts
   ) %>%
-    tidyr::unnest()
+    tidyr::unnest(cols = c(Seas, WindRadius, Forecast))
 
 }
 
