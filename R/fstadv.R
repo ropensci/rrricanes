@@ -267,7 +267,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       AdvDate = adv_date,
       Forecasts = forecasts
     ) %>%
-    tidyr::unnest() %>%
+    tidyr::unnest(cols = c(Forecasts)) %>%
     dplyr::group_by(.data$Key, .data$Adv) %>%
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
