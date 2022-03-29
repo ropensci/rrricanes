@@ -129,7 +129,9 @@ fstadv <- function(contents) {
     WindRadius = wind_radius,
     Forecast = forecasts
   ) %>%
-    tidyr::unnest()
+    tidyr::unnest(cols = c(.data$Seas,
+                           .data$WindRadius,
+                           .data$Forecast))
 
 }
 
@@ -245,7 +247,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
                      .f = ~matrix(data = NA_character_, ncol = 22)) %>%
     # Convert to tibble cause God I hate working with lists like this though I
     # know I need the practice...
-    purrr::map(tibble::as_tibble) %>%
+    purrr::map(tibble::as_tibble, .name_repair = "minimal") %>%
     purrr::map(rlang::set_names,
                nm = c("String", "Date", "Hour", "Minute",
                       "Lat", "LatHemi", "Lon", "LonHemi",
@@ -267,7 +269,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       AdvDate = adv_date,
       Forecasts = forecasts
     ) %>%
-    tidyr::unnest() %>%
+    tidyr::unnest(cols = c(.data$Forecasts)) %>%
     dplyr::group_by(.data$Key, .data$Adv) %>%
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
@@ -442,7 +444,7 @@ fstadv_seas <- function(content) {
 
   stringr::str_match(content, ptn)[,2:5] %>%
     apply(MARGIN = 2L, FUN = as.numeric) %>%
-    tibble::as_tibble() %>%
+    tibble::as_tibble(.name_repair = "minimal") %>%
     rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW"))) %>%
     split(seq(nrow(.)))
 }
@@ -483,7 +485,7 @@ fstadv_wind_radius <- function(content) {
 
   stringr::str_match(content, ptn)[,2:16] %>%
     apply(MARGIN = 2L, FUN = as.numeric) %>%
-    tibble::as_tibble() %>%
+    tibble::as_tibble(.name_repair = "minimal") %>%
     rlang::set_names(nm = c("WindField64", "NE64", "SE64", "SW64", "NW64",
                             "WindField50", "NE50", "SE50", "SW50", "NW50",
                             "WindField34", "NE34", "SE34", "SW34", "NW34")) %>%
