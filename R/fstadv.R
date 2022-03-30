@@ -129,10 +129,10 @@ fstadv <- function(contents) {
     WindRadius = wind_radius,
     Forecast = forecasts
   ) %>%
+
     tidyr::unnest(cols = c(.data$Seas,
                            .data$WindRadius,
                            .data$Forecast))
-
 }
 
 #' @title fstadv_eye
@@ -269,6 +269,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       AdvDate = adv_date,
       Forecasts = forecasts
     ) %>%
+
     tidyr::unnest(cols = c(.data$Forecasts)) %>%
     dplyr::group_by(.data$Key, .data$Adv) %>%
     # If the date of the forecast is less than that of the advisory, the forecast

@@ -208,13 +208,13 @@ wndprb <- function(contents) {
     purrr::map2(key, ~tibble::add_column(.x, Key = .y, .before = 1)) %>%
     purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) %>%
     purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) %>%
-    purrr::map_df(tibble::as_tibble) %>%
+    purrr::map_df(tibble::as_tibble, .name_repair = "minimal") %>%
     dplyr::select(-c("X1")) %>%
     # Trim whitespace
     dplyr::mutate_all(.funs = stringr::str_trim)
 
   # Make "X" values 0
-  wndprb[wndprb == "X"] <- 0
+  wndprb[wndprb == "X"] <- "0"
 
   wndprb <- dplyr::mutate_at(
     .tbl = wndprb,

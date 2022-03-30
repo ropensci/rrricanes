@@ -35,10 +35,6 @@ I wrote this package with the goal of consolidating messy text data into
 well-organized formats that can easily be saved to CSV, SQL and other
 data formats.
 
-You may explore some features of the package through the
-[shinycanes](https://timtrice.shinyapps.io/shinycanes/) beta web
-application (built with R Shiny).
-
 ## Advisory Products
 
 Generally speaking, there are five products available for tropical
