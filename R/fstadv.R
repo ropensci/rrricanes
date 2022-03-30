@@ -129,8 +129,10 @@ fstadv <- function(contents) {
     WindRadius = wind_radius,
     Forecast = forecasts
   ) %>%
-    tidyr::unnest(cols = c(Seas, WindRadius, Forecast))
 
+    tidyr::unnest(cols = c(.data$Seas,
+                           .data$WindRadius,
+                           .data$Forecast))
 }
 
 #' @title fstadv_eye
@@ -267,7 +269,8 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       AdvDate = adv_date,
       Forecasts = forecasts
     ) %>%
-    tidyr::unnest(cols = c(Forecasts)) %>%
+
+    tidyr::unnest(cols = c(.data$Forecasts)) %>%
     dplyr::group_by(.data$Key, .data$Adv) %>%
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
@@ -442,7 +445,7 @@ fstadv_seas <- function(content) {
 
   stringr::str_match(content, ptn)[,2:5] %>%
     apply(MARGIN = 2L, FUN = as.numeric) %>%
-    tibble::as_tibble(.name_repair="minimal") %>%
+    tibble::as_tibble(.name_repair = "minimal") %>%
     rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW"))) %>%
     split(seq(nrow(.)))
 }
