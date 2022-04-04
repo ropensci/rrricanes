@@ -127,7 +127,7 @@ parse_stations <- function(x) {
                     sep = ",",
                     extra = "warn") %>%
     dplyr::arrange(.data$Location)
-  return(df)
+  df
 }
 
 #' @title wndprb
