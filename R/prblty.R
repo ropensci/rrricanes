@@ -72,7 +72,7 @@ prblty <- function(contents) {
     dplyr::mutate_all(.funs = stringr::str_trim)
 
   # Many values will have "X" for less than 1% chance. Make 0
-  prblty[prblty == "X"] <- 0
+  prblty[prblty == "X"] <- "0"
 
   # Convert date
   prblty <- dplyr::mutate_at(
