@@ -253,11 +253,11 @@ p4 + geom_polygon(data = wf_fcst,
 
 Wind Speed probabilities show the chance of experiencing a minimum-sustained winds of 34, 50 and 64 knots with a given period of time (typically, 120 hours). These products are not storm-specific but are global so other active cyclones in other basins may also appear.
 
-```{r}
+```{r wspsettings}
 gis_wsp(datetime = "2016100606", res = 0.5)
 ```
 
-```{r, eval = FALSE}
+```{r  downloadwsp, eval = FALSE}
 df.gis_wsp <- 
   gis_download(
     "https://www.nhc.noaa.gov/gis/forecast/archive/2016100606_wsp_120hrhalfDeg.zip"
@@ -266,7 +266,7 @@ df.gis_wsp <-
 
 ### Cumulative Probability for >34kt Winds
 
-```{r, fig.width = 7, fig.align = "center", error=T}
+```{r cumprobgt34, fig.width = 7, fig.align = "center", error=T, eval =FALSE}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`)
 p + 
   geom_sf(
@@ -278,7 +278,7 @@ p +
 
 Cumulative wind speed probability for >50kt winds:
 
-```{r, fig.width = 7, fig.align = "center", error=T}
+```{r  cumprobgt50, fig.width = 7, fig.align = "center", error=T, eval=FALSE}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`)
 p + 
   geom_sf(
@@ -290,7 +290,7 @@ p +
 
 Cumulative probability for >64kt winds:
 
-```{r, fig.width = 7, fig.align = "center", error=T}
+```{r  cumprobgt64, fig.width = 7, fig.align = "center", error=T, eval=FALSE}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`)
 p + 
   geom_sf(
