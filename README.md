@@ -5,8 +5,9 @@ version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-
 (pre-)release](https://img.shields.io/github/release/ropensci/rrricanes/all.svg)](https://github.com/ropensci/rrricanes/tags)
 [![](https://badges.ropensci.org/118_status.svg)](https://github.com/ropensci/onboarding/issues/118)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes)
-[![Build
-Status](https://img.shields.io/travis/ropensci/rrricanes/master.svg)](https://github.com/ropensci/rrricanes/actions?workflow=R-CMD-check)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/ropensci/rrricanes/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/rrricanes/actions)
+<!-- badges: end -->
 [![codecov](https://codecov.io/gh/ropensci/rrricanes/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/rrricanes)
 
 # rrricanes <img src='man/figures/logo.png' align="right" height="138" />
