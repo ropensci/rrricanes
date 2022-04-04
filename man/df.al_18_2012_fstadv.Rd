@@ -4,7 +4,9 @@
 \name{df.al_18_2012_fstadv}
 \alias{df.al_18_2012_fstadv}
 \title{Forecast/Advisory for Hurricane Sandy (AL182012)}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 31 rows and 117 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 31 rows and 117 columns.
+}
 \source{
 \url{http://www.nhc.noaa.gov/archive/2012/SANDY.shtml?}
 }
