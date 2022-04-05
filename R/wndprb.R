@@ -214,7 +214,7 @@ wndprb <- function(contents) {
     dplyr::mutate_all(.funs = stringr::str_trim)
 
   # Make "X" values 0
-  wndprb[wndprb == "X"] <- 0
+  wndprb[wndprb == "X"] <- "0"
 
   wndprb <- dplyr::mutate_at(
     .tbl = wndprb,
