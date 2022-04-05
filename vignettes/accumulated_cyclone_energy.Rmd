@@ -35,21 +35,21 @@ To calculate ACE you would want to use the `fstadv` dataset and apply the follow
 * select `Wind`
 
 ```{r}
-fstadv <- fstadv %>% 
+fstadv <- fstadv |> 
     filter(hour(Date) %in% c(3, 9, 15, 21), 
            Status %in% c("Tropical Storm", "Hurricane"), 
-           !is.na(Wind)) %>% 
-    group_by(Key) %>% 
+           !is.na(Wind)) |> 
+    group_by(Key) |> 
     select(Name, Wind)
 ```
 
 Now let's summarise our dataset with new variable `ACE`.
 
 ```{r}
-fstadv %>% 
+fstadv |> 
     summarise(Name = last(Name), 
-              ACE = sum(Wind^2) * 1e-04) %>% 
-    arrange(desc(ACE)) %>% 
+              ACE = sum(Wind^2) * 1e-04) |> 
+    arrange(desc(ACE)) |> 
     top_n(10)
 ```
 
@@ -60,14 +60,14 @@ A companion package, [HURDAT](https://github.com/timtrice/HURDAT) is available i
 Let's revisit the top 10 using `HURDAT`:
 
 ```{r}
-AL %>% 
+AL |> 
     filter(hour(DateTime) %in% c(0, 6, 12, 18), 
            Status %in% c("TS", "HU"), 
-           !is.na(Wind)) %>% 
-    group_by(Key) %>% 
+           !is.na(Wind)) |> 
+    group_by(Key) |> 
     summarise(Name = last(Name), 
-              ACE = sum(Wind^2) * 1e-04) %>% 
-    arrange(desc(ACE)) %>% 
+              ACE = sum(Wind^2) * 1e-04) |> 
+    arrange(desc(ACE)) |> 
     top_n(10)
 ```
 
@@ -81,14 +81,14 @@ A couple of things to notice here:
 You can also calculate `ACE` for a season. Instead of grouping by `Key` we group by `Year`. I'll stick with `HURDAT` in this example.
 
 ```{r}
-(df <- AL %>% 
-    mutate(Year = year(DateTime)) %>% 
+(df <- AL |> 
+    mutate(Year = year(DateTime)) |> 
     filter(hour(DateTime) %in% c(0, 6, 12, 18), 
            Status %in% c("TS", "HU"), 
-           !is.na(Wind)) %>% 
-    group_by(Year) %>% 
-    summarise(ACE = sum(Wind^2) * 1e-04) %>% 
-    arrange(desc(ACE))) %>% 
+           !is.na(Wind)) |> 
+    group_by(Year) |> 
+    summarise(ACE = sum(Wind^2) * 1e-04) |> 
+    arrange(desc(ACE))) |> 
     top_n(10)
 ```
 

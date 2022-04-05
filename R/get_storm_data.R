@@ -12,8 +12,8 @@ extract_product_contents <- function(links, product) {
   contents <- purrr::imap(contents, safely_read_html)
 
   contents <-
-    links %>%
-    get_url_contents() %>%  # Read in contents as html
+    links |>
+    get_url_contents() |>  # Read in contents as html
     # If text is not within html, then we simply need to return the text.
     # Otherwise, extract the node from within the HTML and return the text of
     # that node.
@@ -22,10 +22,10 @@ extract_product_contents <- function(links, product) {
       if (is.null(txt$result)) {
         x
       } else if (is.null(txt$error)) {
-        txt$result %>%
-          rvest::html_node(xpath = "//pre") %>%
-          rvest::html_text() %>%
-          stringr::str_replace_all("\r", "") %>%
+        txt$result |>
+          rvest::html_node(xpath = "//pre") |>
+          rvest::html_text() |>
+          stringr::str_replace_all("\r", "") |>
           stringr::str_to_upper()
       }
     })
@@ -45,16 +45,16 @@ extract_storm_links <- function(links) {
 
   # Get links of text products from each `links`
   product_links <-
-    links %>%
-    get_url_contents() %>%
-    purrr::imap(.f = xml2::read_html) %>%
+    links |>
+    get_url_contents() |>
+    purrr::imap(.f = xml2::read_html) |>
     # Extract the html tables from each link to get the storm's text products
-    purrr::imap(.f = ~rvest::html_nodes(.x, xpath = "//td//a")) %>%
+    purrr::imap(.f = ~rvest::html_nodes(.x, xpath = "//td//a")) |>
     # Extract the text product URLs from `nodes`
-    purrr::imap(.f = ~rvest::html_attr(.x, name = "href")) %>%
-    purrr::flatten_chr() %>%
+    purrr::imap(.f = ~rvest::html_attr(.x, name = "href")) |>
+    purrr::flatten_chr() |>
     # Ensure we're only capturing archive pages
-    stringr::str_match( "archive.+") %>%
+    stringr::str_match( "archive.+") |>
     .[stats::complete.cases(.)]
 
   # Extract years from `links`
@@ -75,8 +75,8 @@ extract_storm_links <- function(links) {
 #'   process and return a dataset for that product.
 #' @keywords internal
 get_product <- function(links, product) {
-  links %>%
-    purrr::map2(.y = product, .f = get_storm_data) %>%
+  links |>
+    purrr::map2(.y = product, .f = get_storm_data) |>
     purrr::flatten_df()
 }
 
@@ -117,14 +117,14 @@ get_product <- function(links, product) {
 #' @examples
 #' \dontrun{
 #' ## Get public advisories for first storm of 2016 Atlantic season.
-#' get_storms(year = 2016, basin = "AL") %>%
-#'   slice(1) %>%
-#'   .$Link %>%
+#' get_storms(year = 2016, basin = "AL") |>
+#'   slice(1) |>
+#'   .$Link |>
 #'   get_storm_data(products = "public")
 #' ## Get public advisories and storm discussions for first storm of 2017 Atlantic season.
-#' get_storms(year = 2017, basin = "AL") %>%
-#'   slice(1) %>%
-#'   .$Link %>%
+#' get_storms(year = 2017, basin = "AL") |>
+#'   slice(1) |>
+#'   .$Link |>
 #'   get_storm_data(products = c("discus", "public"))
 #' }
 #' @export

@@ -115,7 +115,7 @@
 #' @name rrricanes
 NULL
 
-#' @importFrom magrittr %>%
+#' @importFrom magrittr |>
 #' @importFrom rlang .data
 
 .pkgenv <- new.env(parent = emptyenv())
@@ -198,7 +198,7 @@ get_url_contents <- function(links) {
   p <- dplyr::progress_estimated(n = length(links))
 
   contents <-
-    links %>%
+    links |>
     purrr::imap(.f = function(x, y) {
 
       if (as.numeric(y) != length(links)) {

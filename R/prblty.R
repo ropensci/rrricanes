@@ -56,18 +56,18 @@ prblty <- function(contents) {
                         "([:digit:]{1,2}|X)")               # E
 
   prblty <-
-    contents %>%
-    stringr::str_match_all(ptn) %>%
-    purrr::map(tibble::as_tibble, .name_repair = "minimal") %>%
+    contents |>
+    stringr::str_match_all(ptn) |>
+    purrr::map(tibble::as_tibble, .name_repair = "minimal") |>
     purrr::map(
       rlang::set_names, nm = c("X1", "Location", "A", "B", "C", "D", "E")
-    ) %>%
-    purrr::map2(status[,1], ~tibble::add_column(.x, Status = .y, .before = 1)) %>%
-    purrr::map2(status[,2], ~tibble::add_column(.x, Name = .y, .after = 1)) %>%
-    purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) %>%
-    purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) %>%
-    purrr::map_df(tibble::as_tibble, .name_repair = "minimal") %>%
-    dplyr::select(-c("X1")) %>%
+    ) |>
+    purrr::map2(status[,1], ~tibble::add_column(.x, Status = .y, .before = 1)) |>
+    purrr::map2(status[,2], ~tibble::add_column(.x, Name = .y, .after = 1)) |>
+    purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) |>
+    purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) |>
+    purrr::map_df(tibble::as_tibble, .name_repair = "minimal") |>
+    dplyr::select(-c("X1")) |>
     # Trim whitespace
     dplyr::mutate_all(.funs = stringr::str_trim)
 

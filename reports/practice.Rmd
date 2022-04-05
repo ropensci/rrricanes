@@ -53,8 +53,8 @@ l <- list("bbox.pts" = bbox(gis$AL112017_pts),
           "bbox.fcst_lin" = bbox(gis$al112017_016_5day_lin), 
           "bbox.fcst_cone" = bbox(gis$al112017_016_5day_pgn))
 
-bb <- matrix(c(map(l, `[[`, 1) %>% flatten_dbl() %>% min(), 
-               map(l, `[[`, 2) %>% flatten_dbl() %>% max()), 
+bb <- matrix(c(map(l, `[[`, 1) |> flatten_dbl() |> min(), 
+               map(l, `[[`, 2) |> flatten_dbl() |> max()), 
              nrow = 2, 
              ncol = 2)
 ```
