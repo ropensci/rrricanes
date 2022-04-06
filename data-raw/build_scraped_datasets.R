@@ -55,7 +55,7 @@ fstadv <- map_df(storms %>% .$Link, .f = function(storm_link) {
 
 write_csv(fstadv, "./datasets/fstadv.csv")
 
-adv <- tidy_fstadv(fstadv)
+adv <- tidy_adv(fstadv)
 write_csv(adv, "./datasets/adv.csv")
 
 fcst <- tidy_fcst(fstadv)

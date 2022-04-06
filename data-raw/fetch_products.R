@@ -136,7 +136,7 @@ parse_products <- function(x, y) {
 
     if (product == "fstadv") {
         ## ---- Tidy fstadv ----------------------------------------------------
-        adv <- tidy_fstadv(updated_df)
+        adv <- tidy_adv(updated_df)
         write_csv(adv, path = "./datasets/adv.csv")
 
         fcst <- tidy_fcst(updated_df)
