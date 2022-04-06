@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, message = FALSE}
+```{r, message = FALSE, warning=FALSE}
 library(dplyr)
 library(rrricanes)
 ```
@@ -24,7 +24,7 @@ There are two basins which data is available: north Atlantic ("AL") and northeas
 
 By default, `get_storms` will return all storms that have developed for the current year in both basins. If no storms have developed, an error will be generated. For this example, we'll use 2012.
 
-```{r get.storms, eval = FALSE}
+```{r get.storms}
 df.al_2012 <- get_storms(years = 2012, basins = "AL")
 ```
 
@@ -41,7 +41,8 @@ df.al_18_2012_fstadv <- df.al_2012 |>
 
 We can get the forecast/advisory data and wind speed probabilities at once:
 
-```{r, eval = FALSE}
+
+```{r }
 df.al_18_2012 <- df.al_2012 |> 
     filter(Name == "Hurricane Sandy") |> 
     .$Link |> 
@@ -56,7 +57,8 @@ The core of a storm's dataset is located in the Forecast/Advisory product, `fsta
 
 To access only this product, we can use `get_fstadv`:
 
-```{r, eval = FALSE}
+
+```{r}
 df.al_18_2012_fstadv <- df.al_2012 |> 
     filter(Name == "Hurricane Sandy") |> 
     .$Link |> 
@@ -93,10 +95,10 @@ In some cases, where hurricanes have an identifiable `Eye`, it's diameter in nau
 
 Lastly, the `Seas` variables will exist for a storm of at least tropical storm-strength. This is the distance from the center of circulation that 12ft seas can be found in each quadrant. The measurement is in nautical miles.
 
-Helper function `tidy_fstadv` will subset this data to a narrow dataframe.
+Helper function `tidy_adv` will subset this data to a narrow dataframe.
 
 ```{r}
-tidy_fstadv(df.al_18_2012_fstadv)
+tidy_adv(df.al_18_2012_fstadv)
 ```
 
 ### Wind Radius

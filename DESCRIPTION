@@ -1,6 +1,6 @@
 Package: rrricanes
 Type: Package
-Title: Web scraper for Atlantic and east Pacific hurricanes and tropical storms
+Title: Web Scraper for Atlantic and East Pacific Hurricanes and Tropical Storms
 Description: Get archived data of past and current hurricanes and tropical 
   storms for the Atlantic and eastern Pacific oceans. Data is available for 
   storms since 1998. Datasets are updated via the rrricanesdata package. 

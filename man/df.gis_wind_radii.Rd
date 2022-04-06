@@ -4,7 +4,9 @@
 \name{df.gis_wind_radii}
 \alias{df.gis_wind_radii}
 \title{GIS windfield and forecast wind radii for Hurricane Sandy (AL182012)}
-\format{An object of class \code{list} of length 2.}
+\format{
+An object of class \code{list} of length 2.
+}
 \source{
 \url{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al18&year=2012&name=Hurricane\%20SANDY}
 }

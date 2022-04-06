@@ -70,7 +70,7 @@
 #'  \item{SeasSW}{Radius of 12ft seas in southwest quadrant}
 #'  \item{SeasNW}{Radius of 12ft seas in northwest quadrant}
 #' }
-#' @seealso \code{\link{tidy_fstadv}}, \code{\link{tidy_wr}},
+#' @seealso \code{\link{tidy_adv}}, \code{\link{tidy_wr}},
 #' \code{\link{tidy_fcst}}, \code{\link{tidy_fcst_wr}}
 #' @examples
 #' \dontrun{
@@ -129,8 +129,9 @@ fstadv <- function(contents) {
     WindRadius = wind_radius,
     Forecast = forecasts
   ) |>
-    tidyr::unnest()
-
+    tidyr::unnest(cols = c(.data$Seas,
+                           .data$WindRadius,
+                           .data$Forecast))
 }
 
 #' @title fstadv_eye
@@ -266,9 +267,12 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       Adv = as.numeric(adv),
       AdvDate = adv_date,
       Forecasts = forecasts
+
     ) |>
+  
     tidyr::unnest() |>
     dplyr::group_by(.data$Key, .data$Adv) |>
+
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
     # the month should be the same.
@@ -554,8 +558,8 @@ tidy_adv <- function(df) {
   return(df)
 }
 
-#' @title tidy_fstadv
-#' @description \code{tidy_fstadv} will be deprecated in 0.2.2
+#' @title tidy_adv
+#' @description \code{tidy_adv} will be deprecated in 0.2.2
 #' @rdname tidy_adv
 #' @export
 tidy_fstadv <- function(df) {

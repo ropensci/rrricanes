@@ -4,8 +4,11 @@
 \alias{gis_storm_surge_flood}
 \title{gis_storm_surge_flood}
 \usage{
-gis_storm_surge_flood(key, advisory = as.numeric(),
-  products = c("inundation", "tidalmask"))
+gis_storm_surge_flood(
+  key,
+  advisory = as.numeric(),
+  products = c("inundation", "tidalmask")
+)
 }
 \arguments{
 \item{key}{Key of storm (i.e., AL012008, EP092015)}
