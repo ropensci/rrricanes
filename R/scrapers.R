@@ -233,7 +233,7 @@ scrape_header <- function(contents, ptn_product_title,
     matches[,c(1:2)] <- apply(matches[,c(1:2)], 2, stringr::str_to_title)
   }
 
-  return(matches)
+   matches
 
 }
 

@@ -554,7 +554,7 @@ tidy_adv <- function(df) {
       .data$Status:.data$Name,
       .data$Lat:.data$Eye,
       dplyr::starts_with("Seas"))
-  return(df)
+  df
 }
 
 #' @title tidy_fstadv
@@ -620,7 +620,7 @@ tidy_wr <- function(df) {
   # Remove NA rows for windfield quadrants
   wr <- wr[stats::complete.cases(wr$NE, wr$SE, wr$SW, wr$NW),]
 
-  return(wr)
+  wr
 }
 
 #' @title tidy_fcst
@@ -683,7 +683,7 @@ tidy_fcst <- function(df) {
   forecasts <- forecasts[stats::complete.cases(
     forecasts$FcstDate, forecasts$Lat, forecasts$Lon, forecasts$Wind,
     forecasts$Gust),]
-  return(forecasts)
+  forecasts
 }
 
 #' @title tidy_fcst_wr
@@ -756,7 +756,7 @@ tidy_fcst_wr <- function(df) {
             "WindField",
             .data$NE:.data$NW))
         })
-      return(y)
+      y
     })
 
   fcst_wr <- dplyr::arrange(
@@ -766,6 +766,6 @@ tidy_fcst_wr <- function(df) {
   fcst_wr <- fcst_wr[stats::complete.cases(
     fcst_wr$NE, fcst_wr$SE, fcst_wr$SW, fcst_wr$NW),]
 
-  return(fcst_wr)
+  fcst_wr
 
 }
