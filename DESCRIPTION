@@ -48,7 +48,6 @@ Imports:
 Suggests:
   covr, 
   devtools,
-  HURDAT,
   knitr, 
   rmarkdown,
   sf (>= 1.0), 
