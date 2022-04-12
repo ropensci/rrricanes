@@ -127,23 +127,25 @@ scrape_date <- function(header) {
                 datetime.extracted[,3], # Minute
                 period[,2])
 
+   tz <- datetime.extracted[,4]
+  if (any(is.na(tz))) {
+    i <- which(is.na(tz))
+    tz[i] <- "UTC"
+  }
+
   # Format date
-  d <- as.Date(stringr::str_c(datetime.extracted[,5], # Month, abbreviated
+  d <- as.Date(stringr::str_c(datetime.extracted[,7], # Year, four-digit format
+                              datetime.extracted[,5], # Month, abbreviated
                               datetime.extracted[,6], # Date, w/wo leading 0
-                              datetime.extracted[,7], # Year, four-digit format
+
                               sep = "-"),
-               format = "%b-%d-%Y")
+               format = "%Y-%b-%d")
 
   # If time zone is NA, make UTC. Is NA because in forecast products time is
   # immeidately followed by Z which is not captured. Z is military code for
   # Zulu time which is equivalent of Z.
 
   # That should be the reason...
-  tz <- datetime.extracted[,4]
-  if (any(is.na(tz))) {
-    i <- which(is.na(tz))
-    tz[i] <- "UTC"
-  }
 
   # Make date/time string
   x <- stringr::str_c(d, t, sep = " ")

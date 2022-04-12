@@ -1,15 +1,16 @@
 
+<!-- badges: start -->
+
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
 [![GitHub
 (pre-)release](https://img.shields.io/github/release/ropensci/rrricanes/all.svg)](https://github.com/ropensci/rrricanes/tags)
 [![](https://badges.ropensci.org/118_status.svg)](https://github.com/ropensci/onboarding/issues/118)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes)
-[![Build
-Status](https://img.shields.io/travis/ropensci/rrricanes/master.svg)](https://travis-ci.org/ropensci/rrricanes)
-[![AppVeyor Build
-Status](https://img.shields.io/appveyor/ci/timtrice/rrricanes-g4dos/master.svg)](https://ci.appveyor.com/project/timtrice/rrricanes-g4dos)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes)
+
+[![R-CMD-check](https://github.com/ropensci/rrricanes/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/rrricanes/actions)
 [![codecov](https://codecov.io/gh/ropensci/rrricanes/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/rrricanes)
+<!-- badges: end -->
 
 # rrricanes <img src='man/figures/logo.png' align="right" height="138" />
 
@@ -129,7 +130,7 @@ devtools::install_github("ropensci/rrricanes", build_vignettes = TRUE)
 
 ## Built With
 
-  - [R 3.3.3](https://www.r-project.org/) - The R Project for
+-   [R 3.3.3](https://www.r-project.org/) - The R Project for
     Statistical Computing
 
 ## Contributing
@@ -147,7 +148,7 @@ repository](https://github.com/ropensci/rrricanes/tags).
 
 ## Authors
 
-  - **Tim Trice** - *Initial work* -
+-   **Tim Trice** - *Initial work* -
     [timtrice](https://github.com/timtrice)
 
 See also the list of
@@ -161,15 +162,15 @@ This project is licensed under the MIT License - see the
 
 ## Acknowledgments
 
-  - [Molyneux, James](https://github.com/jimmylovestea)
-  - [Padgham, Mark](https://github.com/mpadge)
-  - [Robinson, Emily](https://github.com/robinsones)
-  - [Rudis, Bob](https://github.com/hrbrmstr)
-  - [Salmon, Maëlle](https://github.com/maelle)
-  - [Stachelek, Joseph](https://github.com/jsta)
+-   [Molyneux, James](https://github.com/jimmylovestea)
+-   [Padgham, Mark](https://github.com/mpadge)
+-   [Robinson, Emily](https://github.com/robinsones)
+-   [Rudis, Bob](https://github.com/hrbrmstr)
+-   [Salmon, Maëlle](https://github.com/maelle)
+-   [Stachelek, Joseph](https://github.com/jsta)
 
 ## Known Data Quality Issues
 
 1.  Hurricane Juan (AL152003), Adv 15; no status leads to improper
     `Status` and `Name` values in some datasets.
-    ([\#82](https://github.com/ropensci/rrricanes/issues/82))
+    ([#82](https://github.com/ropensci/rrricanes/issues/82))

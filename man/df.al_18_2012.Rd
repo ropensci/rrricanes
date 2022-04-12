@@ -4,7 +4,9 @@
 \name{df.al_18_2012}
 \alias{df.al_18_2012}
 \title{Forecast/Advisory and Wind Speed Probabilities for Hurricane Sandy (AL182012)}
-\format{An object of class \code{list} of length 2.}
+\format{
+An object of class \code{list} of length 2.
+}
 \source{
 \url{http://www.nhc.noaa.gov/archive/2012/SANDY.shtml?}
 }
