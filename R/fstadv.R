@@ -756,7 +756,7 @@ tidy_fcst_wr <- function(df) {
             "WindField",
             .data$NE:.data$NW))
         })
-      y
+      return(y)
     })
 
   fcst_wr <- dplyr::arrange(
