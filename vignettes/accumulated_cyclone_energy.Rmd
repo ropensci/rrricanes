@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE,
 ```{r, message = FALSE}
 library(dplyr)
 library(ggplot2)
-library(HURDAT)
+# library(HURDAT)
 library(lubridate)
 library(readr)
 library(rrricanes)
@@ -58,8 +58,11 @@ This matches somewhat well with [Wikipedia](https://en.wikipedia.org/wiki/Accumu
 A companion package, [HURDAT](https://github.com/timtrice/HURDAT) is available in CRAN that has data for all cyclones dating back as far as 1851. This package has less data than `rrricanes`. But, as it is based on a post-storm reanalysis project, the data is more accurate. 
 
 Let's revisit the top 10 using `HURDAT`:
+Note:HURDAT is currently archived on CRAN.
+
 
 ```{r eval=FALSE}
+
 AL %>% 
     filter(hour(DateTime) %in% c(0, 6, 12, 18), 
            Status %in% c("TS", "HU"), 
