@@ -16,7 +16,6 @@ knitr::opts_chunk$set(echo = TRUE,
 library(dplyr)
 library(ggplot2)
 library(rrricanes)
-library(rrricanesdata)
 library(sp)
 ```
 
@@ -31,7 +30,7 @@ wndprb <- wndprb %>% filter(Key == key, Adv <= adv)
 
 ### GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings
 
-```{r}
+```{r warning=FALSE}
 gis_adv <- gis_advisory(key = key, advisory = adv) %>% gis_download()
 ```
 

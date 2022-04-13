@@ -22,7 +22,7 @@ library(rrricanes)
 
 ACE or Accumulated Cyclone Energy is a method of measuring energy of a cyclone or for an entire season. It is calculated by the formula
 
-$$ \text{ACE} = 10^{-4}\sum{v^2_\text{max}} $$
+$ \text{ACE} = 10^{-4}\sum{v^2_\text{max}} $
 
 where $v_\text{max}$ is the wind speed in knots. Values may only be used when a storm is a tropical system with winds of at least 35 knots. Additionally, only six-hour intervals are used.
 
