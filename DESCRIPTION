@@ -13,7 +13,7 @@ Authors@R: c(person("Tim", "Trice", email = "tim.trice@gmail.com", role = c("aut
   person("Sophia", "Barett", role= "ctb", email = "Sbarrett@ccny.cuny.edu"),
   person("Lismarie", "Arche", role = "ctb", email = "lismarie.arche@lehman.cuny.edu"),
   person("Simon", "Ayotes", role= "ctb", email="simon@aytes.net"),
-  person("Goodness", "Ajayi-Martin", role = "ctb", email = "goodnessmartins89@gmail.com"),
+  person("Goodness", "Ajayi-Martins", role = "ctb", email = "goodnessmartins89@gmail.com"),
   person("Elin", "Waring", email = "elin.waring@gmail.com", role = c("aut","cre"))
   )
 Depends:
