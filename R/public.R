@@ -6,7 +6,7 @@
 #'   \item{Name}{Name of storm}
 #'   \item{Adv}{Advisory Number}
 #'   \item{Date}{Date of advisory issuance}
-#'   \item{Key}{Unique ID of the cyclone}
+#'   \item{StormKey}{Unique ID of the cyclone}
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param links URL to storm's archive page.
@@ -42,7 +42,7 @@ public <- function(contents) {
     Name = status[,2],
     Adv = status[,3],
     Date = issue_date,
-    Key = key,
+    StormKey = key,
     Contents = contents
   )
 
