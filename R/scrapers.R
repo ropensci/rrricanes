@@ -240,13 +240,13 @@ scrape_header <- function(contents, ptn_product_title,
 }
 
 #' @title scrape_key
-#' @description Extract Key from header
+#' @description Extract StormKey from header
 #' @param header Header text of product.
 #' @seealso \code{\link{scrape_header}}
 #' @keywords internal
 scrape_key <- function(header) {
 
-  # There are several possibilities that can preceed Key in the storm header.
+  # There are several possibilities that can preceed StormKey in the storm header.
   # ptn should capture each possibility, but only one of.
   ptn <- stringr::str_c(
     "(?:(?:NATIONAL HURRICANE CENTER|",
