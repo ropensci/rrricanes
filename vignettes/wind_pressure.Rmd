@@ -31,7 +31,7 @@ references:
     month: 2
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
                       fig.align = "center")
 ```
@@ -41,7 +41,6 @@ library(dplyr)
 library(gganimate)
 library(ggplot2)
 library(rrricanes)
-library(rrricanesdata)
 library(tidyr)
 ```
 
