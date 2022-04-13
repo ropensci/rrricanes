@@ -205,7 +205,7 @@ wndprb <- function(contents) {
              "Wind36",  "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
              "Wind72Cum", "Wind96", "Wind96Cum", "Wind120", "Wind120Cum")
     ) %>%
-    purrr::map2(key, ~tibble::add_column(.x, Key = .y, .before = 1)) %>%
+    purrr::map2(key, ~tibble::add_column(.x, StormKey = .y, .before = 1)) %>%
     purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) %>%
     purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) %>%
     purrr::map_df(tibble::as_tibble) %>%
