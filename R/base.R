@@ -191,7 +191,7 @@ get_url_contents <- function(links) {
   # Create groups of links divisible by 80. We are to allow no more than 80
   # requests every 10 seconds. If length of `link` is less than 80, then will
   # only have one group and should have no delay.
-  groups <- ceiling(seq_along(1:length(links))/80)
+  groups <- ceiling(seq_along((links))/80)
   links <- split(links, groups)
 
   # Set progress bar
