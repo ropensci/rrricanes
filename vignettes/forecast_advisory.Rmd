@@ -26,14 +26,15 @@ key <- "AL092008"
 adv <- 42
 ```
 
-```{r}
+```{r eval=FALSE}
 fstadv <- fstadv %>% filter(Key == key, Adv <= adv)
 ```
 
 ### GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings
 
 ```{r warning=FALSE}
-gis_adv <- gis_advisory(key = key, advisory = adv) %>% gis_download()
+gis_adv <- gis_advisory(key = key, advisory = adv) %>% 
+          gis_download()
 ```
 
 Get bounding box of the forecast polygon.

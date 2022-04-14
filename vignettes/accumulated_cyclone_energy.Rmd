@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE,
 ```{r, message = FALSE}
 library(dplyr)
 library(ggplot2)
+
 # library(HURDAT)
 library(lubridate)
 library(readr)
@@ -35,6 +36,7 @@ To calculate ACE you would want to use the `fstadv` dataset and apply the follow
 * select `Wind`
 
 ```{r eval=FALSE}
+
 fstadv <- fstadv %>% 
     filter(hour(Date) %in% c(3, 9, 15, 21), 
            Status %in% c("Tropical Storm", "Hurricane"), 
