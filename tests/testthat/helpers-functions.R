@@ -23,7 +23,7 @@ v <- function(r, c, link) {
     r
   )
 
-  content %>%
-    rvest::html_nodes(xpath = path) %>%
+  content |>
+    rvest::html_nodes(xpath = path) |>
     rvest::html_text()
 }

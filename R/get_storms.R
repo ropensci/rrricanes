@@ -19,22 +19,22 @@ extract_storms <- function(basin, contents) {
   storms <- purrr::map(html, rvest::html_nodes, xpath = link_xpath)
 
   years <-
-    html %>%
-    purrr::map(rvest::html_nodes, xpath = "//title") %>%
-    purrr::map(rvest::html_text) %>%
-    stringr::str_sub(0L, 4L) %>%
+    html |>
+    purrr::map(rvest::html_nodes, xpath = "//title") |>
+    purrr::map(rvest::html_text) |>
+    stringr::str_sub(0L, 4L) |>
     as.numeric()
 
   links <-
-    storms %>%
-    purrr::map(rvest::html_attr, name = "href") %>%
-    purrr::map2(years, ~stringr::str_c(year_archives_link(.y), .x)) %>%
+    storms |>
+    purrr::map(rvest::html_attr, name = "href") |>
+    purrr::map2(years, ~stringr::str_c(year_archives_link(.y), .x)) |>
     purrr::flatten_chr()
 
   names <-
-    storms %>%
-    purrr::map(rvest::html_text) %>%
-    purrr::flatten_chr() %>%
+    storms |>
+    purrr::map(rvest::html_text) |>
+    purrr::flatten_chr() |>
     stringr::str_to_title()
 
   # As of 2019-01-05, during the shutdown, a new table element exists at the
@@ -48,7 +48,7 @@ extract_storms <- function(basin, contents) {
   links <- links[idx]
   names <- names[idx]
 
-  basins <- purrr::map(names, purrr::rep_along, basin) %>% purrr::flatten_chr()
+  basins <- purrr::map(names, purrr::rep_along, basin) |> purrr::flatten_chr()
 
   years <- as.numeric(sub(".+(\\d{4}).+", "\\1", links))
 
@@ -104,8 +104,8 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
     stop("Basin must 'AL' and/or 'EP'.", call. = FALSE)
 
   links <-
-    years %>%
-    purrr::map(.f = year_archives_link) %>%
+    years |>
+    purrr::map(.f = year_archives_link) |>
     purrr::flatten_chr()
 
   # 1998 is only year with slightly different URL. Modify accordingly

@@ -27,9 +27,9 @@ gis <- flatten(gis_latest(verbose = FALSE))
 
 ```{r keys}
 # Keys of existing storms
-keys <- str_extract(names(gis), "(^[[:alpha:]]{2}[[:digit:]]{6})") %>% 
-  toupper() %>% 
-  unique() %>% 
+keys <- str_extract(names(gis), "(^[[:alpha:]]{2}[[:digit:]]{6})") |> 
+  toupper() |> 
+  unique() |> 
   .[complete.cases(.)]
 ```
 

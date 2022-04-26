@@ -48,12 +48,12 @@ walk(keys, .f = function(key) {
 
         # Extract command line arguments
         basin <- str_sub(key, 0L, 2L)
-        year_num <- str_sub(key, 3L, 4L) %>% as.numeric()
-        year <- str_sub(key, 5L, 8L) %>% as.numeric()
+        year_num <- str_sub(key, 3L, 4L) |> as.numeric()
+        year <- str_sub(key, 5L, 8L) |> as.numeric()
 
         # Get storm
-        storm_link <- get_storms(year = year, basin = basin) %>%
-            slice(year_num) %>%
+        storm_link <- get_storms(year = year, basin = basin) |>
+            slice(year_num) |>
             .$Link
 
         # Get product for current cyclone
@@ -73,9 +73,9 @@ walk(keys, .f = function(key) {
         # Read in full dataset
         full_df <- read_csv(sprintf("./datasets/%s.csv", product))
 
-        max_date <- full_df %>% dplyr::filter(Key == key) %>% .$Date %>% max()
+        max_date <- full_df |> dplyr::filter(Key == key) |> .$Date |> max()
 
-        filtered_df <- ret$result[[product]] %>% dplyr::filter(Date > max_date)
+        filtered_df <- ret$result[[product]] |> dplyr::filter(Date > max_date)
 
         df <- bind_rows(full_df, filtered_df)
 

@@ -54,10 +54,10 @@ parse_products <- function(x, y) {
     pub_dates <- read_csv("./datasets/pub_dates.csv", col_types = cols())
 
     # Get title of product
-    title <- xml_find_all(y, "title") %>% xml_text()
+    title <- xml_find_all(y, "title") |> xml_text()
 
     # Get pubdate of products
-    pd <- xml_find_all(y, "pubDate") %>% xml_text() %>%
+    pd <- xml_find_all(y, "pubDate") |> xml_text() |>
         strptime(format = "%a, %d %b %Y %T", tz = "UTC")
 
     # Set product and column types of existing dataset. Remember Adv is char.
@@ -94,15 +94,15 @@ parse_products <- function(x, y) {
         col_types = "cccTc"
     }
 
-    last_update <- pub_dates %>%
-        filter(Product == product) %>%
-        .[[x]] %>%
+    last_update <- pub_dates |>
+        filter(Product == product) |>
+        .[[x]] |>
         as.POSIXct()
 
     if (pd <= last_update) return(NULL)
 
     # At this point we have a new product. Get URL to product and scrape
-    link <- xml_find_all(y, "link") %>% xml_text()
+    link <- xml_find_all(y, "link") |> xml_text()
 
     func <- getAnywhere(product)$objs[[1]]
 
@@ -157,7 +157,7 @@ parse_products <- function(x, y) {
     status <- status(repo)
     status$unstaged
     if (!is_empty(status$unstaged)) {
-        add(repo, status$unstaged %>% flatten() %>% sprintf("./datasets/%s", .))
+        add(repo, status$unstaged |> flatten() |> sprintf("./datasets/%s", .))
         commit(repo, sprintf("%s updated as of %s", product, pd))
         push(repo)
     }
@@ -169,7 +169,7 @@ index_urls <- c("http://www.nhc.noaa.gov/index-at.xml",
                 "http://www.nhc.noaa.gov/index-ep.xml")
 
 # Load XML as list
-indices <- index_urls %>% map(read_xml)
+indices <- index_urls |> map(read_xml)
 
 # Go through each index output and check for active cyclones. If no storms are
 # active then do nothing.
@@ -184,9 +184,9 @@ indices <- index_urls %>% map(read_xml)
 # The nhc:wallet element contains a string (e.g., AT1) which indicates the basin
 # (Atlantic) and wallet number (1). This should tell us there is an active
 # cyclone.
-wallets <- indices %>%
-    map(xml_find_all, xpath = ".//nhc:wallet") %>%
-    map(xml_text) %>%
+wallets <- indices |>
+    map(xml_find_all, xpath = ".//nhc:wallet") |>
+    map(xml_text) |>
     flatten_chr()
 
 if (is_empty(wallets))
@@ -197,11 +197,11 @@ if (is_empty(wallets))
 # wallet is an overall pubDate for each product. This pubDate needs to be
 # checked against the value in pub_dates.csv to ensure that we do not write
 # existing data.
-urls <- map_chr(wallets, str_to_lower) %>%
+urls <- map_chr(wallets, str_to_lower) |>
     sprintf("http://www.nhc.noaa.gov/nhc_%s.xml", .)
 
 # Extract all items
-items <- map(urls, read_xml) %>% map(xml_find_all, xpath = ".//item")
+items <- map(urls, read_xml) |> map(xml_find_all, xpath = ".//item")
 
 # Match the products we need
 item_matches <- map(items, str_detect,
