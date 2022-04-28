@@ -120,7 +120,7 @@ p + geom_path(data = fcst_line,
 
 There are two groups of data in the set: one for 72-hour forecast period and one for 120-hour. Grouping by `FCSTPRD` will show the forecast track correctly.
 
-There is a pretty wide field of view on the map above. You can use `sp::bbox` to "zoom in" on the map.
+There is a pretty wide field of view on the map above. You can use `sf::st_as_sfc.bbox` to "zoom in" on the map.
 
 ```{r}
 (bb <- sp::bbox(df.gis_adv$al182012.018_5day_lin))
@@ -201,7 +201,7 @@ df.gis_storm_surge <- gis_prob_storm_surge(key = "AL142016",
 
 ```{r}
 prob_surge <- shp_to_df(df.gis_storm_surge$al142016_2016100618_gt0)
-bb <- sp::bbox(df.gis_storm_surge$al142016_2016100618_gt0)
+bb <- sf::st_as_sfc.bbox(df.gis_storm_surge$al142016_2016100618_gt0)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
@@ -228,7 +228,7 @@ df.gis_wind_radii <- gis_windfield("AL142016", advisory = "33") |> gis_download(
 
 ```{r}
 wf_init <- shp_to_df(df.gis_wind_radii$al142016_2016100606_initialradii)
-bb <- sp::bbox(df.gis_wind_radii$al142016_2016100606_forecastradii)
+bb <- sf::st_as_sfc.bbox(df.gis_wind_radii$al142016_2016100606_forecastradii)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
@@ -267,7 +267,7 @@ df.gis_wsp <-
 ### Cumulative Probability for >34kt Winds
 
 ```{r cumprobgt34, fig.width = 7, fig.align = "center", error=T, eval =FALSE}
-bb <- sp::bbox(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`)
+bb <- sf::st_as_sfc.bbox(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`)
 p + 
   geom_sf(
     data = st_as_sf(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`), 
@@ -279,7 +279,7 @@ p +
 Cumulative wind speed probability for >50kt winds:
 
 ```{r  cumprobgt50, fig.width = 7, fig.align = "center", error=T, eval=FALSE}
-bb <- sp::bbox(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`)
+bb <- sf::st_as_sfc.bbox(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`)
 p + 
   geom_sf(
     data = st_as_sf(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`), 
@@ -291,7 +291,7 @@ p +
 Cumulative probability for >64kt winds:
 
 ```{r  cumprobgt64, fig.width = 7, fig.align = "center", error=T, eval=FALSE}
-bb <- sp::bbox(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`)
+bb <- sf::st_as_sfc.bbox(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`)
 p + 
   geom_sf(
     data = st_as_sf(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`), 

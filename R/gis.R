@@ -90,7 +90,7 @@ gis_breakpoints <- function() {
 #' @title gis_download
 #' @description Get GIS data for storm.
 #' @param url link to GIS dataset to download.
-#' @param ... additional parameters for rgdal::readOGR
+#' @param ... additional parameters for sf::st_read()
 #' @export
 gis_download <- function(url, ...) {
 
@@ -109,7 +109,7 @@ gis_download <- function(url, ...) {
     purrr::map2(
       .x = destdir,
       .y = stringr::str_replace(shp_files, "\\.shp", ""),
-      .f = rgdal::readOGR,
+      .f = sf::st_read,
       encoding = "UTF-8",
       stringsAsFactors = FALSE,
       use_iconv = TRUE,
@@ -123,7 +123,7 @@ gis_download <- function(url, ...) {
 #' @title gis_latest
 #' @description Latest GIS datasets for \strong{active} cyclones
 #' @param basins AL and/or EP.
-#' @param ... additional parameters for rgdal::readOGR
+#' @param ... additional parameters for sf::st_readd()
 #' @export
 gis_latest <- function(basins = c("AL", "EP"), ...) {
 

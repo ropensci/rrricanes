@@ -158,7 +158,6 @@ fstadv_eye <- function(contents) {
 fstadv_forecasts <- function(content, key, adv, adv_date) {
 
   # https://www.nhc.noaa.gov/help/tcm.shtml
-
   #  Filter forecast dataframe, renaming variables with forecast period as
   #  prefix, eliminate some vars where necessary, and return a filtered
   #  dataframe.
@@ -236,17 +235,18 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
   # 96 and 120 hours). Some text products may have no forecasts at all (if the
   # storm is expected to degenerate or already has).
   forecasts <-
-    content |>
-    stringr::str_match_all(pattern = ptn) |>
+    content %>%
+    stringr::str_match_all(pattern = ptn) %>%
     # # Get only the columns needed excluding the matched string
-    # purrr::map(`[`, , 2:22) |>
+    purrr::map( `[`, , 2:22) %>%
     # If any storm has 0 forecasts (i.e., the list element is empty), populate
     # all columns with NA
-    purrr::modify_if(.p = purrr::is_empty,
-                     .f = ~matrix(data = NA_character_, ncol = 22)) |>
+  purrr::modify_if(forecasts,
+                                  .p = purrr::is_empty,
+                     .f = ~matrix(data = NA_character_, ncol = 22)) %>%
     # Convert to tibble cause God I hate working with lists like this though I
     # know I need the practice...
-    purrr::map(tibble::as_tibble, .name_repair = "minimal") |>
+    purrr::map(tibble::as_tibble, .name_repair = "minimal") %>%
     purrr::map(rlang::set_names,
                nm = c("String", "Date", "Hour", "Minute",
                       "Lat", "LatHemi", "Lon", "LonHemi",
@@ -269,7 +269,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       Forecasts = forecasts
 
     ) |>
-  
+
     tidyr::unnest() |>
     dplyr::group_by(.data$Key, .data$Adv) |>
 
