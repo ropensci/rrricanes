@@ -25,10 +25,10 @@ get_storm_list <- function() {
       "PRIORITY", "STORM_STATE", "WT_NUMBER", "STORMID"
     ),
     col_types = "ccccccciiccccciccicic"
-  ) %>%
-    dplyr::mutate_at(
-      .vars = c("YYY1MMDDHH", "YYY2MMDDHH"),
-      .f = as.POSIXct,
+  ) |>
+    dplyr::across(
+      .cols = c("YYY1MMDDHH", "YYY2MMDDHH"),
+      .fns = as.POSIXct,
       format = "%Y%m%d%H",
       tz = "UTC"
     )
@@ -41,8 +41,8 @@ get_ftp_dirs <- function(x) {
   url <- stringr::str_c(get_nhc_ftp_link(), x)
   con <- curl::curl(url, "r")
   ftp_dirs <-
-    con %>%
-    utils::read.table(stringsAsFactors = FALSE, fill = TRUE) %>%
+    con |>
+    utils::read.table(stringsAsFactors = FALSE, fill = TRUE) |>
     dplyr::rename(Name = .data$V9) # Name is the link
   close(con)
   ftp_dirs
@@ -115,7 +115,7 @@ get_ftp_storm_data <- function(stormid,
     # At this point we have a list of ALL messages in the ftp directory. Let's
     # filter out on what we want.
     links <-
-      ftp_contents %>%
+      ftp_contents |>
       dplyr::filter(
         grepl(
           pattern =
@@ -126,7 +126,7 @@ get_ftp_storm_data <- function(stormid,
             ),
           x = .data$Name
         )
-      ) %>%
+      ) |>
       dplyr::pull(.data$Name)
 
     if (purrr::is_empty(links)) {
@@ -135,13 +135,13 @@ get_ftp_storm_data <- function(stormid,
       # a temp directory, read in the products requested, scrape then do an
       # early return.
       links <-
-        ftp_contents %>%
+        ftp_contents |>
         dplyr::filter(
           grepl(
             pattern = sprintf("^%s_msg.zip", stringr::str_to_lower(stormid)),
             x = .data$Name
           )
-        ) %>%
+        ) |>
         dplyr::pull(.data$Name)
 
       pkg <- sprintf(
@@ -189,7 +189,7 @@ get_ftp_storm_data <- function(stormid,
       )
 
       files <- file.path(destdir, files)
-      files_length <- purrr::map(.x = files, .f = file.info) %>%
+      files_length <- purrr::map(.x = files, .f = file.info) |>
         purrr::map_dbl("size")
       res_txt <- purrr::map2_chr(.x = files, .y = files_length, readChar)
 
@@ -200,7 +200,7 @@ get_ftp_storm_data <- function(stormid,
         links
       )
 
-      res <- get_url_contents(links)
+      res <- hurricanes:::get_url_contents(links)
       res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
       res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
 
@@ -230,7 +230,7 @@ get_ftp_storm_data <- function(stormid,
     ftp_contents <- get_ftp_dirs(ftp_subdir)
 
     links <-
-      ftp_contents %>%
+      ftp_contents |>
       dplyr::filter(
         grepl(
           pattern =
@@ -241,7 +241,7 @@ get_ftp_storm_data <- function(stormid,
             ),
           x = .data$Name
         )
-      ) %>%
+      ) |>
       dplyr::pull(.data$Name)
 
     links <- sprintf(
@@ -250,7 +250,7 @@ get_ftp_storm_data <- function(stormid,
       links
     )
 
-    res <- get_url_contents(links)
+    res <- hurricanes:::get_url_contents(links)
     res_parsed <- purrr::map(res, ~xml2::read_html(.$content))
     res_txt <- purrr::map_chr(res_parsed, rvest::html_text)
 
