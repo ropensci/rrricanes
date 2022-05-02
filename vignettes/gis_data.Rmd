@@ -35,6 +35,7 @@ args(rrricanes::tracking_chart)
 The `countries` and `states` parameters are TRUE by default. This means a basic call to `tracking_chart` will return a map with country and state borders. The `res` parameter is resolution; one of 110, 50 or 10 nautical miles. Resolutions 110nm and 50nm can be used immediately. To use lower resolution you must install the `rnaturalearthdatahires` package from ropensci:
 
 ```{r, eval = FALSE}
+# this should not be needed since package is required
 install.packages("rnaturalearthhires",
                  repos = "http://packages.ropensci.org",
                  type = "source")
@@ -48,7 +49,7 @@ tracking_chart()
 
 You can pass typical `aes` parameters to refine the color and fill of the plot; remember the tracking chart is a ggplot object.
 
-```{r, fig.width = 7, fig.align = "center"}
+```{r, fig.width = 7, fig.align = "center",message=FALSE}
 tracking_chart(color = "black", fill = "white", size = 0.1)
 ```
 
@@ -88,12 +89,13 @@ gis_advisory(key = "AL182012", advisory = "18")
 ```
 
 ```{r, eval = FALSE}
+# Needs to update to support sf
 df.gis_adv <- gis_advisory(key = "AL182012",
                             advisory = "18") %>%
                             gis_download()
 ```
 
-```{r}
+```{r eval=FALSE}
 names(df.gis_adv)
 ```
 
@@ -101,7 +103,8 @@ For this particular storm and advisory, included are the base line, point and po
 
 ### Line track
 
-```{r}
+```{r eval=FALSE}
+# still in sp
 str(df.gis_adv$al182012.018_5day_lin)
 ```
 
@@ -112,7 +115,7 @@ fcst_line <-
   shp_to_df(df.gis_adv$al182012.018_5day_lin)
 ```
 
-```{r, fig.width = 7, fig.align = "center"}
+```{r, fig.width = 7, fig.align = "center", eval=FALSE}
 
 p + geom_path(data = fcst_line, 
               aes(long, lat, group = FCSTPRD))
@@ -123,13 +126,14 @@ There are two groups of data in the set: one for 72-hour forecast period and one
 There is a pretty wide field of view on the map above. You can use `sp::bbox` to "zoom in" on the map.
 
 ```{r}
-(bb <- sp::bbox(df.gis_adv$al182012.018_5day_lin))
+
+(bb <- sf::st_bbox(df.gis_adv$al182012.018_5day_lin))
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
 (p2 <- p + geom_path(data = fcst_line, aes(long, lat, group = FCSTPRD)) + 
-    coord_equal(xlim = c(bb[1,1] - 5, bb[1,2] + 5), 
-                ylim = c(bb[2,1] - 5, bb[2,2] + 5)))
+    coord_equal(xlim = c(bb[1] - 5, bb[3] + 5), 
+                ylim = c(bb[2] - 5, bb[4] + 5)))
 ```
 
 ### Point track
@@ -190,7 +194,8 @@ gis_prob_storm_surge(key = "AL142016",
                      datetime = "20161006")
 ```
 
-```{r,  warning=FALSE}
+```{r,  warning=FALSE,eval=FALSE}
+# Make this work with sf
 df.gis_storm_surge <- 
   gis_prob_storm_surge(key = "AL142016", 
                    products = list(psurge = 0), 
@@ -199,12 +204,12 @@ df.gis_storm_surge <-
   gis_download()
 ```
 
-```{r}
+```{r  eval=FALSE}
 prob_surge <- shp_to_df(df.gis_storm_surge$al142016_2016100618_gt0)
-bb <- sp::bbox(df.gis_storm_surge$al142016_2016100618_gt0)
+bb <- sf::st_bb(df.gis_storm_surge$al142016_2016100618_gt0)
 ```
 
-```{r, fig.width = 7, fig.align = "center"}
+```{r, fig.width = 7, fig.align = "center", eval=FALSE}
 p + geom_path(data = prob_surge, 
                aes(x = long, y = lat, 
                    group = group, 
@@ -226,12 +231,12 @@ gis_windfield("AL142016", advisory = "33")
 df.gis_wind_radii <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
 ```
 
-```{r}
+```{r eval=FALSE}
 wf_init <- shp_to_df(df.gis_wind_radii$al142016_2016100606_initialradii)
 bb <- sp::bbox(df.gis_wind_radii$al142016_2016100606_forecastradii)
 ```
 
-```{r, fig.width = 7, fig.align = "center"}
+```{r, fig.width = 7, fig.align = "center", eval=FALS}
 (p4 <- p + geom_polygon(data = wf_init, 
                   aes(x = long, y = lat, fill = factor(RADII)), alpha = 0.5) + 
     coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2])))
@@ -239,11 +244,11 @@ bb <- sp::bbox(df.gis_wind_radii$al142016_2016100606_forecastradii)
 
 Additionally, forecast wind radii data is also generally available in some packages
 
-```{r}
+```{r eval=FALSE}
 wf_fcst <- shp_to_df(df.gis_wind_radii$al142016_2016100606_forecastradii)
 ```
 
-```{r, fig.width = 7, fig.align = "center"}
+```{r, fig.width = 7, fig.align = "center", eval=FALSE}
 p4 + geom_polygon(data = wf_fcst, 
                   aes(x = long, y = lat, group = group, fill = factor(RADII)), 
                   alpha = 0.5)
@@ -253,7 +258,8 @@ p4 + geom_polygon(data = wf_fcst,
 
 Wind Speed probabilities show the chance of experiencing a minimum-sustained winds of 34, 50 and 64 knots with a given period of time (typically, 120 hours). These products are not storm-specific but are global so other active cyclones in other basins may also appear.
 
-```{r wspsettings}
+```{r wspsettings eval=false}
+#returning a long vector of NA
 gis_wsp(datetime = "2016100606", res = 0.5)
 ```
 
@@ -267,7 +273,7 @@ df.gis_wsp <-
 ### Cumulative Probability for >34kt Winds
 
 ```{r cumprobgt34, fig.width = 7, fig.align = "center", error=T, eval =FALSE}
-bb <- sp::bbox(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`)
+bb <- sf::st_bbox(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`)
 p + 
   geom_sf(
     data = st_as_sf(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`), 
@@ -297,5 +303,5 @@ p +
     data = st_as_sf(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`), 
     aes(color = PWIND120)
   ) +
-  coord_sf(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
+  coord_sf(xlim = c(bb[1], bb[3]), ylim = c(bb[2], bb[4]))
 ```
