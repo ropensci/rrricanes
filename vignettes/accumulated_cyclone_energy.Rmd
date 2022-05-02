@@ -13,7 +13,8 @@ knitr::opts_chunk$set(echo = TRUE,
 ```{r, message = FALSE}
 library(dplyr)
 library(ggplot2)
-library(HURDAT)
+
+# library(HURDAT)
 library(lubridate)
 library(readr)
 library(rrricanes)
@@ -22,7 +23,7 @@ library(rrricanes)
 
 ACE or Accumulated Cyclone Energy is a method of measuring energy of a cyclone or for an entire season. It is calculated by the formula
 
-$$ \text{ACE} = 10^{-4}\sum{v^2_\text{max}} $$
+$ \text{ACE} = 10^{-4}\sum{v^2_\text{max}} $
 
 where $v_\text{max}$ is the wind speed in knots. Values may only be used when a storm is a tropical system with winds of at least 35 knots. Additionally, only six-hour intervals are used.
 
@@ -36,6 +37,7 @@ To calculate ACE you would want to use the `fstadv` dataset and apply the follow
 
 
 ```{r eval=FALSE}
+
 fstadv <- fstadv |> 
     filter(hour(Date) %in% c(3, 9, 15, 21), 
            Status %in% c("Tropical Storm", "Hurricane"), 
@@ -60,6 +62,8 @@ This matches somewhat well with [Wikipedia](https://en.wikipedia.org/wiki/Accumu
 A companion package, [HURDAT](https://github.com/timtrice/HURDAT) is available in CRAN that has data for all cyclones dating back as far as 1851. This package has less data than `rrricanes`. But, as it is based on a post-storm reanalysis project, the data is more accurate. 
 
 Let's revisit the top 10 using `HURDAT`:
+Note:HURDAT is currently archived on CRAN.
+
 
 
 ```{r eval=FALSE}
