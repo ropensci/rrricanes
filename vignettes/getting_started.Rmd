@@ -63,11 +63,19 @@ and structural details of the cyclone.
 To access only this product, we can use `get_fstadv`:
 
 ```{r eval=FALSE}
-df.al_18_2012_fstadv <- df.al_2012 |> 
-    dplyr::filter(Name == "Hurricane Sandy") |> 
-    select(Link) |>
-    get_fstadv() 
+df.al_18_2012 <- df.al_2012 |> 
+    dplyr::filter(Name == "Hurricane Sandy") 
+
+    
+df.al_18_2012_fstadv  <-
+          get_fstadv(v.al_18_2012) 
 ```
+
+```{r}
+df.al_18_2012_wndprb  <-
+          get_wndprb(v.al_18_2012) 
+```
+
 
 As you may have noticed above, the dataframe is very wide at 149 variables. There are four groups of variables in this dataset: current details, current wind radii, forecast positions, and forecast wind radii.
 
@@ -76,7 +84,7 @@ As you may have noticed above, the dataframe is very wide at 149 variables. Ther
 Let's look at an example of the current details.
 
 ```{r eval=FALSE}
-str(df.al_18_2012_fstadv %>% select(Status:Eye, SeasNE:SeasNW))
+#str(df.al_18_2012_fstadv %>% select(Status:Eye, SeasNE:SeasNW))
 ```
 
 The most important variable in this dataset is `Key`. `Key` is a unique identifier for each storm that develops in either basin. It is formatted such as "AABBCCCC" where "AA" is the basin abbreviation (AL or EP), "BB" is the year number of the storm left-padded, and "CC" is the year of the storm.

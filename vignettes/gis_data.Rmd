@@ -258,7 +258,7 @@ p4 + geom_polygon(data = wf_fcst,
 
 Wind Speed probabilities show the chance of experiencing a minimum-sustained winds of 34, 50 and 64 knots with a given period of time (typically, 120 hours). These products are not storm-specific but are global so other active cyclones in other basins may also appear.
 
-```{r wspsettings eval=false}
+```{r wspsettings, eval=false}
 #returning a long vector of NA
 gis_wsp(datetime = "2016100606", res = 0.5)
 ```
