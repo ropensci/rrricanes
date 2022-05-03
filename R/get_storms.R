@@ -12,7 +12,6 @@ extract_storms <- function(basin, contents) {
   )
 
   link_xpath <- xpaths[[basin]]
-
   # Read in contents as html
   html <- purrr::imap(contents, xml2::read_html)
 
@@ -48,7 +47,8 @@ extract_storms <- function(basin, contents) {
   links <- links[idx]
   names <- names[idx]
 
-  basins <- purrr::map(names, purrr::rep_along, basin) |> purrr::flatten_chr()
+  basins <- purrr::map(names, purrr::rep_along, basin) |>
+            purrr::flatten_chr()
 
   years <- as.numeric(sub(".+(\\d{4}).+", "\\1", links))
 
@@ -95,10 +95,11 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
 
   years <- as.integer(years)
 
-  if (!all(years %in% 1998:lubridate::year(Sys.Date())))
+  if (!all(years %in% 1998:lubridate::year(Sys.Date()))){
     stop(sprintf("Param `years` must be between 1998 and %s.",
                  lubridate::year(Sys.Date())),
          call. = FALSE)
+  }
 
   if (!all(basins %in% c("AL", "EP")))
     stop("Basin must 'AL' and/or 'EP'.", call. = FALSE)
@@ -112,7 +113,7 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
   links[grep("1998", links)] <- stringr::str_c(links[grep("1998", links)],
                                                "1998archive.shtml")
 
-  contents <- get_url_contents(links)
+  contents <- rrricanes:::get_url_contents(links)
 
   purrr::map_df(basins, extract_storms, contents)
 

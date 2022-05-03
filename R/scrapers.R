@@ -176,7 +176,12 @@ scrape_date <- function(header) {
   class(dt) <- c("POSIXct", "POSIXt")
 
   for (i in 1:(length(dt))) {
-    dt[i] <- as.POSIXct(strftime(x[i], format = "%Y-%m-%d %H:%M"), tz = unname(timezones[tz[i]]))
+    dt[i] <- as.POSIXct(strftime(x[i], format = "%Y-%m-%d %H:%M"),
+                        tz = ifelse(length(tz[i] == 0),
+                                    "UTC",
+                                    unname(timezones[tz[i]]))
+                        )
+
   }
 
   # Now convert to UTC

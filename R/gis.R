@@ -109,7 +109,7 @@ gis_download <- function(url, ...) {
     purrr::map2(
       .x = destdir,
       .y = stringr::str_replace(shp_files, "\\.shp", ""),
-      .f = rgdal::readOGR,
+      .f = sf::st_read,
       encoding = "UTF-8",
       stringsAsFactors = FALSE,
       use_iconv = TRUE,
