@@ -7,7 +7,6 @@ version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-
 (pre-)release](https://img.shields.io/github/release/ropensci/rrricanes/all.svg)](https://github.com/ropensci/rrricanes/tags)
 [![](https://badges.ropensci.org/118_status.svg)](https://github.com/ropensci/onboarding/issues/118)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes)
-
 [![R-CMD-check](https://github.com/ropensci/rrricanes/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/rrricanes/actions)
 [![codecov](https://codecov.io/gh/ropensci/rrricanes/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/rrricanes)
 <!-- badges: end -->
@@ -31,6 +30,22 @@ Center](http://www.prh.noaa.gov/cphc/)).
 This library parses the text advisories of all tropical cyclones since
 1998. Over the years the formats of the text products have changed and
 many are loosely formatted.
+
+## Current Status of rrricanes
+
+rrcanes is not currently on CRAN. A group of people (who welcome others
+to join us) are working on updating the package and get it back into
+shape for submission to CRAN. Because it has been a while we are taking
+the opportunity to do some updating and refactoring. Specifically we are
+working to get the package working with the recent
+[https://r-spatial.org/](changes%20in%20the%20R%20spatial%20ecosystem).
+When possible we are also shifting to more modern APIs for accessing the
+data when they are available.
+
+Please report any issues and share ideas in the issue tracker and code
+with pull requests.
+
+## Package background
 
 I wrote this package with the goal of consolidating messy text data into
 well-organized formats that can easily be saved to CSV, SQL and other
@@ -110,6 +125,8 @@ install.packages("rrricanesdata",
                  type = "source")
 ```
 
+However this package is not currently maintained.
+
 To use high resolution tracking maps you will need to install the
 `rnaturalearthhires` package.
 
@@ -130,8 +147,11 @@ devtools::install_github("ropensci/rrricanes", build_vignettes = TRUE)
 
 ## Built With
 
--   [R 3.3.3](https://www.r-project.org/) - The R Project for
-    Statistical Computing
+-   [R 4.1](https://www.r-project.org/) - The R Project for Statistical
+    Computing
+
+New minimum versions for a number of dependencies have been establised.
+This provides opportunity to build on newer features of the packages
 
 ## Contributing
 

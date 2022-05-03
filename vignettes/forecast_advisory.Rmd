@@ -18,7 +18,11 @@ knitr::opts_chunk$set(
 library(dplyr)
 library(ggplot2)
 library(rrricanes)
+<<<<<<< HEAD
 
+=======
+library(sp)
+>>>>>>> 17a1f0afccd42832dd16ce67d7b17c30676395c5
 ```
 
 ```{r}
@@ -32,7 +36,8 @@ fstadv <- fstadv |> filter(Key == key, Adv <= adv)
 
 ### GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings
 
-```{r}
+
+```{r  warning=FALSE}
 gis_adv <- gis_advisory(key = key, advisory = adv) |> gis_download()
 ```
 

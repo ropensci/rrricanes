@@ -83,7 +83,7 @@ There are several datasets that are published for active cyclones. The following
 
 ## Advisory Package
 
-```{r}
+```{r warning=FALSE}
 gis_advisory(key = "AL182012", advisory = "18")
 ```
 
@@ -146,7 +146,7 @@ Each forecast position is also included in the points dataframe. You can access 
 
 Forecast cone data is contained in the polygon dataset. To deal with this dataset you can use the `shp_to_df` function again or take the slightly longer way:
 
-```{r}
+```{r warning=FALSE}
 fcst_cone <- df.gis_adv$al182012.018_5day_pgn
 fcst_cone@data$id <- rownames(fcst_cone@data)
 fcst_cone.points <- broom::tidy(fcst_cone, region = "id")
@@ -184,19 +184,21 @@ In the example above you can see tropical storm warnings issued for the Bahamas,
 
 The Tropical Cyclone Storm Surge Probabilities data shows the probability, in percent, of a specified storm surge occurring during the forecast period indicated. The product is based upon an ensemble of Sea, Lake, and Overland Surge from Hurricanes (SLOSH) model runs using the National Hurricane Center (NHC) official advisory and accounts for track, size, and intensity errors based on historical errors.
 
-```{r}
+```{r warning=FALSE}
 gis_prob_storm_surge(key = "AL142016", 
                   products = list(psurge = 0), 
                      datetime = "20161006")
 ```
 
-```{r, eval = FALSE}
+
+```{r, warning=FALSE}
 
 df.gis_storm_surge <- gis_prob_storm_surge(key = "AL142016", 
                            products = list(psurge = 0), 
                            datetime = "20161006") |> 
     last() |> 
     gis_download()
+
 ```
 
 ```{r}
