@@ -132,7 +132,7 @@ tidy_wr(df.al_18_2012_fstadv)
 Most Forecast/Advisory products will have forecast data associated with it unless the storm has dissipated or is no longer tropical. There may be up to seven forecast positions. These positions are issued by 12-hour intervals through 48 hours where they are then at 24-hour intervals; 12, 24, 36, 48, 72, 96 and 120 hours.
 
 ```{r, eval = FALSE}
-str(df.al_18_2012_fstadv %>% select(Hr12FcstDate:Hr12Gust))
+str(df.al_18_2012_fstadv |> select(Hr12FcstDate:Hr12Gust))
 ```
 
 Notice each variable begins with the prefix "Hrn" where n is the forecast period as noted above. Only Date, Lat, Lon, Wind, Gust and wind radius (will discuss shortly) are given for forecast periods.
@@ -160,7 +160,7 @@ Therefore, while officially the forecast periods are 12, 24, 36, ... hours, in r
 Some forecast positions may also contain wind radius information (only up to 72 hours). 
 
 ```{r, eval = FALSE}
-str(df.al_18_2012_fstadv %>% select(Hr12NE64:Hr12NW34))
+str(df.al_18_2012_fstadv |> select(Hr12NE64:Hr12NW34))
 ```
 
 Again, these variables are prepended with the prefix prefix "Hrn" where n notes the forecast period. 
@@ -205,9 +205,9 @@ Strike Probabilities may not exist for most Pacific cyclones.
 ## Wind Speed Probabilities (`wndprb`)
 
 ```{r, eval = FALSE}
-df.al_18_2012_wndprb <- df.al_2012 %>% 
-    filter(Name == "Hurricane Sandy") %>% 
-    .$Link %>% 
+df.al_18_2012_wndprb <- df.al_2012 |> 
+    filter(Name == "Hurricane Sandy") |> 
+    .$Link |> 
     get_wndprb()
 ```
 

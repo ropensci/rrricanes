@@ -1,7 +1,8 @@
 library(dplyr)
 
 AL122005 <-
-  "%sarchive/2005/KATRINA.shtml?"|>
+
+  "%sarchive/2005/KATRINA.shtml?" |>
   sprintf(rrricanes:::get_nhc_link()) |>
   rrricanes:::extract_storm_links()
 
