@@ -4,7 +4,9 @@
 \name{df.al_18_2012_wndprb}
 \alias{df.al_18_2012_wndprb}
 \title{Wind speed probabilities for Hurricane Sandy (AL182012)}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 2227 rows and 18 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 2227 rows and 18 columns.
+}
 \source{
 \url{http://www.nhc.noaa.gov/archive/2012/SANDY.shtml?}
 }

@@ -127,7 +127,7 @@ parse_stations <- function(x) {
                     sep = ",",
                     extra = "warn") %>%
     dplyr::arrange(.data$Location)
-  return(df)
+  df
 }
 
 #' @title wndprb
@@ -214,7 +214,7 @@ wndprb <- function(contents) {
     dplyr::mutate_all(.funs = stringr::str_trim)
 
   # Make "X" values 0
-  wndprb[wndprb == "X"] <- 0
+  wndprb[wndprb == "X"] <- "0"
 
   wndprb <- dplyr::mutate_at(
     .tbl = wndprb,

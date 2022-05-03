@@ -3,7 +3,8 @@
 \name{get_storms}
 \alias{get_storms}
 \title{get_storms}
-\format{A 4xN dataframe
+\format{
+A 4xN dataframe
 \describe{
   \item{Year}{Numeric, four-digit year of the storm}
   \item{Name}{Character, name of storm mixed-case}
@@ -11,7 +12,8 @@
   \item{Link}{URL to storms' product pages}
 }
 
-To disable the progress bar set option dplyr.show_progress to FALSE.}
+To disable the progress bar set option dplyr.show_progress to FALSE.
+}
 \source{
 \url{http://www.nhc.noaa.gov/archive/2016/}
 }
