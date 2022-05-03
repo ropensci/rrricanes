@@ -73,15 +73,15 @@ gis_advisory <- function(key, advisory = as.character()) {
 gis_breakpoints <- function() {
 
   breakpoint_file <-
-    stringr::str_c(get_nhc_link, "gis/") %>%
-    xml2::read_html() %>%
-    rvest::html_nodes(
+    stringr::str_c(get_nhc_link, "gis/") |>
+    xml2::read_html()
+  breakpoint_file <-  rvest::html_nodes(breakpoint_file,
       xpath = "//tr[(((count(preceding-sibling::*) + 1) = 12) and parent::*)]//td"
-    ) %>%
-    rvest::html_children() %>%
-    rvest::html_attr("href") %>%
-    stringr::str_match("/gis/breakpoints/current/Breakpoints_\\d{4}\\.zip") %>%
-    .[stats::complete.cases(.)]
+    )
+  breakpoint_file <- rvest::html_children(breakpoint_file) |>
+    rvest::html_attr("href") |>
+    stringr::str_match("/gis/breakpoints/current/Breakpoints_\\d{4}\\.zip")
+  breakpoint_file <- complete.cases(breakpoint_file)
 
   stringr::str_c(get_nhc_link(withTrailingSlash = FALSE), breakpoint_file)
 
@@ -90,7 +90,7 @@ gis_breakpoints <- function() {
 #' @title gis_download
 #' @description Get GIS data for storm.
 #' @param url link to GIS dataset to download.
-#' @param ... additional parameters for rgdal::readOGR
+#' @param ... additional parameters for simple features
 #' @export
 gis_download <- function(url, ...) {
 
@@ -134,13 +134,13 @@ gis_latest <- function(basins = c("AL", "EP"), ...) {
                "EP" = stringr::str_c(get_nhc_link(), "gis-ep.xml"))
 
   gis_zips <-
-    basins %>%
-    purrr::map(~xml2::read_xml(urls[[.x]])) %>%
-    purrr::map(~ xml2::xml_find_all(.x, xpath = ".//link") %>%
-                 xml2::xml_text()) %>%
-    purrr::map(stringr::str_match, ".+\\.zip$") %>%
-    purrr::flatten_chr() %>%
-    .[!is.na(.)]
+    basins |>
+    purrr::map(~xml2::read_xml(urls[[.x]])) |>
+    purrr::map(~ xml2::xml_find_all(.x, xpath = ".//link") |>
+                 xml2::xml_text()) |>
+    purrr::map(stringr::str_match, ".+\\.zip$") |>
+    purrr::flatten_chr()
+  gis_latest <- gis_latest[!is.na(gis_latest)]
 
   if (purrr::is_empty(gis_zips)) return(NULL)
 
@@ -236,7 +236,7 @@ gis_prob_storm_surge <- function(key, products, datetime = NULL) {
   ptn_product <-
     purrr::map2(.x = names(products),
                 .y = products,
-                .f = stringr::str_c) %>%
+                .f = stringr::str_c) |>
     purrr::flatten_chr()
 
   # Build datetime pattern
@@ -425,15 +425,15 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
   year <- stringr::str_sub(datetime, 0L, 4L)
 
   request <-
-    stringr::str_c(get_nhc_link(), "gis/archive_wsp.php") %>%
+    stringr::str_c(get_nhc_link(), "gis/archive_wsp.php") |>
     httr::GET(body = list(year = year), encode = "form")
 
   contents <- httr::content(request, as = "parsed", encoding = "UTF-8")
 
-  ds <- rvest::html_nodes(contents, xpath = "//a") %>%
-    rvest::html_attr("href") %>%
-    stringr::str_extract(".+\\.zip$") %>%
-    .[stats::complete.cases(.)]
+  ds <- rvest::html_nodes(contents, xpath = "//a") |>
+    rvest::html_attr("href") |>
+    stringr::str_extract(".+\\.zip$")
+  ds <- ds[stats::complete.cases(ds)]
 
   if (nchar(datetime) < 10) {
     ptn_datetime <- stringr::str_c(datetime, "[:digit:]+")
@@ -461,7 +461,7 @@ shp_to_df <- function(obj) {
   if (class(obj) %in% c("SpatialLinesDataFrame", "SpatialPolygonsDataFrame")) {
     obj@data$id <- rownames(obj@data)
     obj <- dplyr::left_join(broom::tidy(obj, region = "id"),
-                            obj@data, by = "id") %>%
+                            obj@data, by = "id") |>
       tibble::as_tibble( .name_repair = "minimal")
   }
 

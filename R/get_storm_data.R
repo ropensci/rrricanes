@@ -82,9 +82,9 @@ extract_storm_links <- function(links) {
 #'   process and return a dataset for that product.
 #' @keywords internal
 get_product <- function(links, product) {
-  links |>
-    purrr::map2(.y = product, .f = get_storm_data) |>
-    purrr::flatten_df()
+
+    product_data <- purrr::map2(links,.y = product, .f = get_storm_data) |>
+    purrr::flatten_df(product_data)
 }
 
 #' @title get_storm_data
@@ -142,7 +142,8 @@ get_storm_data <- function(links,
 
   products <- match.arg(products, several.ok = TRUE)
   product_links <- rrricanes:::extract_storm_links(links)
-  # Filter links based on products and make one-dimensional
+
+    # Filter links based on products and make one-dimensional
   filtered_links <- lapply(products,function(x) grep(x, product_links,
                                                      value = TRUE,
                                                      fixed = TRUE))
