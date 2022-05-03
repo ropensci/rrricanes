@@ -87,7 +87,7 @@ Let's look at an example of the current details.
 #str(df.al_18_2012_fstadv %>% select(Status:Eye, SeasNE:SeasNW))
 ```
 
-The most important variable in this dataset is `Key`. `Key` is a unique identifier for each storm that develops in either basin. It is formatted such as "AABBCCCC" where "AA" is the basin abbreviation (AL or EP), "BB" is the year number of the storm left-padded, and "CC" is the year of the storm.
+The most important variable in this dataset is `StormKey`. `StormKey` is a unique identifier for each storm that develops in either basin. It is formatted such as "AABBCCCC" where "AA" is the basin abbreviation (AL or EP), "BB" is the year number of the storm left-padded, and "CC" is the year of the storm.
 
 `Adv` is the second-most important variable here. You'll notice it is in character format. For regularly-scheduled advisories, advisory numbers are always numeric. However, when watches and warnings are in effect, intermediate advisories are issued which are given alpha suffixes; i.e., 1, 2, 3, 3A, 4, 4A, 4B, 5, etc.
 
@@ -198,7 +198,7 @@ This dataframe contains the possibility of a cyclone passing within 65 nautical 
 
 Many values in the text product may be "X" for less than 1% chance of a strike. These values are converted to 0 as the fields are numeric. 
 
-The strike probability products did not contain `Key` which is the unique identifier for every cyclone. So the best way to do any joins will be by `Name`, `Adv` and `Date`.
+The strike probability products did not contain `StormKey` which is the unique identifier for every cyclone. So the best way to do any joins will be by `Name`, `Adv` and `Date`.
 
 Strike Probabilities may not exist for most Pacific cyclones.
 

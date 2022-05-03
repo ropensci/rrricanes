@@ -26,8 +26,10 @@ key <- "AL092008"
 adv <- 42
 ```
 
-```{r eval=FALSE}
-fstadv <- fstadv |> filter(Key == key, Adv <= adv)
+
+```{r}
+fstadv <- fstadv |> filter(StormKey == key, Adv <= adv)
+
 ```
 
 ### GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings

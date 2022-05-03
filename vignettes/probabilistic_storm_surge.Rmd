@@ -28,7 +28,9 @@ adv <- 42
 ```
 
 ```{r}
-fstadv <- fstadv |> filter(Key == key, Adv <= adv)
+
+fstadv <- fstadv |>filter(StormKey == key, Adv <= adv)
+
 ```
 
 ## Probabilistic Storm Surge
