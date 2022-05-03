@@ -15,7 +15,7 @@ tidy_fstadv(df)
 \description{
 Tidy current details of a fstadv dataframe object.
 
-\code{tidy_fstadv} will be deprecated in 0.2.2
+\code{tidy_adv} will be deprecated in 0.2.2
 }
 \details{
 Returns current data only of a fstadv dataframe. Use Key, Adv and

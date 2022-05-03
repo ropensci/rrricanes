@@ -128,7 +128,7 @@ fstadv <- function(contents) {
     Seas = seas,
     WindRadius = wind_radius,
     Forecast = forecasts
-  ) %>%
+  ) |>
 
     tidyr::unnest(cols = c(.data$Seas,
                            .data$WindRadius,
@@ -166,8 +166,8 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
   rebuild_forecasts <- function(hr, df) {
 
     df <-
-      df %>%
-      dplyr::filter(.data$FcstPeriod == hr) %>%
+      df |>
+      dplyr::filter(.data$FcstPeriod == hr) |>
       dplyr::select(
         .data$StormKey,
         .data$Adv,
@@ -179,7 +179,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
         tidyselect::ends_with("64"),
         tidyselect::ends_with("50"),
         tidyselect::ends_with("34")
-      ) %>%
+      ) |>
       rlang::set_names(
         # Prepend forecast variables with "Hr", the value of `hr`, and the
         # variable name.
@@ -237,17 +237,17 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
   # 96 and 120 hours). Some text products may have no forecasts at all (if the
   # storm is expected to degenerate or already has).
   forecasts <-
-    content %>%
-    stringr::str_match_all(pattern = ptn) %>%
+    content |>
+    stringr::str_match_all(pattern = ptn) |>
     # # Get only the columns needed excluding the matched string
-    # purrr::map(`[`, , 2:22) %>%
+    # purrr::map(`[`, , 2:22) |>
     # If any storm has 0 forecasts (i.e., the list element is empty), populate
     # all columns with NA
     purrr::modify_if(.p = purrr::is_empty,
-                     .f = ~matrix(data = NA_character_, ncol = 22)) %>%
+                     .f = ~matrix(data = NA_character_, ncol = 22)) |>
     # Convert to tibble cause God I hate working with lists like this though I
     # know I need the practice...
-    purrr::map(tibble::as_tibble, .name_repair = "minimal") %>%
+    purrr::map(tibble::as_tibble, .name_repair = "minimal") |>
     purrr::map(rlang::set_names,
                nm = c("String", "Date", "Hour", "Minute",
                       "Lat", "LatHemi", "Lon", "LonHemi",
@@ -268,10 +268,11 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       Adv = as.numeric(adv),
       AdvDate = adv_date,
       Forecasts = forecasts
-    ) %>%
+    ) |>
 
-    tidyr::unnest() %>%
-    dplyr::group_by(.data$StormKey, .data$Adv) %>%
+
+    tidyr::unnest() |>
+    dplyr::group_by(.data$StormKey, .data$Adv) |>
 
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
@@ -311,7 +312,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
         LonHemi == "W" ~ as.numeric(.data$Lon) * -1,
         TRUE           ~ as.numeric(.data$Lon)
       )
-    ) %>%
+    ) |>
     # Make Wind, Gust, relative wind/gust vars and sea vars all numeric
     dplyr::mutate_at(dplyr::vars(.data$Wind:.data$NW34), .funs = as.numeric)
 
@@ -319,15 +320,17 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
 
   for (hr in forecast_periods[2:7]) {
     df <-
-      df %>%
+      df |>
       dplyr::left_join(
         rebuild_forecasts(hr, df = df_forecasts), by = c("StormKey", "Adv")
       )
   }
 
-  df %>%
-    dplyr::ungroup() %>%
-    dplyr::select(-c(.data$StormKey, .data$Adv)) %>%
+
+  df |>
+    dplyr::ungroup() |>
+    dplyr::select(-c(.data$StormKey, .data$Adv)) |>
+
     split(seq(nrow(.)))
 
 }
@@ -394,7 +397,7 @@ fstadv_prev_pos <- function(contents, adv_date) {
   tibble::tibble(
     PrevPosDate = prev_pos_date,
     PrevPosLat = prev_pos_lat,
-    PrevPosLon = prev_pos_lon) %>%
+    PrevPosLon = prev_pos_lon) |>
     split(seq(nrow(.)))
 }
 
@@ -444,10 +447,10 @@ fstadv_seas <- function(content) {
                         "[:blank:]+([0-9]{1,3})SW",
                         "[:blank:]+([0-9]{1,3})NW")
 
-  stringr::str_match(content, ptn)[,2:5] %>%
-    apply(MARGIN = 2L, FUN = as.numeric) %>%
-    tibble::as_tibble(.name_repair = "minimal") %>%
-    rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW"))) %>%
+  stringr::str_match(content, ptn)[,2:5] |>
+    apply(MARGIN = 2L, FUN = as.numeric) |>
+    tibble::as_tibble(.name_repair = "minimal") |>
+    rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW"))) |>
     split(seq(nrow(.)))
 }
 
@@ -485,13 +488,13 @@ fstadv_wind_radius <- function(content) {
                         "SW[:blank:]+([:digit:]{1,3})",
                         "NW[[:punct:][:space:]]+)?")
 
-  stringr::str_match(content, ptn)[,2:16] %>%
-    apply(MARGIN = 2L, FUN = as.numeric) %>%
-    tibble::as_tibble(.name_repair = "minimal") %>%
+  stringr::str_match(content, ptn)[,2:16] |>
+    apply(MARGIN = 2L, FUN = as.numeric) |>
+    tibble::as_tibble(.name_repair = "minimal") |>
     rlang::set_names(nm = c("WindField64", "NE64", "SE64", "SW64", "NW64",
                             "WindField50", "NE50", "SE50", "SW50", "NW50",
-                            "WindField34", "NE34", "SE34", "SW34", "NW34")) %>%
-    dplyr::select(-tidyselect::starts_with("WindField")) %>%
+                            "WindField34", "NE34", "SE34", "SW34", "NW34")) |>
+    dplyr::select(-tidyselect::starts_with("WindField")) |>
     split(seq(nrow(.)))
 }
 
@@ -541,21 +544,21 @@ fstadv_winds_gusts <- function(contents) {
 #' }
 #' @examples
 #' \dontrun{
-#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") |>
 #'   tidy_adv()
 #' }
 #' @export
 tidy_adv <- function(df) {
   if (!is.data.frame(df))
     stop("Expecting a dataframe.")
-  df <- df %>%
+  df <- df |>
     dplyr::select(
       "StormKey",
       .data$Adv:.data$Date,
       .data$Status:.data$Name,
       .data$Lat:.data$Eye,
       dplyr::starts_with("Seas"))
-  return(df)
+  df
 }
 
 #' @title tidy_adv
@@ -585,7 +588,7 @@ tidy_fstadv <- function(df) {
 #' }
 #' @examples
 #' \dontrun{
-#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") |>
 #'   tidy_wr()
 #' }
 #' @export
@@ -600,8 +603,8 @@ tidy_wr <- function(df) {
   wr <- purrr::map_df(
     .x = c(34, 50, 64),
     .f = function(y) {
-      df %>%
-        dplyr::select(c("StormKey", "Adv", "Date", paste0(v, y))) %>%
+      df |>
+        dplyr::select(c("StormKey", "Adv", "Date", paste0(v, y))) |>
         dplyr::rename(
           "StormKey" = "StormKey",
           "Adv" = "Adv",
@@ -609,19 +612,21 @@ tidy_wr <- function(df) {
           "NE" = paste0("NE", y),
           "SE" = paste0("SE", y),
           "SW" = paste0("SW", y),
-          "NW" = paste0("NW", y)) %>%
+          "NW" = paste0("NW", y)) |>
         dplyr::mutate("WindField" = y)
-    }) %>%
+    }) |>
     dplyr::select(c(
+
       "StormKey", "Adv", "Date", "WindField", .data$NE:.data$NW
-    )) %>%
+    )) |>
+
     # Order by Date then Adv since Adv is character. Results as expected.
     dplyr::arrange(.data$StormKey, .data$Date, .data$Adv, .data$WindField)
 
   # Remove NA rows for windfield quadrants
   wr <- wr[stats::complete.cases(wr$NE, wr$SE, wr$SW, wr$NW),]
 
-  return(wr)
+  wr
 }
 
 #' @title tidy_fcst
@@ -643,7 +648,7 @@ tidy_wr <- function(df) {
 #' }
 #' @examples
 #' \dontrun{
-#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") |>
 #'   tidy_fcst()
 #' }
 #' @export
@@ -661,30 +666,33 @@ tidy_fcst <- function(df) {
 
   # What forecast periods are in the current dataset?
   # #107 Modified regex pattern to look for Hr120, as well.
-  fcst_periods <- as.list(names(df)) %>%
-    stringr::str_match(pattern = "Hr([:digit:]{2,3})FcstDate") %>%
-    .[,2] %>%
-    .[!rlang::are_na(.)] %>%
+  fcst_periods <- as.list(names(df)) |>
+    stringr::str_match(pattern = "Hr([:digit:]{2,3})FcstDate") |>
+    .[,2] |>
+    .[!rlang::are_na(.)] |>
     as.numeric()
 
   forecasts <- purrr::map_df(
     .x = fcst_periods,
     .f = function(y) {
-      df %>%
-        dplyr::select(c("StormKey", "Adv", "Date", paste0("Hr", y, v))) %>%
+
+      df |>
+        dplyr::select(c("StormKey", "Adv", "Date", paste0("Hr", y, v))) |>
         dplyr::rename("StormKey" = "StormKey", "Adv" = "Adv", "Date" = "Date",
+
                       "FcstDate" = paste0("Hr", y, "FcstDate"),
                       "Lat" = paste0("Hr", y, "Lat"),
                       "Lon" = paste0("Hr", y, "Lon"),
                       "Wind" = paste0("Hr", y, "Wind"),
-                      "Gust" = paste0("Hr", y, "Gust"))}) %>%
+
+                      "Gust" = paste0("Hr", y, "Gust"))}) |>
     dplyr::arrange(.data$StormKey, .data$Date, .data$Adv, .data$FcstDate)
 
   # Remove NA rows
   forecasts <- forecasts[stats::complete.cases(
     forecasts$FcstDate, forecasts$Lat, forecasts$Lon, forecasts$Wind,
     forecasts$Gust),]
-  return(forecasts)
+  forecasts
 }
 
 #' @title tidy_fcst_wr
@@ -707,7 +715,7 @@ tidy_fcst <- function(df) {
 #' }
 #' @examples
 #' \dontrun{
-#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") |>
 #'   tidy_fcst_wr()
 #' }
 #' @export
@@ -723,10 +731,10 @@ tidy_fcst_wr <- function(df) {
   v <- c("NE", "SE", "SW", "NW")
 
   # What forecast periods are in the current dataset?
-  fcst_periods <- as.list(names(df)) %>%
-    stringr::str_match(pattern = "Hr([:digit:]{2})FcstDate") %>%
-    .[,2] %>%
-    .[!rlang::are_na(.)] %>%
+  fcst_periods <- as.list(names(df)) |>
+    stringr::str_match(pattern = "Hr([:digit:]{2})FcstDate") |>
+    .[,2] |>
+    .[!rlang::are_na(.)] |>
     as.numeric()
 
   fcst_wr <- purrr::map_df(
@@ -737,11 +745,11 @@ tidy_fcst_wr <- function(df) {
       if (x %in% c(96, 120)) return(NULL)
       y <- purrr::map_df(.x = fcst_wind_radii, .f = function(z) {
 
-        df %>%
+        df |>
           dplyr::select(c(
             "StormKey", "Adv", "Date", paste0("Hr", x, "FcstDate"),
             paste0("Hr", x, v, z)
-          )) %>%
+          )) |>
           dplyr::rename(
             "StormKey" = "StormKey",
             "Adv" = "Adv",
@@ -750,8 +758,8 @@ tidy_fcst_wr <- function(df) {
             "NE" = paste0("Hr", x, "NE", z),
             "SE" = paste0("Hr", x, "SE", z),
             "SW" = paste0("Hr", x, "SW", z),
-            "NW" = paste0("Hr", x, "NW", z)) %>%
-          dplyr::mutate("WindField" = z) %>%
+            "NW" = paste0("Hr", x, "NW", z)) |>
+          dplyr::mutate("WindField" = z) |>
           dplyr::select(c(
             .data$StormKey:.data$FcstDate,
             "WindField",
@@ -767,6 +775,6 @@ tidy_fcst_wr <- function(df) {
   fcst_wr <- fcst_wr[stats::complete.cases(
     fcst_wr$NE, fcst_wr$SE, fcst_wr$SW, fcst_wr$NW),]
 
-  return(fcst_wr)
+  fcst_wr
 
 }
