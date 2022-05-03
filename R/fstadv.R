@@ -26,7 +26,7 @@
 #'  \item{Name}{Name of cyclone}
 #'  \item{Adv}{Advisory number}
 #'  \item{Date}{Date and time of advisory}
-#'  \item{Key}{Unique identifier of cyclone}
+#'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Lat}{Latitude of cyclone center}
 #'  \item{Lon}{Longitude of cyclone center}
 #'  \item{Wind}{Maximum sustained one-minute winds in knots}
@@ -70,7 +70,7 @@
 #'  \item{SeasSW}{Radius of 12ft seas in southwest quadrant}
 #'  \item{SeasNW}{Radius of 12ft seas in northwest quadrant}
 #' }
-#' @seealso \code{\link{tidy_fstadv}}, \code{\link{tidy_wr}},
+#' @seealso \code{\link{tidy_adv}}, \code{\link{tidy_wr}},
 #' \code{\link{tidy_fcst}}, \code{\link{tidy_fcst_wr}}
 #' @examples
 #' \dontrun{
@@ -115,7 +115,7 @@ fstadv <- function(contents) {
     Name = status[,2],
     Adv = as.numeric(status[,3]),
     Date = issue_date,
-    Key = key,
+    StormKey = key,
     Lat = lat_lon[,1],
     Lon = lat_lon[,2],
     Wind = winds_gusts[,1],
@@ -129,8 +129,10 @@ fstadv <- function(contents) {
     WindRadius = wind_radius,
     Forecast = forecasts
   ) %>%
-    tidyr::unnest(cols = c(Seas, WindRadius, Forecast))
 
+    tidyr::unnest(cols = c(.data$Seas,
+                           .data$WindRadius,
+                           .data$Forecast))
 }
 
 #' @title fstadv_eye
@@ -167,7 +169,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       df %>%
       dplyr::filter(.data$FcstPeriod == hr) %>%
       dplyr::select(
-        .data$Key,
+        .data$StormKey,
         .data$Adv,
         .data$FcstDate,
         .data$Lat,
@@ -245,7 +247,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
                      .f = ~matrix(data = NA_character_, ncol = 22)) %>%
     # Convert to tibble cause God I hate working with lists like this though I
     # know I need the practice...
-    purrr::map(tibble::as_tibble) %>%
+    purrr::map(tibble::as_tibble, .name_repair = "minimal") %>%
     purrr::map(rlang::set_names,
                nm = c("String", "Date", "Hour", "Minute",
                       "Lat", "LatHemi", "Lon", "LonHemi",
@@ -262,13 +264,15 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
   # dataframe/tibble.
   df_forecasts <-
     tibble::tibble(
-      Key = key,
+      StormKey = key,
       Adv = as.numeric(adv),
       AdvDate = adv_date,
       Forecasts = forecasts
     ) %>%
+
     tidyr::unnest() %>%
-    dplyr::group_by(.data$Key, .data$Adv) %>%
+    dplyr::group_by(.data$StormKey, .data$Adv) %>%
+
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
     # the month should be the same.
@@ -317,13 +321,13 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
     df <-
       df %>%
       dplyr::left_join(
-        rebuild_forecasts(hr, df = df_forecasts), by = c("Key", "Adv")
+        rebuild_forecasts(hr, df = df_forecasts), by = c("StormKey", "Adv")
       )
   }
 
   df %>%
     dplyr::ungroup() %>%
-    dplyr::select(-c(.data$Key, .data$Adv)) %>%
+    dplyr::select(-c(.data$StormKey, .data$Adv)) %>%
     split(seq(nrow(.)))
 
 }
@@ -442,7 +446,7 @@ fstadv_seas <- function(content) {
 
   stringr::str_match(content, ptn)[,2:5] %>%
     apply(MARGIN = 2L, FUN = as.numeric) %>%
-    tibble::as_tibble() %>%
+    tibble::as_tibble(.name_repair = "minimal") %>%
     rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW"))) %>%
     split(seq(nrow(.)))
 }
@@ -483,7 +487,7 @@ fstadv_wind_radius <- function(content) {
 
   stringr::str_match(content, ptn)[,2:16] %>%
     apply(MARGIN = 2L, FUN = as.numeric) %>%
-    tibble::as_tibble() %>%
+    tibble::as_tibble(.name_repair = "minimal") %>%
     rlang::set_names(nm = c("WindField64", "NE64", "SE64", "SW64", "NW64",
                             "WindField50", "NE50", "SE50", "SW50", "NW50",
                             "WindField34", "NE34", "SE34", "SW34", "NW34")) %>%
@@ -513,10 +517,10 @@ fstadv_winds_gusts <- function(contents) {
 #' @title tidy_adv
 #' @description Tidy current details of a fstadv dataframe object.
 #' @param df fstadv dataframe object
-#' @details Returns current data only of a fstadv dataframe. Use Key, Adv and
+#' @details Returns current data only of a fstadv dataframe. Use StormKey, Adv and
 #' Date to join with other tidy dataframes.
 #' \describe{
-#'  \item{Key}{Unique identifier of cyclone}
+#'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
 #'  \item{Date}{Date and time of advisory}
 #'  \item{Status}{Classification of cyclone}
@@ -546,7 +550,7 @@ tidy_adv <- function(df) {
     stop("Expecting a dataframe.")
   df <- df %>%
     dplyr::select(
-      "Key",
+      "StormKey",
       .data$Adv:.data$Date,
       .data$Status:.data$Name,
       .data$Lat:.data$Eye,
@@ -554,8 +558,8 @@ tidy_adv <- function(df) {
   return(df)
 }
 
-#' @title tidy_fstadv
-#' @description \code{tidy_fstadv} will be deprecated in 0.2.2
+#' @title tidy_adv
+#' @description \code{tidy_adv} will be deprecated in 0.2.2
 #' @rdname tidy_adv
 #' @export
 tidy_fstadv <- function(df) {
@@ -570,7 +574,7 @@ tidy_fstadv <- function(df) {
 #' @details Returns tidy dataframe of current wind radius values for a cyclone.
 #' Returns only complete.cases (based on quadrants).
 #' \describe{
-#'  \item{Key}{Unique identifier of cyclone}
+#'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
 #'  \item{Date}{Date and time of advisory}
 #'  \item{Windfield}{Minimum wind speed expected}
@@ -597,9 +601,9 @@ tidy_wr <- function(df) {
     .x = c(34, 50, 64),
     .f = function(y) {
       df %>%
-        dplyr::select(c("Key", "Adv", "Date", paste0(v, y))) %>%
+        dplyr::select(c("StormKey", "Adv", "Date", paste0(v, y))) %>%
         dplyr::rename(
-          "Key" = "Key",
+          "StormKey" = "StormKey",
           "Adv" = "Adv",
           "Date" = "Date",
           "NE" = paste0("NE", y),
@@ -609,10 +613,10 @@ tidy_wr <- function(df) {
         dplyr::mutate("WindField" = y)
     }) %>%
     dplyr::select(c(
-      "Key", "Adv", "Date", "WindField", .data$NE:.data$NW
+      "StormKey", "Adv", "Date", "WindField", .data$NE:.data$NW
     )) %>%
     # Order by Date then Adv since Adv is character. Results as expected.
-    dplyr::arrange(.data$Key, .data$Date, .data$Adv, .data$WindField)
+    dplyr::arrange(.data$StormKey, .data$Date, .data$Adv, .data$WindField)
 
   # Remove NA rows for windfield quadrants
   wr <- wr[stats::complete.cases(wr$NE, wr$SE, wr$SW, wr$NW),]
@@ -624,11 +628,11 @@ tidy_wr <- function(df) {
 #' @description Tidy forecasts of a fstadv dataframe object.
 #' @param df fstadv dataframe object
 #' @details Gathers all forecast points, tidies dataframe to make one row per
-#' forecast position. Complete cases only. Use Key, Adv and Date to join with
+#' forecast position. Complete cases only. Use StormKey, Adv and Date to join with
 #' other tidy dataframes.
 #'
 #' \describe{
-#'  \item{Key}{Unique identifier of cyclone}
+#'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
 #'  \item{Date}{Date and time of advisory}
 #'  \item{FcstDate}{Forecast date and time in UTC}
@@ -667,14 +671,14 @@ tidy_fcst <- function(df) {
     .x = fcst_periods,
     .f = function(y) {
       df %>%
-        dplyr::select(c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
-        dplyr::rename("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
+        dplyr::select(c("StormKey", "Adv", "Date", paste0("Hr", y, v))) %>%
+        dplyr::rename("StormKey" = "StormKey", "Adv" = "Adv", "Date" = "Date",
                       "FcstDate" = paste0("Hr", y, "FcstDate"),
                       "Lat" = paste0("Hr", y, "Lat"),
                       "Lon" = paste0("Hr", y, "Lon"),
                       "Wind" = paste0("Hr", y, "Wind"),
                       "Gust" = paste0("Hr", y, "Gust"))}) %>%
-    dplyr::arrange(.data$Key, .data$Date, .data$Adv, .data$FcstDate)
+    dplyr::arrange(.data$StormKey, .data$Date, .data$Adv, .data$FcstDate)
 
   # Remove NA rows
   forecasts <- forecasts[stats::complete.cases(
@@ -687,11 +691,11 @@ tidy_fcst <- function(df) {
 #' @description Tidy forecast wind radii of a fstadv dataframe object
 #' @param df fstadv dataframe object
 #' @details Tidies forecast wind radius for each forecast position. Complete
-#' cases only (by quadrants). Use Key, Adv and Date to join with other tidy
+#' cases only (by quadrants). Use StormKey, Adv and Date to join with other tidy
 #' dataframes.
 #'
 #' \describe{
-#'  \item{Key}{Unique identifier of cyclone}
+#'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
 #'  \item{Date}{Date and time of advisory}
 #'  \item{FcstDate}{Forecast date and time in UTC}
@@ -735,11 +739,11 @@ tidy_fcst_wr <- function(df) {
 
         df %>%
           dplyr::select(c(
-            "Key", "Adv", "Date", paste0("Hr", x, "FcstDate"),
+            "StormKey", "Adv", "Date", paste0("Hr", x, "FcstDate"),
             paste0("Hr", x, v, z)
           )) %>%
           dplyr::rename(
-            "Key" = "Key",
+            "StormKey" = "StormKey",
             "Adv" = "Adv",
             "Date" = "Date",
             "FcstDate" = paste0("Hr", x, "FcstDate"),
@@ -749,7 +753,7 @@ tidy_fcst_wr <- function(df) {
             "NW" = paste0("Hr", x, "NW", z)) %>%
           dplyr::mutate("WindField" = z) %>%
           dplyr::select(c(
-            .data$Key:.data$FcstDate,
+            .data$StormKey:.data$FcstDate,
             "WindField",
             .data$NE:.data$NW))
         })
@@ -757,7 +761,7 @@ tidy_fcst_wr <- function(df) {
     })
 
   fcst_wr <- dplyr::arrange(
-    fcst_wr, .data$Key, .data$Date, .data$Adv, .data$FcstDate, .data$WindField
+    fcst_wr, .data$StormKey, .data$Date, .data$Adv, .data$FcstDate, .data$WindField
   )
 
   fcst_wr <- fcst_wr[stats::complete.cases(

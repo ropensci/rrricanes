@@ -6,7 +6,7 @@
 #'   \item{Name}{Name of storm}
 #'   \item{Adv}{Advisory Number}
 #'   \item{Date}{Date of advisory issuance}
-#'   \item{Key}{ID of cyclone}
+#'   \item{StormKey}{ID of cyclone}
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param links URL to storm's archive page.
@@ -47,7 +47,7 @@ discus <- function(contents) {
     Name = status[,2],
     Adv = as.numeric(status[,3]),
     Date = issue_date,
-    Key = key,
+    StormKey = key,
     Contents = contents
   )
 

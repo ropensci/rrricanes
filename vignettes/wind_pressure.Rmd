@@ -53,7 +53,7 @@ adv <- 42
 ### Forecast/Advisory Data for Hurricane Ike Adv #42
 
 ```{r}
-fstadv <- fstadv %>% filter(Key == key, Adv <= adv)
+fstadv <- fstadv %>% filter(StormKey == key, Adv <= adv)
 ```
 
 ## Wind Profile

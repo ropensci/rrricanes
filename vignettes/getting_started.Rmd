@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, message = FALSE}
+```{r, message = FALSE, warning=FALSE}
 library(dplyr)
 library(rrricanes)
 ```
@@ -24,7 +24,7 @@ There are two basins which data is available: north Atlantic ("AL") and northeas
 
 By default, `get_storms` will return all storms that have developed for the current year in both basins. If no storms have developed, an error will be generated. For this example, we'll use 2012.
 
-```{r get.storms, eval = FALSE}
+```{r get.storms}
 df.al_2012 <- get_storms(years = 2012, basins = "AL")
 ```
 
@@ -41,7 +41,7 @@ df.al_18_2012_fstadv <- df.al_2012 %>%
 
 We can get the forecast/advisory data and wind speed probabilities at once:
 
-```{r, eval = FALSE}
+```{r}
 df.al_18_2012 <- df.al_2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
@@ -56,7 +56,7 @@ The core of a storm's dataset is located in the Forecast/Advisory product, `fsta
 
 To access only this product, we can use `get_fstadv`:
 
-```{r, eval = FALSE}
+```{r}
 df.al_18_2012_fstadv <- df.al_2012 %>% 
     filter(Name == "Hurricane Sandy") %>% 
     .$Link %>% 
@@ -73,7 +73,7 @@ Let's look at an example of the current details.
 str(df.al_18_2012_fstadv %>% select(Status:Eye, SeasNE:SeasNW))
 ```
 
-The most important variable in this dataset is `Key`. `Key` is a unique identifier for each storm that develops in either basin. It is formatted such as "AABBCCCC" where "AA" is the basin abbreviation (AL or EP), "BB" is the year number of the storm left-padded, and "CC" is the year of the storm.
+The most important variable in this dataset is `StormKey`. `StormKey` is a unique identifier for each storm that develops in either basin. It is formatted such as "AABBCCCC" where "AA" is the basin abbreviation (AL or EP), "BB" is the year number of the storm left-padded, and "CC" is the year of the storm.
 
 `Adv` is the second-most important variable here. You'll notice it is in character format. For regularly-scheduled advisories, advisory numbers are always numeric. However, when watches and warnings are in effect, intermediate advisories are issued which are given alpha suffixes; i.e., 1, 2, 3, 3A, 4, 4A, 4B, 5, etc.
 
@@ -93,10 +93,10 @@ In some cases, where hurricanes have an identifiable `Eye`, it's diameter in nau
 
 Lastly, the `Seas` variables will exist for a storm of at least tropical storm-strength. This is the distance from the center of circulation that 12ft seas can be found in each quadrant. The measurement is in nautical miles.
 
-Helper function `tidy_fstadv` will subset this data to a narrow dataframe.
+Helper function `tidy_adv` will subset this data to a narrow dataframe.
 
 ```{r}
-tidy_fstadv(df.al_18_2012_fstadv)
+tidy_adv(df.al_18_2012_fstadv)
 ```
 
 ### Wind Radius
@@ -184,7 +184,7 @@ This dataframe contains the possibility of a cyclone passing within 65 nautical 
 
 Many values in the text product may be "X" for less than 1% chance of a strike. These values are converted to 0 as the fields are numeric. 
 
-The strike probability products did not contain `Key` which is the unique identifier for every cyclone. So the best way to do any joins will be by `Name`, `Adv` and `Date`.
+The strike probability products did not contain `StormKey` which is the unique identifier for every cyclone. So the best way to do any joins will be by `Name`, `Adv` and `Date`.
 
 Strike Probabilities may not exist for most Pacific cyclones.
 

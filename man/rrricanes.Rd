@@ -3,7 +3,6 @@
 \docType{package}
 \name{rrricanes}
 \alias{rrricanes}
-\alias{rrricanes-package}
 \title{rrricanes}
 \description{
 rrricanes is a web-scraping library for R designed to deliver

@@ -4,7 +4,9 @@
 \name{df.al_12_2005_prblty}
 \alias{df.al_12_2005_prblty}
 \title{Strike probabilities for Hurricane Katrina (AL122005)}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 937 rows and 10 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 937 rows and 10 columns.
+}
 \source{
 \url{http://www.nhc.noaa.gov/archive/2005/KATRINA.shtml?}
 }

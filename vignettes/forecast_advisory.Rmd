@@ -28,7 +28,7 @@ adv <- 42
 ```
 
 ```{r}
-fstadv <- fstadv %>% filter(Key == key, Adv <= adv)
+fstadv <- fstadv %>% filter(StormKey == key, Adv <= adv)
 ```
 
 ### GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings
