@@ -62,7 +62,10 @@ tracking_chart(countries = FALSE, res = 50, color = "black", fill = "white",
 For the purposes of this vignette we'll focus on Atlantic storms.
 
 ```{r, fig.width = 7, fig.align = "center"}
-(p <- al_tracking_chart(color = "black", fill = "white", size = 0.1, res = 50))
+(p <- al_tracking_chart(color = "black",
+                        fill = "white", 
+                        size = 0.1,
+                        res = 50))
 ```
 
 The `res` parameter defines the resolution of the chart presented. Options are in 110nm, 50nm and 10nm. The lower the resolution the longer the chart takes to be built. 
@@ -85,7 +88,9 @@ gis_advisory(key = "AL182012", advisory = "18")
 ```
 
 ```{r, eval = FALSE}
-df.gis_adv <- gis_advisory(key = "AL182012", advisory = "18") %>% gis_download()
+df.gis_adv <- gis_advisory(key = "AL182012",
+                            advisory = "18") %>%
+                            gis_download()
 ```
 
 ```{r}
@@ -103,11 +108,14 @@ str(df.gis_adv$al182012.018_5day_lin)
 As we're dealing with a SpatialLinesDataFrame which needs to be modified, you can use the helper function `shp_to_df` for plotting.
 
 ```{r}
-fcst_line <- shp_to_df(df.gis_adv$al182012.018_5day_lin)
+fcst_line <- 
+  shp_to_df(df.gis_adv$al182012.018_5day_lin)
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
-p + geom_path(data = fcst_line, aes(long, lat, group = FCSTPRD))
+
+p + geom_path(data = fcst_line, 
+              aes(long, lat, group = FCSTPRD))
 ```
 
 There are two groups of data in the set: one for 72-hour forecast period and one for 120-hour. Grouping by `FCSTPRD` will show the forecast track correctly.
@@ -129,7 +137,9 @@ There is a pretty wide field of view on the map above. You can use `sp::bbox` to
 Each forecast position is also included in the points dataframe. You can access this in the `df.gis_adv$al182012.018_5day_pts@data` object; no conversion necessary.
 
 ```{r, fig.width = 7, fig.align = "center"}
-(p3 <- p2 + geom_point(data = df.gis_adv$al182012.018_5day_pts@data, aes(LON, LAT)))
+(p3 <- p2 + 
+   geom_point(data = df.gis_adv$al182012.018_5day_pts@data,
+              aes(LON, LAT)))
 ```
 
 ## Forecast Cone
@@ -175,16 +185,18 @@ In the example above you can see tropical storm warnings issued for the Bahamas,
 The Tropical Cyclone Storm Surge Probabilities data shows the probability, in percent, of a specified storm surge occurring during the forecast period indicated. The product is based upon an ensemble of Sea, Lake, and Overland Surge from Hurricanes (SLOSH) model runs using the National Hurricane Center (NHC) official advisory and accounts for track, size, and intensity errors based on historical errors.
 
 ```{r}
-gis_prob_storm_surge(key = "AL142016", products = list(psurge = 0), 
+gis_prob_storm_surge(key = "AL142016", 
+                  products = list(psurge = 0), 
                      datetime = "20161006")
 ```
 
 ```{r, eval = FALSE}
-df.gis_storm_surge <- gis_prob_storm_surge(key = "AL142016", 
-                           products = list(psurge = 0), 
-                           datetime = "20161006") %>% 
-    last() %>% 
-    gis_download()
+df.gis_storm_surge <- 
+  gis_prob_storm_surge(key = "AL142016", 
+                   products = list(psurge = 0), 
+                  datetime = "20161006") %>% 
+  last() %>% 
+  gis_download()
 ```
 
 ```{r}
@@ -194,9 +206,12 @@ bb <- sp::bbox(df.gis_storm_surge$al142016_2016100618_gt0)
 
 ```{r, fig.width = 7, fig.align = "center"}
 p + geom_path(data = prob_surge, 
-               aes(x = long, y = lat, group = group, color = PSurge00c), 
+               aes(x = long, y = lat, 
+                   group = group, 
+                   color = PSurge00c), 
               size = 1, alpha = 0.5) + 
-    coord_equal(xlim = c(bb[1,1], bb[1,2]), ylim = c(bb[2,1], bb[2,2]))
+    coord_equal(xlim = c(bb[1,1], bb[1,2]),
+                ylim = c(bb[2,1], bb[2,2]))
 ```
 
 ## Current and Forecast Wind Field Radii
@@ -238,11 +253,11 @@ p4 + geom_polygon(data = wf_fcst,
 
 Wind Speed probabilities show the chance of experiencing a minimum-sustained winds of 34, 50 and 64 knots with a given period of time (typically, 120 hours). These products are not storm-specific but are global so other active cyclones in other basins may also appear.
 
-```{r}
+```{r wspsettings}
 gis_wsp(datetime = "2016100606", res = 0.5)
 ```
 
-```{r, eval = FALSE}
+```{r  downloadwsp, eval = FALSE}
 df.gis_wsp <- 
   gis_download(
     "https://www.nhc.noaa.gov/gis/forecast/archive/2016100606_wsp_120hrhalfDeg.zip"
@@ -251,7 +266,7 @@ df.gis_wsp <-
 
 ### Cumulative Probability for >34kt Winds
 
-```{r, fig.width = 7, fig.align = "center", error=T}
+```{r cumprobgt34, fig.width = 7, fig.align = "center", error=T, eval =FALSE}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp34knt120hr_halfDeg`)
 p + 
   geom_sf(
@@ -263,7 +278,7 @@ p +
 
 Cumulative wind speed probability for >50kt winds:
 
-```{r, fig.width = 7, fig.align = "center", error=T}
+```{r  cumprobgt50, fig.width = 7, fig.align = "center", error=T, eval=FALSE}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp50knt120hr_halfDeg`)
 p + 
   geom_sf(
@@ -275,7 +290,7 @@ p +
 
 Cumulative probability for >64kt winds:
 
-```{r, fig.width = 7, fig.align = "center", error=T}
+```{r  cumprobgt64, fig.width = 7, fig.align = "center", error=T, eval=FALSE}
 bb <- sp::bbox(df.gis_wsp$`2016100606_wsp64knt120hr_halfDeg`)
 p + 
   geom_sf(

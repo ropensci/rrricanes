@@ -34,7 +34,7 @@ To calculate ACE you would want to use the `fstadv` dataset and apply the follow
 * group by `StormKey`
 * select `Wind`
 
-```{r}
+```{r eval=FALSE}
 fstadv <- fstadv %>% 
     filter(hour(Date) %in% c(3, 9, 15, 21), 
            Status %in% c("Tropical Storm", "Hurricane"), 
@@ -45,7 +45,7 @@ fstadv <- fstadv %>%
 
 Now let's summarise our dataset with new variable `ACE`.
 
-```{r}
+```{r eval=FALSE}
 fstadv %>% 
     summarise(Name = last(Name), 
               ACE = sum(Wind^2) * 1e-04) %>% 
@@ -59,7 +59,7 @@ A companion package, [HURDAT](https://github.com/timtrice/HURDAT) is available i
 
 Let's revisit the top 10 using `HURDAT`:
 
-```{r}
+```{r eval=FALSE}
 AL %>% 
     filter(hour(DateTime) %in% c(0, 6, 12, 18), 
            Status %in% c("TS", "HU"), 
@@ -80,7 +80,7 @@ A couple of things to notice here:
 
 You can also calculate `ACE` for a season. Instead of grouping by `StormKey` we group by `Year`. I'll stick with `HURDAT` in this example.
 
-```{r}
+```{r eval=FALSE}
 (df <- AL %>% 
     mutate(Year = year(DateTime)) %>% 
     filter(hour(DateTime) %in% c(0, 6, 12, 18), 
@@ -94,7 +94,7 @@ You can also calculate `ACE` for a season. Instead of grouping by `StormKey` we 
 
 This also matches relatively well with that on [Wikipedia](https://en.wikipedia.org/wiki/Accumulated_cyclone_energy#Atlantic_hurricane_seasons.2C_1950.E2.80.932017) and other sources. 
 
-```{r}
+```{r eval=FALSE}
 ggplot(df, aes(x = Year, y = ACE)) + 
     geom_bar(stat = "identity") + 
     theme_bw()
