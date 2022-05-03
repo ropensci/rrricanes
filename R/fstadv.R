@@ -442,8 +442,10 @@ fstadv_seas <- function(content) {
                         "[:blank:]+([0-9]{1,3})SE",
                         "[:blank:]+([0-9]{1,3})SW",
                         "[:blank:]+([0-9]{1,3})NW")
+  stringr::str_match(content, ptn)[,2:5]
 
-  stringr::str_match(content, ptn)[,2:5] |>
+  # ---- Start pipe again due to native pipe RHS restriction
+  ptn <- ptn |>
     apply(MARGIN = 2L, FUN = as.numeric) |>
     tibble::as_tibble(.name_repair = "minimal") |>
     rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW"))) |>
@@ -483,8 +485,9 @@ fstadv_wind_radius <- function(content) {
                         "SE[:blank:]+([:digit:]{1,3})",
                         "SW[:blank:]+([:digit:]{1,3})",
                         "NW[[:punct:][:space:]]+)?")
+  stringr::str_match(content, ptn)[,2:16]
 
-  stringr::str_match(content, ptn)[,2:16] |>
+  ptn <- ptn |>
     apply(MARGIN = 2L, FUN = as.numeric) |>
     tibble::as_tibble(.name_repair = "minimal") |>
     rlang::set_names(nm = c("WindField64", "NE64", "SE64", "SW64", "NW64",
@@ -662,8 +665,13 @@ tidy_fcst <- function(df) {
   # #107 Modified regex pattern to look for Hr120, as well.
   fcst_periods <- as.list(names(df)) |>
     stringr::str_match(pattern = "Hr([:digit:]{2,3})FcstDate") |>
-    .[,2] |>
-    .[!rlang::are_na(.)] |>
+    .[,2]
+
+  # ---- Breaking up pipe due to native pipe RHS limitations
+  fcst_periods <- fcst_periods |>
+    .[!rlang::are_na(.)]
+
+  fcst_periods <- fcst_periods |>
     as.numeric()
 
   forecasts <- purrr::map_df(
@@ -724,8 +732,13 @@ tidy_fcst_wr <- function(df) {
   # What forecast periods are in the current dataset?
   fcst_periods <- as.list(names(df)) |>
     stringr::str_match(pattern = "Hr([:digit:]{2})FcstDate") |>
-    .[,2] |>
-    .[!rlang::are_na(.)] |>
+    .[,2]
+
+  # ---- Breaking up pipe due to native pipe RHS limitations
+  fcst_periods <- fcst_periods |>
+    .[!rlang::are_na(.)]
+
+  fcst_periods <- fcst_periods |>
     as.numeric()
 
   fcst_wr <- purrr::map_df(
