@@ -90,6 +90,6 @@ get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html")
 }
 }
 \seealso{
-\code{\link{tidy_fstadv}}, \code{\link{tidy_wr}},
+\code{\link{tidy_adv}}, \code{\link{tidy_wr}},
 \code{\link{tidy_fcst}}, \code{\link{tidy_fcst_wr}}
 }
