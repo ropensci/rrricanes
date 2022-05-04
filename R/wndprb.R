@@ -120,12 +120,12 @@ get_wndprb <- function(links) {
 #' @param x URL of station list
 #' @keywords internal
 parse_stations <- function(x) {
-  df <- readLines(x) %>%
-    tibble::as_tibble() %>%
+  df <- readLines(x) |>
+    tibble::as_tibble() |>
     tidyr::separate(.data$value,
                     c("X1", "Location", "Lat", "Lon", "X5", "X6", "X7"),
                     sep = ",",
-                    extra = "warn") %>%
+                    extra = "warn") |>
     dplyr::arrange(.data$Location)
   df
 }
@@ -196,20 +196,22 @@ wndprb <- function(contents) {
                         "[[:blank:]\n]+")
 
   wndprb <-
-    contents %>%
-    stringr::str_match_all(ptn) %>%
-    purrr::map(tibble::as_tibble, .name_repair = "minimal") %>%
+    contents |>
+    stringr::str_match_all(ptn) |>
+    purrr::map(tibble::as_tibble, .name_repair = "minimal") |>
     purrr::map(
       .f = rlang::set_names,
       nm = c("X1", "Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
              "Wind36",  "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
              "Wind72Cum", "Wind96", "Wind96Cum", "Wind120", "Wind120Cum")
-    ) %>%
-    purrr::map2(key, ~tibble::add_column(.x, Key = .y, .before = 1)) %>%
-    purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) %>%
-    purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) %>%
-    purrr::map_df(tibble::as_tibble, .name_repair = "minimal") %>%
-    dplyr::select(-c("X1")) %>%
+
+    ) |>
+    purrr::map2(key, ~tibble::add_column(.x, StormKey = .y, .before = 1)) |>
+    purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) |>
+    purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) |>
+    purrr::map_df(tibble::as_tibble, .name_repair = "minimal") |>
+    dplyr::select(-c("X1")) |>
+
     # Trim whitespace
     dplyr::mutate_all(.funs = stringr::str_trim)
 

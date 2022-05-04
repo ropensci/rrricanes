@@ -1,8 +1,9 @@
 library(dplyr)
 
 AL122005 <-
-  "%sarchive/2005/KATRINA.shtml?" %>%
-  sprintf(rrricanes:::get_nhc_link()) %>%
+
+  "%sarchive/2005/KATRINA.shtml?" |>
+  sprintf(rrricanes:::get_nhc_link()) |>
   rrricanes:::extract_storm_links()
 
 files <- list(
@@ -51,8 +52,8 @@ files <- list(
 )
 
 AL092008 <-
-  "%sarchive/2008/IKE.shtml?" %>%
-  sprintf(rrricanes:::get_nhc_link()) %>%
+  "%sarchive/2008/IKE.shtml?" |>
+  sprintf(rrricanes:::get_nhc_link()) |>
   rrricanes:::extract_storm_links()
 
 ## ---- Saved Data -------------------------------------------------------------

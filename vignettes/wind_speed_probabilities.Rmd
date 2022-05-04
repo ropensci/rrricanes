@@ -16,7 +16,6 @@ knitr::opts_chunk$set(echo = TRUE,
 library(dplyr)
 library(ggplot2)
 library(rrricanes)
-library(rrricanesdata)
 library(sp)
 ```
 
@@ -26,13 +25,15 @@ adv <- 42
 ```
 
 ```{r}
-wndprb <- wndprb %>% filter(Key == key, Adv <= adv)
+
+wndprb <- wndprb |> filter(StormKey == key, Adv <= adv)
+
 ```
 
 ### GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings
 
-```{r}
-gis_adv <- gis_advisory(key = key, advisory = adv) %>% gis_download()
+```{r warning=FALSE}
+gis_adv <- gis_advisory(key = key, advisory = adv) |> gis_download()
 ```
 
 Get bounding box of the forecast polygon.
@@ -102,8 +103,8 @@ The `wndprb` will not have coordinates for cities. An option is `al_prblty_stati
 
 ```{r}
 wndprb <- 
-    wndprb %>% 
-    left_join(al_prblty_stations(), by = "Location") %>% 
+    wndprb |> 
+    left_join(al_prblty_stations(), by = "Location") |> 
     mutate_at(.vars = c("Lat", "Lon"), .funs = as.numeric)
 ```
 

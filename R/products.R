@@ -7,7 +7,7 @@
 #' @export
 twoal <- function() {
   url <- sprintf("%sindex-at.xml", get_nhc_link())
-  xml2::read_xml(url) %>% xml2::as_list()
+  xml2::read_xml(url) |> xml2::as_list()
 }
 
 #' @title twoep
@@ -19,5 +19,5 @@ twoal <- function() {
 #' @export
 twoep <- function() {
   url <- sprintf("%sxml/TWOEP.xml", get_nhc_link())
-  xml2::read_xml(url) %>% xml2::as_list()
+  xml2::read_xml(url) |> xml2::as_list()
 }

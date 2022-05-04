@@ -26,7 +26,7 @@ storms <- map_df(years, .f = function(year) {
 })
 
 ## ---- Storm Discussions ------------------------------------------------------
-discus <- map_df(storms %>% .$Link, .f = function(storm_link) {
+discus <- map_df(storms |> .$Link, .f = function(storm_link) {
     safely_get_discus <- purrr::safely(get_discus)
     df <- safely_get_discus(link = storm_link)
     if (is.null(df$error)) {
@@ -41,11 +41,11 @@ discus <- map_df(storms %>% .$Link, .f = function(storm_link) {
 write_csv(discus, "./datasets/discus.csv")
 
 ## ---- Forecast/Advisory ------------------------------------------------------
-fstadv <- map_df(storms %>% .$Link, .f = function(storm_link) {
+fstadv <- map_df(storms |> .$Link, .f = function(storm_link) {
     safely_get_fstadv <- purrr::safely(get_fstadv)
     df <- safely_get_fstadv(link = storm_link)
     if (is.null(df$error)) {
-        return(df$result)
+      return(df$result)
     } else {
         write(sprintf("Forecast/Advisory error: %s\n%s", df$error, storm_link),
               file = "log.txt",
@@ -68,11 +68,11 @@ fcst_wr <- tidy_fcst_wr(fstadv)
 write_csv(fcst_wr, "./datasets/fcst_wr.csv")
 
 ## ---- Position Estimates -----------------------------------------------------
-posest <- map_df(storms %>% .$Link, .f = function(storm_link) {
+posest <- map_df(storms |> .$Link, .f = function(storm_link) {
     safely_get_posest <- purrr::safely(get_posest)
     df <- safely_get_posest(link = storm_link)
     if (is.null(df$error)) {
-        return(df$result)
+      return(df$result)
     } else {
         write(sprintf("Position Estimate error: %s\n%s", df$error, storm_link),
               file = "log.txt",
@@ -83,11 +83,11 @@ posest <- map_df(storms %>% .$Link, .f = function(storm_link) {
 write_csv(posest, "./datasets/posest.csv")
 
 ## ---- Strike Probabilities ---------------------------------------------------
-prblty <- map_df(storms %>% .$Link, .f = function(storm_link) {
+prblty <- map_df(storms |> .$Link, .f = function(storm_link) {
     safely_get_prblty <- purrr::safely(get_prblty)
     df <- safely_get_prblty(link = storm_link)
     if (is.null(df$error)) {
-        return(df$result)
+      return(df$result)
     } else {
         write(sprintf("Strike Probabilities error: %s\n%s", df$error, storm_link),
               file = "log.txt",
@@ -98,11 +98,11 @@ prblty <- map_df(storms %>% .$Link, .f = function(storm_link) {
 write_csv(prblty, "./datasets/prblty.csv")
 
 ## ---- Public Advisories ------------------------------------------------------
-public <- map_df(storms %>% .$Link, .f = function(storm_link) {
+public <- map_df(storms |> .$Link, .f = function(storm_link) {
     safely_get_public <- purrr::safely(get_public)
     df <- safely_get_public(link = storm_link)
     if (is.null(df$error)) {
-        return(df$result)
+      return(df$result)
     } else {
         write(sprintf("Public Advisory error: %s\n%s", df$error, storm_link),
               file = "log.txt",
@@ -113,11 +113,11 @@ public <- map_df(storms %>% .$Link, .f = function(storm_link) {
 write_csv(public, "./datasets/public.csv")
 
 ## ---- Updates ----------------------------------------------------------------
-update <- map_df(storms %>% .$Link, .f = function(storm_link) {
+update <- map_df(storms |> .$Link, .f = function(storm_link) {
     safely_get_update <- purrr::safely(get_update)
     df <- safely_get_update(link = storm_link)
     if (is.null(df$error)) {
-        return(df$result)
+      return(df$result)
     } else {
         write(sprintf("Update error: %s\n%s", df$error, storm_link),
               file = "log.txt",
@@ -128,11 +128,11 @@ update <- map_df(storms %>% .$Link, .f = function(storm_link) {
 write_csv(update, "./datasets/update.csv")
 
 ## ---- Wind Speed Probabilities -----------------------------------------------
-wndprb <- map_df(storms %>% .$Link, .f = function(storm_link) {
+wndprb <- map_df(storms |> .$Link, .f = function(storm_link) {
     safely_get_wndprb <- purrr::safely(get_wndprb)
     df <- safely_get_wndprb(link = storm_link)
     if (is.null(df$error)) {
-        return(df$result)
+      return(df$result)
     } else {
         write(sprintf("Wind Probabilities error: %s\n%s", df$error, storm_link),
               file = "log.txt",

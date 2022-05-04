@@ -31,7 +31,7 @@ references:
     month: 2
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
                       fig.align = "center")
 ```
@@ -41,7 +41,6 @@ library(dplyr)
 library(gganimate)
 library(ggplot2)
 library(rrricanes)
-library(rrricanesdata)
 library(tidyr)
 ```
 
@@ -53,14 +52,16 @@ adv <- 42
 ### Forecast/Advisory Data for Hurricane Ike Adv #42
 
 ```{r}
-fstadv <- fstadv %>% filter(Key == key, Adv <= adv)
+
+fstadv <- fstadv |> filter(StormKey == key, Adv <= adv)
+
 ```
 
 ## Wind Profile
 
 ```{r}
 # Plot wind values
-fstadv %>% ggplot(aes(x = Date, y = Wind)) + 
+fstadv |> ggplot(aes(x = Date, y = Wind)) + 
   geom_line() + 
   geom_point(aes(color = Status), size = 3) + 
   scale_y_continuous(name = "Wind (kts)") + 
@@ -75,7 +76,7 @@ fstadv %>% ggplot(aes(x = Date, y = Wind)) +
 
 ```{r}
 # Plot pressure values
-fstadv %>% ggplot(aes(x = Date, y = Pressure)) + 
+fstadv |> ggplot(aes(x = Date, y = Pressure)) + 
   geom_line() + 
   geom_point(aes(color = Status), size = 3) + 
   scale_y_continuous(name = "Pressure (mb)") + 
@@ -89,10 +90,10 @@ fstadv %>% ggplot(aes(x = Date, y = Pressure)) +
 ## Wind/Pressure Relational Change
 
 ```{r}
-fstadv %>%
+fstadv |>
   mutate(WindDist = (Wind - min(Wind))/(max(Wind) - min(Wind)),
-         PressDist = (Pressure - max(Pressure))/(max(Pressure) - min(Pressure))) %>%
-  gather(Var, Val, WindDist, PressDist) %>% 
+         PressDist = (Pressure - max(Pressure))/(max(Pressure) - min(Pressure))) |>
+  gather(Var, Val, WindDist, PressDist) |> 
   ggplot(aes(x = Date, y = Val, group = Var, color = Var)) + 
   geom_line(size = 1) + 
   scale_color_discrete(labels = c("Pressure Change", "Wind Change")) + 
@@ -109,9 +110,9 @@ fstadv %>%
 
 ```{r}
 wr_animate <- 
-  fstadv %>% 
-  tidy_wr() %>% 
-  gather(Quadrant, Radius, NE:NW) %>% 
+  fstadv |> 
+  tidy_wr() |> 
+  gather(Quadrant, Radius, NE:NW) |> 
   ggplot(
     aes(
       x = Quadrant, 

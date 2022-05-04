@@ -29,7 +29,7 @@ Data in `rrricanesdata` will be updated on the first of every month with a cutof
 ## Datasets
 
 ### `adv`
-  * Key: Unique identifier of cyclone
+  * StormKey: Unique identifier of cyclone
   * Adv: Advisory number
   * Date: Date and time of advisory
   * Status: Classification of cyclone
@@ -54,11 +54,11 @@ Data in `rrricanesdata` will be updated on the first of every month with a cutof
   * Name: Name of storm
   * Adv: Advisory Number
   * Date: Date of advisory issuance
-  * Key: ID of cyclone
+  * StormKey: ID of cyclone
   * Contents: Text content of product
 
 ### `fcst`
-  * Key: Unique identifier of cyclone
+  * StormKey: Unique identifier of cyclone
   * Adv: Advisory number
   * Date: Date and time of advisory
   * FcstDate: Forecast date and time in UTC
@@ -68,7 +68,7 @@ Data in `rrricanesdata` will be updated on the first of every month with a cutof
   * Gust: Forecast gust in knots
 
 ### `fcst_wr`
-  * Key: Unique identifier of cyclone
+  * StormKey: Unique identifier of cyclone
   * Adv: Advisory number
   * Date: Date and time of advisory
   * FcstDate: Forecast date and time in UTC
@@ -83,7 +83,7 @@ Data in `rrricanesdata` will be updated on the first of every month with a cutof
   * Name: Name of cyclone
   * Adv: Advisory number
   * Date: Date and time of advisory
-  * Key: Unique identifier of cyclone
+  * StormKey: Unique identifier of cyclone
   * Lat: Latitude of cyclone center
   * Lon: Longitude of cyclone center
   * Wind: Maximum sustained one-minute winds in knots
@@ -153,11 +153,11 @@ Data in `rrricanesdata` will be updated on the first of every month with a cutof
   * Name: Name of storm
   * Adv: Advisory Number
   * Date: Date of advisory issuance
-  * Key: Unique ID of the cyclone
+  * StormKey: Unique ID of the cyclone
   * Contents: Text content of product
 
 ### `storms`
-  * Key: Storm ID
+  * StormKey: Storm ID
   * Name: Storm name
   * Wind: Peak wind speed in knots
   * StartDate: Date/time of first advisory
@@ -168,7 +168,7 @@ Data in `rrricanesdata` will be updated on the first of every month with a cutof
     etc.
   * Name: Name of storm
   * Date: Date of advisory issuance
-  * Key: Unique ID of cyclone
+  * StormKey: Unique ID of cyclone
   * Contents: Text content of product
 
 ### `wndprb`
@@ -193,7 +193,7 @@ Data in `rrricanesdata` will be updated on the first of every month with a cutof
   * Wind120Cum: Cumulative probability through 120 hours
 
 ### `wr`
-  * Key: Unique identifier of cyclone
+  * StormKey: Unique identifier of cyclone
   * Adv: Advisory number
   * Date: Date and time of advisory
   * Windfield: Minimum wind speed expected

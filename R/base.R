@@ -191,7 +191,7 @@ get_url_contents <- function(links) {
   # Create groups of links divisible by 80. We are to allow no more than 80
   # requests every 10 seconds. If length of `link` is less than 80, then will
   # only have one group and should have no delay.
-  groups <- ceiling(seq_along(1:length(links))/80)
+  groups <- ceiling(seq_along((links))/80)
   links <- split(links, groups)
 
   # Set progress bar
@@ -295,15 +295,9 @@ nm_to_sm <- function(x) {
 #' saffir(c(32, 45, 70, 90, 110, 125, 140))
 #' @export
 saffir <- function(x) {
-  y <- character(length = length(x))
-  y[x <= 33] <- "TD"
-  y[dplyr::between(x, 34, 64)] <- "TS"
-  y[dplyr::between(x, 65, 83)] <- "HU1"
-  y[dplyr::between(x, 84, 95)] <- "HU2"
-  y[dplyr::between(x, 96, 113)] <- "HU3"
-  y[dplyr::between(x, 114, 134)] <- "HU4"
-  y[x >= 135] <- "HU5"
-  y
+  cut(x, breaks = c(0, 34, 65, 84, 96, 114, 135, 500),
+      labels = c("TD","TS", "HU1","HU2", "HU3","HU4","HU5"),
+      ordered_result = TRUE)
 }
 
 #' @title status_abbr_to_str

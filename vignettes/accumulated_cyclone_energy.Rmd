@@ -13,7 +13,8 @@ knitr::opts_chunk$set(echo = TRUE,
 ```{r, message = FALSE}
 library(dplyr)
 library(ggplot2)
-library(HURDAT)
+
+# library(HURDAT)
 library(lubridate)
 library(readr)
 library(rrricanes)
@@ -22,7 +23,7 @@ library(rrricanes)
 
 ACE or Accumulated Cyclone Energy is a method of measuring energy of a cyclone or for an entire season. It is calculated by the formula
 
-$$ \text{ACE} = 10^{-4}\sum{v^2_\text{max}} $$
+$ \text{ACE} = 10^{-4}\sum{v^2_\text{max}} $
 
 where $v_\text{max}$ is the wind speed in knots. Values may only be used when a storm is a tropical system with winds of at least 35 knots. Additionally, only six-hour intervals are used.
 
@@ -31,25 +32,28 @@ To calculate ACE you would want to use the `fstadv` dataset and apply the follow
 * since forecast/advisory products are typically issued at 03:00, 09:00, 15:00 and 21:00 UTC filter out odd hours
 * `Status` is Tropical Storm or Hurricane.
 * `Wind` is not NA
-* group by `Key`
+* group by `StormKey`
 * select `Wind`
 
 ```{r eval=FALSE}
-fstadv <- fstadv %>% 
+
+fstadv <- fstadv |> 
     filter(hour(Date) %in% c(3, 9, 15, 21), 
            Status %in% c("Tropical Storm", "Hurricane"), 
-           !is.na(Wind)) %>% 
-    group_by(Key) %>% 
+
+           !is.na(Wind)) |>
+    group_by(StormKey) |> 
+
     select(Name, Wind)
 ```
 
 Now let's summarise our dataset with new variable `ACE`.
 
 ```{r eval=FALSE}
-fstadv %>% 
+fstadv |> 
     summarise(Name = last(Name), 
-              ACE = sum(Wind^2) * 1e-04) %>% 
-    arrange(desc(ACE)) %>% 
+              ACE = sum(Wind^2) * 1e-04) |> 
+    arrange(desc(ACE)) |> 
     top_n(10)
 ```
 
@@ -58,16 +62,21 @@ This matches somewhat well with [Wikipedia](https://en.wikipedia.org/wiki/Accumu
 A companion package, [HURDAT](https://github.com/timtrice/HURDAT) is available in CRAN that has data for all cyclones dating back as far as 1851. This package has less data than `rrricanes`. But, as it is based on a post-storm reanalysis project, the data is more accurate. 
 
 Let's revisit the top 10 using `HURDAT`:
+Note:HURDAT is currently archived on CRAN.
+
 
 ```{r eval=FALSE}
-AL %>% 
+
+AL |> 
     filter(hour(DateTime) %in% c(0, 6, 12, 18), 
            Status %in% c("TS", "HU"), 
-           !is.na(Wind)) %>% 
-    group_by(Key) %>% 
+
+           !is.na(Wind)) |> 
+    group_by(StormKey) |>
+
     summarise(Name = last(Name), 
-              ACE = sum(Wind^2) * 1e-04) %>% 
-    arrange(desc(ACE)) %>% 
+              ACE = sum(Wind^2) * 1e-04) |> 
+    arrange(desc(ACE)) |> 
     top_n(10)
 ```
 
@@ -78,17 +87,17 @@ A couple of things to notice here:
 
 `ACE` is slightly higher and that could be for a number of reasons. For example, on re-analysis the Hurricane Research Division may have determined a cyclone was actually tropical (shown in `HURDAT`) when initially it was believed to be extratropical (as shown in `rrricanes`). Or, and more likely, they determined through additional data that a storm was actually stronger than originally though. 
 
-You can also calculate `ACE` for a season. Instead of grouping by `Key` we group by `Year`. I'll stick with `HURDAT` in this example.
+You can also calculate `ACE` for a season. Instead of grouping by `StormKey` we group by `Year`. I'll stick with `HURDAT` in this example.
 
 ```{r eval=FALSE}
-(df <- AL %>% 
-    mutate(Year = year(DateTime)) %>% 
+(df <- AL |> 
+    mutate(Year = year(DateTime)) |> 
     filter(hour(DateTime) %in% c(0, 6, 12, 18), 
            Status %in% c("TS", "HU"), 
-           !is.na(Wind)) %>% 
-    group_by(Year) %>% 
-    summarise(ACE = sum(Wind^2) * 1e-04) %>% 
-    arrange(desc(ACE))) %>% 
+           !is.na(Wind)) |> 
+    group_by(Year) |> 
+    summarise(ACE = sum(Wind^2) * 1e-04) |> 
+    arrange(desc(ACE))) |> 
     top_n(10)
 ```
 

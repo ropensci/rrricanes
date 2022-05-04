@@ -26,7 +26,7 @@
 #'  \item{Name}{Name of cyclone}
 #'  \item{Adv}{Advisory number}
 #'  \item{Date}{Date and time of advisory}
-#'  \item{Key}{Unique identifier of cyclone}
+#'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Lat}{Latitude of cyclone center}
 #'  \item{Lon}{Longitude of cyclone center}
 #'  \item{Wind}{Maximum sustained one-minute winds in knots}
@@ -115,7 +115,7 @@ fstadv <- function(contents) {
     Name = status[,2],
     Adv = as.numeric(status[,3]),
     Date = issue_date,
-    Key = key,
+    StormKey = key,
     Lat = lat_lon[,1],
     Lon = lat_lon[,2],
     Wind = winds_gusts[,1],
@@ -128,7 +128,7 @@ fstadv <- function(contents) {
     Seas = seas,
     WindRadius = wind_radius,
     Forecast = forecasts
-  ) %>%
+  ) |>
 
     tidyr::unnest(cols = c(.data$Seas,
                            .data$WindRadius,
@@ -166,10 +166,10 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
   rebuild_forecasts <- function(hr, df) {
 
     df <-
-      df %>%
-      dplyr::filter(.data$FcstPeriod == hr) %>%
+      df |>
+      dplyr::filter(.data$FcstPeriod == hr) |>
       dplyr::select(
-        .data$Key,
+        .data$StormKey,
         .data$Adv,
         .data$FcstDate,
         .data$Lat,
@@ -179,7 +179,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
         tidyselect::ends_with("64"),
         tidyselect::ends_with("50"),
         tidyselect::ends_with("34")
-      ) %>%
+      ) |>
       rlang::set_names(
         # Prepend forecast variables with "Hr", the value of `hr`, and the
         # variable name.
@@ -237,17 +237,17 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
   # 96 and 120 hours). Some text products may have no forecasts at all (if the
   # storm is expected to degenerate or already has).
   forecasts <-
-    content %>%
-    stringr::str_match_all(pattern = ptn) %>%
+    content |>
+    stringr::str_match_all(pattern = ptn) |>
     # # Get only the columns needed excluding the matched string
-    # purrr::map(`[`, , 2:22) %>%
+    # purrr::map(`[`, , 2:22) |>
     # If any storm has 0 forecasts (i.e., the list element is empty), populate
     # all columns with NA
     purrr::modify_if(.p = purrr::is_empty,
-                     .f = ~matrix(data = NA_character_, ncol = 22)) %>%
+                     .f = ~matrix(data = NA_character_, ncol = 22)) |>
     # Convert to tibble cause God I hate working with lists like this though I
     # know I need the practice...
-    purrr::map(tibble::as_tibble, .name_repair = "minimal") %>%
+    purrr::map(tibble::as_tibble, .name_repair = "minimal") |>
     purrr::map(rlang::set_names,
                nm = c("String", "Date", "Hour", "Minute",
                       "Lat", "LatHemi", "Lon", "LonHemi",
@@ -264,14 +264,16 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
   # dataframe/tibble.
   df_forecasts <-
     tibble::tibble(
-      Key = key,
+      StormKey = key,
       Adv = as.numeric(adv),
       AdvDate = adv_date,
       Forecasts = forecasts
-    ) %>%
+    ) |>
 
-    tidyr::unnest(cols = c(.data$Forecasts)) %>%
-    dplyr::group_by(.data$Key, .data$Adv) %>%
+
+    tidyr::unnest() |>
+    dplyr::group_by(.data$StormKey, .data$Adv) |>
+
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
     # the month should be the same.
@@ -310,7 +312,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
         LonHemi == "W" ~ as.numeric(.data$Lon) * -1,
         TRUE           ~ as.numeric(.data$Lon)
       )
-    ) %>%
+    ) |>
     # Make Wind, Gust, relative wind/gust vars and sea vars all numeric
     dplyr::mutate_at(dplyr::vars(.data$Wind:.data$NW34), .funs = as.numeric)
 
@@ -318,15 +320,17 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
 
   for (hr in forecast_periods[2:7]) {
     df <-
-      df %>%
+      df |>
       dplyr::left_join(
-        rebuild_forecasts(hr, df = df_forecasts), by = c("Key", "Adv")
+        rebuild_forecasts(hr, df = df_forecasts), by = c("StormKey", "Adv")
       )
   }
 
-  df %>%
-    dplyr::ungroup() %>%
-    dplyr::select(-c(.data$Key, .data$Adv)) %>%
+
+  df |>
+    dplyr::ungroup() |>
+    dplyr::select(-c(.data$StormKey, .data$Adv)) |>
+
     split(seq(nrow(.)))
 
 }
