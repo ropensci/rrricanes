@@ -647,9 +647,10 @@ tidy_wr <- function(df) {
 #' }
 #' @export
 tidy_fcst <- function(df) {
-  if (!is.data.frame(df))
+  if (!is.data.frame(df)){
     stop("Expecting a dataframe.")
-print(head(df, 3))
+  }
+
   # Build forecasts dataframe with base data for each forecast position. This
   # does not include wind radius data; that comes next. This will be similar
   # to fstadv (without seas and some other data points which are never
@@ -665,8 +666,7 @@ print(head(df, 3))
   fcst_periods <- fcst_periods[,2]
   fcst_periods <-fcst_periods[!rlang::are_na(fcst_periods)]
   fcst_periods <-  as.numeric(fcst_periods)
-print(names(df))
-stop()
+
   forecasts <- purrr::map_df(
     .x = fcst_periods,
     .f = function(y) {
