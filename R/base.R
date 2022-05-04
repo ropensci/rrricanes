@@ -328,15 +328,14 @@ saffir <- function(x) {
 #' status_abbr_to_str("HU")
 #' @export
 status_abbr_to_str <- function(x) {
-  y <- character(length = 0)
-  y[x == "TD"] <- "Tropical Depression"
-  y[x == "TS"] <- "Tropical Storm"
-  y[x == "HU"] <- "Hurricane"
-  y[x == "EX"] <- "Extratropical Cyclone"
-  y[x == "SD"] <- "Subtropical Depression"
-  y[x == "SS"] <- "Subtropical Storm"
-  y[x == "LO"] <- "Low"
-  y[x == "WV"] <- "Tropical Wave"
-  y[x == "DB"] <- "Disturbance"
-  y
+  abbr_to_str <- c("TD" = "Tropical Depression",
+                  "TS" = "Tropical Storm",
+                  "HU" = "Hurricane",
+                  "EX" = "Extratropical Cyclone",
+                  "SD" = "Subtropical Depression",
+                  "SS" = "Subtropical Storm",
+                  "LO" = "Low",
+                  "WV" = "Tropical Wave",
+                  "DB" = "Disturbance")
+  abbr_to_str[x]
 }
