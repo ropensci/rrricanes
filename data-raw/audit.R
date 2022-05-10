@@ -41,7 +41,7 @@ if (!(any(status %in% valid_options)))
 discus_names <- sort(unique(discus$Name))
 if (any(discus_names %in% invalid_names)) {
     warning("Invalid Names in discus. See object df_discus_invalid_names.")
-    df_discus_invalid_names <- discus %>% filter(Name %in% invalid_names)
+    df_discus_invalid_names <- discus |> filter(Name %in% invalid_names)
 }
 
 ## ---- * Adv ------------------------------------------------------------------
@@ -65,7 +65,7 @@ if (!(any(status %in% valid_options)))
 fstadv_names <- sort(unique(fstadv$Name))
 if (any(fstadv_names %in% invalid_names)) {
     warning("Invalid Names in fstadv. See object df_fstadv_invalid_names.")
-    df_fstadv_invalid_names <- fstadv %>% filter(Name %in% invalid_names)
+    df_fstadv_invalid_names <- fstadv |> filter(Name %in% invalid_names)
 }
 
 ## ---- * Date -----------------------------------------------------------------
@@ -130,14 +130,14 @@ if (!is.numeric(fstadv$Eye))
 ## ---- * Wind Radii -----------------------------------------------------------
 #' Convert to numeric, if not, which sould generate error if non-numeric values
 #' exist.
-fstadv_wr <- fstadv %>% select(matches(".[NE|SE|SW|NW][34|50|64].")) %>%
+fstadv_wr <- fstadv |> select(matches(".[NE|SE|SW|NW][34|50|64].")) |>
     map_df(as.numeric)
 
 #' Forecast hours 48 and 72 should not have 64kt wind radius fields
-is_empty(select(fstadv, Hr48NE64:Hr48NW64, Hr72NE64:Hr72NW64) %>% describe())
+is_empty(select(fstadv, Hr48NE64:Hr48NW64, Hr72NE64:Hr72NW64) |> describe())
 
 #' Forecast hours 96 and 120 should not have any wind radius fields
-is_empty(select(fstadv, Hr96NE64:Hr96NW34, Hr120NE64:Hr120NW34) %>% describe())
+is_empty(select(fstadv, Hr96NE64:Hr96NW34, Hr120NE64:Hr120NW34) |> describe())
 
 #' ########################################################################## '#
 ## ---- Position Estimates -----------------------------------------------------
@@ -153,7 +153,7 @@ if (!(any(status %in% valid_options)))
 posest_names <- sort(unique(posest$Name))
 if (any(posest_names %in% invalid_names)) {
     warning("Invalid Names in posest. See object df_posest_invalid_names.")
-    df_posest_invalid_names <- posest %>% filter(Name %in% invalid_names)
+    df_posest_invalid_names <- posest |> filter(Name %in% invalid_names)
 }
 
 ## ---- * Date -----------------------------------------------------------------
@@ -174,11 +174,11 @@ if (!(any(status %in% valid_options)))
 prblty_names <- sort(unique(prblty$Name))
 if (any(prblty_names %in% invalid_names)) {
     warning("Invalid Names in prblty. See object df_prblty_invalid_names.")
-    df_prblty_invalid_names <- prblty %>% filter(Name %in% invalid_names)
+    df_prblty_invalid_names <- prblty |> filter(Name %in% invalid_names)
 }
 
 ## ---- * Wind:Wind120Cum ------------------------------------------------------
-if (!every(prblty %>% select(A:E), is.numeric))
+if (!every(prblty |> select(A:E), is.numeric))
     warning("Some probability cols not numeric.")
 
 #' ########################################################################## '#
@@ -195,14 +195,14 @@ if (!(any(status %in% valid_options)))
 public_names <- sort(unique(public$Name))
 if (any(public_names %in% invalid_names)) {
     warning("Invalid Names in public. See object df_public_invalid_names.")
-    df_public_invalid_names <- public %>% filter(Name %in% invalid_names)
+    df_public_invalid_names <- public |> filter(Name %in% invalid_names)
 }
 
 ## ---- * Adv ------------------------------------------------------------------
 describe(public$Adv)
 if (any(is.na(public$Adv))) {
     warning("Adv contains NA values.")
-    df_public_invalid_adv <- public %>% filter(is.na(Adv))
+    df_public_invalid_adv <- public |> filter(is.na(Adv))
 }
 
 ## ---- * Date -----------------------------------------------------------------
@@ -222,7 +222,7 @@ if (!(any(status %in% valid_options)))
 update_names <- sort(unique(update$Name))
 if (any(update_names %in% invalid_names)) {
     warning("Invalid Names in update. See object df_update_invalid_names.")
-    df_update_invalid_names <- update %>% filter(Name %in% invalid_names)
+    df_update_invalid_names <- update |> filter(Name %in% invalid_names)
 }
 
 #' ########################################################################## '#
@@ -237,12 +237,12 @@ if (any(grepl("^[AL|EP][[:digit:]]{6}$", wndprb$Key)))
 describe(wndprb$Adv)
 if (any(is.na(wndprb$Adv))) {
     warning("Adv contains NA values.")
-    df_wndprb_invalid_adv <- wndprb %>% filter(is.na(Adv))
+    df_wndprb_invalid_adv <- wndprb |> filter(is.na(Adv))
 }
 
 ## ---- * Date -----------------------------------------------------------------
 describe(wndprb$Date)
 
 ## ---- * Wind:Wind120Cum ------------------------------------------------------
-if (!every(wndprb %>% select(Wind:Wind120Cum), is.numeric))
+if (!every(wndprb |> select(Wind:Wind120Cum), is.numeric))
     warning("Some Wind cols not numeric.")

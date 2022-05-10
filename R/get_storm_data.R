@@ -60,7 +60,8 @@ extract_storm_links <- function(links) {
     purrr::flatten_chr() |>
     # Ensure we're only capturing archive pages
     stringr::str_match( "archive.+")
-    product_links <-product_links[stats::complete.cases(product_links)]
+  
+  product_links <- product_links[stats::complete.cases(product_links)]
 
   # Extract years from `links`
   years <- as.numeric(stringr::str_extract(product_links, "[[:digit:]]{4}"))
@@ -124,14 +125,14 @@ get_product <- function(links, product) {
 #' @examples
 #' \dontrun{
 #' ## Get public advisories for first storm of 2016 Atlantic season.
-#' get_storms(year = 2016, basin = "AL") %>%
-#'   slice(1) %>%
-#'   .$Link %>%
+#' get_storms(year = 2016, basin = "AL") |>
+#'   slice(1) |>
+#'   .$Link |>
 #'   get_storm_data(products = "public")
 #' ## Get public advisories and storm discussions for first storm of 2017 Atlantic season.
-#' get_storms(year = 2017, basin = "AL") %>%
-#'   slice(1) %>%
-#'   .$Link %>%
+#' get_storms(year = 2017, basin = "AL") |>
+#'   slice(1) |>
+#'   .$Link |>
 #'   get_storm_data(products = c("discus", "public"))
 #' }
 #' @export

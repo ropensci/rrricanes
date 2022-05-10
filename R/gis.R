@@ -139,8 +139,10 @@ gis_latest <- function(basins = c("AL", "EP"), ...) {
     purrr::map(~ xml2::xml_find_all(.x, xpath = ".//link") |>
                  xml2::xml_text()) |>
     purrr::map(stringr::str_match, ".+\\.zip$") |>
+
     purrr::flatten_chr()
   gis_latest <- gis_latest[!is.na(gis_latest)]
+
 
   if (purrr::is_empty(gis_zips)) return(NULL)
 
@@ -432,6 +434,7 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
 
   ds <- rvest::html_nodes(contents, xpath = "//a") |>
     rvest::html_attr("href") |>
+
     stringr::str_extract(".+\\.zip$")
   ds <- ds[stats::complete.cases(ds)]
 

@@ -91,7 +91,7 @@ gis_advisory(key = "AL182012", advisory = "18")
 ```{r, eval = FALSE}
 # Needs to update to support sf
 df.gis_adv <- gis_advisory(key = "AL182012",
-                            advisory = "18") %>%
+                            advisory = "18") |>
                             gis_download()
 ```
 
@@ -158,10 +158,10 @@ fcst_cone <- dplyr::left_join(fcst_cone.points, fcst_cone@data, by = "id")
 ```
 
 ```{r, fig.width = 7, fig.align = "center"}
-p3 + geom_polygon(data = fcst_cone %>% filter(FCSTPRD == 120), 
+p3 + geom_polygon(data = fcst_cone |> filter(FCSTPRD == 120), 
                  aes(long, lat, group = group, fill = factor(FCSTPRD)), 
                  alpha = 0.5) + 
-    geom_polygon(data = fcst_cone %>% filter(FCSTPRD == 72), 
+    geom_polygon(data = fcst_cone |> filter(FCSTPRD == 72), 
                  aes(long, lat, group = group, fill = factor(FCSTPRD)), 
                  alpha = 0.5)
 ```
@@ -199,8 +199,8 @@ gis_prob_storm_surge(key = "AL142016",
 df.gis_storm_surge <- 
   gis_prob_storm_surge(key = "AL142016", 
                    products = list(psurge = 0), 
-                  datetime = "20161006") %>% 
-  last() %>% 
+                  datetime = "20161006") |> 
+  last() |> 
   gis_download()
 ```
 
@@ -228,7 +228,7 @@ gis_windfield("AL142016", advisory = "33")
 ```
 
 ```{r, eval = FALSE}
-df.gis_wind_radii <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
+df.gis_wind_radii <- gis_windfield("AL142016", advisory = "33") |> gis_download()
 ```
 
 ```{r eval=FALSE}
