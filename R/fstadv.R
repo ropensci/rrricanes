@@ -325,3 +325,4 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
         rebuild_forecasts(hr, df = df_forecasts), by = c("StormKey", "Adv")
       )
   }
+}

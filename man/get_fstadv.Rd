@@ -38,7 +38,7 @@ clarifications:
  \item{Name}{Name of cyclone}
  \item{Adv}{Advisory number}
  \item{Date}{Date and time of advisory}
- \item{Key}{Unique identifier of cyclone}
+ \item{StormKey}{Unique identifier of cyclone}
  \item{Lat}{Latitude of cyclone center}
  \item{Lon}{Longitude of cyclone center}
  \item{Wind}{Maximum sustained one-minute winds in knots}
