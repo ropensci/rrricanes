@@ -22,4 +22,5 @@
 ^vignettes/wind_pressure.Rmd$
 ^vignettes/wind_speed_probabilities.Rmd$
 ^vignettes/installing_rrricanesdata.Rmd$
+^vignettes/
 \.pre-commit-config\.yml
