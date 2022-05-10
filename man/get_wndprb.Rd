@@ -12,6 +12,9 @@ get_wndprb(links)
 \arguments{
 \item{links}{URL to storm's archive page.}
 }
+\value{
+Data frame of wndprb information
+}
 \description{
 Return dataframe of wind speed probability data.
 }

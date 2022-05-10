@@ -7,7 +7,7 @@
 get_product(links, product)
 }
 \description{
-This funtion acts as a hub for the individual product extraction
+This function acts as a hub for the individual product extraction
   functions. Given the product and links, it will begin the scraping
   process and return a dataset for that product.
 }
