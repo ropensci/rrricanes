@@ -87,7 +87,7 @@ Let's look at an example of the current details.
 #str(df.al_18_2012_fstadv %>% select(Status:Eye, SeasNE:SeasNW))
 ```
 
-The most important variable in this dataset is `Key`. `Key` is a unique identifier for each storm that develops in either basin. It is formatted such as "AABBCCCC" where "AA" is the basin abbreviation (AL or EP), "BB" is the year number of the storm left-padded, and "CC" is the year of the storm.
+The most important variable in this dataset is `StormKey`. `StormKey` is a unique identifier for each storm that develops in either basin. It is formatted such as "AABBCCCC" where "AA" is the basin abbreviation (AL or EP), "BB" is the year number of the storm left-padded, and "CC" is the year of the storm.
 
 `Adv` is the second-most important variable here. You'll notice it is in character format. For regularly-scheduled advisories, advisory numbers are always numeric. However, when watches and warnings are in effect, intermediate advisories are issued which are given alpha suffixes; i.e., 1, 2, 3, 3A, 4, 4A, 4B, 5, etc.
 
@@ -132,7 +132,7 @@ tidy_wr(df.al_18_2012_fstadv)
 Most Forecast/Advisory products will have forecast data associated with it unless the storm has dissipated or is no longer tropical. There may be up to seven forecast positions. These positions are issued by 12-hour intervals through 48 hours where they are then at 24-hour intervals; 12, 24, 36, 48, 72, 96 and 120 hours.
 
 ```{r, eval = FALSE}
-str(df.al_18_2012_fstadv %>% select(Hr12FcstDate:Hr12Gust))
+str(df.al_18_2012_fstadv |> select(Hr12FcstDate:Hr12Gust))
 ```
 
 Notice each variable begins with the prefix "Hrn" where n is the forecast period as noted above. Only Date, Lat, Lon, Wind, Gust and wind radius (will discuss shortly) are given for forecast periods.
@@ -160,7 +160,7 @@ Therefore, while officially the forecast periods are 12, 24, 36, ... hours, in r
 Some forecast positions may also contain wind radius information (only up to 72 hours). 
 
 ```{r, eval = FALSE}
-str(df.al_18_2012_fstadv %>% select(Hr12NE64:Hr12NW34))
+str(df.al_18_2012_fstadv |> select(Hr12NE64:Hr12NW34))
 ```
 
 Again, these variables are prepended with the prefix prefix "Hrn" where n notes the forecast period. 
@@ -198,16 +198,16 @@ This dataframe contains the possibility of a cyclone passing within 65 nautical 
 
 Many values in the text product may be "X" for less than 1% chance of a strike. These values are converted to 0 as the fields are numeric. 
 
-The strike probability products did not contain `Key` which is the unique identifier for every cyclone. So the best way to do any joins will be by `Name`, `Adv` and `Date`.
+The strike probability products did not contain `StormKey` which is the unique identifier for every cyclone. So the best way to do any joins will be by `Name`, `Adv` and `Date`.
 
 Strike Probabilities may not exist for most Pacific cyclones.
 
 ## Wind Speed Probabilities (`wndprb`)
 
 ```{r, eval = FALSE}
-df.al_18_2012_wndprb <- df.al_2012 %>% 
-    filter(Name == "Hurricane Sandy") %>% 
-    .$Link %>% 
+df.al_18_2012_wndprb <- df.al_2012 |> 
+    filter(Name == "Hurricane Sandy") |> 
+    .$Link |> 
     get_wndprb()
 ```
 

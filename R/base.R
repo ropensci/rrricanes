@@ -235,15 +235,9 @@ nm_to_sm <- function(x) {
 #' saffir(c(32, 45, 70, 90, 110, 125, 140))
 #' @export
 saffir <- function(x) {
-  y <- character(length = length(x))
-  y[x <= 33] <- "TD"
-  y[dplyr::between(x, 34, 64)] <- "TS"
-  y[dplyr::between(x, 65, 83)] <- "HU1"
-  y[dplyr::between(x, 84, 95)] <- "HU2"
-  y[dplyr::between(x, 96, 113)] <- "HU3"
-  y[dplyr::between(x, 114, 134)] <- "HU4"
-  y[x >= 135] <- "HU5"
-  y
+  cut(x, breaks = c(0, 34, 65, 84, 96, 114, 135, 500),
+      labels = c("TD","TS", "HU1","HU2", "HU3","HU4","HU5"),
+      ordered_result = TRUE)
 }
 
 #' @title status_abbr_to_str
@@ -274,15 +268,14 @@ saffir <- function(x) {
 #' status_abbr_to_str("HU")
 #' @export
 status_abbr_to_str <- function(x) {
-  y <- character(length = 0)
-  y[x == "TD"] <- "Tropical Depression"
-  y[x == "TS"] <- "Tropical Storm"
-  y[x == "HU"] <- "Hurricane"
-  y[x == "EX"] <- "Extratropical Cyclone"
-  y[x == "SD"] <- "Subtropical Depression"
-  y[x == "SS"] <- "Subtropical Storm"
-  y[x == "LO"] <- "Low"
-  y[x == "WV"] <- "Tropical Wave"
-  y[x == "DB"] <- "Disturbance"
-  y
+  abbr_to_str <- c("TD" = "Tropical Depression",
+                  "TS" = "Tropical Storm",
+                  "HU" = "Hurricane",
+                  "EX" = "Extratropical Cyclone",
+                  "SD" = "Subtropical Depression",
+                  "SS" = "Subtropical Storm",
+                  "LO" = "Low",
+                  "WV" = "Tropical Wave",
+                  "DB" = "Disturbance")
+  abbr_to_str[x]
 }
