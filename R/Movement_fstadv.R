@@ -61,7 +61,7 @@ fstadv_prev_pos <- function(contents, adv_date) {
   tibble::tibble(
     PrevPosDate = prev_pos_date,
     PrevPosLat = prev_pos_lat,
-    PrevPosLon = prev_pos_lon) %>%
+    PrevPosLon = prev_pos_lon) |>
     split(seq(nrow(.)))
 }
 
@@ -111,11 +111,11 @@ fstadv_seas <- function(content) {
                         "[:blank:]+([0-9]{1,3})SW",
                         "[:blank:]+([0-9]{1,3})NW")
 
-  stringr::str_match(content, ptn)[,2:5] %>%
-    apply(MARGIN = 2L, FUN = as.numeric) %>%
-    tibble::as_tibble(.name_repair = "minimal") %>%
-    rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW"))) %>%
-    split(seq(nrow(.)))
+  df <- stringr::str_match(content, ptn)[,2:5] |>
+    apply(MARGIN = 2L, FUN = as.numeric) |>
+    tibble::as_tibble(.name_repair = "minimal") |>
+    rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW")))
+  split(df, seq(nrow(df)))
 }
 
 #' @title fstadv_wind_radius
@@ -152,14 +152,14 @@ fstadv_wind_radius <- function(content) {
                         "SW[:blank:]+([:digit:]{1,3})",
                         "NW[[:punct:][:space:]]+)?")
 
-  stringr::str_match(content, ptn)[,2:16] %>%
-    apply(MARGIN = 2L, FUN = as.numeric) %>%
-    tibble::as_tibble(.name_repair = "minimal") %>%
+  df <- stringr::str_match(content, ptn)[,2:16] |>
+    apply(MARGIN = 2L, FUN = as.numeric) |>
+    tibble::as_tibble(.name_repair = "minimal") |>
     rlang::set_names(nm = c("WindField64", "NE64", "SE64", "SW64", "NW64",
                             "WindField50", "NE50", "SE50", "SW50", "NW50",
-                            "WindField34", "NE34", "SE34", "SW34", "NW34")) %>%
-    dplyr::select(-tidyselect::starts_with("WindField")) %>%
-    split(seq(nrow(.)))
+                            "WindField34", "NE34", "SE34", "SW34", "NW34")) |>
+    dplyr::select(-tidyselect::starts_with("WindField"))
+  split(df, seq(nrow(df)))
 }
 
 #' @title fstadv_winds_gusts

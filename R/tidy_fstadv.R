@@ -32,7 +32,7 @@
 tidy_adv <- function(df) {
   if (!is.data.frame(df))
     stop("Expecting a dataframe.")
-  df <- df %>%
+  df <- df |>
     dplyr::select(
       "Key",
       .data$Adv:.data$Date,
@@ -84,21 +84,21 @@ tidy_wr <- function(df) {
   wr <- purrr::map_df(
     .x = c(34, 50, 64),
     .f = function(y) {
-      df %>%
-        dplyr::select(c("Key", "Adv", "Date", paste0(v, y))) %>%
-        dplyr::rename(
+
+      df <-  dplyr::select(df, c("Key", "Adv", "Date", paste0(v, y)))
+      df <-   dplyr::rename(
           "Key" = "Key",
           "Adv" = "Adv",
           "Date" = "Date",
           "NE" = paste0("NE", y),
           "SE" = paste0("SE", y),
           "SW" = paste0("SW", y),
-          "NW" = paste0("NW", y)) %>%
-        dplyr::mutate("WindField" = y)
-    }) %>%
+          "NW" = paste0("NW", y))
+        df <- dplyr::mutate("WindField" = y)
+    }) |>
     dplyr::select(c(
       "Key", "Adv", "Date", "WindField", .data$NE:.data$NW
-    )) %>%
+    )) |>
     # Order by Date then Adv since Adv is character. Results as expected.
     dplyr::arrange(.data$Key, .data$Date, .data$Adv, .data$WindField)
 
@@ -145,23 +145,22 @@ tidy_fcst <- function(df) {
 
   # What forecast periods are in the current dataset?
   # #107 Modified regex pattern to look for Hr120, as well.
-  fcst_periods <- as.list(names(df)) %>%
-    stringr::str_match(pattern = "Hr([:digit:]{2,3})FcstDate") %>%
-    .[,2] %>%
-    .[!rlang::are_na(.)] %>%
-    as.numeric()
+  fcst_periods <- as.list(names(df)) |>
+    stringr::str_match(pattern = "Hr([:digit:]{2,3})FcstDate")
+   fcst_periods <- fcst_periods[,2]
+   fcst_periods <- as.numeric(fcst_periods[!rlang::are_na(.)] )
 
   forecasts <- purrr::map_df(
     .x = fcst_periods,
     .f = function(y) {
-      df %>%
-        dplyr::select(c("Key", "Adv", "Date", paste0("Hr", y, v))) %>%
-        dplyr::rename("Key" = "Key", "Adv" = "Adv", "Date" = "Date",
+      df <-
+        dplyr::select(df, c("Key", "Adv", "Date", paste0("Hr", y, v)))
+       df <-  dplyr::rename(df, "Key" = "Key", "Adv" = "Adv", "Date" = "Date",
                       "FcstDate" = paste0("Hr", y, "FcstDate"),
                       "Lat" = paste0("Hr", y, "Lat"),
                       "Lon" = paste0("Hr", y, "Lon"),
                       "Wind" = paste0("Hr", y, "Wind"),
-                      "Gust" = paste0("Hr", y, "Gust"))}) %>%
+                      "Gust" = paste0("Hr", y, "Gust"))}) |>
     dplyr::arrange(.data$Key, .data$Date, .data$Adv, .data$FcstDate)
 
   # Remove NA rows
@@ -209,9 +208,9 @@ tidy_fcst_wr <- function(df) {
   # What forecast periods are in the current dataset?
   fcst_periods <- as.list(names(df)) %>%
     stringr::str_match(pattern = "Hr([:digit:]{2})FcstDate") %>%
-    .[,2] %>%
-    .[!rlang::are_na(.)] %>%
-    as.numeric()
+  fcst_periods <-fcst_periods[,2]
+  fcst_periods <- as.numeric(fcst_periods[!rlang::are_na(.)] )
+
 
   fcst_wr <- purrr::map_df(
     .x = fcst_periods,
@@ -221,12 +220,12 @@ tidy_fcst_wr <- function(df) {
       if (x %in% c(96, 120)) return(NULL)
       y <- purrr::map_df(.x = fcst_wind_radii, .f = function(z) {
 
-        df %>%
-          dplyr::select(c(
+
+         df <-  dplyr::select(df, c(
             "Key", "Adv", "Date", paste0("Hr", x, "FcstDate"),
             paste0("Hr", x, v, z)
-          )) %>%
-          dplyr::rename(
+          ))
+         df <-  dplyr::rename(df,
             "Key" = "Key",
             "Adv" = "Adv",
             "Date" = "Date",
@@ -234,9 +233,9 @@ tidy_fcst_wr <- function(df) {
             "NE" = paste0("Hr", x, "NE", z),
             "SE" = paste0("Hr", x, "SE", z),
             "SW" = paste0("Hr", x, "SW", z),
-            "NW" = paste0("Hr", x, "NW", z)) %>%
-          dplyr::mutate("WindField" = z) %>%
-          dplyr::select(c(
+            "NW" = paste0("Hr", x, "NW", z))
+         df <- dplyr::mutate(df, "WindField" = z)
+         df <- dplyr::select(df, c(
             .data$Key:.data$FcstDate,
             "WindField",
             .data$NE:.data$NW))
@@ -251,6 +250,6 @@ tidy_fcst_wr <- function(df) {
   fcst_wr <- fcst_wr[stats::complete.cases(
     fcst_wr$NE, fcst_wr$SE, fcst_wr$SW, fcst_wr$NW),]
 
-  return(fcst_wr)
+  fcst_wr
 
 }
