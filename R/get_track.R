@@ -24,7 +24,9 @@ get_serial_numbers <- function() {
    close(serial_raw)
    serial_numbers <<- purrr::map_df(serial_numbers, .f = trimws)
 }
-#'  serial_numbers <- get_serial_numbers()
+#' @title get_serial_numbers
+#'
+#' @description  serial_numbers <- get_serial_numbers()
 #'
 #' Get all serial numbers for a basin
 #' @param basin_id  The basin id
@@ -38,7 +40,9 @@ serial_from_basin_id <- function(basin_id) {
 
 }
 
-#' Get IDs for a named storm
+#' @title serial_from_name
+#'
+#' @description  Get IDs for a named storm
 #' @param  name  Name of the storm
 #'
 #' @return A character vector of storm IDs.
@@ -56,6 +60,7 @@ serial_from_name <- function(name) {
 }
 
 
+#'@title get_storm_track
 #'
 #' @param serials vector of serial numbers for a storm
 #' @param source  Short name for source, allows use of smaller file.

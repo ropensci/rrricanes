@@ -217,17 +217,21 @@ wndprb <- function(contents) {
   # Make "X" values 0
   wndprb[wndprb == "X"] <- "0"
 
-  wndprb <- dplyr::mutate_at(
+  wndprb <- dplyr::mutate(
     .tbl = wndprb,
-    .vars = "Date",
-    .funs = lubridate::ymd_hms
+     across(
+        .vars = "Date",
+        .funs = lubridate::ymd_hms
+     )
   )
 
   # Make Wind:Wind120Cum numeric
-  wndprb <- dplyr::mutate_at(
+  wndprb <- wndprb |> dplyr::mutate(
     .tbl = wndprb,
+    across(
     .vars = c(2, 5:18),
     .funs = "as.numeric"
+    )
   )
 
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_track.R
 \name{serial_from_basin_id}
 \alias{serial_from_basin_id}
-\title{serial_numbers <- get_serial_numbers()}
+\title{get_serial_numbers}
 \usage{
 serial_from_basin_id(basin_id)
 }
@@ -10,5 +10,7 @@ serial_from_basin_id(basin_id)
 \item{basin_id}{The basin id}
 }
 \description{
+serial_numbers <- get_serial_numbers()
+
 Get all serial numbers for a basin
 }
