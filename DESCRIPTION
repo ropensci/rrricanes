@@ -44,6 +44,7 @@ Imports:
 Suggests:
   covr, 
   devtools,
+  here,
   knitr, 
   rgdal (>= 1.4),
   rmarkdown,
