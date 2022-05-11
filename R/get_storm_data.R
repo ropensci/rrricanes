@@ -85,6 +85,7 @@ extract_storm_links <- function(links) {
 get_product <- function(links, product) {
 
     product_data <- purrr::map2(links,.y = product, .f = get_storm_data)
+
     purrr::flatten_df(product_data)
 }
 
@@ -148,7 +149,6 @@ get_storm_data <- function(links,
   filtered_links <- lapply(products,function(x) grep(x, product_links,
                                                      value = TRUE,
                                                      fixed = TRUE))
-  names(filtered_links) <- products
 
   purrr::map2(filtered_links, products, extract_product_contents)
 

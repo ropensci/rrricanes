@@ -1,10 +1,9 @@
 library(dplyr)
 
 AL122005 <-
-
   "%sarchive/2005/KATRINA.shtml?" |>
-  sprintf(get_nhc_link()) |>
-  extract_storm_links()
+  sprintf(rrricanes:::get_nhc_link()) |>
+  rrricanes:::extract_storm_links()
 
 files <- list(
   "AL011991" = list(
@@ -54,7 +53,7 @@ files <- list(
 AL092008 <-
   "%sarchive/2008/IKE.shtml?" |>
   sprintf(rrricanes:::get_nhc_link()) |>
-  rrricanes::extract_storm_links()
+  rrricanes:::extract_storm_links()
 
 ## ---- Saved Data -------------------------------------------------------------
 df.tests <- system.file("extdta", "test_datasets.RData", package = "rrricanes")
