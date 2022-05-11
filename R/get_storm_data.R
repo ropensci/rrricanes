@@ -51,7 +51,7 @@ extract_storm_links <- function(links) {
   # Get links of text products from each `links`
   product_links <-
     links |>
-    rrricanes:::get_url_contents() |>
+    rrricanes::get_url_contents() |>
     purrr::imap(.f = xml2::read_html) |>
     # Extract the html tables from each link to get the storm's text products
     purrr::imap(.f = ~rvest::html_nodes(.x, xpath = "//td//a")) |>
@@ -142,7 +142,7 @@ get_storm_data <- function(links,
                                                "wndprb")) {
 
   products <- match.arg(products, several.ok = TRUE)
-  product_links <- rrricanes:::extract_storm_links(links)
+  product_links <- rrricanes::extract_storm_links(links)
 
     # Filter links based on products and make one-dimensional
   filtered_links <- lapply(products,function(x) grep(x, product_links,
