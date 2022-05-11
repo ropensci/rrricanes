@@ -84,7 +84,7 @@ extract_storm_links <- function(links) {
 #' @keywords internal
 get_product <- function(links, product) {
 
-    product_data <- purrr::map2(links,.y = product, .f = get_storm_data) |>
+    product_data <- purrr::map2(links,.y = product, .f = get_storm_data)
     purrr::flatten_df(product_data)
 }
 

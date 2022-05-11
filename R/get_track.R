@@ -1,5 +1,6 @@
 
-#' Creates the serial numbers look up
+#' @title  get_serial_number
+#' @description Creates the serial numbers look up
 #'
 #' This will create a fresh table for serial numbers
 #' Since this is constantly updated it should be
@@ -8,11 +9,13 @@
 
 get_serial_numbers <- function() {
 
-  today <- gsub("-", "", Sys.Date())
+  lines <- readLines("https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/access/csv/")
+  currentid <- substring(lines[12], 58, 65)
+  #today <- gsub("-", "", Sys.Date())
   serial_raw <-
     file(paste0(
       "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/access/csv/IBTrACS_SerialNumber_NameMapping_v04r00_",
-    today,".txt"))
+    currentid,".txt"))
   open(serial_raw)
   serial_numbers <-  iotools::dstrfw(stringr::str_pad(readLines(serial_raw),
                                              210, "right"),
