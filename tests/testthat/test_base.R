@@ -64,7 +64,8 @@ test_that("Nautical Miles to Survey Miles", {
 test_that("test saffir()", {
     expect_identical(
       saffir(c(32, 45, 70, 90, 110, 125, 140)),
-      c("TD", "TS", "HU1", "HU2", "HU3", "HU4", "HU5")
+      ordered(c("TD", "TS", "HU1", "HU2", "HU3", "HU4", "HU5"),
+                 levels = c("TD", "TS", "HU1", "HU2", "HU3", "HU4", "HU5"))
     )
 })
 

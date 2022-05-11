@@ -129,7 +129,6 @@ fstadv <- function(contents) {
     WindRadius = wind_radius,
     Forecast = forecasts
   ) |>
-
     tidyr::unnest(cols = c(.data$Seas,
                            .data$WindRadius,
                            .data$Forecast))
@@ -236,14 +235,15 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
   # multiple forecasts (at 12 hours, 24, 36, 48, 72, and, for more recent years,
   # 96 and 120 hours). Some text products may have no forecasts at all (if the
   # storm is expected to degenerate or already has).
-  forecasts <-
-    content |>
-    stringr::str_match_all(pattern = ptn) |>
+
+
+    forecasts <- content |>
+    stringr::str_match_all(pattern = ptn)
     # # Get only the columns needed excluding the matched string
-    # purrr::map(`[`, , 2:22) |>
+    forecasts <-purrr::map(forecasts, `[`, , 2:22)
     # If any storm has 0 forecasts (i.e., the list element is empty), populate
     # all columns with NA
-    purrr::modify_if(.p = purrr::is_empty,
+    forecasts <- purrr::modify_if(forecasts, .p = purrr::is_empty,
                      .f = ~matrix(data = NA_character_, ncol = 22)) |>
     # Convert to tibble cause God I hate working with lists like this though I
     # know I need the practice...
@@ -269,10 +269,8 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
       AdvDate = adv_date,
       Forecasts = forecasts
     ) |>
-
-
-    tidyr::unnest() |>
-    dplyr::group_by(.data$StormKey, .data$Adv) |>
+    tidyr::unnest(cols = c(.data$Forecasts)) |>
+    dplyr::group_by(.data$Key, .data$Adv) |>
 
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
@@ -325,13 +323,4 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
         rebuild_forecasts(hr, df = df_forecasts), by = c("StormKey", "Adv")
       )
   }
-
-
-  df |>
-    dplyr::ungroup() |>
-    dplyr::select(-c(.data$StormKey, .data$Adv)) |>
-
-    split(seq(nrow(.)))
-
 }
-

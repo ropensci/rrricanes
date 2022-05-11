@@ -9,7 +9,7 @@ gis_download(url, ...)
 \arguments{
 \item{url}{link to GIS dataset to download.}
 
-\item{...}{additional parameters for rgdal::readOGR}
+\item{...}{additional parameters for simple features}
 }
 \description{
 Get GIS data for storm.

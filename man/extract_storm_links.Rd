@@ -12,4 +12,3 @@ extract_storm_links(links)
 \description{
 Extract product links from a storm's archive page
 }
-\keyword{internal}

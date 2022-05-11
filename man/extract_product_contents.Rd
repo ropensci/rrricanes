@@ -4,7 +4,7 @@
 \alias{extract_product_contents}
 \title{extract_product_contents}
 \usage{
-extract_product_contents(links, product)
+extract_product_contents(links, products)
 }
 \arguments{
 \item{links}{URLs to storm products}

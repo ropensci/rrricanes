@@ -52,14 +52,14 @@ each advisory being worked by setting the rrricanes.working_msg to TRUE.
 \examples{
 \dontrun{
 ## Get public advisories for first storm of 2016 Atlantic season.
-get_storms(year = 2016, basin = "AL") \%>\%
-  slice(1) \%>\%
-  .$Link \%>\%
+get_storms(year = 2016, basin = "AL") |>
+  slice(1) |>
+  .$Link |>
   get_storm_data(products = "public")
 ## Get public advisories and storm discussions for first storm of 2017 Atlantic season.
-get_storms(year = 2017, basin = "AL") \%>\%
-  slice(1) \%>\%
-  .$Link \%>\%
+get_storms(year = 2017, basin = "AL") |>
+  slice(1) |>
+  .$Link |>
   get_storm_data(products = c("discus", "public"))
 }
 }

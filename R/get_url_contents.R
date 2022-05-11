@@ -3,8 +3,9 @@
 #' @details This function primarily is reserved for extracting the contents of
 #' the individual products (thought it can be used in other instances). Often,
 #' there are timeout issues. This is an attempt to try to work around that.
-#' @param link URL to download
-#' @keywords internal
+#' @param links character vector of URLs to download
+#'
+#' @export
 get_url_contents <- function(links) {
 
   download_text <- function(grouped_links) {

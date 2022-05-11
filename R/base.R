@@ -115,9 +115,8 @@
 #' @name rrricanes
 NULL
 
-#' @importFrom magrittr %>%
 #' @importFrom rlang .data
-
+#' @importFrom stats complete.cases
 .pkgenv <- new.env(parent = emptyenv())
 
 .onLoad <- function(libname, pkgname) {
@@ -141,13 +140,16 @@ hasData <- function(has_data = .pkgenv$has_data) {
   }
 }
 
+quads <- c("NE", "SE", "SW", "NW")
+
 utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
                          "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
                          "WindField34", "WindField50", "WindField64", "lat",
                          "long", "group", ".", "NW34", "name", "data", "Basin",
                          stringr::str_c(c("NE", "SE", "SW", "NW", "64")),
                          stringr::str_c(c("NE", "SE", "SW", "NW", "50")),
-                         stringr::str_c(c("NE", "SE", "SW", "NW", "34"))))
+                         stringr::str_c(c("NE", "SE", "SW", "NW", "34")),
+                         "serial_numbers", "sid"))
 
 #' @title extract_year_archive_link
 #' @description Extracts the year from the archive link.
@@ -157,68 +159,6 @@ utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
 extract_year_archive_link <- function(link) {
   # Year is listed in link towards the end surrounded by slashes.
   as.numeric(stringr::str_match(link, '/([:digit:]{4})/')[,2])
-}
-
-#' @title get_url_contents
-#' @description Get contents from URL
-#' @details This function primarily is reserved for extracting the contents of
-#' the individual products \(thought it can be used in other instances\). Often,
-#' there are timeout issues. This is an attempt to try to work around that.
-#' @param link URL to download
-#' @keywords internal
-get_url_contents <- function(links) {
-
-  download_text <- function(grouped_links) {
-
-    # Create a new Async object with `grouped_links`
-    grouped_links <- crul::Async$new(urls = grouped_links)
-
-    # Get `grouped_links`
-    results <- grouped_links$get()
-
-    # Do we have any bad `grouped_links`?
-    bad_results_ind <- which(purrr::map(results, ~.$success()) == FALSE)
-    if (length(bad_results_ind) > 0) {
-      warning(sprintf("URL %s was unsuccesful.\n",
-                      purrr::map(results[bad_results_ind], ~.$url)),
-              call. = FALSE)
-      # Remove bad `grouped_links`
-      results <- results[-bad_results_ind]
-    }
-    purrr::map_chr(results, ~.$parse("UTF-8"))
-  }
-
-  # Create groups of links divisible by 80. We are to allow no more than 80
-  # requests every 10 seconds. If length of `link` is less than 80, then will
-  # only have one group and should have no delay.
-  groups <- ceiling(seq_along((links))/80)
-  links <- split(links, groups)
-
-  # Set progress bar
-  p <- dplyr::progress_estimated(n = length(links))
-
-  contents <-
-    links %>%
-    purrr::imap(.f = function(x, y) {
-
-      if (as.numeric(y) != length(links)) {
-        # Send group of links to `download_txt`
-        txt <- download_text(x)
-        # We are not in the last group; apply a delay
-        p$tick()$print()
-        if (getOption("rrricanes.working_msg"))
-          message("Waiting 10 seconds to retrieve large numbers of links.")
-        p$pause(10)
-        txt
-      } else {
-        # Send group of links to `download_txt`
-        p$tick()$print()
-        download_text(x)
-      }
-    })
-
-  purrr::flatten_chr(contents)
-
 }
 
 #' @title get_nhc_link
@@ -337,5 +277,5 @@ status_abbr_to_str <- function(x) {
                   "LO" = "Low",
                   "WV" = "Tropical Wave",
                   "DB" = "Disturbance")
-  abbr_to_str[x]
+  unname(abbr_to_str[x])
 }

@@ -1,5 +1,6 @@
 
-#' Creates the serial numbers look up
+#' @title  get_serial_number
+#' @description Creates the serial numbers look up
 #'
 #' This will create a fresh table for serial numbers
 #' Since this is constantly updated it should be
@@ -8,11 +9,13 @@
 
 get_serial_numbers <- function() {
 
-  today <- gsub("-", "", Sys.Date())
+  lines <- readLines("https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/access/csv/")
+  currentid <- substring(lines[12], 58, 65)
+  #today <- gsub("-", "", Sys.Date())
   serial_raw <-
     file(paste0(
       "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/access/csv/IBTrACS_SerialNumber_NameMapping_v04r00_",
-    today,".txt"))
+    currentid,".txt"))
   open(serial_raw)
   serial_numbers <-  iotools::dstrfw(stringr::str_pad(readLines(serial_raw),
                                              210, "right"),
@@ -24,7 +27,10 @@ get_serial_numbers <- function() {
    close(serial_raw)
    serial_numbers <<- purrr::map_df(serial_numbers, .f = trimws)
 }
-#'  serial_numbers <- get_serial_numbers()
+
+#' @title get_serial_numbers
+#'
+#' @description  serial_numbers <- get_serial_numbers()
 #'
 #' Get all serial numbers for a basin
 #' @param basin_id  The basin id
@@ -38,12 +44,12 @@ serial_from_basin_id <- function(basin_id) {
 
 }
 
-#' Get IDs for a named storm
+#' @title serial_from_name
+#'
+#' @description  Get IDs for a named storm
 #' @param  name  Name of the storm
 #'
 #' @return A character vector of storm IDs.
-#' @example
-#'     serials <- serial_from_name("SANDY")
 #' @export
 serial_from_name <- function(name) {
   if (!exists("serial_numbers")){
@@ -52,10 +58,11 @@ serial_from_name <- function(name) {
   sids <- serial_numbers[grep(pattern = toupper(name),
                                  x = serial_numbers$name_history,
                                 fixed = TRUE), "sid"]
-  pull(sids, sid)
+  dplyr::pull(sids, sid)
 }
 
 
+#'@title get_storm_track
 #'
 #' @param serials vector of serial numbers for a storm
 #' @param source  Short name for source, allows use of smaller file.
