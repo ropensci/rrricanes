@@ -52,16 +52,18 @@ extract_storm_links <- function(links) {
   product_links <-
     links |>
     rrricanes::get_url_contents() |>
-    purrr::imap(.f = xml2::read_html) |>
+    purrr::imap(.f = xml2::read_html)
     # Extract the html tables from each link to get the storm's text products
-    purrr::imap(.f = ~rvest::html_nodes(.x, xpath = "//td//a")) |>
+    product_links <- purrr::imap(product_links, .f = ~rvest::html_nodes(.x, xpath = "//td//a"))
     # Extract the text product URLs from `nodes`
-    purrr::imap(.f = ~rvest::html_attr(.x, name = "href")) |>
-    purrr::flatten_chr() |>
+    product_links <- purrr::imap(product_links, .f = ~rvest::html_attr(.x, name = "href"))
+    product_links <- purrr::flatten_chr(product_links)
     # Ensure we're only capturing archive pages
-    stringr::str_match( "archive.+")
+    product_links <- grep("archive", product_links, value = TRUE, fixed = TRUE)
+    #stringr::str_match( "archive.+")
 
-  product_links <- product_links[stats::complete.cases(product_links)]
+  #product_links <- product_links[stats::complete.cases(product_links)]
+    product_links <- product_links[!is.na(product_links)]
 
   # Extract years from `links`
   years <- as.numeric(stringr::str_extract(product_links, "[[:digit:]]{4}"))
@@ -70,9 +72,12 @@ extract_storm_links <- function(links) {
   # other years, product_links are absolute. If product_links exist for 1998
   # they must be modified. All product_links must then be prefixed with
   # NHC URL.
-  product_links[years == 1998] <- stringr::str_c("/archive/1998/",
-                                                 product_links[years == 1998])
-  product_links <- stringr::str_c(get_nhc_link(), product_links)
+  #product_links[years == 1998] <- stringr::str_c("/archive/1998/",
+  #                                               product_links[years == 1998])
+  #product_links <- stringr::str_c(get_nhc_link(), product_links)
+  product_links[years == 1998] <- sub("archive", "1998/archive",
+                                      product_links[years == 1998], fixed = TRUE)
+  product_links <- paste0(rrricanes:::get_nhc_link(), product_links)
 
   product_links
 }
@@ -149,7 +154,6 @@ get_storm_data <- function(links,
   filtered_links <- lapply(products,function(x) grep(x, product_links,
                                                      value = TRUE,
                                                      fixed = TRUE))
-
   purrr::map2(filtered_links, products, extract_product_contents)
 
 }

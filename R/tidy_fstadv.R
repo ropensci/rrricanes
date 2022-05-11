@@ -4,7 +4,7 @@
 #' @details Returns current data only of a fstadv dataframe. Use Key, Adv and
 #' Date to join with other tidy dataframes.
 #' \describe{
-#'  \item{Key}{Unique identifier of cyclone}
+#'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
 #'  \item{Date}{Date and time of advisory}
 #'  \item{Status}{Classification of cyclone}
@@ -34,7 +34,7 @@ tidy_adv <- function(df) {
     stop("Expecting a dataframe.")
   df <- df |>
     dplyr::select(
-      "Key",
+      "StormKey",
       .data$Adv:.data$Date,
       .data$Status:.data$Name,
       .data$Lat:.data$Eye,
@@ -58,7 +58,7 @@ tidy_fstadv <- function(df) {
 #' @details Returns tidy dataframe of current wind radius values for a cyclone.
 #' Returns only complete.cases (based on quadrants).
 #' \describe{
-#'  \item{Key}{Unique identifier of cyclone}
+#'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
 #'  \item{Date}{Date and time of advisory}
 #'  \item{Windfield}{Minimum wind speed expected}
@@ -85,9 +85,9 @@ tidy_wr <- function(df) {
     .x = c(34, 50, 64),
     .f = function(y) {
 
-      df <-  dplyr::select(df, c("Key", "Adv", "Date", paste0(v, y)))
+      df <-  dplyr::select(df, c("StormKey", "Adv", "Date", paste0(v, y)))
       df <-   dplyr::rename(df,
-          "Key" = "Key",
+          "StormKey" = "StormKey",
           "Adv" = "Adv",
           "Date" = "Date",
           "NE" = paste0("NE", y),
@@ -97,10 +97,10 @@ tidy_wr <- function(df) {
         df <- dplyr::mutate(df, "WindField" = y)
     }) |>
     dplyr::select(c(
-      "Key", "Adv", "Date", "WindField", .data$NE:.data$NW
+      "StormKey", "Adv", "Date", "WindField", .data$NE:.data$NW
     )) |>
     # Order by Date then Adv since Adv is character. Results as expected.
-    dplyr::arrange(.data$Key, .data$Date, .data$Adv, .data$WindField)
+    dplyr::arrange(.data$StormKey, .data$Date, .data$Adv, .data$WindField)
 
   # Remove NA rows for windfield quadrants
   wr <- wr[stats::complete.cases(wr$NE, wr$SE, wr$SW, wr$NW),]
@@ -148,14 +148,14 @@ tidy_fcst <- function(df) {
   fcst_periods <- as.list(names(df))
   fcst_periods <- stringr::str_match(fcst_periods, pattern = "Hr([:digit:]{2,3})FcstDate")
   fcst_periods <- fcst_periods[,2]
-  fcst_periods <- as.numeric(fct_periods, fcst_periods[!rlang::are_na(.)] )
+  fcst_periods <- as.numeric(fcst_periods, fcst_periods[!rlang::are_na(fcst_periods)] )
 
   forecasts <- purrr::map_df(
     .x = fcst_periods,
     .f = function(y) {
       df <-
-        dplyr::select(df, c("Key", "Adv", "Date", paste0("Hr", y, v)))
-       df <-  dplyr::rename(df, "Key" = "Key", "Adv" = "Adv", "Date" = "Date",
+        dplyr::select(df, c("StormKey", "Adv", "Date", paste0("Hr", y, v)))
+       df <-  dplyr::rename(df, "StormKey" = "StormKey", "Adv" = "Adv", "Date" = "Date",
                       "FcstDate" = paste0("Hr", y, "FcstDate"),
                       "Lat" = paste0("Hr", y, "Lat"),
                       "Lon" = paste0("Hr", y, "Lon"),
@@ -178,7 +178,7 @@ tidy_fcst <- function(df) {
 #' dataframes.
 #'
 #' \describe{
-#'  \item{Key}{Unique identifier of cyclone}
+#'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
 #'  \item{Date}{Date and time of advisory}
 #'  \item{FcstDate}{Forecast date and time in UTC}
@@ -220,14 +220,12 @@ tidy_fcst_wr <- function(df) {
       if (x %in% c(48, 72)) fcst_wind_radii <- c(34, 50)
       if (x %in% c(96, 120)) return(NULL)
       y <- purrr::map_df(.x = fcst_wind_radii, .f = function(z) {
-
-
          df <-  dplyr::select(df, c(
-            "Key", "Adv", "Date", paste0("Hr", x, "FcstDate"),
+            "StormKey", "Adv", "Date", paste0("Hr", x, "FcstDate"),
             paste0("Hr", x, v, z)
           ))
          df <-  dplyr::rename(df,
-            "Key" = "Key",
+            "StormKey" = "StormKey",
             "Adv" = "Adv",
             "Date" = "Date",
             "FcstDate" = paste0("Hr", x, "FcstDate"),
@@ -245,7 +243,7 @@ tidy_fcst_wr <- function(df) {
     })
 
   fcst_wr <- dplyr::arrange(
-    fcst_wr, .data$Key, .data$Date, .data$Adv, .data$FcstDate, .data$WindField
+    fcst_wr, .data$StormKey, .data$Date, .data$Adv, .data$FcstDate, .data$WindField
   )
 
   fcst_wr <- fcst_wr[stats::complete.cases(

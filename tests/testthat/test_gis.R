@@ -1,5 +1,6 @@
-context("Test GIS functions.")
-
+if (!exists("al_2008")){
+  al_2008 <- get_storms(years = 2008, basins = "AL")
+}
 ## ---- gis_advisory -----------------------------------------------------------
 test_that("gis_advisory", {
   expect_identical(gis_advisory("AL092008", 32),

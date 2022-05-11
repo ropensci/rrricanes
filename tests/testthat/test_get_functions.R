@@ -1,8 +1,16 @@
 # Test all get functions
-context("Get Functions")
+
 
 ## ---- Get Storms -------------------------------------------------------------
-
+if (!exists("al_2017")){
+  al_2017 <- get_storms(years = 2017, basins = "AL")
+}
+if (!exists("al_1998")){
+al_1998 <- get_storms(years = 1998, basins = "AL")
+}
+if (!exists("al_2008")){
+  al_2008 <- get_storms(years = 2008, basins = "AL")
+}
 ## ---- * URL Status -----------------------------------------------------------
 #' Test that annual archive links work. All results should return 'OK'.
 test_that("URL Status", {
