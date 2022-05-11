@@ -277,5 +277,5 @@ status_abbr_to_str <- function(x) {
                   "LO" = "Low",
                   "WV" = "Tropical Wave",
                   "DB" = "Disturbance")
-  abbr_to_str[x]
+  unname(abbr_to_str[x])
 }

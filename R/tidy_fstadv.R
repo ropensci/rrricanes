@@ -86,7 +86,7 @@ tidy_wr <- function(df) {
     .f = function(y) {
 
       df <-  dplyr::select(df, c("Key", "Adv", "Date", paste0(v, y)))
-      df <-   dplyr::rename(
+      df <-   dplyr::rename(df,
           "Key" = "Key",
           "Adv" = "Adv",
           "Date" = "Date",
@@ -94,7 +94,7 @@ tidy_wr <- function(df) {
           "SE" = paste0("SE", y),
           "SW" = paste0("SW", y),
           "NW" = paste0("NW", y))
-        df <- dplyr::mutate("WindField" = y)
+        df <- dplyr::mutate(df, "WindField" = y)
     }) |>
     dplyr::select(c(
       "Key", "Adv", "Date", "WindField", .data$NE:.data$NW
@@ -146,9 +146,9 @@ tidy_fcst <- function(df) {
   # What forecast periods are in the current dataset?
   # #107 Modified regex pattern to look for Hr120, as well.
   fcst_periods <- as.list(names(df))
-  fcst_periods <- stringr::str_match(pattern = "Hr([:digit:]{2,3})FcstDate")
+  fcst_periods <- stringr::str_match(fcst_periods, pattern = "Hr([:digit:]{2,3})FcstDate")
   fcst_periods <- fcst_periods[,2]
-   fcst_periods <- as.numeric(fcst_periods[!rlang::are_na(.)] )
+  fcst_periods <- as.numeric(fct_periods, fcst_periods[!rlang::are_na(.)] )
 
   forecasts <- purrr::map_df(
     .x = fcst_periods,
@@ -210,7 +210,7 @@ tidy_fcst_wr <- function(df) {
   fcst_periods <- stringr::str_match(fcst_periods,
                                   pattern = "Hr([:digit:]{2})FcstDate")
   fcst_periods <-fcst_periods[,2]
-  fcst_periods <- as.numeric(fcst_periods[!rlang::are_na(.)] )
+  fcst_periods <- as.numeric(fcst_periods[!rlang::are_na(fcst_periods)] )
 
 
   fcst_wr <- purrr::map_df(

@@ -123,7 +123,7 @@ gis_download <- function(url, ...) {
 #' @title gis_latest
 #' @description Latest GIS datasets for \strong{active} cyclones
 #' @param basins AL and/or EP.
-#' @param ... additional parameters for rgdal::readOGR
+#' @param ... additional parameters for sf::st_read()
 #' @export
 gis_latest <- function(basins = c("AL", "EP"), ...) {
 

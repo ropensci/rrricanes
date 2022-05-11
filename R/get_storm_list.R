@@ -26,12 +26,12 @@ get_storm_list <- function() {
     ),
     col_types = "ccccccciiccccciccicic"
   ) |>
-    dplyr::across(
+    dplyr::mutate(dplyr::across(
       .cols = c("YYY1MMDDHH", "YYY2MMDDHH"),
       .fns = as.POSIXct,
       format = "%Y%m%d%H",
       tz = "UTC"
-    )
+    ))
 }
 
 #' @title get_ftp_dirs()

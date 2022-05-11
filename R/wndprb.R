@@ -220,7 +220,7 @@ wndprb <- function(contents) {
 
   wndprb <- dplyr::mutate(
     .tbl = wndprb,
-     across(
+     dplyr::across(
         .vars = "Date",
         .funs = lubridate::ymd_hms
      )
@@ -229,7 +229,7 @@ wndprb <- function(contents) {
   # Make Wind:Wind120Cum numeric
   wndprb <- wndprb |> dplyr::mutate(
     .tbl = wndprb,
-    across(
+    dplyr::across(
     .vars = c(2, 5:18),
     .funs = "as.numeric"
     )

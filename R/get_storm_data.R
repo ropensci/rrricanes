@@ -42,7 +42,7 @@ extract_product_contents <- function(links, products) {
 #' @title extract_storm_links
 #' @description Extract product links from a storm's archive page
 #' @param links URLs to a storm's archive page
-#' @keywords internal
+#' @export
 extract_storm_links <- function(links) {
 
   if (!is.vector(links))
