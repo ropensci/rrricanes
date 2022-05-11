@@ -43,7 +43,7 @@ Date to join with other tidy dataframes.
 }
 \examples{
 \dontrun{
-get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") \%>\%
+get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") |>
   tidy_adv()
 }
 }

@@ -25,7 +25,7 @@
 #' }
 #' @examples
 #' \dontrun{
-#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") |>
 #'   tidy_adv()
 #' }
 #' @export
@@ -39,7 +39,7 @@ tidy_adv <- function(df) {
       .data$Status:.data$Name,
       .data$Lat:.data$Eye,
       dplyr::starts_with("Seas"))
-  return(df)
+  df
 }
 
 #' @title tidy_adv
@@ -69,7 +69,7 @@ tidy_fstadv <- function(df) {
 #' }
 #' @examples
 #' \dontrun{
-#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") |>
 #'   tidy_wr()
 #' }
 #' @export
@@ -127,7 +127,7 @@ tidy_wr <- function(df) {
 #' }
 #' @examples
 #' \dontrun{
-#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") |>
 #'   tidy_fcst()
 #' }
 #' @export
@@ -145,9 +145,9 @@ tidy_fcst <- function(df) {
 
   # What forecast periods are in the current dataset?
   # #107 Modified regex pattern to look for Hr120, as well.
-  fcst_periods <- as.list(names(df)) |>
-    stringr::str_match(pattern = "Hr([:digit:]{2,3})FcstDate")
-   fcst_periods <- fcst_periods[,2]
+  fcst_periods <- as.list(names(df))
+  fcst_periods <- stringr::str_match(pattern = "Hr([:digit:]{2,3})FcstDate")
+  fcst_periods <- fcst_periods[,2]
    fcst_periods <- as.numeric(fcst_periods[!rlang::are_na(.)] )
 
   forecasts <- purrr::map_df(
@@ -190,7 +190,7 @@ tidy_fcst <- function(df) {
 #' }
 #' @examples
 #' \dontrun{
-#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") %>%
+#' get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html") |>
 #'   tidy_fcst_wr()
 #' }
 #' @export
@@ -206,8 +206,9 @@ tidy_fcst_wr <- function(df) {
   v <- c("NE", "SE", "SW", "NW")
 
   # What forecast periods are in the current dataset?
-  fcst_periods <- as.list(names(df)) %>%
-    stringr::str_match(pattern = "Hr([:digit:]{2})FcstDate") %>%
+  fcst_periods <- as.list(names(df))
+  fcst_periods <- stringr::str_match(fcst_periods,
+                                  pattern = "Hr([:digit:]{2})FcstDate")
   fcst_periods <-fcst_periods[,2]
   fcst_periods <- as.numeric(fcst_periods[!rlang::are_na(.)] )
 

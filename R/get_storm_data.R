@@ -33,8 +33,8 @@ extract_product_contents <- function(links, products) {
           stringr::str_to_upper()
       }
     })
-ccc <<- contents
- contents <- data.frame(Text = contents)
+
+  contents <- data.frame(Text = contents)
   purrr::map(.x= products, .f = ~contents)
 
 }
@@ -60,7 +60,7 @@ extract_storm_links <- function(links) {
     purrr::flatten_chr() |>
     # Ensure we're only capturing archive pages
     stringr::str_match( "archive.+")
-  
+
   product_links <- product_links[stats::complete.cases(product_links)]
 
   # Extract years from `links`

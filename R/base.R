@@ -115,9 +115,8 @@
 #' @name rrricanes
 NULL
 
-#' @importFrom magrittr %>%
 #' @importFrom rlang .data
-
+#' @importFrom stats complete.cases
 .pkgenv <- new.env(parent = emptyenv())
 
 .onLoad <- function(libname, pkgname) {
@@ -149,7 +148,8 @@ utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
                          "long", "group", ".", "NW34", "name", "data", "Basin",
                          stringr::str_c(c("NE", "SE", "SW", "NW", "64")),
                          stringr::str_c(c("NE", "SE", "SW", "NW", "50")),
-                         stringr::str_c(c("NE", "SE", "SW", "NW", "34"))))
+                         stringr::str_c(c("NE", "SE", "SW", "NW", "34")),
+                         "serial_numbers", "sid"))
 
 #' @title extract_year_archive_link
 #' @description Extracts the year from the archive link.

@@ -24,6 +24,7 @@ get_serial_numbers <- function() {
    close(serial_raw)
    serial_numbers <<- purrr::map_df(serial_numbers, .f = trimws)
 }
+
 #' @title get_serial_numbers
 #'
 #' @description  serial_numbers <- get_serial_numbers()
@@ -46,8 +47,6 @@ serial_from_basin_id <- function(basin_id) {
 #' @param  name  Name of the storm
 #'
 #' @return A character vector of storm IDs.
-#' @example
-#'     serials <- serial_from_name("SANDY")
 #' @export
 serial_from_name <- function(name) {
   if (!exists("serial_numbers")){
@@ -56,7 +55,7 @@ serial_from_name <- function(name) {
   sids <- serial_numbers[grep(pattern = toupper(name),
                                  x = serial_numbers$name_history,
                                 fixed = TRUE), "sid"]
-  pull(sids, sid)
+  dplyr::pull(sids, sid)
 }
 
 
