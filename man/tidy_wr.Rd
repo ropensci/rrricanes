@@ -16,7 +16,7 @@ Tidy current wind radius of a fstadv dataframe object.
 Returns tidy dataframe of current wind radius values for a cyclone.
 Returns only complete.cases (based on quadrants).
 \describe{
- \item{Key}{Unique identifier of cyclone}
+ \item{StormKey}{Unique identifier of cyclone}
  \item{Adv}{Advisory number}
  \item{Date}{Date and time of advisory}
  \item{Windfield}{Minimum wind speed expected}

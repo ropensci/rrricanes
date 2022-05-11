@@ -7,7 +7,7 @@
 get_url_contents(links)
 }
 \arguments{
-\item{link}{URL to download}
+\item{links}{character vector of URLs to download}
 }
 \description{
 Get contents from URL

@@ -21,7 +21,7 @@ Tidy current details of a fstadv dataframe object.
 Returns current data only of a fstadv dataframe. Use Key, Adv and
 Date to join with other tidy dataframes.
 \describe{
- \item{Key}{Unique identifier of cyclone}
+ \item{StormKey}{Unique identifier of cyclone}
  \item{Adv}{Advisory number}
  \item{Date}{Date and time of advisory}
  \item{Status}{Classification of cyclone}

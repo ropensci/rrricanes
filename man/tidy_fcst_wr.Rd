@@ -18,7 +18,7 @@ cases only (by quadrants). Use Key, Adv and Date to join with other tidy
 dataframes.
 
 \describe{
- \item{Key}{Unique identifier of cyclone}
+ \item{StormKey}{Unique identifier of cyclone}
  \item{Adv}{Advisory number}
  \item{Date}{Date and time of advisory}
  \item{FcstDate}{Forecast date and time in UTC}
