@@ -229,7 +229,7 @@ fstadv_forecasts <- function(content, key, adv, adv_date) {
                         "[:blank:]+([:digit:]{1,3})NW",
                         "[[:punct:][:space:]]+)?")
 
-  quads <- c("NE", "SE", "SW", "NW")
+  quads
 
   # Extract all forecasts from every text product. Some text products may have
   # multiple forecasts (at 12 hours, 24, 36, 48, 72, and, for more recent years,

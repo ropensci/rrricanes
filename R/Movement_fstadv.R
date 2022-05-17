@@ -114,7 +114,7 @@ fstadv_seas <- function(content) {
   df <- stringr::str_match(content, ptn)[,2:5] |>
     apply(MARGIN = 2L, FUN = as.numeric) |>
     tibble::as_tibble(.name_repair = "minimal") |>
-    rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW")))
+    rlang::set_names(nm = stringr::str_c("Seas", quads))
   split(df, seq(nrow(df)))
 }
 
