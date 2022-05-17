@@ -104,14 +104,9 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
   if (!all(basins %in% c("AL", "EP")))
     stop("Basin must 'AL' and/or 'EP'.", call. = FALSE)
 
-  links <-
-    years |>
-    purrr::map(.f = year_archives_link) |>
-    purrr::flatten_chr()
+  links <- year_archives_link(years)
 
-  # 1998 is only year with slightly different URL. Modify accordingly
-  links[grep("1998", links)] <- stringr::str_c(links[grep("1998", links)],
-                                               "1998archive.shtml")
+
 
   contents <- rrricanes:::get_url_contents(links)
 
@@ -123,7 +118,13 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
 #' @description Returns link to a year's archive page
 #' @param year 4-digit numeric
 #' @keywords internal
-year_archives_link <- function(year) {
+year_archives_link <- function(years) {
   nhc_link <- get_nhc_link()
-  sprintf(stringr::str_c(nhc_link, 'archive/%i/'), year)
+  archive_links <-ifelse(years != 1998,
+    sprintf(stringr::str_c(nhc_link, 'archive/%i/'), years),
+    # 1998 is only year with slightly different URL. Modify accordingly
+    stringr::str_c(nhc_link, 'archive/1998/1998archive.shtml?')
+  )
+  archive_links
+
 }
