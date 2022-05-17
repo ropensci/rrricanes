@@ -450,7 +450,7 @@ fstadv_seas <- function(content) {
   stringr::str_match(content, ptn)[,2:5] |>
     apply(MARGIN = 2L, FUN = as.numeric) |>
     tibble::as_tibble(.name_repair = "minimal") |>
-    rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW"))) |>
+    rlang::set_names(nm = stringr::str_c("Seas", quads)) |>
     split(seq(nrow(.)))
 }
 
@@ -598,7 +598,7 @@ tidy_wr <- function(df) {
 
   # Collapse wind radius fields to narrow dataframe then expand on the four
   # quadrants, keeping WindField as a variable.
-  v <- c("NE", "SE", "SW", "NW")
+  quads
 
   wr <- purrr::map_df(
     .x = c(34, 50, 64),
@@ -728,7 +728,7 @@ tidy_fcst_wr <- function(df) {
   # and 120 hours are never forecasted). This dataframe will be similar to
   # fstadv.wr with the exception of FcstDate.
 
-  v <- c("NE", "SE", "SW", "NW")
+  quads
 
   # What forecast periods are in the current dataset?
   fcst_periods <- as.list(names(df)) |>
