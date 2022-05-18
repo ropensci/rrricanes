@@ -231,14 +231,18 @@ nm_to_sm <- function(x) {
 #' @description Return category of tropical cyclone based on wind. Saffir-
 #' Simpson Hurricane Scale does not apply to non-tropical cyclones.
 #' @param x Vector of wind speed values.
+#' @details This function returns Storm Catergories as an ordered factors.
+#' To return the Storm Categories without the ordered levels, print saffir with
+#' max.level = 0 i.e print(saffir, max.level = 0)
 #' @examples
 #' saffir(c(32, 45, 70, 90, 110, 125, 140))
 #' @export
-saffir <- function(x) {
-  cut(x, breaks = c(0, 34, 65, 84, 96, 114, 135, 500),
+saffir <- function(x,max.levels = 0) {
+  lvl <- cut(x, breaks = c(0, 34, 65, 84, 96, 114, 135, 500),
       labels = c("TD","TS", "HU1","HU2", "HU3","HU4","HU5"),
       ordered_result = TRUE)
 }
+
 
 #' @title status_abbr_to_str
 #' @description Convert Status abbreviation to string
