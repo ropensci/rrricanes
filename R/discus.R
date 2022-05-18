@@ -5,7 +5,7 @@
 #'   etc.}
 #'   \item{Name}{Name of storm}
 #'   \item{Adv}{Advisory Number}
-#'   \item{Date}{Date of advisory issuance}
+#'   \item{DateTime}{Date of advisory issuance}
 #'   \item{StormKey}{ID of cyclone}
 #'   \item{Contents}{Text content of product}
 #' }
@@ -46,7 +46,7 @@ discus <- function(contents) {
     Status = status[,1],
     Name = status[,2],
     Adv = as.numeric(status[,3]),
-    Date = issue_date,
+    DateTime = issue_date,
     StormKey = key,
     Contents = contents
   )

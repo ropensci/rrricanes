@@ -25,7 +25,7 @@
 #'  \item{Status}{Classification of cyclone}
 #'  \item{Name}{Name of cyclone}
 #'  \item{Adv}{Advisory number}
-#'  \item{Date}{Date and time of advisory}
+#'  \item{DateTime}{Date and time of advisory}
 #'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Lat}{Latitude of cyclone center}
 #'  \item{Lon}{Longitude of cyclone center}
@@ -525,7 +525,7 @@ fstadv_winds_gusts <- function(contents) {
 #' \describe{
 #'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
-#'  \item{Date}{Date and time of advisory}
+#'  \item{DateTime}{Date and time of advisory}
 #'  \item{Status}{Classification of cyclone}
 #'  \item{Name}{Name of cyclone}
 #'  \item{Lat}{Latitude of cyclone center}
@@ -579,7 +579,7 @@ tidy_fstadv <- function(df) {
 #' \describe{
 #'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
-#'  \item{Date}{Date and time of advisory}
+#'  \item{DateTime}{Date and time of advisory}
 #'  \item{Windfield}{Minimum wind speed expected}
 #'  \item{NE}{Radius of `Windfield` in the northeast quadrant}
 #'  \item{SE}{Radius of `Windfield` in the southeast quadrant}
@@ -608,7 +608,7 @@ tidy_wr <- function(df) {
         dplyr::rename(
           "StormKey" = "StormKey",
           "Adv" = "Adv",
-          "Date" = "Date",
+          "DateTime" = "DateTime",
           "NE" = paste0("NE", y),
           "SE" = paste0("SE", y),
           "SW" = paste0("SW", y),
@@ -621,7 +621,7 @@ tidy_wr <- function(df) {
     )) |>
 
     # Order by Date then Adv since Adv is character. Results as expected.
-    dplyr::arrange(.data$StormKey, .data$Date, .data$Adv, .data$WindField)
+    dplyr::arrange(.data$StormKey, .data$DateTime, .data$Adv, .data$WindField)
 
   # Remove NA rows for windfield quadrants
   wr <- wr[stats::complete.cases(wr$NE, wr$SE, wr$SW, wr$NW),]
@@ -639,7 +639,7 @@ tidy_wr <- function(df) {
 #' \describe{
 #'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
-#'  \item{Date}{Date and time of advisory}
+#'  \item{DateTime}{Date and time of advisory}
 #'  \item{FcstDate}{Forecast date and time in UTC}
 #'  \item{Lat}{Forecast latitude}
 #'  \item{Lon}{Forecast Longitude}
@@ -678,7 +678,7 @@ tidy_fcst <- function(df) {
 
       df |>
         dplyr::select(c("StormKey", "Adv", "Date", paste0("Hr", y, v))) |>
-        dplyr::rename("StormKey" = "StormKey", "Adv" = "Adv", "Date" = "Date",
+        dplyr::rename("StormKey" = "StormKey", "Adv" = "Adv", "DateTime" = "DateTime",
 
                       "FcstDate" = paste0("Hr", y, "FcstDate"),
                       "Lat" = paste0("Hr", y, "Lat"),
@@ -705,7 +705,7 @@ tidy_fcst <- function(df) {
 #' \describe{
 #'  \item{StormKey}{Unique identifier of cyclone}
 #'  \item{Adv}{Advisory number}
-#'  \item{Date}{Date and time of advisory}
+#'  \item{DateTime}{Date and time of advisory}
 #'  \item{FcstDate}{Forecast date and time in UTC}
 #'  \item{WindField}{Minimum sustained wind field for quadrants}
 #'  \item{NE}{Radius in nautical miles for northeast quadrant}
@@ -753,7 +753,7 @@ tidy_fcst_wr <- function(df) {
           dplyr::rename(
             "StormKey" = "StormKey",
             "Adv" = "Adv",
-            "Date" = "Date",
+            "DateTime" = "DateTime",
             "FcstDate" = paste0("Hr", x, "FcstDate"),
             "NE" = paste0("Hr", x, "NE", z),
             "SE" = paste0("Hr", x, "SE", z),

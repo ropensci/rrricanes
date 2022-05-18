@@ -6,7 +6,7 @@
 #'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
 #'   etc.}
 #'   \item{Name}{Name of storm}
-#'   \item{Date}{Date of advisory issuance}
+#'   \item{DateTime}{Date of advisory issuance}
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param links URL to storm's archive page.
@@ -39,7 +39,7 @@ posest <- function(contents) {
   tibble::tibble(
     Status = status[,1],
     Name = status[,2],
-    Date = issue_date,
+    DateTime = issue_date,
     Contents = contents
   )
 
