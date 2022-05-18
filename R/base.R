@@ -237,8 +237,8 @@ nm_to_sm <- function(x) {
 #' @examples
 #' saffir(c(32, 45, 70, 90, 110, 125, 140))
 #' @export
-saffir <- function(x,max.levels = 0) {
-  lvl <- cut(x, breaks = c(0, 34, 65, 84, 96, 114, 135, 500),
+saffir <- function(x) {
+  cut(x, breaks = c(0, 34, 65, 84, 96, 114, 135, 500),
       labels = c("TD","TS", "HU1","HU2", "HU3","HU4","HU5"),
       ordered_result = TRUE)
 }
