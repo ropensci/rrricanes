@@ -12,6 +12,6 @@ extract_product_contents(links, products)
 \item{product}{specific product to parse}
 }
 \description{
-Get and parse product contents for each links
+Get and parse product contents for each link
 }
 \keyword{internal}
