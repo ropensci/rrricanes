@@ -22,7 +22,7 @@
 al_prblty_stations <- function() {
   url <- sprintf(
     "%sdata/wsp/al_prblty_station.lst.csv.txt",
-    get_nhc_link(protocol = "http")
+    get_nhc_link(withTrailingSlash = TRUE)
   )
   parse_stations(url)
 }
@@ -104,6 +104,7 @@ get_wndprb <- function(links) {
 }
 
 #' @title parse_stations
+#'
 #' @description Parse probability station listings for each basin.
 #' @details At the moment, documentation on the format is unavailable. The
 #' format changed during the 2017/2018 offseason and now includes a

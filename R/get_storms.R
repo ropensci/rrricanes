@@ -106,12 +106,12 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
 
   links <- year_archives_link(years)
 
+  contents <- rrricanes::get_url_contents(links)
 
-
-  contents <- rrricanes:::get_url_contents(links)
-
-  purrr::map_df(basins, extract_storms, contents)
-
+  storms <- purrr::map_df(basins, extract_storms, contents)
+  attr(storms, "years") <- years
+  attr(storms, basins) <- basins
+  storms
 }
 
 #' @title year_archives_link
@@ -119,7 +119,7 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
 #' @param year 4-digit numeric
 #' @keywords internal
 year_archives_link <- function(years) {
-  nhc_link <- get_nhc_link()
+  nhc_link <- rrricanes:::get_nhc_link()
   archive_links <-ifelse(years != 1998,
     sprintf(stringr::str_c(nhc_link, 'archive/%i/'), years),
     # 1998 is only year with slightly different URL. Modify accordingly
