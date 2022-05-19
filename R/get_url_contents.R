@@ -38,7 +38,7 @@ get_url_contents <- function(links) {
   p <- dplyr::progress_estimated(n = length(links))
 
   contents <-
-    links %>%
+    links |>
     purrr::imap(.f = function(x, y) {
 
       if (as.numeric(y) != length(links)) {

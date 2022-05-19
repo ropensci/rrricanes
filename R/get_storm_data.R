@@ -39,6 +39,7 @@ extract_product_contents <- function(links, products) {
 #' @title extract_storm_links
 #' @description Extract product links from a storm's archive page
 #' @param links URLs to a storm's archive page
+#' @param products Products to return
 #' @export
 extract_storm_links <- function(links, products) {
   years <- attr(df, "years")
@@ -148,7 +149,8 @@ get_storm_data <- function(links,
   filtered_links
 }
 #' @title get_product_links
-#' @param link data frame containing Link
+#' @param links data frame containing Link that lists storm page urls
+#' @param product Data product
 #' @return vector of links for specific storm and product
 get_product_links<- function(links, product){
   year <-attr(links, "years")
