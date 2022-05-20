@@ -119,7 +119,7 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
 #' @param year 4-digit numeric
 #' @keywords internal
 year_archives_link <- function(years) {
-  nhc_link <- rrricanes:::get_nhc_link()
+  nhc_link <- get_nhc_link()
   archive_links <-ifelse(years != 1998,
     sprintf(stringr::str_c(nhc_link, 'archive/%i/'), years),
     # 1998 is only year with slightly different URL. Modify accordingly

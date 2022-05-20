@@ -66,7 +66,7 @@ extract_storm_links <- function(links, products) {
                    product_links[years == 1998])
   product_links[years == 1998] <- sub("archive", "/1998/archive",
                                       product_links[years == 1998], fixed = TRUE)
- product_links <- paste0(rrricanes::get_nhc_link(withTrailingSlash = FALSE), product_links)
+ product_links <- paste0(get_nhc_link(withTrailingSlash = FALSE), product_links)
  product_links <- product_links[grep(products, product_links, fixed = TRUE)]
 
   product_links
