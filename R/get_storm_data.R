@@ -10,7 +10,7 @@ extract_product_contents <- function(links, products) {
 
   contents <-
     links |>
-    rrricanes::get_url_contents()
+    get_url_contents()
 
     # Read in contents as html
     # If text is not within html, then we simply need to return the text.
@@ -30,9 +30,9 @@ extract_product_contents <- function(links, products) {
       }
     })
 
-  contents <- data.frame(Text = contents)
-
-    purrr::map(.x= contents, .f = products)
+  #contents <- data.frame(Text = contents)
+   #products <- paste0("rrricanes:::", products)
+    purrr::map(.x= contents, .f = match.fun(products[1]))
 
 }
 

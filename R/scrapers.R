@@ -206,7 +206,7 @@ scrape_header <- function(contents, ptn_product_title,
   # products.
   # (timtrice): Added backtick for AL162005 public #18
   ptn_header <- paste0("^[\\w\\d\\s\\W]*?\\w{3}\\s*\\w{3}\\s*\\d{1,2}\\s*\\d{4}[\\s\n\r]*")
-
+  a_n <<-advisory_number
   header <- stringr::str_extract(contents, ptn_header)
 
   # Storm status patterns
@@ -222,14 +222,13 @@ scrape_header <- function(contents, ptn_product_title,
     ptn_status, ptn_names, ptn_product_title, sep = "\\s"
   )
 
-  if (advisory_number) {
-    ptn <-  stringr::str_c(ptn, ptn_adv, sep = "\\s")
-    matches <- stringr::str_match(header, ptn)[,2:4]
-  } else {
-    matches <- stringr::str_match(header, ptn)[,2:3]
-    status <- apply(stringr::str_match(header, ptn)[,2:3], 2, stringr::str_to_title)
-  }
-
+matches <-  ifelse(advisory_number,
+     stringr::str_match(header,
+                        stringr::str_c(ptn, ptn_adv, sep = "\\s"))[,2:4],
+    stringr::str_match(header, ptn)[,2:3]
+)
+# this was in the second part of ifelse
+status <- stringr::str_c(ptn, ptn_adv, sep = "\\s")
   # String-to-title Status and Name
 
   if (is.null(ncol(matches))) {

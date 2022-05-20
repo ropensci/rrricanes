@@ -52,17 +52,18 @@ fstadv_prev_pos <- function(contents, adv_date) {
   matches <- stringr::str_match(contents, ptn)[,2:5]
 
   prev_pos_date <- adv_date - lubridate::hours(3)
-  prev_pos_lat <- ifelse(matches[,2] == "S",
-                         as.numeric(matches[,1]) * -1,
-                         as.numeric(matches[,1]))
-  prev_pos_lon <- ifelse(matches[,4] == "W",
-                         as.numeric(matches[,3]) * -1,
-                         as.numeric(matches[,3]))
-  tibble::tibble(
+  prev_pos_lat <- ifelse(matches[2] == "S",
+                         as.numeric(matches[1]) * -1,
+                         as.numeric(matches[1]))
+  prev_pos_lon <- ifelse(matches[4] == "W",
+                         as.numeric(matches[3]) * -1,
+                         as.numeric(matches[3]))
+  prev_pos_date<-tibble::tibble(
     PrevPosDate = prev_pos_date,
     PrevPosLat = prev_pos_lat,
-    PrevPosLon = prev_pos_lon) |>
-    split(seq(nrow(.)))
+    PrevPosLon = prev_pos_lon)
+
+    split(prev_pos_date, seq(nrow(prev_pos_date)))
 }
 
 #' @title fstadv_lat_lon
@@ -111,10 +112,11 @@ fstadv_seas <- function(content) {
                         "[:blank:]+([0-9]{1,3})SW",
                         "[:blank:]+([0-9]{1,3})NW")
 
-  df <- stringr::str_match(content, ptn)[,2:5] |>
-    apply(MARGIN = 2L, FUN = as.numeric) |>
-    tibble::as_tibble(.name_repair = "minimal") |>
-    rlang::set_names(nm = stringr::str_c("Seas", c("NE", "SE", "SW", "NW")))
+  df <- stringr::str_match(content, ptn)[,2:5]
+  df <- lapply(df, FUN = as.numeric)
+  df <- tibble::as_tibble(df, .name_repair = "minimal")
+  df <- rlang::set_names(df, nm = quads)
+#  df <-  rlang::set_names(nm = stringr::str_c("Seas", quads))
   split(df, seq(nrow(df)))
 }
 
@@ -152,9 +154,11 @@ fstadv_wind_radius <- function(content) {
                         "SW[:blank:]+([:digit:]{1,3})",
                         "NW[[:punct:][:space:]]+)?")
 
-  df <- stringr::str_match(content, ptn)[,2:16] |>
-    apply(MARGIN = 2L, FUN = as.numeric) |>
-    tibble::as_tibble(.name_repair = "minimal") |>
+  df <- stringr::str_match(content, ptn)[2:16]
+
+  #df <-  apply(df, MARGIN = 2L, FUN = as.numeric)
+  df <-  lapply(df, FUN = as.numeric)
+  df <- df |> tibble::as_tibble(.name_repair = "minimal") |>
     rlang::set_names(nm = c("WindField64", "NE64", "SE64", "SW64", "NW64",
                             "WindField50", "NE50", "SE50", "SW50", "NW50",
                             "WindField34", "NE34", "SE34", "SW34", "NW34")) |>
