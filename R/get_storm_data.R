@@ -42,7 +42,7 @@ extract_product_contents <- function(links, products) {
 #' @param products Products to return
 #' @export
 extract_storm_links <- function(links, products) {
-  years <- attr(df, "years")
+  years <- attr(links, "years")
   if (!is.vector(links$Link))
     stop("Links must be a character vector.", call. = FALSE)
 
