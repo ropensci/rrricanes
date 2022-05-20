@@ -4,10 +4,12 @@
 \alias{extract_storm_links}
 \title{extract_storm_links}
 \usage{
-extract_storm_links(links)
+extract_storm_links(links, products)
 }
 \arguments{
-\item{links}{URLs to a storm's archive page}
+\item{links}{data frame with URLs to a storm's archive page}
+
+\item{products}{Products to return}
 }
 \description{
 Extract product links from a storm's archive page

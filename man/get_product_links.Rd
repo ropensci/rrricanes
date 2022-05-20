@@ -7,7 +7,9 @@
 get_product_links(links, product)
 }
 \arguments{
-\item{link}{url to a storm page}
+\item{links}{data frame containing Link that lists storm page urls}
+
+\item{product}{Data product}
 }
 \value{
 vector of links for specific storm and product
