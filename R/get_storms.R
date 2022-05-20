@@ -106,12 +106,12 @@ get_storms <- function(years = format(Sys.Date(), "%Y"),
 
   links <- year_archives_link(years)
 
+  contents <- rrricanes::get_url_contents(links)
 
-
-  contents <- rrricanes:::get_url_contents(links)
-
-  purrr::map_df(basins, extract_storms, contents)
-
+  storms <- purrr::map_df(basins, extract_storms, contents)
+  attr(storms, "years") <- years
+  attr(storms, basins) <- basins
+  storms
 }
 
 #' @title year_archives_link

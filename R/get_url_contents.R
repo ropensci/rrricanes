@@ -25,28 +25,25 @@ get_url_contents <- function(links) {
       # Remove bad `grouped_links`
       results <- results[-bad_results_ind]
     }
-    purrr::map_chr(results, ~.$parse(encoding = "UTF-8"))
+    purrr::map_chr(results, ~.$parse("UTF-8"))
   }
 
   # Create groups of links divisible by 80. We are to allow no more than 80
   # requests every 10 seconds. If length of `link` is less than 80, then will
   # only have one group and should have no delay.
-  groups <- ceiling(seq(links)/80)
-
-  if (is.vector(links)) {
-    links <- split(links, groups)
-  }
+  groups <- ceiling(seq_along(1:length(links))/80)
+  links <- split(links, groups)
 
   # Set progress bar
   p <- dplyr::progress_estimated(n = length(links))
 
   contents <-
-    purrr::imap(links, .f = function(x, y) {
+    links |>
+    purrr::imap(.f = function(x, y) {
 
       if (as.numeric(y) != length(links)) {
         # Send group of links to `download_txt`
         txt <- download_text(x)
-
         # We are not in the last group; apply a delay
         p$tick()$print()
         if (getOption("rrricanes.working_msg"))
@@ -61,5 +58,4 @@ get_url_contents <- function(links) {
     })
 
   purrr::flatten_chr(contents)
-
 }

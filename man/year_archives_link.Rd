@@ -4,7 +4,7 @@
 \alias{year_archives_link}
 \title{year_archives_link}
 \usage{
-year_archives_link(year)
+year_archives_link(years)
 }
 \arguments{
 \item{year}{4-digit numeric}
