@@ -38,7 +38,7 @@ extract_product_contents <- function(links, products) {
 
 #' @title extract_storm_links
 #' @description Extract product links from a storm's archive page
-#' @param links URLs to a storm's archive page
+#' @param links data frame with URLs to a storm's archive page
 #' @param products Products to return
 #' @export
 extract_storm_links <- function(links, products) {
