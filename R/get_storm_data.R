@@ -30,10 +30,13 @@ extract_product_contents <- function(links, products) {
       }
     })
 
-  #contents <- data.frame(Text = contents)
-   #products <- paste0("rrricanes:::", products)
-    purrr::map(.x= contents, .f = match.fun(products[1]))
 
+}
+#' concept for isolating this step
+#' @keywords internal
+
+parse_product_contents <- function(contents, products){
+  purrr::map(.x= contents, .f = match.fun(products))
 }
 
 #' @title extract_storm_links
@@ -61,15 +64,13 @@ extract_storm_links <- function(links, products) {
   # other years, product_links are absolute. If product_links exist for 1998
   # they must be modified. All product_links must then be prefixed with
   # NHC URL.
-  product_links[years == 1998] <- stringr::str_c (
-    "archive/1998/",
-                   product_links[years == 1998])
-  product_links[years == 1998] <- sub("archive", "/1998/archive",
-                                      product_links[years == 1998], fixed = TRUE)
- product_links <- paste0(get_nhc_link(withTrailingSlash = FALSE), product_links)
- product_links <- product_links[grep(products, product_links, fixed = TRUE)]
-
-  product_links
+ product_links <- ifelse(years != 1998,
+                paste0(get_nhc_link(withTrailingSlash = FALSE), product_links),
+                paste0(get_nhc_link(withTrailingSlash = FALSE), "/1998/archive",
+                       product_links)
+                         )
+ # Needs to be revised to handle multiple products
+ product_links[grep(products, product_links, fixed = TRUE)]
 }
 
 #' @title get_product
@@ -77,12 +78,10 @@ extract_storm_links <- function(links, products) {
 #'   functions. Given the product and links, it will begin the scraping
 #'   process and return a dataset for that product.
 #' @keywords internal
-get_product <- function(links, product) {
+get_product <- function(links, products) {
 
-#    get_product_links(links, product)
-    product_data <- purrr::map2(links,.y = product, .f = get_storm_data)
-
-    purrr::flatten_df(product_data)
+     product_data <- get_storm_data(links, products)
+    #purrr::flatten_df(product_data)
 }
 
 #' @title get_storm_data
@@ -139,15 +138,9 @@ get_storm_data <- function(links,
                                        "wndprb")) {
 
   products <- match.arg(products, several.ok = TRUE)
+   extract_product_contents(links, products)
+  # purrr::map2(links, products, extract_product_contents)
 
-  #product_links <- rrricanes::extract_storm_links(links, products)
-
-    # Filter links based on products and make one-dimensional
-  #filtered_links <- lapply(products,function(x) grep(x, product_links,
-   #                                                value = TRUE,
-    #                                               fixed = TRUE))
-  purrr::map2(links, products, extract_product_contents)
-  #filtered_links
 }
 #' @title get_product_links
 #' @param links data frame containing Link that lists storm page urls
@@ -163,9 +156,6 @@ get_product_links<- function(links, product){
     extract_storm_links(links, product)
   product_links <- grep(product, product_links,
                        fixed = TRUE, value = TRUE)
- # product_links <-ifelse(year != 1998,
- #  paste0(get_nhc_link(withTrailingSlash=FALSE), product_links),
- #   paste0(get_nhc_link(withTrailingSlash=TRUE), product_links)
- #  )
+
   product_links
 }

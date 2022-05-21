@@ -1,59 +1,59 @@
 library(dplyr)
 
-AL122005 <-
-  "%sarchive/2005/KATRINA.shtml?" |>
-  sprintf(rrricanes:::get_nhc_link()) |>
-  rrricanes:::extract_storm_links()
+#AL122005 <-
+#  "%sarchive/2005/KATRINA.shtml?" |>
+#  sprintf(rrricanes:::get_nhc_link()) |>
+#  rrricanes::extract_storm_links()
 
-files <- list(
-  "AL011991" = list(
-    "fstadv" = c("mal0191.001")
-  ),
-  "AL011998" = list(
-    "fstadv" = c("mal0198.001")
-  ),
-  "AL151999" = list(
-    "fstadv" = c("mal1599.001")
-  ),
-  "AL012001" = list(
-    "fstadv" = c("al012001.fstadv.001", "al012001.fstadv.004")
-  ),
-  "AL012003" = list(
-    "fstadv" = c("al012003.fstadv.001")
-  ),
-  "AL012004" = list(
-    "fstadv" = c("al012004.fstadv.012")
-  ),
-  "AL012011" = list(
-    "fstadv" = c("al012011.fstadv.010")
-  ),
-  "AL012012" = list(
-    "fstadv" = c("al012012.fstadv.012")
-  ),
-  "AL022017" = list(
-    "fstadv" = c("al022017.fstadv.001")
-  ),
-  "AL102008" = list(
-    "fstadv" = c("al102008.fstadv.017")
-  ),
-  "AL102017" = list(
-    "fstadv" = c("al102017.fstadv.004")
-  ),
-  "AL052011" = list(
-    "fstadv" = c("al052011.fstadv.001")
-  ),
-  "CP031994" = list(
-    "fstadv" = c("mcp0394.001")
-  ),
-  "EP132014" = list(
-      "fstadv" = c("ep132014.fstadv.001.08220251")
-  )
-)
-
-AL092008 <-
-  "%sarchive/2008/IKE.shtml?" |>
-  sprintf(rrricanes:::get_nhc_link()) |>
-  rrricanes:::extract_storm_links()
+# files <- list(
+#   "AL011991" = list(
+#     "fstadv" = c("mal0191.001")
+#   ),
+#   "AL011998" = list(
+#     "fstadv" = c("mal0198.001")
+#   ),
+#   "AL151999" = list(
+#     "fstadv" = c("mal1599.001")
+#   ),
+#   "AL012001" = list(
+#     "fstadv" = c("al012001.fstadv.001", "al012001.fstadv.004")
+#   ),
+#   "AL012003" = list(
+#     "fstadv" = c("al012003.fstadv.001")
+#   ),
+#   "AL012004" = list(
+#     "fstadv" = c("al012004.fstadv.012")
+#   ),
+#   "AL012011" = list(
+#     "fstadv" = c("al012011.fstadv.010")
+#   ),
+#   "AL012012" = list(
+#     "fstadv" = c("al012012.fstadv.012")
+#   ),
+#   "AL022017" = list(
+#     "fstadv" = c("al022017.fstadv.001")
+#   ),
+#   "AL102008" = list(
+#     "fstadv" = c("al102008.fstadv.017")
+#   ),
+#   "AL102017" = list(
+#     "fstadv" = c("al102017.fstadv.004")
+#   ),
+#   "AL052011" = list(
+#     "fstadv" = c("al052011.fstadv.001")
+#   ),
+#   "CP031994" = list(
+#     "fstadv" = c("mcp0394.001")
+#   ),
+#   "EP132014" = list(
+#       "fstadv" = c("ep132014.fstadv.001.08220251")
+#   )
+# )
+#
+# AL092008 <-
+#   "%sarchive/2008/IKE.shtml?" |>
+#   sprintf(rrricanes::get_nhc_link()) |>
+#   rrricanes::extract_storm_links()
 
 ## ---- Saved Data -------------------------------------------------------------
 df.tests <- system.file("extdta", "test_datasets.RData", package = "rrricanes")
