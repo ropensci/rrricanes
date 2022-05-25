@@ -43,9 +43,9 @@ discus <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
-    Status = status[,1],
-    Name = status[,2],
-    Adv = as.numeric(status[,3]),
+    Status = status[1],
+    Name = status[2],
+    Adv = as.numeric(status[3]),
     Date = issue_date,
     StormKey = key,
     Contents = contents

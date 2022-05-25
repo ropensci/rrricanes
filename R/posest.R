@@ -19,7 +19,7 @@ get_posest <- function(links) {
 #' @title posest
 #' @description Extrapolate data from Position Estimate products.
 #' @details Given a direct link to a position estimate product, parse and return
-#' dataframe of values.
+#' data frame of values.
 #' @param contents URL of a specific position estimate product
 #' @return Dataframe
 #' @seealso \code{\link{get_posest}}
@@ -37,8 +37,8 @@ posest <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
-    Status = status[,1],
-    Name = status[,2],
+    Status = status[1],
+    Name = status[2],
     Date = issue_date,
     Contents = contents
   )

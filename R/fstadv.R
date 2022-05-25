@@ -79,7 +79,7 @@
 #' }
 #' @export
 get_fstadv <- function(links) {
-  get_product(links = links, product = "fstadv")
+  get_product(links = links, products = "fstadv")
 }
 
 #' @title fstadv
@@ -125,14 +125,13 @@ fstadv <- function(contents) {
       PosAcc = posacc,
       FwdDir = fwd_mvmt[,1],
       FwdSpeed = fwd_mvmt[,2],
-      Eye = eye #,
-      #Seas = seas,
-      #WindRadius = wind_radius,
-      #Forecast = forecasts
-  ) |> bind_rows(list(seas,
-       wind_radius,
-      forecasts))
+      Eye = eye ,
+      Seas = seas,
+      WindRadius = wind_radius,
+      Forecast = forecasts
+  ) #|> bind_rows(list(seas,
+     #  wind_radius,
+    #  forecasts))
 
    fstadv.data
 }
-

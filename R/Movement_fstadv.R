@@ -113,8 +113,7 @@ fstadv_seas <- function(content) {
                         "[:blank:]+([0-9]{1,3})NW")
 
   df <- stringr::str_match(content, ptn)[,2:5]
-  df <- tibble::as_tibble(df)
-  colnames(df) <- paste0("Seas", quads)
+  df <- tibble::as_tibble(df, .name_repair = ~paste0("Seas", quads))
   dplyr::mutate(df, dplyr::across(.cols = everything(), as.numeric))
 }
 
@@ -153,12 +152,12 @@ fstadv_wind_radius <- function(content) {
                         "NW[[:punct:][:space:]]+)?")
 
   df <- stringr::str_match(content, ptn)[2:16]
-  df <- df |> tibble::as_tibble(.name_repair = "minimal")
+  df <- df |>
+    tibble::as_tibble(.name_repair =
+                        ~c(paste0("WindField",c( "NE64", "SE64", "SW64", "NW64",
+                                    "NE50", "SE50", "SW50", "NW50",
+                                     "NE34", "SE34", "SW34", "NW34"))))
   df <-  df |> dplyr::mutate(dplyr::across( everything(), as.numeric))
-  print(df)
-  colnames(df) <-  c(paste0("WindField",c( "NE64", "SE64", "SW64", "NW64",
-                      "NE50", "SE50", "SW50", "NW50",
-                     "NE34", "SE34", "SW34", "NW34")))
 
   df
 }
@@ -231,7 +230,6 @@ fstadv_forecasts <- function(contents, key, adv, adv_date) {
       df,
       # Prepend forecast variables with "Hr", the value of `hr`, and the
       # variable name.
-      #nm = c(names(df)[1], stringr::str_c("Hr", hr, names(df)[3:19]))
       nm = c(names(df)[1:2], stringr::str_c("Hr", hr, names(df)[3:19]))
     )
 
@@ -299,15 +297,14 @@ fstadv_forecasts <- function(contents, key, adv, adv_date) {
   # Convert to tibble cause God I hate working with lists like this though I
   # know I need the practice...)
   forecasts <- forecasts |>
-    purrr::map(tibble::as_tibble, .name_repair = "minimal")
+    purrr::map(tibble::as_tibble, .name_repair = ~nm =
+                 c( "FcstDate", "Hour", "Minute",
+                          "Lat", "LatHemi", "Lon", "LonHemi",
+                          "Wind", "Gust", stringr::str_c(quads, "64"),
+                        stringr::str_c(quads, "50"),
+                        stringr::str_c(quads, "34"))
+  )
 
-  forecasts <- forecasts |> purrr::map(rlang::set_names,
-               #Took String back out
-               nm = c( "ForDate", "Hour", "Minute",
-                      "Lat", "LatHemi", "Lon", "LonHemi",
-                      "Wind", "Gust", stringr::str_c(quads, "64"),
-                      stringr::str_c(quads, "50"),
-                      stringr::str_c(quads, "34")))
 
   forecast_periods <- c(12, 24, 36, 48, 72, 96, 120)
 
@@ -322,9 +319,9 @@ fstadv_forecasts <- function(contents, key, adv, adv_date) {
       Adv = as.numeric(adv),
       AdvDate = adv_date,
       Forecasts = forecasts
-    ) |>
-    tidyr::unnest(cols = c(.data$Forecasts)) |>
-    dplyr::group_by(.data$StormKey, .data$Adv) |>
+    )
+   df_forecasts <-  tidyr::unnest(df_forecasts, cols = c(.data$Forecasts))
+   df_forecasts <-  dplyr::group_by(df_forecasts,.data$StormKey, .data$Adv)
 
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
@@ -333,11 +330,11 @@ fstadv_forecasts <- function(contents, key, adv, adv_date) {
     # Additionally, though rare, we need to account for storms that generate one
     # year but degenerate the next. There is one instance of an EP cyclone doing
     # this but I cannot recall which one. Oops... So, check for the year as well.
-    dplyr::mutate(
+   df_forecasts <-  dplyr::mutate(df_forecasts,
       # Add var for forecast periods, limited to size of each group
       FcstPeriod = forecast_periods[1:dplyr::n()],
       FcstMonth = dplyr::case_when(
-        as.numeric(.data$ForDate) < lubridate::day(.data$AdvDate) ~ lubridate::month(.data$AdvDate) + 1,
+        as.numeric(.data$FcstDate) < lubridate::day(.data$AdvDate) ~ lubridate::month(.data$AdvDate) + 1,
         TRUE                                       ~ lubridate::month(.data$AdvDate)
       ),
       FcstYear = dplyr::case_when(
@@ -347,7 +344,7 @@ fstadv_forecasts <- function(contents, key, adv, adv_date) {
       FcstDate = lubridate::ymd_hms(
         strftime(
           paste(
-            paste(.data$FcstYear, .data$FcstMonth, .data$ForDate, sep = "-"),
+            paste(.data$FcstYear, .data$FcstMonth, .data$FcstDate, sep = "-"),
             paste(.data$Hour, .data$Minute, "00", sep = ":"),
             sep = " "
           ),
@@ -364,9 +361,14 @@ fstadv_forecasts <- function(contents, key, adv, adv_date) {
         LonHemi == "W" ~ as.numeric(.data$Lon) * -1,
         TRUE           ~ as.numeric(.data$Lon)
       )
-    ) |>
+    )
+
     # Make Wind, Gust, relative wind/gust vars and sea vars all numeric
-    dplyr::mutate_at(dplyr::vars(.data$Wind:.data$NW34), .funs = as.numeric)
+    df_forecasts <-df_forecasts |>
+      dplyr::mutate(
+         dplyr::across(c(NE34, SE34, SW34, NW34),
+                     .funs = as.numeric)
+         )
 
   df <- rebuild_forecasts(12, df = df_forecasts)
 

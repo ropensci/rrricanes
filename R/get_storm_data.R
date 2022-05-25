@@ -29,14 +29,14 @@ extract_product_contents <- function(links, products) {
           stringr::str_to_upper()
       }
     })
-
-
 }
 #' concept for isolating this step
 #' @keywords internal
 
 parse_product_contents <- function(contents, products){
-  purrr::map(.x= contents, .f = match.fun(products))
+  f <- match.fun(products)
+  f(contents)
+  #purrr::map(.x= contents, .f = match.fun(products))
 }
 
 #' @title extract_storm_links
@@ -45,6 +45,9 @@ parse_product_contents <- function(contents, products){
 #' @param products Products to return
 #' @export
 extract_storm_links <- function(links, products) {
+  if (length(links) == 0 ){
+    stop("The links vector is empty.")
+  }
   years <- attr(links, "years")
   if (!is.vector(links$Link))
     stop("Links must be a character vector.", call. = FALSE)
@@ -54,21 +57,22 @@ extract_storm_links <- function(links, products) {
       links$Link)
     product_links <-rvest::html_elements(html, "table td a")
     product_links <-  rvest::html_attr(x=product_links, name = "href")
+
     # Ensure we're only capturing archive pages
     product_links <- grep("archive", product_links, value = TRUE, fixed = TRUE)
-
   #product_links <- product_links[stats::complete.cases(product_links)]
  product_links <- product_links[!is.na(product_links)]
-
   # 1998 product links are relative and prefixed with "/archive/1998/" whereas
   # other years, product_links are absolute. If product_links exist for 1998
   # they must be modified. All product_links must then be prefixed with
   # NHC URL.
- product_links <- ifelse(years != 1998,
+
+ product_links <- ifelse(!is.na(product_links) &years != 1998,
                 paste0(get_nhc_link(withTrailingSlash = FALSE), product_links),
                 paste0(get_nhc_link(withTrailingSlash = FALSE), "/1998/archive",
                        product_links)
-                         )
+            )
+
  # Needs to be revised to handle multiple products
  product_links[grep(products, product_links, fixed = TRUE)]
 }
@@ -79,9 +83,8 @@ extract_storm_links <- function(links, products) {
 #'   process and return a dataset for that product.
 #' @keywords internal
 get_product <- function(links, products) {
-
      product_data <- get_storm_data(links, products)
-    #purrr::flatten_df(product_data)
+     product_data
 }
 
 #' @title get_storm_data
@@ -138,7 +141,7 @@ get_storm_data <- function(links,
                                        "wndprb")) {
 
   products <- match.arg(products, several.ok = TRUE)
-   extract_product_contents(links, products)
+  extract_product_contents(links, products)
   # purrr::map2(links, products, extract_product_contents)
 
 }

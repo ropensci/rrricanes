@@ -57,6 +57,7 @@ get_url_contents <- function(links) {
         download_text(x)
       }
     })
-
-  purrr::flatten_chr(contents)
+  contents <- unsplit(contents, groups)
+contents
+  #purrr::flatten_chr(contents)
 }
