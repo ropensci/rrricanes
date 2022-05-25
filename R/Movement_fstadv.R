@@ -297,7 +297,7 @@ fstadv_forecasts <- function(contents, key, adv, adv_date) {
   # Convert to tibble cause God I hate working with lists like this though I
   # know I need the practice...)
   forecasts <- forecasts |>
-    purrr::map(tibble::as_tibble, .name_repair = ~nm =
+    purrr::map(tibble::as_tibble, .name_repair = ~
                  c( "FcstDate", "Hour", "Minute",
                           "Lat", "LatHemi", "Lon", "LonHemi",
                           "Wind", "Gust", stringr::str_c(quads, "64"),
