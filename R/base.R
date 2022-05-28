@@ -145,9 +145,10 @@ quads <- c("NE", "SE", "SW", "NW")
 utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
                          "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
                          "WindField34", "WindField50", "WindField64", "lat",
-                         "long", "group", ".", "NW34", "name", "data", "Basin",
-                         stringr::str_c(c("NE", "SE", "SW", "NW", "64")),
-                         stringr::str_c(c("NE", "SE", "SW", "NW", "50")),
-                         stringr::str_c(c("NE", "SE", "SW", "NW", "34")),
+                         "long", "group", ".",  "name", "data", "Basin",
+                         stringr::str_c(c("NE", "SE", "SW", "NW"), "64"),
+                         stringr::str_c(c("NE", "SE", "SW", "NW"), "50"),
+                         stringr::str_c(c("NE", "SE", "SW", "NW"), "34"),
+                         "everything", "where",
                          "serial_numbers", "sid"))
 

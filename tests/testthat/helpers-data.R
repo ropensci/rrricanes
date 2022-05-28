@@ -59,16 +59,16 @@ library(dplyr)
 df.tests <- system.file("extdta", "test_datasets.RData", package = "rrricanes")
 
 ## ---- Get Data ---------------------------------------------------------------
-al_1998 <- get_storms(years = 1998, basins = "AL")
-al_2008 <- get_storms(years = 2008, basins = "AL")
-al_2017 <- get_storms(years = 2017, basins = "AL")
+#al_1998 <- rrricanes:::get_storms(years = 1998, basins = "AL")
+#al_2008 <- rrricanes:::get_storms(years = 2008, basins = "AL")
+#al_2017 <- rrricanes:::get_storms(years = 2017, basins = "AL")
 
-df.al_01_2017_products <- rrricanes:::get_storm_data(al_2017[[1,4]],
-                                             products = c("discus", "fstadv"))
-df.al_09_2008_discus <- rrricanes:::get_discus(al_2008[[9,4]])
-df.al_09_2008_fstadv <- rrricanes:::get_fstadv(al_2008[[9,4]])
-df.al_09_2008_posest <- rrricanes:::get_posest(al_2008[[9,4]])
-df.al_01_1998_prblty <- rrricanes:::get_prblty(al_1998[[1,4]])
-df.al_09_2008_public <- rrricanes:::get_public(al_2008[[9,4]])
-df.al_09_2008_update <- rrricanes:::get_update(al_2008[[9,4]])
-df.al_09_2008_wndprb <- rrricanes:::get_wndprb(al_2008[[9,4]])
+# df.al_01_2017_products <- rrricanes:::get_storm_data(al_2017[[1,4]],
+#                                              products = c("discus", "fstadv"))
+# df.al_09_2008_discus <- rrricanes:::get_discus(al_2008[[9,4]])
+# df.al_09_2008_fstadv <- rrricanes:::get_fstadv(al_2008[[9,4]])
+# df.al_09_2008_posest <- rrricanes:::get_posest(al_2008[[9,4]])
+# df.al_01_1998_prblty <- rrricanes:::get_prblty(al_1998[[1,4]])
+# df.al_09_2008_public <- rrricanes:::get_public(al_2008[[9,4]])
+# df.al_09_2008_update <- rrricanes:::get_update(al_2008[[9,4]])
+# df.al_09_2008_wndprb <- rrricanes:::get_wndprb(al_2008[[9,4]])
