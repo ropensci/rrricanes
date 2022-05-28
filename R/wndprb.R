@@ -199,41 +199,47 @@ wndprb <- function(contents) {
 
   wndprb <-
     contents |>
-    stringr::str_match_all(ptn) |>
-    purrr::map(tibble::as_tibble, .name_repair = "minimal") |>
-    purrr::map(
-      .f = rlang::set_names,
-      nm = c("X1", "Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
-             "Wind36",  "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
-             "Wind72Cum", "Wind96", "Wind96Cum", "Wind120", "Wind120Cum")
-    ) |>
-    purrr::map2(key, ~tibble::add_column(.x, StormKey = .y, .before = 1)) |>
+    stringr::str_match_all(ptn)
 
-    purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) |>
+  wndprb <- wndprb |>
+    purrr::map(
+      tibble::as_tibble,
+               .name_repair = ~c("X1", "Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
+                                 "Wind36",  "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
+                                 "Wind72Cum", "Wind96", "Wind96Cum", "Wind120", "Wind120Cum"))
+
+  wndprb <- wndprb |> purrr::map2(key,
+                            ~tibble::add_column(.x, StormKey = .y, .before = 1))
+
+  wndprb <- wndprb |>
+    purrr::map2(status[3], ~tibble::add_column(.x, Adv = .y, .after = 2)) |>
     purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) |>
-    purrr::map_df(tibble::as_tibble, .name_repair = "minimal") |>
+    purrr::map_df(tibble::as_tibble, .name_repair = "unique") |>
     dplyr::select(-c("X1")) |>
     # Trim whitespace
-    dplyr::mutate_all(.funs = stringr::str_trim)
+    dplyr::mutate(dplyr::across(.cols = everything(), .funs = stringr::str_trim))
 
   # Make "X" values 0
-  wndprb[wndprb == "X"] <- "0"
+  #wndprb[wndprb == "X"] <- "0"
 
-  wndprb <- dplyr::mutate(
-    .tbl = wndprb,
-     dplyr::across(
-        .vars = "Date",
-        .funs = lubridate::ymd_hms
+  wndprb <- wndprb |> dplyr::mutate(
+         dplyr::across(
+          .cols = "Date",
+          .funs = lubridate::ymd_hms
      )
   )
-
+  wndprb <- wndprb |> dplyr::mutate(dplyr::across(where(is.character),
+                                            ~na_if(., "X"))) |>
   # Make Wind:Wind120Cum numeric
-  wndprb <- wndprb |> dplyr::mutate(
-    .tbl = wndprb,
+   dplyr::mutate(
     dplyr::across(
-    .vars = c(2, 5:18),
+    .cols = c(2, 5:18),
     .funs = "as.numeric"
-    )
-  )
+        )
+    ) # |> mutate(across(
+      # starts_with("Wind"), function(x)
+      # case_when(
+      # is.na(x) ~ 0,
+      # TRUE ~ x)))
 
 }
