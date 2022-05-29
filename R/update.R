@@ -36,8 +36,8 @@ update <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
-    Status = status[,1],
-    Name = status[,2],
+    Status = status[1],
+    Name = status[2],
     Date = issue_date,
     Key = key,
     Contents = contents

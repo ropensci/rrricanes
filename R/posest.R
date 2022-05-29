@@ -40,6 +40,7 @@ posest <- function(contents) {
     Status = status[1],
     Name = status[2],
     Date = issue_date,
+    StormKey = key,
     Contents = contents
   )
 

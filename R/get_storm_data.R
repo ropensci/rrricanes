@@ -5,6 +5,10 @@
 #' @keywords internal
 extract_product_contents <- function(links, products) {
 
+  if (length(links) == 0) {
+    stop("No links input, please check that the data exist.")
+  }
+
   # Some products may not exist within HTML but as strict text.
   safely_read_html <- purrr::safely(xml2::read_html)
 
