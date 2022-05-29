@@ -160,7 +160,7 @@ fstadv_wind_radius <- function(contents) {
                            "Windfield34", "NE34", "SE34", "SW34", "NW34"))
   df <- df |> dplyr::mutate(dplyr::across(.cols = everything(), as.numeric)) |>
               dplyr::select(-tidyselect::starts_with("WindField"))
-print(df)
+
   df
 }
 
@@ -198,7 +198,7 @@ fstadv_eye <- function(contents) {
 #' @title fstadv_forecasts
 #' @description Retrieve forecast data from FORECAST/ADVISORY products. Loads
 #'   into respective dataframes (df_forecasts, df_forecast_winds)
-#' @param content text content of FORECAST/ADVISORY
+#' @param contents text content of FORECAST/ADVISORY
 #' @param key Storm ID
 #' @param adv Advisory Number
 #' @param adv_date Date value of forecast/advisory product.
