@@ -207,7 +207,7 @@ scrape_header <- function(contents, ptn_product_title,
   # products.
   # (timtrice): Added backtick for AL162005 public #18
   ptn_header <- paste0("^[\\w\\d\\s\\W]*?\\w{3}\\s*\\w{3}\\s*\\d{1,2}\\s*\\d{4}[\\s\n\r]*")
-  a_n <<-advisory_number
+
   header <- stringr::str_extract(contents, ptn_header)
 
   # Storm status patterns

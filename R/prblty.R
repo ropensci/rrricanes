@@ -17,7 +17,7 @@
 #' @param links URL to storm's archive page.
 #' @export
 get_prblty <- function(links) {
-  get_product(links = links, product = "prblty")
+  get_product(links = links, products = "prblty")
 }
 
 #' @title prblty
@@ -68,8 +68,8 @@ prblty <- function(contents) {
   prblty <- prblty |>  purrr::map_df(tibble::as_tibble, .name_repair = "minimal") |>
     dplyr::select(-c("X1")) |>
     # Trim whitespace
-    dplyr::mutate(across(.cols = everything(), .fns = ~stringr::str_trim(.))) |>
-    dplyr::mutate(across(.cols = everything(), .fns = ~stringr::str_replace(
+    dplyr::mutate(dplyr::across(.cols = everything(), .fns = ~stringr::str_trim(.))) |>
+    dplyr::mutate(dplyr::across(.cols = everything(), .fns = ~stringr::str_replace(
                                                            .,
                                                            "X",
                                                            "O")))

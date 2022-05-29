@@ -12,7 +12,7 @@
 #' @seealso \code{\link{get_storms}}, \code{\link{update}}
 #' @export
 get_update <- function(links) {
-  get_product(links = links, product = "update")
+  get_product(links = links, products = "update")
 }
 
 #' @title update

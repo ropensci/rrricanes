@@ -150,5 +150,6 @@ utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
                          stringr::str_c(c("NE", "SE", "SW", "NW"), "50"),
                          stringr::str_c(c("NE", "SE", "SW", "NW"), "34"),
                          "everything", "where",
-                         "serial_numbers", "sid"))
+                         "serial_numbers", "sid", "Seas", "Forecast",
+                         "WindRadius"))
 

@@ -100,7 +100,7 @@ ep_prblty_stations <- function() {
 #' @return Data frame of wndprb information
 #' @export
 get_wndprb <- function(links) {
-  get_product(links = links, product = "wndprb")
+  get_product(links = links, products = "wndprb")
 }
 
 #' @title parse_stations
@@ -237,7 +237,7 @@ wndprb <- function(contents) {
   #  .cols = c( 5:18),
    # .fns = ~as.numeric()
     #    )
-   # ) # |> mutate(across(
+   # ) # |> dplyr::mutate(dplyr::across(
       # starts_with("Wind"), function(x)
       # case_when(
       # is.na(x) ~ 0,
