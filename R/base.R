@@ -127,6 +127,9 @@ NULL
   invisible()
   has_data <- base::requireNamespace("rrricanesdata", quietly = TRUE)
   .pkgenv[["has_data"]] <- has_data
+  pkg.env <- new.env(parent = emptyenv())
+  pkg.env$quad <- c("NE", "SE", "SW", "NW")
+
 }
 
 .onAttach <- function(libname, pkgname) {
@@ -140,15 +143,12 @@ hasData <- function(has_data = .pkgenv$has_data) {
   }
 }
 
-quads <- c("NE", "SE", "SW", "NW")
 
-utils::globalVariables(c("Date", "Hour", "Minute", "Lat", "LatHemi", "Lon",
-                         "LonHemi", "Wind", "Gust", "Month", "Year", "FcstDate",
-                         "WindField34", "WindField50", "WindField64", "lat",
-                         "long", "group", ".",  "name", "data", "Basin",
-                         stringr::str_c(c("NE", "SE", "SW", "NW"), "64"),
-                         stringr::str_c(c("NE", "SE", "SW", "NW"), "50"),
+utils::globalVariables(c(  "Date",
+                        "lat", "long", "group", ".",
                          stringr::str_c(c("NE", "SE", "SW", "NW"), "34"),
                          "everything", "where",
-                         "serial_numbers", "sid"))
+                         "serial_numbers", "sid",
+                         "Seas", "Forecast", "WindRadius"
+                        ))
 

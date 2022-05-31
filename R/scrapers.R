@@ -191,7 +191,8 @@ scrape_date <- function(header) {
 
 #' @title scrape_header
 #' @description Extract status, name, and advisory from products header.
-#' @param contents Text product
+#'
+#' @param contents text product contents
 #' @param ptn_product_title Pattern of product title to match
 #' @param advisory_number Default is true; set to false if product does not
 #'   have an advisory number.
@@ -206,7 +207,7 @@ scrape_header <- function(contents, ptn_product_title,
   # products.
   # (timtrice): Added backtick for AL162005 public #18
   ptn_header <- paste0("^[\\w\\d\\s\\W]*?\\w{3}\\s*\\w{3}\\s*\\d{1,2}\\s*\\d{4}[\\s\n\r]*")
-  a_n <<-advisory_number
+
   header <- stringr::str_extract(contents, ptn_header)
 
   # Storm status patterns
@@ -215,7 +216,7 @@ scrape_header <- function(contents, ptn_product_title,
   # Pattern for storm names
   ptn_names <- stringr::str_c("([\\w-]*?)")
 
-  ptn_adv = "NUMBER\\s+(\\d{1,3}\\w?)"
+  ptn_adv <- "NUMBER\\s+(\\d{1,3}\\w?)"
 
   # Combine patterns
   ptn <- stringr::str_c(
@@ -227,10 +228,10 @@ matches <-  ifelse(advisory_number,
                         stringr::str_c(ptn, ptn_adv, sep = "\\s"))[,2:4],
     stringr::str_match(header, ptn)[,2:3]
 )
+
 # this was in the second part of ifelse
 status <- stringr::str_c(ptn, ptn_adv, sep = "\\s")
   # String-to-title Status and Name
-
   if (is.null(ncol(matches))) {
     # working with a vector
     matches[1:2] <- stringr::str_to_title(matches[1:2])

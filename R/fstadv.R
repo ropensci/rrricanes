@@ -129,7 +129,13 @@ fstadv <- function(contents) {
       Seas = seas,
       WindRadius = wind_radius,
       Forecast = forecasts
-  ) #|> bind_rows(list(seas,
+  ) |>
+    tidyr::unnest(cols = c(Seas,
+                           WindRadius,
+                           Forecast),
+                   names_repair = "minimal")
+
+  #|> bind_rows(list(seas,
      #  wind_radius,
     #  forecasts))
 

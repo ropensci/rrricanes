@@ -100,7 +100,7 @@ ep_prblty_stations <- function() {
 #' @return Data frame of wndprb information
 #' @export
 get_wndprb <- function(links) {
-  get_product(links = links, product = "wndprb")
+  get_product(links = links, products = "wndprb")
 }
 
 #' @title parse_stations
@@ -228,15 +228,16 @@ wndprb <- function(contents) {
           .funs = lubridate::ymd_hms
      )
   )
+
   wndprb <- wndprb |> dplyr::mutate(dplyr::across(where(is.character),
-                                            ~na_if(., "X"))) |>
+                                            ~na_if(., "X"))) #|>
   # Make Wind:Wind120Cum numeric
-   dplyr::mutate(
-    dplyr::across(
-    .cols = c(2, 5:18),
-    .funs = "as.numeric"
-        )
-    ) # |> mutate(across(
+ #  dplyr::mutate(
+   # dplyr::across(
+  #  .cols = c( 5:18),
+   # .fns = ~as.numeric()
+    #    )
+   # ) # |> dplyr::mutate(dplyr::across(
       # starts_with("Wind"), function(x)
       # case_when(
       # is.na(x) ~ 0,

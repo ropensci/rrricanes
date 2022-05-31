@@ -130,7 +130,7 @@ fstadv_seas <- function(content) {
 #' @param contents text of product
 #' @return dataframe
 #' @keywords internal
-fstadv_wind_radius <- function(content) {
+fstadv_wind_radius <- function(contents) {
 
   ptn <- stringr::str_c("MAX SUSTAINED WINDS[:blank:]+[:digit:]{1,3} KT ",
                         "WITH GUSTS TO[:blank:]+[:digit:]{1,3} ",
@@ -151,13 +151,15 @@ fstadv_wind_radius <- function(content) {
                         "SW[:blank:]+([:digit:]{1,3})",
                         "NW[[:punct:][:space:]]+)?")
 
-  df <- stringr::str_match(content, ptn)[2:16]
-  df <- df |>
+  df <- stringr::str_match(contents, ptn) #[2:16]
+
+  df <- df[,2:16] |>
     tibble::as_tibble(.name_repair =
-                        ~c(paste0("WindField",c( "NE64", "SE64", "SW64", "NW64",
-                                    "NE50", "SE50", "SW50", "NW50",
-                                     "NE34", "SE34", "SW34", "NW34"))))
-  df <-  df |> dplyr::mutate(dplyr::across( everything(), as.numeric))
+                        ~c("WindField64","NE64", "SE64", "SW64", "NW64",
+                           "WindField50", "NE50", "SE50", "SW50", "NW50",
+                           "Windfield34", "NE34", "SE34", "SW34", "NW34"))
+  df <- df |> dplyr::mutate(dplyr::across(.cols = everything(), as.numeric)) |>
+              dplyr::select(-tidyselect::starts_with("WindField"))
 
   df
 }
@@ -196,7 +198,7 @@ fstadv_eye <- function(contents) {
 #' @title fstadv_forecasts
 #' @description Retrieve forecast data from FORECAST/ADVISORY products. Loads
 #'   into respective dataframes (df_forecasts, df_forecast_winds)
-#' @param content text content of FORECAST/ADVISORY
+#' @param contents text content of FORECAST/ADVISORY
 #' @param key Storm ID
 #' @param adv Advisory Number
 #' @param adv_date Date value of forecast/advisory product.
@@ -321,7 +323,7 @@ fstadv_forecasts <- function(contents, key, adv, adv_date) {
       Forecasts = forecasts
     )
    df_forecasts <-  tidyr::unnest(df_forecasts, cols = c(.data$Forecasts))
-   df_forecasts <-  dplyr::group_by(df_forecasts,.data$StormKey, .data$Adv)
+   df_forecasts <-  dplyr::group_by(df_forecasts, .data$StormKey, .data$Adv)
 
     # If the date of the forecast is less than that of the advisory, the forecast
     # period runs into the next month; so need to account for that. Otherwise,
@@ -367,7 +369,7 @@ fstadv_forecasts <- function(contents, key, adv, adv_date) {
     df_forecasts <-df_forecasts |>
       dplyr::mutate(
          dplyr::across(c(NE34, SE34, SW34, NW34),
-                     .funs = as.numeric)
+                     .fns = as.numeric)
          )
 
   df <- rebuild_forecasts(12, df = df_forecasts)
@@ -380,6 +382,6 @@ fstadv_forecasts <- function(contents, key, adv, adv_date) {
       )
   }
 
-  df_forecasts
+  df
 }
 

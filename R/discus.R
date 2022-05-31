@@ -18,7 +18,7 @@
 #' }
 #' @export
 get_discus <- function(links) {
-  get_product(links = links, product = "discus")
+  get_product(links = links, products = "discus")
 }
 
 #' @title discus
