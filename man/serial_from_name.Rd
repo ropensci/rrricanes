@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_track.R
 \name{serial_from_name}
 \alias{serial_from_name}
-\title{Get IDs for a named storm}
+\title{serial_from_name}
 \usage{
 serial_from_name(name)
 }

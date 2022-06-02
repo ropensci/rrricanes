@@ -2,11 +2,13 @@
 % Please edit documentation in R/get_track.R
 \name{get_serial_numbers}
 \alias{get_serial_numbers}
-\title{Creates the serial numbers look up}
+\title{get_serial_number}
 \usage{
 get_serial_numbers()
 }
 \description{
+Creates the serial numbers look up
+
 This will create a fresh table for serial numbers
 Since this is constantly updated it should be
 refreshed regularly especially when seeking recent

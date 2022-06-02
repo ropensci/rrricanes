@@ -1,4 +1,3 @@
-context("Test Product functions.")
 
 ## ---- twoal() ----------------------------------------------------------------
 test_that("twoal()", {

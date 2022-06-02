@@ -18,7 +18,7 @@
 #' }
 #' @export
 get_discus <- function(links) {
-  get_product(links = links, product = "discus")
+  get_product(links = links, products = "discus")
 }
 
 #' @title discus
@@ -43,10 +43,17 @@ discus <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
+
     Status = status[,1],
     Name = status[,2],
     Adv = as.numeric(status[,3]),
     DateTime = issue_date,
+
+    Status = status[1],
+    Name = status[2],
+    Adv = as.numeric(status[3]),
+    Date = issue_date,
+
     StormKey = key,
     Contents = contents
   )

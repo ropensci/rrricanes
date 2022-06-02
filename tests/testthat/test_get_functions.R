@@ -1,8 +1,16 @@
 # Test all get functions
-context("Get Functions")
+
 
 ## ---- Get Storms -------------------------------------------------------------
-
+if (!exists("al_2017")){
+  al_2017 <- get_storms(years = 2017, basins = "AL")
+}
+if (!exists("al_1998")){
+al_1998 <- get_storms(years = 1998, basins = "AL")
+}
+if (!exists("al_2008")){
+  al_2008 <- get_storms(years = 2008, basins = "AL")
+}
 ## ---- * URL Status -----------------------------------------------------------
 #' Test that annual archive links work. All results should return 'OK'.
 test_that("URL Status", {
@@ -26,24 +34,24 @@ test_that("HTML format", {
   ## ---- * * 1998 -------------------------------------------------------------
   #' 1998
   expect_identical(
-    v(1, 1, sprintf("%sarchive/1998/1998archive.shtml", get_nhc_link())),
+    v(1, 1, sprintf("%sarchive/1998/1998archive.shtml", rrricanes:::get_nhc_link())),
     "TROPICAL STORM ALEX")
   expect_identical(
-    v(29, 2, sprintf("%sarchive/1998/1998archive.shtml", get_nhc_link())),
+    v(29, 2, sprintf("%sarchive/1998/1998archive.shtml", rrricanes:::get_nhc_link())),
     "HURRICANE MADELINE")
   ## ---- * * 2005 -------------------------------------------------------------
   #' 2005
-  expect_identical(v(1, 1, sprintf("%sarchive/2005/", get_nhc_link())),
+  expect_identical(v(1, 1, sprintf("%sarchive/2005/", rrricanes:::get_nhc_link())),
                    "Tropical Storm ARLENE")
-  expect_identical(v(31, 2, sprintf("%sarchive/2005/", get_nhc_link())),
+  expect_identical(v(31, 2, sprintf("%sarchive/2005/", rrricanes:::get_nhc_link())),
                    "Tropical Depression SIXTEEN-E")
-  expect_identical(v(59, 1, sprintf("%sarchive/2005/", get_nhc_link())),
+  expect_identical(v(59, 1, sprintf("%sarchive/2005/", rrricanes:::get_nhc_link())),
                    "Tropical Storm ZETA")
   ## ---- * * 2016 -------------------------------------------------------------
   #' 2016
-  expect_identical(v(29, 1, sprintf("%sarchive/2016/", get_nhc_link())),
+  expect_identical(v(29, 1, sprintf("%sarchive/2016/", rrricanes:::get_nhc_link())),
                    "Hurricane NICOLE")
-  expect_identical(v(41, 2, sprintf("%sarchive/2016/", get_nhc_link())),
+  expect_identical(v(41, 2, sprintf("%sarchive/2016/", rrricanes:::get_nhc_link())),
                    "Tropical Storm TINA")
 })
 

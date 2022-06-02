@@ -4,7 +4,7 @@
 \alias{extract_product_contents}
 \title{extract_product_contents}
 \usage{
-extract_product_contents(links, product)
+extract_product_contents(links, products)
 }
 \arguments{
 \item{links}{URLs to storm products}
@@ -12,6 +12,6 @@ extract_product_contents(links, product)
 \item{product}{specific product to parse}
 }
 \description{
-Get and parse product contents for each links
+Get and parse product contents for each link
 }
 \keyword{internal}

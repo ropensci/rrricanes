@@ -79,15 +79,16 @@
 #' }
 #' @export
 get_fstadv <- function(links) {
-  get_product(links = links, product = "fstadv")
+  get_product(links = links, products = "fstadv")
 }
 
 #' @title fstadv
 #' @description Extrapolate data from FORECAST/ADVISORY products.
 #' @details Given a direct link to a forecast/advisory product, parse and
-#' return dataframe of values.
+#'    return data frame of values.
 #' @param contents URL of a specific FORECAST/ADVISORY product
-#' @keywords internal
+#' @return Data frame of values
+#' @export
 fstadv <- function(contents) {
 
   status <- scrape_header(
@@ -108,163 +109,15 @@ fstadv <- function(contents) {
   wind_radius <- fstadv_wind_radius(contents)
   prev_pos <- fstadv_prev_pos(contents, issue_date)
   seas <- fstadv_seas(contents)
-  forecasts <- fstadv_forecasts(contents, key, status[,3], issue_date)
-
-  tibble::tibble(
-    Status = status[,1],
-    Name = status[,2],
-    Adv = as.numeric(status[,3]),
-    Date = issue_date,
-    StormKey = key,
-    Lat = lat_lon[,1],
-    Lon = lat_lon[,2],
-    Wind = winds_gusts[,1],
-    Gust = winds_gusts[,2],
-    Pressure = pressure,
-    PosAcc = posacc,
-    FwdDir = fwd_mvmt[,1],
-    FwdSpeed = fwd_mvmt[,2],
-    Eye = eye,
-    Seas = seas,
-    WindRadius = wind_radius,
-    Forecast = forecasts
-  ) |>
-
-    tidyr::unnest(cols = c(.data$Seas,
-                           .data$WindRadius,
-                           .data$Forecast))
-}
-
-#' @title fstadv_eye
-#' @description Get eye diameter, if available
-#' @param contents text contents of FORECAST/ADVISORY
-#' @return numeric
-#' @keywords internal
-fstadv_eye <- function(contents) {
-  ptn <- stringr::str_c('EYE DIAMETER[ ]+',
-                        '([0-9]{2,3})', # Eye diameter, integer
-                        '[ ]+NM')
-  as.numeric(stringr::str_match(contents, ptn)[,2])
-}
-
-#' @title fstadv_fcst
-#' @description Retrieve forecast data from FORECAST/ADVISORY products. Loads
-#'   into respective dataframes (df_forecasts, df_forecast_winds)
-#' @param content text content of FORECAST/ADVISORY
-#' @param key Storm ID
-#' @param adv Advisory Number
-#' @param adv_date Date value of forecast/advisory product.
-#' @return boolean
-#' @keywords internal
-fstadv_forecasts <- function(content, key, adv, adv_date) {
-
-  # https://www.nhc.noaa.gov/help/tcm.shtml
-
-  #  Filter forecast dataframe, renaming variables with forecast period as
-  #  prefix, eliminate some vars where necessary, and return a filtered
-  #  dataframe.
-  rebuild_forecasts <- function(hr, df) {
-
-    df <-
-      df |>
-      dplyr::filter(.data$FcstPeriod == hr) |>
-      dplyr::select(
-        .data$StormKey,
-        .data$Adv,
-        .data$FcstDate,
-        .data$Lat,
-        .data$Lon,
-        .data$Wind,
-        .data$Gust,
-        tidyselect::ends_with("64"),
-        tidyselect::ends_with("50"),
-        tidyselect::ends_with("34")
-      ) |>
-      rlang::set_names(
-        # Prepend forecast variables with "Hr", the value of `hr`, and the
-        # variable name.
-        nm = c(names(.)[1:2], stringr::str_c("Hr", hr, names(.)[3:19]))
-      )
-
-    # 64 knot wind radius forecasts are never provided beyond 48 hours.
-    # No wind radii data are provided for 96 and 120 hours
-    if (hr %in% c(48, 72)) {
-      dplyr::select(df, -tidyselect::ends_with("64"))
-    } else if (hr %in% c(96, 120)) {
-      dplyr::select(
-        df, -c(
-          tidyselect::ends_with("64"),
-          tidyselect::ends_with("50"),
-          tidyselect::ends_with("34")
-        )
-      )
-    } else {
-      df
-    }
-
-  }
-
-  ptn <- stringr::str_c("([:digit:]{2})/([:digit:]{2})([:digit:]{2})Z",
-                        "[:blank:]+([:digit:]{1,2}\\.[:digit:])([N|S])",
-                        "[:blank:]+([:digit:]{1,3}\\.[:digit:]{1})([E|W])",
-                        "[[:space:][:punct:][:alpha:]]+",
-                        "MAX WIND[:blank:]+([:digit:]{1,3})[:blank:]*KT",
-                        "[[:blank:][:punct:]]+GUSTS[:blank:]+",
-                        "([:digit:]{1,3})[:blank:]*KT[[:space:][:punct:]]+",
-                        "(?:64 KT[[:blank:][:punct:]]+",
-                        "([:digit:]{1,3})NE",
-                        "[:blank:]+([:digit:]{1,3})SE",
-                        "[:blank:]+([:digit:]{1,3})SW",
-                        "[:blank:]+([:digit:]{1,3})NW",
-                        "[[:punct:][:space:]]+)?",
-                        "(?:50 KT[[:blank:][:punct:]]+",
-                        "([:digit:]{1,3})NE",
-                        "[:blank:]+([:digit:]{1,3})SE",
-                        "[:blank:]+([:digit:]{1,3})SW",
-                        "[:blank:]+([:digit:]{1,3})NW",
-                        "[[:punct:][:space:]]+)?",
-                        "(?:34 KT[[:blank:][:punct:]]+",
-                        "([:digit:]{1,3})NE",
-                        "[:blank:]+([:digit:]{1,3})SE",
-                        "[:blank:]+([:digit:]{1,3})SW",
-                        "[:blank:]+([:digit:]{1,3})NW",
-                        "[[:punct:][:space:]]+)?")
-
-  quads <- c("NE", "SE", "SW", "NW")
-
-  # Extract all forecasts from every text product. Some text products may have
-  # multiple forecasts (at 12 hours, 24, 36, 48, 72, and, for more recent years,
-  # 96 and 120 hours). Some text products may have no forecasts at all (if the
-  # storm is expected to degenerate or already has).
-  forecasts <-
-    content |>
-    stringr::str_match_all(pattern = ptn) |>
-    # # Get only the columns needed excluding the matched string
-    # purrr::map(`[`, , 2:22) |>
-    # If any storm has 0 forecasts (i.e., the list element is empty), populate
-    # all columns with NA
-    purrr::modify_if(.p = purrr::is_empty,
-                     .f = ~matrix(data = NA_character_, ncol = 22)) |>
-    # Convert to tibble cause God I hate working with lists like this though I
-    # know I need the practice...
-    purrr::map(tibble::as_tibble, .name_repair = "minimal") |>
-    purrr::map(rlang::set_names,
-               nm = c("String", "Date", "Hour", "Minute",
-                      "Lat", "LatHemi", "Lon", "LonHemi",
-                      "Wind", "Gust", stringr::str_c(quads, "64"),
-                      stringr::str_c(quads, "50"),
-                      stringr::str_c(quads, "34")))
-
-  forecast_periods <- c(12, 24, 36, 48, 72, 96, 120)
-
-  # The `FcstDate`` conversion in the call below is just inaccurate. The math
-  # is wrong!!!
-
-  # Take `key`, `adv`, `adv_date` and add nested tibble `forecasts` as a new
-  # dataframe/tibble.
-  df_forecasts <-
+  forecasts <- fstadv_forecasts(contents, key, status[3], issue_date)
+  fstadv.data <-
     tibble::tibble(
+      Status = status[1],
+      Name = status[2],
+      Adv = as.numeric(status[3]),
+      Date = issue_date,
       StormKey = key,
+
       Adv = as.numeric(adv),
       AdvDate = adv_date,
       Forecasts = forecasts
@@ -774,7 +627,29 @@ tidy_fcst_wr <- function(df) {
 
   fcst_wr <- fcst_wr[stats::complete.cases(
     fcst_wr$NE, fcst_wr$SE, fcst_wr$SW, fcst_wr$NW),]
+=======
+      Lat = lat_lon[1],
+      Lon = lat_lon[2],
+      Wind = winds_gusts[,1],
+      Gust = winds_gusts[,2],
+      Pressure = pressure,
+      PosAcc = posacc,
+      FwdDir = fwd_mvmt[,1],
+      FwdSpeed = fwd_mvmt[,2],
+      Eye = eye ,
+      Seas = seas,
+      WindRadius = wind_radius,
+      Forecast = forecasts
+  ) |>
+    tidyr::unnest(cols = c(Seas,
+                           WindRadius,
+                           Forecast),
+                   names_repair = "minimal")
 
-  fcst_wr
 
+  #|> bind_rows(list(seas,
+     #  wind_radius,
+    #  forecasts))
+
+   fstadv.data
 }

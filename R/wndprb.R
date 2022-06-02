@@ -22,7 +22,7 @@
 al_prblty_stations <- function() {
   url <- sprintf(
     "%sdata/wsp/al_prblty_station.lst.csv.txt",
-    get_nhc_link(protocol = "http")
+    get_nhc_link(withTrailingSlash = TRUE)
   )
   parse_stations(url)
 }
@@ -97,12 +97,14 @@ ep_prblty_stations <- function() {
 #' }
 #' @param links URL to storm's archive page.
 #' @source \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
+#' @return Data frame of wndprb information
 #' @export
 get_wndprb <- function(links) {
-  get_product(links = links, product = "wndprb")
+  get_product(links = links, products = "wndprb")
 }
 
 #' @title parse_stations
+#'
 #' @description Parse probability station listings for each basin.
 #' @details At the moment, documentation on the format is unavailable. The
 #' format changed during the 2017/2018 offseason and now includes a
@@ -197,38 +199,48 @@ wndprb <- function(contents) {
 
   wndprb <-
     contents |>
-    stringr::str_match_all(ptn) |>
-    purrr::map(tibble::as_tibble, .name_repair = "minimal") |>
+    stringr::str_match_all(ptn)
+
+  wndprb <- wndprb |>
     purrr::map(
-      .f = rlang::set_names,
-      nm = c("X1", "Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
-             "Wind36",  "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
-             "Wind72Cum", "Wind96", "Wind96Cum", "Wind120", "Wind120Cum")
+      tibble::as_tibble,
+               .name_repair = ~c("X1", "Location", "Wind", "Wind12", "Wind24", "Wind24Cum",
+                                 "Wind36",  "Wind36Cum", "Wind48", "Wind48Cum", "Wind72",
+                                 "Wind72Cum", "Wind96", "Wind96Cum", "Wind120", "Wind120Cum"))
 
-    ) |>
-    purrr::map2(key, ~tibble::add_column(.x, StormKey = .y, .before = 1)) |>
-    purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) |>
+  wndprb <- wndprb |> purrr::map2(key,
+                            ~tibble::add_column(.x, StormKey = .y, .before = 1))
+
+  wndprb <- wndprb |>
+    purrr::map2(status[3], ~tibble::add_column(.x, Adv = .y, .after = 2)) |>
     purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) |>
-    purrr::map_df(tibble::as_tibble, .name_repair = "minimal") |>
+    purrr::map_df(tibble::as_tibble, .name_repair = "unique") |>
     dplyr::select(-c("X1")) |>
-
     # Trim whitespace
-    dplyr::mutate_all(.funs = stringr::str_trim)
+    dplyr::mutate(dplyr::across(.cols = everything(), .funs = stringr::str_trim))
 
   # Make "X" values 0
-  wndprb[wndprb == "X"] <- "0"
+  #wndprb[wndprb == "X"] <- "0"
 
-  wndprb <- dplyr::mutate_at(
-    .tbl = wndprb,
-    .vars = "Date",
-    .funs = lubridate::ymd_hms
+  wndprb <- wndprb |> dplyr::mutate(
+         dplyr::across(
+          .cols = "Date",
+          .funs = lubridate::ymd_hms
+     )
   )
 
+  wndprb <- wndprb |> dplyr::mutate(dplyr::across(where(is.character),
+                                            ~na_if(., "X"))) #|>
   # Make Wind:Wind120Cum numeric
-  wndprb <- dplyr::mutate_at(
-    .tbl = wndprb,
-    .vars = c(2, 5:18),
-    .funs = "as.numeric"
-  )
+ #  dplyr::mutate(
+   # dplyr::across(
+  #  .cols = c( 5:18),
+   # .fns = ~as.numeric()
+    #    )
+   # ) # |> dplyr::mutate(dplyr::across(
+      # starts_with("Wind"), function(x)
+      # case_when(
+      # is.na(x) ~ 0,
+      # TRUE ~ x)))
 
 }

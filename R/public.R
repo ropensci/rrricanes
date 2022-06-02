@@ -13,7 +13,7 @@
 #' @seealso \code{\link{get_storms}}, \code{\link{public}}
 #' @export
 get_public <- function(links) {
-  get_product(links = links, product = "public")
+  get_product(links = links, products = "public")
 }
 
 #' @title public
@@ -38,9 +38,9 @@ public <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
-    Status = status[,1],
-    Name = status[,2],
-    Adv = status[,3],
+    Status = status[1],
+    Name = status[2],
+    Adv = status[3],
     Date = issue_date,
     StormKey = key,
     Contents = contents

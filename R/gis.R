@@ -74,14 +74,14 @@ gis_breakpoints <- function() {
 
   breakpoint_file <-
     stringr::str_c(get_nhc_link, "gis/") |>
-    xml2::read_html() |>
-    rvest::html_nodes(
+    xml2::read_html()
+  breakpoint_file <-  rvest::html_nodes(breakpoint_file,
       xpath = "//tr[(((count(preceding-sibling::*) + 1) = 12) and parent::*)]//td"
-    ) |>
-    rvest::html_children() |>
+    )
+  breakpoint_file <- rvest::html_children(breakpoint_file) |>
     rvest::html_attr("href") |>
-    stringr::str_match("/gis/breakpoints/current/Breakpoints_\\d{4}\\.zip") |>
-    .[stats::complete.cases(.)]
+    stringr::str_match("/gis/breakpoints/current/Breakpoints_\\d{4}\\.zip")
+  breakpoint_file <- complete.cases(breakpoint_file)
 
   stringr::str_c(get_nhc_link(withTrailingSlash = FALSE), breakpoint_file)
 
@@ -90,7 +90,7 @@ gis_breakpoints <- function() {
 #' @title gis_download
 #' @description Get GIS data for storm.
 #' @param url link to GIS dataset to download.
-#' @param ... additional parameters for rgdal::readOGR
+#' @param ... additional parameters for simple features
 #' @export
 gis_download <- function(url, ...) {
 
@@ -123,7 +123,7 @@ gis_download <- function(url, ...) {
 #' @title gis_latest
 #' @description Latest GIS datasets for \strong{active} cyclones
 #' @param basins AL and/or EP.
-#' @param ... additional parameters for rgdal::readOGR
+#' @param ... additional parameters for sf::st_read()
 #' @export
 gis_latest <- function(basins = c("AL", "EP"), ...) {
 
@@ -139,8 +139,10 @@ gis_latest <- function(basins = c("AL", "EP"), ...) {
     purrr::map(~ xml2::xml_find_all(.x, xpath = ".//link") |>
                  xml2::xml_text()) |>
     purrr::map(stringr::str_match, ".+\\.zip$") |>
-    purrr::flatten_chr() |>
-    .[!is.na(.)]
+
+    purrr::flatten_chr()
+  gis_latest <- gis_latest[!is.na(gis_latest)]
+
 
   if (purrr::is_empty(gis_zips)) return(NULL)
 
@@ -432,8 +434,9 @@ gis_wsp <- function(datetime, res = c(5, 0.5, 0.1)) {
 
   ds <- rvest::html_nodes(contents, xpath = "//a") |>
     rvest::html_attr("href") |>
-    stringr::str_extract(".+\\.zip$") |>
-    .[stats::complete.cases(.)]
+
+    stringr::str_extract(".+\\.zip$")
+  ds <- ds[stats::complete.cases(ds)]
 
   if (nchar(datetime) < 10) {
     ptn_datetime <- stringr::str_c(datetime, "[:digit:]+")
