@@ -202,8 +202,6 @@ tidy_fcst_wr <- function(df) {
   # and 120 hours are never forecasted). This dataframe will be similar to
   # fstadv.wr with the exception of FcstDate.
 
-  quads
-
   # What forecast periods are in the current dataset?
   fcst_periods <- as.list(names(df))
   fcst_periods <- stringr::str_match(fcst_periods,
