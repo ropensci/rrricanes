@@ -153,3 +153,4 @@ utils::globalVariables(c(  "Date",
                         ))
 
 quads <- c("NE", "SE", "SW", "NW")
+
