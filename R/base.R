@@ -151,4 +151,3 @@ utils::globalVariables(c(  "Date",
                          "serial_numbers", "sid",
                          "Seas", "Forecast", "WindRadius"
                         ))
-

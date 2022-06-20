@@ -109,6 +109,7 @@ fstadv <- function(contents) {
   wind_radius <- fstadv_wind_radius(contents)
   prev_pos <- fstadv_prev_pos(contents, issue_date)
   seas <- fstadv_seas(contents)
+
   forecasts <- fstadv_forecasts(contents, key, status[3], issue_date)
   fstadv.data <-
     tibble::tibble(

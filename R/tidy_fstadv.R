@@ -79,13 +79,12 @@ tidy_wr <- function(df) {
 
   # Collapse wind radius fields to narrow dataframe then expand on the four
   # quadrants, keeping WindField as a variable.
-  v <- c("NE", "SE", "SW", "NW")
 
   wr <- purrr::map_df(
     .x = c(34, 50, 64),
     .f = function(y) {
 
-      df <-  dplyr::select(df, c("StormKey", "Adv", "Date", paste0(v, y)))
+      df <-  dplyr::select(df, c("StormKey", "Adv", "Date", paste0(quads, y)))
       df <-   dplyr::rename(df,
           "StormKey" = "StormKey",
           "Adv" = "Adv",
@@ -154,7 +153,7 @@ tidy_fcst <- function(df) {
     .x = fcst_periods,
     .f = function(y) {
       df <-
-        dplyr::select(df, c("StormKey", "Adv", "Date", paste0("Hr", y, v)))
+        dplyr::select(df, c("StormKey", "Adv", "Date", paste0("Hr", y, quads)))
        df <-  dplyr::rename(df, "StormKey" = "StormKey", "Adv" = "Adv", "Date" = "Date",
                       "FcstDate" = paste0("Hr", y, "FcstDate"),
                       "Lat" = paste0("Hr", y, "Lat"),
@@ -203,8 +202,6 @@ tidy_fcst_wr <- function(df) {
   # and 120 hours are never forecasted). This dataframe will be similar to
   # fstadv.wr with the exception of FcstDate.
 
-  v <- c("NE", "SE", "SW", "NW")
-
   # What forecast periods are in the current dataset?
   fcst_periods <- as.list(names(df))
   fcst_periods <- stringr::str_match(fcst_periods,
@@ -222,7 +219,7 @@ tidy_fcst_wr <- function(df) {
       y <- purrr::map_df(.x = fcst_wind_radii, .f = function(z) {
          df <-  dplyr::select(df, c(
             "StormKey", "Adv", "Date", paste0("Hr", x, "FcstDate"),
-            paste0("Hr", x, v, z)
+            paste0("Hr", x, quads, z)
           ))
          df <-  dplyr::rename(df,
             "StormKey" = "StormKey",
