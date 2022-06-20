@@ -88,7 +88,7 @@ get_fstadv <- function(links) {
 #'    return data frame of values.
 #' @param contents URL of a specific FORECAST/ADVISORY product
 #' @return Data frame of values
-#' @export
+#' @keywords internal
 fstadv <- function(contents) {
 
   status <- scrape_header(

@@ -128,7 +128,7 @@ NULL
   has_data <- base::requireNamespace("rrricanesdata", quietly = TRUE)
   .pkgenv[["has_data"]] <- has_data
   pkg.env <- new.env(parent = emptyenv())
-  pkg.env$quad <- c("NE", "SE", "SW", "NW")
+  pkg.env$quads <- c("NE", "SE", "SW", "NW")
 
 }
 
@@ -152,3 +152,4 @@ utils::globalVariables(c(  "Date",
                          "Seas", "Forecast", "WindRadius"
                         ))
 
+quads <- c("NE", "SE", "SW", "NW")
