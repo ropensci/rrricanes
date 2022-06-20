@@ -1,20 +1,20 @@
 #' @title extract_product_contents
-#' @description Get and parse product contents for each links
+#' @description Get and parse product contents for each link
 #' @param links URLs to storm products
 #' @param product specific product to parse
 #' @keywords internal
 extract_product_contents <- function(links, products) {
+
+  if (length(links) == 0) {
+    stop("No links input, please check that the data exist.")
+  }
 
   # Some products may not exist within HTML but as strict text.
   safely_read_html <- purrr::safely(xml2::read_html)
 
   contents <-
     links |>
-    rrricanes:::get_url_contents()
-  #contents <- sub(
-  #  ".*<!-- START OF CONTENT -->(.+)<!-- End of content div -->.*",
-   #                 "",
-    #                contents, perl =TRUE )
+    get_url_contents()
 
     # Read in contents as html
     # If text is not within html, then we simply need to return the text.
@@ -33,65 +33,64 @@ extract_product_contents <- function(links, products) {
           stringr::str_to_upper()
       }
     })
+}
+#' concept for isolating this step
+#' @keywords internal
 
-  contents <- data.frame(Text = contents)
-  purrr::map(.x= products, .f = ~contents)
-
+parse_product_contents <- function(contents, products){
+  f <- match.fun(products)
+  f(contents)
+  #purrr::map(.x= contents, .f = match.fun(products))
 }
 
 #' @title extract_storm_links
 #' @description Extract product links from a storm's archive page
-#' @param links URLs to a storm's archive page
+#' @param links data frame with URLs to a storm's archive page
+#' @param products Products to return
 #' @export
-extract_storm_links <- function(links) {
-
-  if (!is.vector(links))
+extract_storm_links <- function(links, products) {
+  if (length(links) == 0 ){
+    stop("The links vector is empty.")
+  }
+  years <- attr(links, "years")
+  if (!is.vector(links$Link))
     stop("Links must be a character vector.", call. = FALSE)
 
   # Get links of text products from each `links`
-  product_links <-
-    links |>
-    rrricanes::get_url_contents() |>
-    purrr::imap(.f = xml2::read_html)
-    # Extract the html tables from each link to get the storm's text products
-    product_links <- purrr::imap(product_links, .f = ~rvest::html_nodes(.x, xpath = "//td//a"))
-    # Extract the text product URLs from `nodes`
-    product_links <- purrr::imap(product_links, .f = ~rvest::html_attr(.x, name = "href"))
-    product_links <- purrr::flatten_chr(product_links)
+    html <- rvest::read_html(
+      links$Link)
+    product_links <-rvest::html_elements(html, "table td a")
+    product_links <-  rvest::html_attr(x=product_links, name = "href")
+
     # Ensure we're only capturing archive pages
     product_links <- grep("archive", product_links, value = TRUE, fixed = TRUE)
-    #stringr::str_match( "archive.+")
-
   #product_links <- product_links[stats::complete.cases(product_links)]
-    product_links <- product_links[!is.na(product_links)]
-
-  # Extract years from `links`
-  years <- as.numeric(stringr::str_extract(product_links, "[[:digit:]]{4}"))
-
+ product_links <- product_links[!is.na(product_links)]
   # 1998 product links are relative and prefixed with "/archive/1998/" whereas
   # other years, product_links are absolute. If product_links exist for 1998
   # they must be modified. All product_links must then be prefixed with
   # NHC URL.
-  #product_links[years == 1998] <- stringr::str_c("/archive/1998/",
-  #                                               product_links[years == 1998])
-  #product_links <- stringr::str_c(get_nhc_link(), product_links)
-  product_links[years == 1998] <- sub("archive", "1998/archive",
-                                      product_links[years == 1998], fixed = TRUE)
-  product_links <- paste0(rrricanes:::get_nhc_link(), product_links)
 
-  product_links
+ product_links <- ifelse(!is.na(product_links) &years != 1998,
+                paste0(get_nhc_link(withTrailingSlash = FALSE), product_links),
+                paste0(get_nhc_link(withTrailingSlash = FALSE), "/1998/archive",
+                       product_links)
+            )
+
+ # Needs to be revised to handle multiple products
+ product_links[grep(products, product_links, fixed = TRUE)]
 }
 
 #' @title get_product
 #' @description This function acts as a hub for the individual product extraction
 #'   functions. Given the product and links, it will begin the scraping
 #'   process and return a dataset for that product.
+#' @param links a vector of links to storm pages
+#' @param products  vector of products
 #' @keywords internal
-get_product <- function(links, product) {
-
-    product_data <- purrr::map2(links,.y = product, .f = get_storm_data)
-
-    purrr::flatten_df(product_data)
+get_product <- function(links, products) {
+     product_data <- get_storm_data(links, products)
+     product_data
 }
 
 #' @title get_storm_data
@@ -144,16 +143,28 @@ get_product <- function(links, product) {
 #' @export
 get_storm_data <- function(links,
                            products = c("discus", "fstadv", "posest",
-                                               "public", "prblty", "update",
-                                               "wndprb")) {
+                                        "public", "prblty", "update",
+                                       "wndprb")) {
 
   products <- match.arg(products, several.ok = TRUE)
-  product_links <- rrricanes::extract_storm_links(links)
+  extract_product_contents(links, products)
+  # purrr::map2(links, products, extract_product_contents)
 
-    # Filter links based on products and make one-dimensional
-  filtered_links <- lapply(products,function(x) grep(x, product_links,
-                                                     value = TRUE,
-                                                     fixed = TRUE))
-  purrr::map2(filtered_links, products, extract_product_contents)
+}
+#' @title get_product_links
+#' @param links data frame containing Link that lists storm page urls
+#' @param product Data product
+#' @return vector of links for specific storm and product
+get_product_links<- function(links, product){
+  year <-attr(links, "years")
+  if (!is.character(links$Link))
+    stop("Links must be a character vector.", call. = FALSE)
 
+  # Get links of text products from each `links`
+  product_links <-
+    extract_storm_links(links, product)
+  product_links <- grep(product, product_links,
+                       fixed = TRUE, value = TRUE)
+
+  product_links
 }
