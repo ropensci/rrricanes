@@ -17,7 +17,7 @@ Extrapolate data from Position Estimate products.
 }
 \details{
 Given a direct link to a position estimate product, parse and return
-dataframe of values.
+data frame of values.
 }
 \seealso{
 \code{\link{get_posest}}
