@@ -46,7 +46,6 @@ Suggests:
   devtools,
   here,
   knitr, 
-  rgdal (>= 1.4),
   rmarkdown,
   rnaturalearthdata (>= 0.1),
   sf (>= 1.0), 
