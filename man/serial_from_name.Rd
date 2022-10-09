@@ -15,3 +15,4 @@ A character vector of storm IDs.
 \description{
 Get IDs for a named storm
 }
+\keyword{internal}

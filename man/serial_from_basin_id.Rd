@@ -10,7 +10,6 @@ serial_from_basin_id(basin_id)
 \item{basin_id}{The basin id}
 }
 \description{
-serial_numbers <- get_serial_numbers()
-
-Get all serial numbers for a basin
+Extract serial numbers for a basin
 }
+\keyword{internal}
