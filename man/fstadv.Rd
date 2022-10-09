@@ -19,3 +19,4 @@ Extrapolate data from FORECAST/ADVISORY products.
 Given a direct link to a forecast/advisory product, parse and
    return data frame of values.
 }
+\keyword{internal}
