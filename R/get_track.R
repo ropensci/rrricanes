@@ -6,6 +6,7 @@
 #' Since this is constantly updated it should be
 #' refreshed regularly especially when seeking recent
 #' tracks.
+#' @export
 
 get_serial_numbers <- function() {
 
