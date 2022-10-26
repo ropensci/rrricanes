@@ -2,7 +2,7 @@
 <!-- badges: start -->
 
 [![minimal R
-version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
+version](https://img.shields.io/badge/R%3E%3D-4.1.0-6666ff.svg)](https://cran.r-project.org/)
 [![GitHub
 (pre-)release](https://img.shields.io/github/release/ropensci/rrricanes/all.svg)](https://github.com/ropensci/rrricanes/tags)
 [![](https://badges.ropensci.org/118_status.svg)](https://github.com/ropensci/onboarding/issues/118)

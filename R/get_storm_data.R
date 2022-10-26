@@ -47,7 +47,7 @@ parse_product_contents <- function(contents, products){
 #' @description Extract product links from a storm's archive page
 #' @param links data frame with URLs to a storm's archive page
 #' @param products Products to return
-#' @export
+#' @keywords internal
 extract_storm_links <- function(links, products) {
   if (length(links) == 0 ){
     stop("The links vector is empty.")

@@ -19,7 +19,7 @@ now included in the Tropical Cyclone Update product (\code{\link{update}}).
   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
   etc.}
   \item{Name}{Name of storm}
-  \item{Date}{Date of advisory issuance}
+  \item{DateTime}{Date of advisory issuance}
   \item{Contents}{Text content of product}
 }
 }

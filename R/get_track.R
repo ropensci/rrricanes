@@ -30,12 +30,13 @@ get_serial_numbers <- function() {
 
 #' @title get_serial_numbers
 #'
-#' @description  serial_numbers <- get_serial_numbers()
+#' @description Extract serial numbers for a basin
+#' @example  serial_numbers <- get_serial_numbers()
 #'
 #' Get all serial numbers for a basin
 #' @param basin_id  The basin id
 #'
-#' @export
+#' @keywords internal
 serial_from_basin_id <- function(basin_id) {
   if (!exists("serial_numbers")){
     get_serial_numbers()
@@ -50,7 +51,7 @@ serial_from_basin_id <- function(basin_id) {
 #' @param  name  Name of the storm
 #'
 #' @return A character vector of storm IDs.
-#' @export
+#' @keywords internal
 serial_from_name <- function(name) {
   if (!exists("serial_numbers")){
     get_serial_numbers()
