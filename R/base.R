@@ -127,6 +127,7 @@ NULL
 
   has_data <- base::requireNamespace("rrricanesdata", quietly = TRUE)
   .pkgenv[["has_data"]] <- has_data
+
   canes.env <- new.env(parent = emptyenv())
   canes.env$quad <- c("NE", "SE", "SW", "NW")
 
@@ -151,3 +152,6 @@ utils::globalVariables(c(  "Date",
                          "serial_numbers", "sid",
                          "Seas", "Forecast", "WindRadius"
                         ))
+
+quads <- c("NE", "SE", "SW", "NW")
+
