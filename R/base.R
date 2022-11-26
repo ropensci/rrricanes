@@ -124,11 +124,12 @@ NULL
   op.rrricanes <- list(rrricanes.working_msg = FALSE)
   toset <- !(names(op.rrricanes) %in% names(op))
   if (any(toset)) options(op.rrricanes[toset])
-  invisible()
+
   has_data <- base::requireNamespace("rrricanesdata", quietly = TRUE)
   .pkgenv[["has_data"]] <- has_data
-  pkg.env <- new.env(parent = emptyenv())
-  pkg.env$quads <- c("NE", "SE", "SW", "NW")
+
+  canes.env <- new.env(parent = emptyenv())
+  canes.env$quad <- c("NE", "SE", "SW", "NW")
 
 }
 

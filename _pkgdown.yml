@@ -39,6 +39,11 @@ reference:
     - saffir
     - status_abbr_to_str
     - starts_with("tidy_")
+  - title: Serial numbers data
+    desc: >
+      Generate or update serial numbers data.
+    contents:
+      - get_serial_numbers
   - title: Datasets
     desc: >
       Sample datasets included in this package.

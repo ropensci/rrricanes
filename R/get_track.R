@@ -1,11 +1,12 @@
 
-#' @title  get_serial_number
+#' @title  Get Serial Numbers
 #' @description Creates the serial numbers look up
 #'
 #' This will create a fresh table for serial numbers
 #' Since this is constantly updated it should be
 #' refreshed regularly especially when seeking recent
 #' tracks.
+#' @export
 
 get_serial_numbers <- function() {
 
@@ -25,10 +26,13 @@ get_serial_numbers <- function() {
                             widths = c(13, 11, 186),
                             strict = FALSE)
    close(serial_raw)
-   serial_numbers <<- purrr::map_df(serial_numbers, .f = trimws)
+   serial_numbers <- purrr::map_df(serial_numbers, .f = trimws)
+   save(serial_numbers,
+        file = file.path( find.package("rrricanes"), "data/serial_numbers.rda"))
+    data(serial_numbers, package = "rrricanes")
 }
 
-#' @title get_serial_numbers
+#' @title Get Serial Numbers for Basin ID
 #'
 #' @description Extract serial numbers for a basin
 #' @example  serial_numbers <- get_serial_numbers()
@@ -45,21 +49,23 @@ serial_from_basin_id <- function(basin_id) {
 
 }
 
-#' @title serial_from_name
+#' @title Get serial number by storm name
 #'
 #' @description  Get IDs for a named storm
 #' @param  name  Name of the storm
 #'
 #' @return A character vector of storm IDs.
 #' @keywords internal
-serial_from_name <- function(name) {
+serial_from_name <- function(name, basin) {
   if (!exists("serial_numbers")){
     get_serial_numbers()
   }
-  sids <- serial_numbers[grep(pattern = toupper(name),
-                                 x = serial_numbers$name_history,
-                                fixed = TRUE), "sid"]
-  dplyr::pull(sids, sid)
+  sids <- serial_numbers[grepl(pattern = toupper(name),
+                                 x = toupper(serial_numbers$name_history),
+                                fixed = TRUE), ]
+  sids <- sids |>
+  dplyr::filter(tolower(substr(id, 2, 3)) == tolower(basin)) |>
+  dplyr::pull( sid)
 }
 
 
@@ -102,10 +108,9 @@ get_storm_track <- function(serials,
                          )
     )
  #track_data
-   # track_data <- track_data[grepstring,]
-    #|>
-      #  filter(V1 %in% serials)
-    #if (isOpen(con1)) {close(con1)}
+    track_data <- track_data[grepstring,] |>
+        filter(V1 %in% serials)
+    if (isOpen(con1)) {close(con1)}
     colnames(track_data) <- cn
     track_data
 }
