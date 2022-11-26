@@ -21,7 +21,6 @@ extract_product_contents <- function(links, products) {
     # Otherwise, extract the node from within the HTML and return the text of
     # that node.
   contents <- contents |> purrr::map_chr(.f = function(x) {
-
       txt <- safely_read_html(x)
       if (is.null(txt$result)) {
         x
@@ -65,7 +64,7 @@ extract_storm_links <- function(links, products) {
     # Ensure we're only capturing archive pages
     product_links <- grep("archive", product_links, value = TRUE, fixed = TRUE)
   #product_links <- product_links[stats::complete.cases(product_links)]
- product_links <- product_links[!is.na(product_links)]
+    product_links <- product_links[!is.na(product_links)]
   # 1998 product links are relative and prefixed with "/archive/1998/" whereas
   # other years, product_links are absolute. If product_links exist for 1998
   # they must be modified. All product_links must then be prefixed with
@@ -130,15 +129,15 @@ get_product <- function(links, products) {
 #' @examples
 #' \dontrun{
 #' ## Get public advisories for first storm of 2016 Atlantic season.
-#' get_storms(year = 2016, basin = "AL") |>
-#'   slice(1) |>
-#'   .$Link |>
-#'   get_storm_data(products = "public")
+#' #get_storms(year = 2016, basin = "AL") |>
+#'  # dplyr::slice(1) |>
+#'  # pull(Link) |>
+#'  # get_storm_data( products = "public")
 #' ## Get public advisories and storm discussions for first storm of 2017 Atlantic season.
-#' get_storms(year = 2017, basin = "AL") |>
-#'   slice(1) |>
-#'   .$Link |>
-#'   get_storm_data(products = c("discus", "public"))
+#'# get_storms(year = 2017, basin = "AL") |>
+#' #  slice(1) |>
+#'  # pull(Link) |>
+#'   # get_storm_data(products = c("discus", "public"))
 #' }
 #' @export
 get_storm_data <- function(links,
@@ -147,17 +146,17 @@ get_storm_data <- function(links,
                                        "wndprb")) {
 
   products <- match.arg(products, several.ok = TRUE)
-  extract_product_contents(links, products)
-  # purrr::map2(links, products, extract_product_contents)
-
+ # extract_product_contents(links, products)
+  purrr::map2(links, products, extract_product_contents)
 }
+
 #' @title get_product_links
 #' @param links data frame containing Link that lists storm page urls
 #' @param product Data product
 #' @return vector of links for specific storm and product
 get_product_links<- function(links, product){
   year <-attr(links, "years")
-  if (!is.character(links$Link))
+  if (!is.character(links))
     stop("Links must be a character vector.", call. = FALSE)
 
   # Get links of text products from each `links`
