@@ -62,11 +62,11 @@ parse_products <- function(x, y) {
 
     # Set product and column types of existing dataset. Remember Adv is char.
     if (str_detect(title, "Public Advisory")) {
-        product = "public"
-        col_types = "cccTc"
+        product <- "public"
+        col_types <- "cccTc"
     } else if (str_detect(title, "Forecast Advisory")) {
-        product = "fstadv"
-        col_types = paste0("cccTcddiiniiiiiiiiiiiiiiii",
+        product <- "fstadv"
+        col_types <- paste0("cccTcddiiniiiiiiiiiiiiiiii",
                            # 12 hrs
                            "Tddiiiiiiiiiiiiii",
                            # 24 hrs
@@ -84,14 +84,14 @@ parse_products <- function(x, y) {
                            #120 hrs
                            "Tddiiiiiiiiiiiiii")
     } else if (str_detect(title, "Forecast Discussion")) {
-        product = "discus"
-        col_types = "cccTc"
+        product <- "discus"
+        col_types <- "cccTc"
     } else if (str_detect(title, "Wind Speed Probabilities")) {
-        product = "wndprb"
-        col_types = "ccTciiiiiiiiiiiiii"
+        product <- "wndprb"
+        col_types <- "ccTciiiiiiiiiiiiii"
     } else if (str_detect(title, "Tropical Cyclone Update")) {
-        product = "update"
-        col_types = "cccTc"
+        product <- "update"
+        col_types <- "cccTc"
     }
 
     last_update <- pub_dates %>%
@@ -227,6 +227,6 @@ from <- "<rrricanes@gmail.com>"
 to <- "<rrricanes@gmail.com>"
 subject <- "rrricanes fetch products"
 body <- read_file("fetch_products.Rout")
-mailControl = list(smtpServer = "ASPMX.L.GOOGLE.COM")
+mailControl <- list(smtpServer = "ASPMX.L.GOOGLE.COM")
 sendmail(from = from, to = to, subject = subject, msg = body,
          control = mailControl)

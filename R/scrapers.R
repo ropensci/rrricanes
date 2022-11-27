@@ -208,7 +208,7 @@ scrape_header <- function(contents, ptn_product_title,
   # Pattern for storm names
   ptn_names <- stringr::str_c("([\\w-]*?)")
 
-  ptn_adv = "NUMBER\\s+(\\d{1,3}\\w?)"
+  ptn_adv <- "NUMBER\\s+(\\d{1,3}\\w?)"
 
   # Combine patterns
   ptn <- stringr::str_c(
