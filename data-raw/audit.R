@@ -59,8 +59,8 @@ fstadv <- read_csv("./datasets/fstadv.csv", col_types = cols(),
 ## ---- * Status ---------------------------------------------------------------
 status <- sort(unique(fstadv$Status))
 if (!(any(status %in% valid_options)))
-    warning(sprintf("Invalid Status in fstadv:\n%s",\n
-                    sort(unique(fstadv$Status[!(fstadv$Status %in% valid_options)]))))
+    warning(sprintf("Invalid Status in fstadv:\n%s",sort(unique(fstadv$Status
+    [!(fstadv$Status %in% valid_options)]))))
 
 ## ---- * Names ----------------------------------------------------------------
 fstadv_names <- sort(unique(fstadv$Name))
@@ -147,7 +147,7 @@ posest <- read_csv("./datasets/posest.csv", col_types = cols())
 ## ---- * Status ---------------------------------------------------------------
 status <- sort(unique(posest$Status))
 if (!(any(status %in% valid_options)))
-    warning(sprintf("Invalid Status in posest:\n%s",\n
+    warning(sprintf("Invalid Status in posest:\n%s",# nolint
                     sort(unique(posest$Status[!(posest$Status %in% valid_options)]))))
 
 ## ---- * Names ----------------------------------------------------------------
@@ -167,7 +167,7 @@ prblty <- read_csv("./datasets/prblty.csv", col_types = cols())
 ## ---- * Status ---------------------------------------------------------------
 status <- sort(unique(prblty$Status))
 if (!(any(status %in% valid_options)))
-    warning(sprintf("Invalid Status in prblty:\n%s",\n
+    warning(sprintf("Invalid Status in prblty:\n%s",
                     sort(unique(prblty$Status[!(prblty$Status %in% valid_options)]))))
 
 ## ---- * Names ----------------------------------------------------------------
@@ -189,7 +189,7 @@ public <- read_csv("./datasets/public.csv", col_types = cols())
 ## ---- * Status ---------------------------------------------------------------
 status <- sort(unique(public$Status))
 if (!(any(status %in% valid_options)))
-    warning(sprintf("Invalid Status in public:\n%s",\n
+    warning(sprintf("Invalid Status in public:\n%s",
                     sort(unique(public$Status[!(public$Status %in% valid_options)]))))
 
 ## ---- * Names ----------------------------------------------------------------
@@ -216,7 +216,7 @@ update <- read_csv("./datasets/update.csv", col_types = cols())
 ## ---- * Status ---------------------------------------------------------------
 status <- sort(unique(update$Status))
 if (!(any(status %in% valid_options)))
-    warning(sprintf("Invalid Status in update:\n%s",\n
+    warning(sprintf("Invalid Status in update:\n%s",
                     sort(unique(update$Status[!(update$Status %in% valid_options)]))))
 
 ## ---- * Names ----------------------------------------------------------------
