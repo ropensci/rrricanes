@@ -147,8 +147,8 @@ posest <- read_csv("./datasets/posest.csv", col_types = cols())
 ## ---- * Status ---------------------------------------------------------------
 status <- sort(unique(posest$Status))
 if (!(any(status %in% valid_options)))
-    warning(sprintf("Invalid Status in posest:\n%s",# nolint
-                    sort(unique(posest$Status[!(posest$Status %in% valid_options)]))))
+    warning(sprintf("Invalid Status in posest:\n%s",
+    sort(unique(posest$Status[!(posest$Status %in% valid_options)]))))
 
 ## ---- * Names ----------------------------------------------------------------
 posest_names <- sort(unique(posest$Name))
@@ -168,7 +168,7 @@ prblty <- read_csv("./datasets/prblty.csv", col_types = cols())
 status <- sort(unique(prblty$Status))
 if (!(any(status %in% valid_options)))
     warning(sprintf("Invalid Status in prblty:\n%s",
-                    sort(unique(prblty$Status[!(prblty$Status %in% valid_options)]))))
+          sort(unique(prblty$Status[!(prblty$Status %in% valid_options)]))))
 
 ## ---- * Names ----------------------------------------------------------------
 #' * prblty$Name for AL161999 Adv 1 is "Test". This is an err on the NHC's part.
@@ -190,7 +190,7 @@ public <- read_csv("./datasets/public.csv", col_types = cols())
 status <- sort(unique(public$Status))
 if (!(any(status %in% valid_options)))
     warning(sprintf("Invalid Status in public:\n%s",
-                    sort(unique(public$Status[!(public$Status %in% valid_options)]))))
+          sort(unique(public$Status[!(public$Status %in% valid_options)]))))
 
 ## ---- * Names ----------------------------------------------------------------
 public_names <- sort(unique(public$Name))
@@ -217,7 +217,7 @@ update <- read_csv("./datasets/update.csv", col_types = cols())
 status <- sort(unique(update$Status))
 if (!(any(status %in% valid_options)))
     warning(sprintf("Invalid Status in update:\n%s",
-                    sort(unique(update$Status[!(update$Status %in% valid_options)]))))
+          sort(unique(update$Status[!(update$Status %in% valid_options)]))))
 
 ## ---- * Names ----------------------------------------------------------------
 update_names <- sort(unique(update$Name))

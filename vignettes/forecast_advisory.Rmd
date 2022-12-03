@@ -62,9 +62,9 @@ Build a thin tracking map for the inset.
 
 ```{r}
 bp_inset <- ggplotGrob(bp +
-                           geom_rect(mapping = aes(xmin = lon_min, xmax = lon_max,
-                                                   ymin = lat_min, ymax = lat_max),
-                                     color = "red", alpha = 0) +
+            geom_rect(mapping = aes(xmin = lon_min, xmax = lon_max,
+       ymin = lat_min, ymax = lat_max),
+              color = "red", alpha = 0) +
                            theme_bw() +
                            theme(axis.title = element_blank(),
                                  axis.ticks = element_blank(),

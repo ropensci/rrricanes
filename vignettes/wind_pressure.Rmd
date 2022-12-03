@@ -91,7 +91,8 @@ fstadv %>% ggplot(aes(x = Date, y = Pressure)) +
 ```{r}
 fstadv %>%
   mutate(WindDist = (Wind - min(Wind))/(max(Wind) - min(Wind)),
-         PressDist = (Pressure - max(Pressure))/(max(Pressure) - min(Pressure))) %>%
+         PressDist = (Pressure - max(Pressure))/(max(Pressure) -
+                     min(Pressure))) %>%
   gather(Var, Val, WindDist, PressDist) %>% 
   ggplot(aes(x = Date, y = Val, group = Var, color = Var)) + 
   geom_line(size = 1) + 

@@ -174,7 +174,8 @@ scrape_date <- function(header) {
   class(dt) <- c("POSIXct", "POSIXt")
 
   for (i in 1:(length(dt))) {
-    dt[i] <- as.POSIXct(strftime(x[i], format = "%Y-%m-%d %H:%M"), tz = unname(timezones[tz[i]]))
+    dt[i] <- as.POSIXct(strftime(x[i], format = "%Y-%m-%d %H:%M"), tz = unname
+                        (timezones[tz[i]]))
   }
 
   # Now convert to UTC
@@ -198,12 +199,15 @@ scrape_header <- function(contents, ptn_product_title,
   # Use day, month, date and year which seems to be consistent across all
   # products.
   # (timtrice): Added backtick for AL162005 public #18
-  ptn_header <- paste0("^[\\w\\d\\s\\W]*?\\w{3}\\s*\\w{3}\\s*\\d{1,2}\\s*\\d{4}[\\s\n\r]*")
+  ptn_header <- paste0("^[\\w\\d\\s\\W]*?\\w{3}\\s*\\w{3}\\s*\\d{1,2}\\s*\\d
+                      {4}[\\s\n\r]*")
 
   header <- stringr::str_extract(contents, ptn_header)
 
   # Storm status patterns
-  ptn_status <- "((?:POST-|POTENTIAL\\s|SUB)?TROPICAL (?:CYCLONE|DEPRESSION|DISTURBANCE|STOMR|STORM)|HURRICANE|REMNANTS)(?: OF)?"
+  ptn_status <- "((?:POST-|POTENTIAL\\s|SUB)?TROPICAL
+                (?:CYCLONE|DEPRESSION|DISTURBANCE|STOMR|STORM)|HURRICANE|
+                REMNANTS)(?: OF)?"
 
   # Pattern for storm names
   ptn_names <- stringr::str_c("([\\w-]*?)")
@@ -220,7 +224,8 @@ scrape_header <- function(contents, ptn_product_title,
     matches <- stringr::str_match(header, ptn)[,2:4]
   } else {
     matches <- stringr::str_match(header, ptn)[,2:3]
-    status <- apply(stringr::str_match(header, ptn)[,2:3], 2, stringr::str_to_title)
+    status <- apply(stringr::str_match(header, ptn)[,2:3], 2, stringr::
+                      str_to_title)
   }
 
   # String-to-title Status and Name

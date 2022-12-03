@@ -19,15 +19,18 @@
 "df.al_18_2012_fstadv"
 
 #' GIS advisory dataset for Hurricane Sandy Adv 18
-#' @source \url{http://www.nhc.noaa.gov/gis/archive_forecast_results.php?id=al18&year=2012&name=Hurricane\%20SANDY}
+#' @source \url{http://www.nhc.noaa.gov/gis/archive_forecast_results.php?id=al
+#' 18&year=2012&name=Hurricane\%20SANDY}
 "df.gis_adv"
 
-#' GIS storm surge shapefile dataset for Hurricane Sandy (AL182012)
-#' @source \url{http://www.nhc.noaa.gov/gis/archive_psurge_results.php?id=al18&year=2012&name=Hurricane\%20SANDY}
+#' GIS storm surge shapefile dataset for Hurricane Sandy(AL182012)
+#' @source \url{http://www.nhc.noaa.gov/gis/archive_psurge_results.php?id=al18
+#' &year=2012&name=Hurricane\%20SANDY}
 "df.gis_storm_surge"
 
 #' GIS windfield and forecast wind radii for Hurricane Sandy (AL182012)
-#' @source \url{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al18&year=2012&name=Hurricane\%20SANDY}
+#' @source \url{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?
+#' id=al18&year=2012&name=Hurricane\%20SANDY}
 "df.gis_wind_radii"
 
 #' GIS wind speed probabilities for Hurricane Sandy (AL182012)

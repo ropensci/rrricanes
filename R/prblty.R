@@ -24,7 +24,8 @@ get_prblty <- function(links) {
 #' @description Parse strike probability products
 #' @details Given a direct link to a strike probability advisory product, parse
 #' and return dataframe of values.
-#' @param contents Link to a storm's specific strike probability advisory product.
+#' @param contents Link to a storm's specific strike probability
+#'                 advisory product.
 #' @return Dataframe
 #' @seealso \code{\link{get_prblty}}
 #' @keywords internal
@@ -43,7 +44,8 @@ prblty <- function(contents) {
   # 15.8N  45.9W     1 26  1  X 28
 
   ptn <- stringr::str_c("(?<=[:blank:]{3}|\n)",
-                        "([[:alpha:][:digit:][:punct:][:blank:]]{17})",   # Location
+                        "([[:alpha:][:digit:][:punct:][:blank:]]{17})",
+                        # Location
                         "[:blank:]+",                   # Delimiter
                         "([:digit:]{1,2}|X)",               # A
                         "[:blank:]+",                   # Delimiter
@@ -62,7 +64,8 @@ prblty <- function(contents) {
     purrr::map(
       rlang::set_names, nm = c("X1", "Location", "A", "B", "C", "D", "E")
     ) %>%
-    purrr::map2(status[,1], ~tibble::add_column(.x, Status = .y, .before = 1)) %>%
+    purrr::map2(status[,1], ~tibble::add_column(.x, Status = .y, .before = 1)
+                ) %>%
     purrr::map2(status[,2], ~tibble::add_column(.x, Name = .y, .after = 1)) %>%
     purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) %>%
     purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) %>%

@@ -89,9 +89,8 @@ prblty <- map_df(storms %>% .$Link, .f = function(storm_link) {
     if (is.null(df$error)) {
         return(df$result)
     } else {
-        write(sprintf("Strike Probabilities error: %s\n%s", df$error, storm_link),
-              file = "log.txt",
-              append = TRUE)
+        write(sprintf("Strike Probabilities error: %s\n%s",
+                      df$error, storm_link),file = "log.txt",append = TRUE)
     }
 })
 

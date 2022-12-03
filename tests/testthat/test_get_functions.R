@@ -70,7 +70,8 @@ test_that("Errors", {
 
 ## ---- Get Storm Data ---------------------------------------------------------
 test_that("rrricanes:::get_storm_data()", {
-  # ## ---- * 2017, AL, 01 -------------------------------------------------------
+  # ## ---- * 2017, AL, 01 ---------------------------------------------------
+  #----
   expect_identical(al_01_2017_products, df.al_01_2017_products)
   ## ---- * Errors -------------------------------------------------------------
   expect_error(rrricanes:::get_storm_data(al_2017[[1,4]], products = "test"))
@@ -103,6 +104,7 @@ test_that("Get Storm List", {
   )
   expect_identical(
     storm_list$warnings,
-    "1 parsing failure.\n row col   expected    actual         file\n2583  -- 21 columns 2 columns literal data\n"
+    "1 parsing failure.\n row col   expected actual file\n2583  -- 21 columns
+    2 columns literal data\n"
   )
 })

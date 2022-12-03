@@ -17,8 +17,8 @@ gis_advisory <- function(key, advisory = as.character()) {
     stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
 
   key <- stringr::str_match(key,
-                            pattern = stringr::str_c("([:lower:]{2})([:digit:]{2})",
-                                                     "([:digit:]{4})"))
+         pattern = stringr::str_c("([:lower:]{2})([:digit:]{2})",
+                   "([:digit:]{4})"))
 
   # Get list of GIS forecast zips for storm and download
   url <- sprintf("%sgis/archive_forecast_results.php?id=%s%s&year=%s",
@@ -76,7 +76,8 @@ gis_breakpoints <- function() {
     stringr::str_c(get_nhc_link, "gis/") %>%
     xml2::read_html() %>%
     rvest::html_nodes(
-      xpath = "//tr[(((count(preceding-sibling::*) + 1) = 12) and parent::*)]//td"
+      xpath = "//tr[(((count(preceding-sibling::*) + 1) = 12) and
+      parent::*)]//td"
     ) %>%
     rvest::html_children() %>%
     rvest::html_attr("href") %>%
@@ -182,7 +183,8 @@ gis_outlook <- function() {
 #'     and accounts for track, size, and intensity errors based on historical
 #'     errors and astronomical tide. Valid values are 0:20.}
 #' }
-#' @seealso \href{http://www.nhc.noaa.gov/surge/psurge.php}{Tropical Cyclone Storm Surge Probabilities}
+#' @seealso \href{http://www.nhc.noaa.gov/surge/psurge.php}
+#' {Tropical Cyclone Storm Surge Probabilities}
 #' @seealso \code{\link{gis_download}}
 #' @examples
 #' \dontrun{
@@ -190,7 +192,8 @@ gis_outlook <- function() {
 #' gis_prob_storm_surge("AL092016", products = list("psurge" = 0))
 #'
 #' # Return the psurge0 and esurge10 products for storm AL092016
-#' gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10))
+#' gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 1
+#' 0))
 #'
 #' # Return all psurge0 products for Sep 2, 2016, storm AL092016
 #' gis_prob_storm_surge("AL092016", products = list("psurge" = 0),
@@ -333,14 +336,16 @@ gis_storm_surge_flood <- function(key,
 #' @param advisory Advisory number. If NULL, all advisories are returned.
 #' Intermediate advisories are acceptable.
 #' @details Tropical Cyclone Advisory Wind Field
-#'  http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year=2016
+#'  http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year
+#'  =2016
 #'  http://www.nhc.noaa.gov/gis/forecast/archive/
 #' Example file name: al012017_fcst_001.zip
 #' [basin]{2}[year_num]{2}[year]{4}_fcst_[advisory]{3}.zip
 #' Many storms do not appear to have this data; especially earlier.
 #'
 #' Not all advisories will be available for storms. For example,
-#' \href{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year=2016}{Hurricane Matthew (AL142016)}
+#' \href{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14
+#' &year=2016}{Hurricane Matthew (AL142016)}
 #' is missing several advisories.
 #' @seealso \code{\link{gis_download}}
 #' @export

@@ -45,7 +45,8 @@ df.gis_storm_surge <- gis_prob_storm_surge(key = "AL142016",
     last() %>%
     gis_download()
 
-df.gis_wind_radii <- gis_windfield("AL142016", advisory = "33") %>% gis_download()
+df.gis_wind_radii <- gis_windfield("AL142016", advisory = "33")%>%
+                      gis_download()
 
 df.gis_wsp <- gis_wsp(datetime = "2016100606", res = 0.5) %>% gis_download()
 

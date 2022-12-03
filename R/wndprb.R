@@ -96,7 +96,8 @@ ep_prblty_stations <- function() {
 #'   \item{Wind120Cum}{Cumulative probability through 120 hours}
 #' }
 #' @param links URL to storm's archive page.
-#' @source \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilities.pdf}
+#' @source \url{http://www.nhc.noaa.gov/about/pdf/About_Windspeed_Probabilitie
+#' s.pdf}
 #' @export
 get_wndprb <- function(links) {
   get_product(links = links, product = "wndprb")
