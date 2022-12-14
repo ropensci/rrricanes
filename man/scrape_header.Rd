@@ -7,7 +7,7 @@
 scrape_header(contents, ptn_product_title, advisory_number = TRUE)
 }
 \arguments{
-\item{contents}{Text product}
+\item{contents}{text product contents}
 
 \item{ptn_product_title}{Pattern of product title to match}
 

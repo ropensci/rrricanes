@@ -9,11 +9,14 @@ fstadv(contents)
 \arguments{
 \item{contents}{URL of a specific FORECAST/ADVISORY product}
 }
+\value{
+Data frame of values
+}
 \description{
 Extrapolate data from FORECAST/ADVISORY products.
 }
 \details{
 Given a direct link to a forecast/advisory product, parse and
-return dataframe of values.
+   return data frame of values.
 }
 \keyword{internal}

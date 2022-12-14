@@ -6,20 +6,20 @@
 #'   \item{Status}{Classification of storm, e.g., Tropical Storm, Hurricane,
 #'   etc.}
 #'   \item{Name}{Name of storm}
-#'   \item{Date}{Date of advisory issuance}
+#'   \item{DateTime}{Date of advisory issuance}
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param links URL to storm's archive page.
 #' @seealso \code{\link{get_storms}}, \code{\link{posest}}
 #' @export
 get_posest <- function(links) {
-  get_product(links = links, product = "posest")
+  get_product(links = links, products = "posest")
 }
 
 #' @title posest
 #' @description Extrapolate data from Position Estimate products.
 #' @details Given a direct link to a position estimate product, parse and return
-#' dataframe of values.
+#' data frame of values.
 #' @param contents URL of a specific position estimate product
 #' @return Dataframe
 #' @seealso \code{\link{get_posest}}
@@ -37,9 +37,16 @@ posest <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
+
     Status = status[,1],
     Name = status[,2],
+    DateTime = issue_date,
+
+    Status = status[1],
+    Name = status[2],
     Date = issue_date,
+    StormKey = key,
+
     Contents = contents
   )
 

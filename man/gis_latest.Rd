@@ -9,7 +9,7 @@ gis_latest(basins = c("AL", "EP"), ...)
 \arguments{
 \item{basins}{AL and/or EP.}
 
-\item{...}{additional parameters for rgdal::readOGR}
+\item{...}{additional parameters for sf::st_read()}
 }
 \description{
 Latest GIS datasets for \strong{active} cyclones

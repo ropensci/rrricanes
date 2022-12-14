@@ -4,7 +4,9 @@
 \name{df.gis_wsp}
 \alias{df.gis_wsp}
 \title{GIS wind speed probabilities for Hurricane Sandy (AL182012)}
-\format{An object of class \code{list} of length 3.}
+\format{
+An object of class \code{list} of length 3.
+}
 \source{
 \url{http://www.nhc.noaa.gov/gis/archive_wsp.php}
 }

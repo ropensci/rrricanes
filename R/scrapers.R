@@ -127,23 +127,25 @@ scrape_date <- function(header) {
                 datetime.extracted[,3], # Minute
                 period[,2])
 
+   tz <- datetime.extracted[,4]
+  if (any(is.na(tz))) {
+    i <- which(is.na(tz))
+    tz[i] <- "UTC"
+  }
+
   # Format date
-  d <- as.Date(stringr::str_c(datetime.extracted[,5], # Month, abbreviated
+  d <- as.Date(stringr::str_c(datetime.extracted[,7], # Year, four-digit format
+                              datetime.extracted[,5], # Month, abbreviated
                               datetime.extracted[,6], # Date, w/wo leading 0
-                              datetime.extracted[,7], # Year, four-digit format
+
                               sep = "-"),
-               format = "%b-%d-%Y")
+               format = "%Y-%b-%d")
 
   # If time zone is NA, make UTC. Is NA because in forecast products time is
   # immeidately followed by Z which is not captured. Z is military code for
   # Zulu time which is equivalent of Z.
 
   # That should be the reason...
-  tz <- datetime.extracted[,4]
-  if (any(is.na(tz))) {
-    i <- which(is.na(tz))
-    tz[i] <- "UTC"
-  }
 
   # Make date/time string
   x <- stringr::str_c(d, t, sep = " ")
@@ -174,8 +176,12 @@ scrape_date <- function(header) {
   class(dt) <- c("POSIXct", "POSIXt")
 
   for (i in 1:(length(dt))) {
-    dt[i] <- as.POSIXct(strftime(x[i], format = "%Y-%m-%d %H:%M"), tz = unname
-                        (timezones[tz[i]]))
+    dt[i] <- as.POSIXct(strftime(x[i], format = "%Y-%m-%d %H:%M"),
+                        tz = ifelse(length(tz[i] == 0),
+                                    "UTC",
+                                    unname(timezones[tz[i]]))
+                        )
+
   }
 
   # Now convert to UTC
@@ -185,7 +191,8 @@ scrape_date <- function(header) {
 
 #' @title scrape_header
 #' @description Extract status, name, and advisory from products header.
-#' @param contents Text product
+#'
+#' @param contents text product contents
 #' @param ptn_product_title Pattern of product title to match
 #' @param advisory_number Default is true; set to false if product does not
 #'   have an advisory number.
@@ -219,17 +226,15 @@ scrape_header <- function(contents, ptn_product_title,
     ptn_status, ptn_names, ptn_product_title, sep = "\\s"
   )
 
-  if (advisory_number) {
-    ptn <-  stringr::str_c(ptn, ptn_adv, sep = "\\s")
-    matches <- stringr::str_match(header, ptn)[,2:4]
-  } else {
-    matches <- stringr::str_match(header, ptn)[,2:3]
-    status <- apply(stringr::str_match(header, ptn)[,2:3], 2, stringr::
-                      str_to_title)
-  }
+matches <-  ifelse(advisory_number,
+     stringr::str_match(header,
+                        stringr::str_c(ptn, ptn_adv, sep = "\\s"))[,2:4],
+    stringr::str_match(header, ptn)[,2:3]
+)
 
+# this was in the second part of ifelse
+status <- stringr::str_c(ptn, ptn_adv, sep = "\\s")
   # String-to-title Status and Name
-
   if (is.null(ncol(matches))) {
     # working with a vector
     matches[1:2] <- stringr::str_to_title(matches[1:2])
@@ -238,18 +243,18 @@ scrape_header <- function(contents, ptn_product_title,
     matches[,c(1:2)] <- apply(matches[,c(1:2)], 2, stringr::str_to_title)
   }
 
-  return(matches)
+   matches
 
 }
 
 #' @title scrape_key
-#' @description Extract Key from header
+#' @description Extract StormKey from header
 #' @param header Header text of product.
 #' @seealso \code{\link{scrape_header}}
 #' @keywords internal
 scrape_key <- function(header) {
 
-  # There are several possibilities that can preceed Key in the storm header.
+  # There are several possibilities that can preceed StormKey in the storm header.
   # ptn should capture each possibility, but only one of.
   ptn <- stringr::str_c(
     "(?:(?:NATIONAL HURRICANE CENTER|",

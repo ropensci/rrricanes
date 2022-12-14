@@ -5,8 +5,8 @@
 #'   etc.}
 #'   \item{Name}{Name of storm}
 #'   \item{Adv}{Advisory Number}
-#'   \item{Date}{Date of advisory issuance}
-#'   \item{Key}{ID of cyclone}
+#'   \item{DateTime}{Date of advisory issuance}
+#'   \item{StormKey}{ID of cyclone}
 #'   \item{Contents}{Text content of product}
 #' }
 #' @param links URL to storm's archive page.
@@ -18,7 +18,7 @@
 #' }
 #' @export
 get_discus <- function(links) {
-  get_product(links = links, product = "discus")
+  get_product(links = links, products = "discus")
 }
 
 #' @title discus
@@ -43,11 +43,18 @@ discus <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
+
     Status = status[,1],
     Name = status[,2],
     Adv = as.numeric(status[,3]),
+    DateTime = issue_date,
+
+    Status = status[1],
+    Name = status[2],
+    Adv = as.numeric(status[3]),
     Date = issue_date,
-    Key = key,
+
+    StormKey = key,
     Contents = contents
   )
 

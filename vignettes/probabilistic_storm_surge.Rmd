@@ -28,7 +28,9 @@ adv <- 42
 ```
 
 ```{r}
-fstadv <- fstadv %>% filter(Key == key, Adv <= adv)
+
+fstadv <- fstadv |>filter(StormKey == key, Adv <= adv)
+
 ```
 
 ## Probabilistic Storm Surge
@@ -36,7 +38,7 @@ fstadv <- fstadv %>% filter(Key == key, Adv <= adv)
 Calculate the last date/time of forecast/advisory product and subtract 3 hrs
 
 ```{r}
-dt <- (last(fstadv$Date) - (60 * 60 * 3)) %>% 
+dt <- (last(fstadv$Date) - (60 * 60 * 3)) |> 
     strftime(format = "%Y%m%d%H", tz = "UTC")
 ```
 
@@ -47,7 +49,7 @@ I'm downloading the `psurge` products for 5 feet since there are no other storm 
 ```{r}
 dl <- purrr::safely(.f = gis_download)
 gis_surge <- gis_prob_storm_surge(key, products = list("psurge" = c(5)), 
-                                  datetime = dt) %>% dl()
+                                  datetime = dt) |> dl()
 
 if (!is.null(gis_surge$error))
     message(gis_surge$error)

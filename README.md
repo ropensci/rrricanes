@@ -1,15 +1,15 @@
 
+<!-- badges: start -->
+
 [![minimal R
-version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
+version](https://img.shields.io/badge/R%3E%3D-4.1.0-6666ff.svg)](https://cran.r-project.org/)
 [![GitHub
 (pre-)release](https://img.shields.io/github/release/ropensci/rrricanes/all.svg)](https://github.com/ropensci/rrricanes/tags)
 [![](https://badges.ropensci.org/118_status.svg)](https://github.com/ropensci/onboarding/issues/118)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes)
-[![Build
-Status](https://img.shields.io/travis/ropensci/rrricanes/master.svg)](https://travis-ci.org/ropensci/rrricanes)
-[![AppVeyor Build
-Status](https://img.shields.io/appveyor/ci/timtrice/rrricanes-g4dos/master.svg)](https://ci.appveyor.com/project/timtrice/rrricanes-g4dos)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rrricanes)](https://cran.r-project.org/package=rrricanes)
+[![R-CMD-check](https://github.com/ropensci/rrricanes/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/rrricanes/actions)
 [![codecov](https://codecov.io/gh/ropensci/rrricanes/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/rrricanes)
+<!-- badges: end -->
 
 # rrricanes <img src='man/figures/logo.png' align="right" height="138" />
 
@@ -31,13 +31,25 @@ This library parses the text advisories of all tropical cyclones since
 1998. Over the years the formats of the text products have changed and
 many are loosely formatted.
 
+## Current Status of rrricanes
+
+rrcanes is not currently on CRAN. A group of people (who welcome others
+to join us) are working on updating the package and get it back into
+shape for submission to CRAN. Because it has been a while we are taking
+the opportunity to do some updating and refactoring. Specifically we are
+working to get the package working with the recent
+[https://r-spatial.org/](changes%20in%20the%20R%20spatial%20ecosystem).
+When possible we are also shifting to more modern APIs for accessing the
+data when they are available.
+
+Please report any issues and share ideas in the issue tracker and code
+with pull requests.
+
+## Package background
+
 I wrote this package with the goal of consolidating messy text data into
 well-organized formats that can easily be saved to CSV, SQL and other
 data formats.
-
-You may explore some features of the package through the
-[shinycanes](https://timtrice.shinyapps.io/shinycanes/) beta web
-application (built with R Shiny).
 
 ## Advisory Products
 
@@ -113,6 +125,8 @@ install.packages("rrricanesdata",
                  type = "source")
 ```
 
+However this package is not currently maintained.
+
 To use high resolution tracking maps you will need to install the
 `rnaturalearthhires` package.
 
@@ -133,8 +147,11 @@ devtools::install_github("ropensci/rrricanes", build_vignettes = TRUE)
 
 ## Built With
 
-  - [R 3.3.3](https://www.r-project.org/) - The R Project for
-    Statistical Computing
+-   [R 4.1](https://www.r-project.org/) - The R Project for Statistical
+    Computing
+
+New minimum versions for a number of dependencies have been establised.
+This provides opportunity to build on newer features of the packages
 
 ## Contributing
 
@@ -151,7 +168,7 @@ repository](https://github.com/ropensci/rrricanes/tags).
 
 ## Authors
 
-  - **Tim Trice** - *Initial work* -
+-   **Tim Trice** - *Initial work* -
     [timtrice](https://github.com/timtrice)
 
 See also the list of
@@ -165,15 +182,15 @@ This project is licensed under the MIT License - see the
 
 ## Acknowledgments
 
-  - [Molyneux, James](https://github.com/jimmylovestea)
-  - [Padgham, Mark](https://github.com/mpadge)
-  - [Robinson, Emily](https://github.com/robinsones)
-  - [Rudis, Bob](https://github.com/hrbrmstr)
-  - [Salmon, Maëlle](https://github.com/maelle)
-  - [Stachelek, Joseph](https://github.com/jsta)
+-   [Molyneux, James](https://github.com/jimmylovestea)
+-   [Padgham, Mark](https://github.com/mpadge)
+-   [Robinson, Emily](https://github.com/robinsones)
+-   [Rudis, Bob](https://github.com/hrbrmstr)
+-   [Salmon, Maëlle](https://github.com/maelle)
+-   [Stachelek, Joseph](https://github.com/jsta)
 
 ## Known Data Quality Issues
 
 1.  Hurricane Juan (AL152003), Adv 15; no status leads to improper
     `Status` and `Name` values in some datasets.
-    ([\#82](https://github.com/ropensci/rrricanes/issues/82))
+    ([#82](https://github.com/ropensci/rrricanes/issues/82))

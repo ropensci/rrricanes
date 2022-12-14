@@ -4,10 +4,15 @@
 \alias{get_product}
 \title{get_product}
 \usage{
-get_product(links, product)
+get_product(links, products)
+}
+\arguments{
+\item{links}{a vector of links to storm pages}
+
+\item{products}{vector of products}
 }
 \description{
-This funtion acts as a hub for the individual product extraction
+This function acts as a hub for the individual product extraction
   functions. Given the product and links, it will begin the scraping
   process and return a dataset for that product.
 }

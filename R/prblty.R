@@ -17,7 +17,7 @@
 #' @param links URL to storm's archive page.
 #' @export
 get_prblty <- function(links) {
-  get_product(links = links, product = "prblty")
+  get_product(links = links, products = "prblty")
 }
 
 #' @title prblty
@@ -58,36 +58,33 @@ prblty <- function(contents) {
                         "([:digit:]{1,2}|X)")               # E
 
   prblty <-
-    contents %>%
-    stringr::str_match_all(ptn) %>%
-    purrr::map(tibble::as_tibble) %>%
-    purrr::map(
-      rlang::set_names, nm = c("X1", "Location", "A", "B", "C", "D", "E")
-    ) %>%
-    purrr::map2(status[,1], ~tibble::add_column(.x, Status = .y, .before = 1)
-                ) %>%
-    purrr::map2(status[,2], ~tibble::add_column(.x, Name = .y, .after = 1)) %>%
-    purrr::map2(status[,3], ~tibble::add_column(.x, Adv = .y, .after = 2)) %>%
-    purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) %>%
-    purrr::map_df(tibble::as_tibble) %>%
-    dplyr::select(-c("X1")) %>%
+    contents |>
+    stringr::str_match_all(ptn) |>
+    purrr::map(tibble::as_tibble, .name_repair =
+                 ~c("X1", "Location", "A", "B", "C", "D", "E")) |>
+    purrr::map2(status[1], ~tibble::add_column(.x, Status = .y, .before = 1)) |>
+    purrr::map2(status[2], ~tibble::add_column(.x, Name = .y, .after = 1)) |>
+    purrr::map2(status[3], ~tibble::add_column(.x, Adv = .y, .after = 2)) |>
+    purrr::map2(issue_date, ~tibble::add_column(.x, Date = .y, .after = 3)) # |>
+
+  prblty <- prblty |>  purrr::map_df(tibble::as_tibble, .name_repair = "minimal") |>
+    dplyr::select(-c("X1")) |>
     # Trim whitespace
-    dplyr::mutate_all(.funs = stringr::str_trim)
-
-  # Many values will have "X" for less than 1% chance. Make 0
-  prblty[prblty == "X"] <- 0
-
-  # Convert date
-  prblty <- dplyr::mutate_at(
-    .tbl = prblty,
-    .vars = "Date",
-    .funs = lubridate::ymd_hms
+    dplyr::mutate(dplyr::across(.cols = everything(), .fns = ~stringr::str_trim(.))) |>
+    dplyr::mutate(dplyr::across(.cols = everything(), .fns = ~stringr::str_replace(
+                                                           .,
+                                                           "X",
+                                                           "O")))
+print(prblty())
+    # Convert date
+  prblty <- prblty |> dplyr::mutate(
+    Date  =
+    lubridate::ymd_hms(Date)
   )
 
-  prblty <- dplyr::mutate_at(
-    .tbl = prblty,
-    .vars = c(6:10),
-    .funs = "as.numeric"
-  )
-
+ # prblty <- prblty |> dplyr::mutate(
+  #   across(c(6:10),
+  #  ~as.numeric(.))
+  #)
+   prblty
 }

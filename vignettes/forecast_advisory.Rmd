@@ -18,8 +18,7 @@ knitr::opts_chunk$set(
 library(dplyr)
 library(ggplot2)
 library(rrricanes)
-library(rrricanesdata)
-library(sp)
+#library(sp)
 ```
 
 ```{r}
@@ -27,14 +26,17 @@ key <- "AL092008"
 adv <- 42
 ```
 
+
 ```{r}
-fstadv <- fstadv %>% filter(Key == key, Adv <= adv)
+fstadv <- fstadv |> filter(StormKey == key, Adv <= adv)
+
 ```
 
 ### GIS Advisory Forecast Track, Cone of Uncertainty, and Watches/Warnings
 
-```{r}
-gis_adv <- gis_advisory(key = key, advisory = adv) %>% gis_download()
+```{r warning=FALSE}
+gis_adv <- gis_advisory(key = key, advisory = adv) |> 
+          gis_download()
 ```
 
 Get bounding box of the forecast polygon.

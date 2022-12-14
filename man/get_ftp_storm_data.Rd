@@ -4,8 +4,10 @@
 \alias{get_ftp_storm_data}
 \title{get_ftp_storm_data}
 \usage{
-get_ftp_storm_data(stormid, products = c("discus", "fstadv", "posest",
-  "public", "prblty", "update", "wndprb"))
+get_ftp_storm_data(
+  stormid,
+  products = c("discus", "fstadv", "posest", "public", "prblty", "update", "wndprb")
+)
 }
 \arguments{
 \item{stormid}{A six-character alphanumeric string formatted as AABBCCCC

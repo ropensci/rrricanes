@@ -10,7 +10,7 @@ scrape_key(header)
 \item{header}{Header text of product.}
 }
 \description{
-Extract Key from header
+Extract StormKey from header
 }
 \seealso{
 \code{\link{scrape_header}}

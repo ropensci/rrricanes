@@ -12,7 +12,7 @@
 #' @seealso \code{\link{get_storms}}, \code{\link{update}}
 #' @export
 get_update <- function(links) {
-  get_product(links = links, product = "update")
+  get_product(links = links, products = "update")
 }
 
 #' @title update
@@ -36,8 +36,8 @@ update <- function(contents) {
   key <- scrape_key(contents)
 
   tibble::tibble(
-    Status = status[,1],
-    Name = status[,2],
+    Status = status[1],
+    Name = status[2],
     Date = issue_date,
     Key = key,
     Contents = contents

@@ -37,8 +37,8 @@ clarifications:
  \item{Status}{Classification of cyclone}
  \item{Name}{Name of cyclone}
  \item{Adv}{Advisory number}
- \item{Date}{Date and time of advisory}
- \item{Key}{Unique identifier of cyclone}
+ \item{DateTime}{Date and time of advisory}
+ \item{StormKey}{Unique identifier of cyclone}
  \item{Lat}{Latitude of cyclone center}
  \item{Lon}{Longitude of cyclone center}
  \item{Wind}{Maximum sustained one-minute winds in knots}
@@ -90,6 +90,6 @@ get_fstadv("http://www.nhc.noaa.gov/archive/1998/1998ALEXadv.html")
 }
 }
 \seealso{
-\code{\link{tidy_fstadv}}, \code{\link{tidy_wr}},
+\code{\link{tidy_adv}}, \code{\link{tidy_wr}},
 \code{\link{tidy_fcst}}, \code{\link{tidy_fcst_wr}}
 }
