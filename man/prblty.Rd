@@ -7,7 +7,8 @@
 prblty(contents)
 }
 \arguments{
-\item{contents}{Link to a storm's specific strike probability advisory product.}
+\item{contents}{Link to a storm's specific strike probability
+advisory product.}
 }
 \value{
 Dataframe

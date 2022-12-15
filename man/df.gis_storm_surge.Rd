@@ -3,17 +3,18 @@
 \docType{data}
 \name{df.gis_storm_surge}
 \alias{df.gis_storm_surge}
-\title{GIS storm surge shapefile dataset for Hurricane Sandy (AL182012)}
+\title{GIS storm surge shapefile dataset for Hurricane Sandy(AL182012)}
 \format{
 An object of class \code{list} of length 1.
 }
 \source{
-\url{http://www.nhc.noaa.gov/gis/archive_psurge_results.php?id=al18&year=2012&name=Hurricane\%20SANDY}
+\url{http://www.nhc.noaa.gov/gis/archive_psurge_results.php?id=al18
+&year=2012&name=Hurricane\%20SANDY}
 }
 \usage{
 df.gis_storm_surge
 }
 \description{
-GIS storm surge shapefile dataset for Hurricane Sandy (AL182012)
+GIS storm surge shapefile dataset for Hurricane Sandy(AL182012)
 }
 \keyword{datasets}

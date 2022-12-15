@@ -184,8 +184,7 @@ gis_outlook <- function() {
 #'     and accounts for track, size, and intensity errors based on historical
 #'     errors and astronomical tide. Valid values are 0:20.}
 #' }
-#' @seealso \href{http://www.nhc.noaa.gov/surge/psurge.php}
-#' {Tropical Cyclone Storm Surge Probabilities}
+#' @seealso \href{http://www.nhc.noaa.gov/surge/psurge.php}{Tropical Cyclone Storm Surge Probabilities}
 #' @seealso \code{\link{gis_download}}
 #' @examples
 #' \dontrun{
@@ -345,8 +344,7 @@ gis_storm_surge_flood <- function(key,
 #' Many storms do not appear to have this data; especially earlier.
 #'
 #' Not all advisories will be available for storms. For example,
-#' \href{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14
-#' &year=2016}{Hurricane Matthew (AL142016)}
+#' \href{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year=2016}{Hurricane Matthew (AL142016)}
 #' is missing several advisories.
 #' @seealso \code{\link{gis_download}}
 #' @export

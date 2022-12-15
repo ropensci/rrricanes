@@ -9,7 +9,6 @@
 #' @export
 
 get_serial_numbers <- function() {
-
   lines <- readLines("https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/access/csv/")
   currentid <- substring(lines[12], 58, 65)
   #today <- gsub("-", "", Sys.Date())
@@ -29,15 +28,13 @@ get_serial_numbers <- function() {
    serial_numbers <- purrr::map_df(serial_numbers, .f = trimws)
    save(serial_numbers,
         file = file.path( find.package("rrricanes"), "data/serial_numbers.rda"))
-    data(serial_numbers, package = "rrricanes")
+    data("serial_numbers", package = "rrricanes")
 }
 
 #' @title Get Serial Numbers for Basin ID
 #'
 #' @description Extract serial numbers for a basin
-#' @example  serial_numbers <- get_serial_numbers()
 #'
-#' Get all serial numbers for a basin
 #' @param basin_id  The basin id
 #'
 #' @keywords internal

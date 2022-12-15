@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_track.R
 \name{get_serial_numbers}
 \alias{get_serial_numbers}
-\title{get_serial_number}
+\title{Get Serial Numbers}
 \usage{
 get_serial_numbers()
 }

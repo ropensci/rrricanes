@@ -2,9 +2,9 @@
 % Please edit documentation in R/get_track.R
 \name{serial_from_name}
 \alias{serial_from_name}
-\title{serial_from_name}
+\title{Get serial number by storm name}
 \usage{
-serial_from_name(name)
+serial_from_name(name, basin)
 }
 \arguments{
 \item{name}{Name of the storm}
