@@ -17,8 +17,8 @@ gis_advisory <- function(key, advisory = as.character()) {
     stop("`key` should be a 8-character alphanumeric string.", call. = FALSE)
 
   key <- stringr::str_match(key,
-                            pattern = stringr::str_c("([:lower:]{2})([:digit:]{2})",
-                                                     "([:digit:]{4})"))
+         pattern = stringr::str_c("([:lower:]{2})([:digit:]{2})",
+                   "([:digit:]{4})"))
 
   # Get list of GIS forecast zips for storm and download
   url <- sprintf("%sgis/archive_forecast_results.php?id=%s%s&year=%s",
@@ -192,7 +192,8 @@ gis_outlook <- function() {
 #' gis_prob_storm_surge("AL092016", products = list("psurge" = 0))
 #'
 #' # Return the psurge0 and esurge10 products for storm AL092016
-#' gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10))
+#' gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 1
+#' 0))
 #'
 #' # Return all psurge0 products for Sep 2, 2016, storm AL092016
 #' gis_prob_storm_surge("AL092016", products = list("psurge" = 0),
@@ -335,7 +336,8 @@ gis_storm_surge_flood <- function(key,
 #' @param advisory Advisory number. If NULL, all advisories are returned.
 #' Intermediate advisories are acceptable.
 #' @details Tropical Cyclone Advisory Wind Field
-#'  http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year=2016
+#'  http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year
+#'  =2016
 #'  http://www.nhc.noaa.gov/gis/forecast/archive/
 #' Example file name: al012017_fcst_001.zip
 #' [basin]{2}[year_num]{2}[year]{4}_fcst_[advisory]{3}.zip

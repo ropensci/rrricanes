@@ -95,7 +95,8 @@ fstadv <- function(contents) {
     contents = contents,
     # The "SPECIAL" pattern has to be left here; moving it under
     # `scrape_header` will break posest and update products.
-    ptn_product_title = "(?:\n?SPECIAL\\s+)?(?:FORECAST/|MARINE\\s+)?(?:ADVISORY)?"
+    ptn_product_title = "(?:\n?SPECIAL\\s+)?(?:FORECAST/|MARINE\\s+)?(?:ADVISO
+    RY)?"
   )
 
   issue_date <- scrape_date(contents)
@@ -123,8 +124,6 @@ fstadv <- function(contents) {
       AdvDate = adv_date,
       Forecasts = forecasts
     ) |>
-
-
     tidyr::unnest() |>
     dplyr::group_by(.data$StormKey, .data$Adv) |>
 
@@ -134,16 +133,19 @@ fstadv <- function(contents) {
     #
     # Additionally, though rare, we need to account for storms that generate one
     # year but degenerate the next. There is one instance of an EP cyclone doing
-    # this but I cannot recall which one. Oops... So, check for the year as well.
+    # this but I cannot recall which one. Oops... So, check for the year
+    #as well.
     dplyr::mutate(
       # Add var for forecast periods, limited to size of each group
-      FcstPeriod = forecast_periods[1:dplyr::n()],
-      FcstMonth = dplyr::case_when(
-        as.numeric(.data$Date) < lubridate::day(.data$AdvDate) ~ lubridate::month(.data$AdvDate) + 1,
-        TRUE                                       ~ lubridate::month(.data$AdvDate)
+      FcstPeriod <- forecast_periods[1:dplyr::n()],
+      FcstMonth <- dplyr::case_when(
+        as.numeric(.data$Date) < lubridate::day(.data$AdvDate) ~
+              lubridate::month(.data$AdvDate) + 1,
+        TRUE ~ lubridate::month(.data$AdvDate)
       ),
       FcstYear = dplyr::case_when(
-        FcstMonth < lubridate::month(.data$AdvDate) ~ lubridate::year(.data$AdvDate) + 1,
+        FcstMonth < lubridate::month(.data$AdvDate) ~
+          lubridate::year(.data$AdvDate) + 1,
         TRUE                                  ~ lubridate::year(.data$AdvDate)
       ),
       FcstDate = lubridate::ymd_hms(
@@ -217,7 +219,8 @@ fstadv_fwd_mvmt <- function(contents, what = NULL) {
 #' @return numeric
 #' @keywords internal
 fstadv_pos_accuracy <- function(contents) {
-  ptn <- stringr::str_c("POSITION ACCURATE WITHIN[:blank:]+([0-9]{2,3})[:blank:]+NM")
+  ptn <- stringr::str_c("POSITION ACCURATE WITHIN[:blank:]+([0-9]{2,3})[:blank
+                        :]+NM")
   as.numeric(stringr::str_match(contents, ptn)[,2])
 }
 
@@ -238,7 +241,8 @@ fstadv_pressure <- function(contents) {
 #' @keywords internal
 fstadv_prev_pos <- function(contents, adv_date) {
 
-  ptn <- "AT \\d\\d/\\d{4}Z CENTER WAS LOCATED NEAR (\\d\\d\\.\\d)(\\w)\\s+(\\d{1,3}\\.\\d)(\\w)"
+  ptn <- "AT \\d\\d/\\d{4}Z CENTER WAS LOCATED NEAR (\\d\\d\\.\\d)(\\w)\\s+(\\
+  d{1,3}\\.\\d)(\\w)"
   matches <- stringr::str_match(contents, ptn)[,2:5]
 
   prev_pos_date <- adv_date - lubridate::hours(3)

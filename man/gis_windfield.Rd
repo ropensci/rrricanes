@@ -17,7 +17,8 @@ Advisory Wind Field and Forecast Wind Radii
 }
 \details{
 Tropical Cyclone Advisory Wind Field
- http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year=2016
+ http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al14&year
+ =2016
  http://www.nhc.noaa.gov/gis/forecast/archive/
 Example file name: al012017_fcst_001.zip
 [basin]{2}[year_num]{2}[year]{4}_fcst_[advisory]{3}.zip

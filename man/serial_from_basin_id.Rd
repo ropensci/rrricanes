@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_track.R
 \name{serial_from_basin_id}
 \alias{serial_from_basin_id}
-\title{get_serial_numbers}
+\title{Get Serial Numbers for Basin ID}
 \usage{
 serial_from_basin_id(basin_id)
 }

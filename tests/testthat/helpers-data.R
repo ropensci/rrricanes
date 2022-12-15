@@ -64,7 +64,7 @@ df.tests <- system.file("extdta", "test_datasets.RData", package = "rrricanes")
 #al_2017 <- rrricanes:::get_storms(years = 2017, basins = "AL")
 
 # df.al_01_2017_products <- rrricanes:::get_storm_data(al_2017[[1,4]],
-#                                              products = c("discus", "fstadv"))
+#                              products = c("discus", "fstadv"))
 # df.al_09_2008_discus <- rrricanes:::get_discus(al_2008[[9,4]])
 # df.al_09_2008_fstadv <- rrricanes:::get_fstadv(al_2008[[9,4]])
 # df.al_09_2008_posest <- rrricanes:::get_posest(al_2008[[9,4]])

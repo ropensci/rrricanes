@@ -14,7 +14,8 @@
 #' Consider it a brute-force script.
 #'
 #' Execution:
-#' Rscript ~/Projects/rrricanes/data-raw/update_datasets.R <key> &>> ~/Projects/rrricanes/data-raw/log.txt
+#' Rscript ~/Projects/rrricanes/data-raw/update_datasets.R
+#' <key> &>> ~/Projects/rrricanes/data-raw/log.txt
 
 cat("\n\n###############################################################\n\n\n")
 Sys.time()

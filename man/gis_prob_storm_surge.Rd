@@ -49,7 +49,8 @@ Probabilistic Storm Surge Forecasts
 gis_prob_storm_surge("AL092016", products = list("psurge" = 0))
 
 # Return the psurge0 and esurge10 products for storm AL092016
-gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 10))
+gis_prob_storm_surge("AL092016", products = list("psurge" = 0, "esurge" = 1
+0))
 
 # Return all psurge0 products for Sep 2, 2016, storm AL092016
 gis_prob_storm_surge("AL092016", products = list("psurge" = 0),
