@@ -139,8 +139,8 @@ fstadv <- function(contents) {
       # Add var for forecast periods, limited to size of each group
       FcstPeriod <- forecast_periods[1:dplyr::n()],
       FcstMonth <- dplyr::case_when(
-        as.numeric(.data$Date) < lubridate::day(.data$AdvDate) ~ lubridate::mo
-        nth(.data$AdvDate) + 1,
+        as.numeric(.data$Date) < lubridate::day(.data$AdvDate) ~ 
+              lubridate::month(.data$AdvDate) + 1,
         TRUE ~ lubridate::month(.data$AdvDate)
       ),
       FcstYear = dplyr::case_when(
