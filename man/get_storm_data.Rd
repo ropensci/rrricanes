@@ -45,8 +45,8 @@ Types of products:
   the 2006 season. Nearly identical.}
 }
 
-Progress bars are displayed by default. These can be turned off by setting
-the dplyr.show_progress to FALSE. Additionally, you can display messages for
+Progress bars are displayed by default.
+ Additionally, you can display messages for
 each advisory being worked by setting the rrricanes.working_msg to TRUE.
 }
 \examples{
@@ -56,7 +56,7 @@ each advisory being worked by setting the rrricanes.working_msg to TRUE.
  # dplyr::slice(1) |>
  # pull(Link) |>
  # get_storm_data( products = "public")
-## Get public advisories and storm discussions for first storm of 2017 
+## Get public advisories and storm discussions for first storm of 2017
 Atlantic season.
 # get_storms(year = 2017, basin = "AL") |>
 #  slice(1) |>

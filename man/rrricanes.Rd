@@ -103,8 +103,7 @@ SpatialPolygonsDataFrames. SpatialPointsDataFrames can be converted using
 \section{Package Options}{
 
 
-\code{dplyr.show_progress} displays the dplyr progress bar when scraping raw
-product datasets. In \code{\link{get_storms}}, it is based on the number of
+In \code{\link{get_storms}}, the progress bar is based on the number of
 years being requested. In the product functions (i.e.,
 \code{\link{get_fstadv}}) it is based on the number of advisories. It can be
 misleading when calling \code{\link{get_storm_data}} because it shows the
@@ -113,8 +112,7 @@ new products/storms.
 
 
 
-\code{dplyr.show_progress} displays the dplyr progress bar when scraping raw
-product datasets. In \code{\link{get_storms}}, it is based on the number of
+product datasets. In \code{\link{get_storms}}, the progress bar is based on the number of
 years being requested. In the product functions (i.e.,
 \code{\link{get_fstadv}}) it is based on the number of advisories. It can be
 misleading when calling \code{\link{get_storm_data}} because it shows the

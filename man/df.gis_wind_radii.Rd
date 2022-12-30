@@ -8,8 +8,7 @@
 An object of class \code{list} of length 2.
 }
 \source{
-\url{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?
-id=al18&year=2012&name=Hurricane\%20SANDY}
+\url{http://www.nhc.noaa.gov/gis/archive_forecast_info_results.php?id=al18&year=2012&name=Hurricane\%20SANDY}
 }
 \usage{
 df.gis_wind_radii
