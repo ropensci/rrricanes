@@ -1,5 +1,5 @@
 pandoc: '2.2'
-pkgdown: 1.4.1
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   accumulated_cyclone_energy: accumulated_cyclone_energy.html
