@@ -71,7 +71,6 @@ articles:
       - accumulated_cyclone_energy
 
 extra_packages:
-  - cran/HURDAT
   - rrricanesdata
   - gganimate
   - magick
