@@ -47,7 +47,9 @@ issue tracker and code with pull requests.
 
 ## Package background
 
-I wrote this package with the goal of consolidating messy text data into well-organized formats that can easily be saved to CSV, SQL and other data formats. 
+This package was created by Time Trice with the goal of consolidating messy
+text data into well-organized formats that can easily be saved
+to CSV, SQL and other data formats. 
 
 ## Advisory Products
 
@@ -70,6 +72,9 @@ These products are included in the package though they have been discontinued at
 1. Strike Probabilities - List the probability of a tropical cyclone passing within 65 nautical miles of a location within a forecast window. Replaced in 2006 by the Wind Speed Probabilities product.
 
 2. Position Estimates - Typically issued as a storm is threatening land but generally rare (see Hurricane Ike 2008, Key AL092008). It is generally just an update of the current location of the cyclone. After the 2011 hurricane season, this product was discontinued; Updates are now issued in their place.
+
+**Note that the discontinued products are historical only
+and eventually we will create 
 
 ## Getting Started
 

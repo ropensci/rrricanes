@@ -2,7 +2,7 @@
 <!-- badges: start -->
 
 [![minimal R
-version](https://img.shields.io/badge/R%3E%3D-4.1.0-6666ff.svg)](https://cran.r-project.org/)
+version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
 [![GitHub
 (pre-)release](https://img.shields.io/github/release/ropensci/rrricanes/all.svg)](https://github.com/ropensci/rrricanes/tags)
 [![](https://badges.ropensci.org/118_status.svg)](https://github.com/ropensci/onboarding/issues/118)
@@ -47,9 +47,9 @@ with pull requests.
 
 ## Package background
 
-I wrote this package with the goal of consolidating messy text data into
-well-organized formats that can easily be saved to CSV, SQL and other
-data formats.
+This package was created by Time Trice with the goal of consolidating
+messy text data into well-organized formats that can easily be saved to
+CSV, SQL and other data formats.
 
 ## Advisory Products
 
@@ -96,6 +96,9 @@ discontinued at some point:
     generally just an update of the current location of the cyclone.
     After the 2011 hurricane season, this product was discontinued;
     Updates are now issued in their place.
+
+\*\*Note that the discontinued products are historical only and
+eventually we will create
 
 ## Getting Started
 
@@ -147,8 +150,8 @@ devtools::install_github("ropensci/rrricanes", build_vignettes = TRUE)
 
 ## Built With
 
--   [R 4.1](https://www.r-project.org/) - The R Project for Statistical
-    Computing
+- [R 4.1](https://www.r-project.org/) - The R Project for Statistical
+  Computing
 
 New minimum versions for a number of dependencies have been establised.
 This provides opportunity to build on newer features of the packages
@@ -168,8 +171,8 @@ repository](https://github.com/ropensci/rrricanes/tags).
 
 ## Authors
 
--   **Tim Trice** - *Initial work* -
-    [timtrice](https://github.com/timtrice)
+- **Tim Trice** - *Initial work* -
+  [timtrice](https://github.com/timtrice)
 
 See also the list of
 [contributors](https://github.com/ropensci/rrricanes/contributors) who
@@ -182,15 +185,15 @@ This project is licensed under the MIT License - see the
 
 ## Acknowledgments
 
--   [Molyneux, James](https://github.com/jimmylovestea)
--   [Padgham, Mark](https://github.com/mpadge)
--   [Robinson, Emily](https://github.com/robinsones)
--   [Rudis, Bob](https://github.com/hrbrmstr)
--   [Salmon, Maëlle](https://github.com/maelle)
--   [Stachelek, Joseph](https://github.com/jsta)
+- [Molyneux, James](https://github.com/jimmylovestea)
+- [Padgham, Mark](https://github.com/mpadge)
+- [Robinson, Emily](https://github.com/robinsones)
+- [Rudis, Bob](https://github.com/hrbrmstr)
+- [Salmon, Maëlle](https://github.com/maelle)
+- [Stachelek, Joseph](https://github.com/jsta)
 
 ## Known Data Quality Issues
 
 1.  Hurricane Juan (AL152003), Adv 15; no status leads to improper
     `Status` and `Name` values in some datasets.
-    ([#82](https://github.com/ropensci/rrricanes/issues/82))
+    ([\#82](https://github.com/ropensci/rrricanes/issues/82))
