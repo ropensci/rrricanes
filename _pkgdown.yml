@@ -70,11 +70,6 @@ articles:
       - probabilistic_storm_surge
       - accumulated_cyclone_energy
 
-extra_packages:
-  - rrricanesdata
-  - gganimate
-  - magick
-
 # Temp workaround for ragg/gganimate problem
 figures:
    dev: grDevices::png
