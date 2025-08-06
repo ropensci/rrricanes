@@ -111,7 +111,7 @@
 #' \code{rrricanes.working_msg} is set to FALSE by default. When TRUE, it will
 #' list the current storm, advisory and date being worked.
 #'
-#' @docType package
+#' @docType _PACKAGE
 #' @name rrricanes
 NULL
 

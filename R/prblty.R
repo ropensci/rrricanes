@@ -75,7 +75,7 @@ prblty <- function(contents) {
                                                            .,
                                                            "X",
                                                            "O")))
-print(prblty())
+
     # Convert date
   prblty <- prblty |> dplyr::mutate(
     Date  =

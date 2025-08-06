@@ -36,16 +36,13 @@ extract_product_contents <- function(links, products) {
           stringr::str_to_upper()
       }
     })
-  print(contents)
   contents
 }
 #' concept for isolating this step
 #' @keywords internal
 
 parse_product_contents <- function(contents, products){
-  f <- match.fun(products)
-  f(contents)
-  #purrr::map(.x= contents, .f = match.fun(products))
+  purrr::map(.x= contents, .f = match.fun(products))
 }
 
 #' @title extract_storm_links
