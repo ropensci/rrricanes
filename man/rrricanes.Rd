@@ -2,6 +2,7 @@
 % Please edit documentation in R/base.R
 \docType{package}
 \name{rrricanes}
+\alias{rrricanes-package}
 \alias{rrricanes}
 \title{rrricanes}
 \description{
@@ -103,7 +104,8 @@ SpatialPolygonsDataFrames. SpatialPointsDataFrames can be converted using
 \section{Package Options}{
 
 
-In \code{\link{get_storms}}, the progress bar is based on the number of
+\code{dplyr.show_progress} displays the dplyr progress bar when scraping raw
+product datasets. In \code{\link{get_storms}}, it is based on the number of
 years being requested. In the product functions (i.e.,
 \code{\link{get_fstadv}}) it is based on the number of advisories. It can be
 misleading when calling \code{\link{get_storm_data}} because it shows the
@@ -112,7 +114,8 @@ new products/storms.
 
 
 
-product datasets. In \code{\link{get_storms}}, the progress bar is based on the number of
+\code{dplyr.show_progress} displays the dplyr progress bar when scraping raw
+product datasets. In \code{\link{get_storms}}, it is based on the number of
 years being requested. In the product functions (i.e.,
 \code{\link{get_fstadv}}) it is based on the number of advisories. It can be
 misleading when calling \code{\link{get_storm_data}} because it shows the
@@ -123,3 +126,30 @@ new products/storms.
 list the current storm, advisory and date being worked.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://docs.ropensci.org/rrricanes https://github.com/ropensci/rrricanes}
+  \item Report bugs at \url{https://github.com/ropensci/rrricanes/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Elin Waring \email{elin.waring@gmail.com}
+
+Authors:
+\itemize{
+  \item Tim Trice \email{tim.trice@gmail.com}
+}
+
+Other contributors:
+\itemize{
+  \item Joseph Stachelek (Joseph Stachelek reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/118) [reviewer]
+  \item Emily Robinson (Emily Robinson reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/118) [reviewer]
+  \item Sophia Barett \email{Sbarrett@ccny.cuny.edu} [contributor]
+  \item Lismarie Arche \email{lismarie.arche@lehman.cuny.edu} [contributor]
+  \item Simon Ayotes \email{simon@aytes.net} [contributor]
+  \item Goodness Ajayi-Martins \email{goodnessmartins89@gmail.com} [contributor]
+}
+
+}
