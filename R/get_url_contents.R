@@ -38,7 +38,7 @@ get_url_contents <- function(links) {
     grouped_links <- split(links, groups)
 
   # Set progress bar
-  p <- dplyr::progress_estimated(n = length(links))
+  # p <- dplyr::progress_estimated(n = length(links))
 
   contents <-
     grouped_links |>
@@ -51,11 +51,11 @@ get_url_contents <- function(links) {
         p$tick()$print()
         if (getOption("rrricanes.working_msg"))
           message("Waiting 10 seconds to retrieve large numbers of links.")
-        p$pause(10)
+       # p$pause(10)
         txt
       } else {
         # Send group of links to `download_txt`
-        p$tick()$print()
+     #   p$tick()$print()
         download_text(x)
       }
     })
