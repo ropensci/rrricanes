@@ -21,25 +21,28 @@ extract_product_contents <- function(links, products) {
     # Otherwise, extract the node from within the HTML and return the text of
     # that node.
   contents <- contents |> purrr::map_chr(.f = function(x) {
+
       txt <- safely_read_html(x)
       if (is.null(txt$result)) {
         x
       } else if (is.null(txt$error)) {
+          xpath_to_use <- ifelse(is.na(rvest::html_node(txt$result, xpath = "//pre")),
+                                 "//table", "//pre")
+        .progress <- FALSE
         txt$result |>
-          rvest::html_node(xpath = "//pre") |>
+          rvest::html_element(xpath = xpath_to_use) |>
           rvest::html_text() |>
           stringr::str_replace_all("\r", "") |>
           stringr::str_to_upper()
       }
     })
+  contents
 }
 #' concept for isolating this step
 #' @keywords internal
 
 parse_product_contents <- function(contents, products){
-  f <- match.fun(products)
-  f(contents)
-  #purrr::map(.x= contents, .f = match.fun(products))
+  purrr::map(.x= contents, .f = match.fun(products))
 }
 
 #' @title extract_storm_links
@@ -130,13 +133,13 @@ get_product <- function(links, products) {
 #' \dontrun{
 #' ## Get public advisories for first storm of 2016 Atlantic season.
 #' #get_storms(year = 2016, basin = "AL") |>
-#'  # dplyr::slice(1) |>
+#'  # dplyr::slice_head(n=1) |>
 #'  # pull(Link) |>
 #'  # get_storm_data( products = "public")
-#' ## Get public advisories and storm discussions for first storm of 2017 
+#' ## Get public advisories and storm discussions for first storm of 2017
 #' Atlantic season.
 #'# get_storms(year = 2017, basin = "AL") |>
-#' #  slice(1) |>
+#' #  slice_head(n=1) |>
 #'  # pull(Link) |>
 #'   # get_storm_data(products = c("discus", "public"))
 #' }
@@ -147,8 +150,8 @@ get_storm_data <- function(links,
                                        "wndprb")) {
 
   products <- match.arg(products, several.ok = TRUE)
- # extract_product_contents(links, products)
-  purrr::map2(links, products, extract_product_contents)
+
+  purrr::map2(links, products, extract_product_contents, .progress = FALSE)
 }
 
 #' @title get_product_links

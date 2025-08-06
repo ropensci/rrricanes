@@ -37,9 +37,6 @@ get_url_contents <- function(links) {
     groups <- ceiling(seq_along(1:length(links))/80)
     grouped_links <- split(links, groups)
 
-  # Set progress bar
-  p <- dplyr::progress_estimated(n = length(links))
-
   contents <-
     grouped_links |>
     purrr::imap(.f = function(x, y) {
@@ -48,18 +45,16 @@ get_url_contents <- function(links) {
         # Send group of links to `download_txt`
         txt <- download_text(x)
         # We are not in the last group; apply a delay
-        p$tick()$print()
         if (getOption("rrricanes.working_msg"))
           message("Waiting 10 seconds to retrieve large numbers of links.")
-        p$pause(10)
         txt
       } else {
         # Send group of links to `download_txt`
-        p$tick()$print()
         download_text(x)
       }
     })
-  contents <- unsplit(contents, groups)
-contents
-  #purrr::flatten_chr(contents)
+
+    contents <- unsplit(contents, groups)
+    #purrr::list_c(contents)
+    contents
 }
