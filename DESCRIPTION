@@ -49,8 +49,31 @@ Suggests:
   rmarkdown,
   rnaturalearthdata (>= 0.1),
   sf (>= 1.0), 
-  sp,
+  terra,
   testthat
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.2
+Collate:
+  'base.R'
+  'data.R'
+  'discus.R'
+  'filters.R'
+  'fstadv.R'
+  'get_storm_data.R'
+  'get_storm_list.R'
+  'get_storms.R'
+  'get_track.R'
+  'get_url_contents.R'
+  'gis.R'
+  'Movement_fstadv.R' 
+  'posest.R' 
+  'prblty.R' 
+  'products.R'
+  'public.R'
+  'scrapers.R'
+  'tidy_fstadv.R'
+  'tracking_chart.R' 
+  'update.R'
+  'utils.R'
+  'wndprb.R' 
