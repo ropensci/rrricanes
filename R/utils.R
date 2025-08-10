@@ -13,7 +13,7 @@ extract_year_archive_link <- function(link) {
 #' @param withTrailingSlash True, by default. False returns URL without
 #' trailing slash.
 #' @param protocol https or http
-#' @keywords internal
+#' @export
 get_nhc_link <- function(withTrailingSlash = TRUE, protocol = "https") {
   if (withTrailingSlash)
     return(sprintf("%s://www.nhc.noaa.gov/", protocol))

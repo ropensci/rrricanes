@@ -2,7 +2,7 @@
 #' @description Scrape date/time of product issuance from header.
 #' @param header Header text of product.
 #' @seealso \code{\link{scrape_header}}
-#' @keywords internal
+#' @export
 scrape_date <- function(header) {
 
   maketime <- function(h, m, p) {
@@ -196,7 +196,7 @@ scrape_date <- function(header) {
 #' @param ptn_product_title Pattern of product title to match
 #' @param advisory_number Default is true; set to false if product does not
 #'   have an advisory number.
-#' @keywords internal
+#' @export
 scrape_header <- function(contents, ptn_product_title,
                           advisory_number = TRUE) {
 
@@ -226,22 +226,22 @@ scrape_header <- function(contents, ptn_product_title,
     ptn_status, ptn_names, ptn_product_title, sep = "\\s"
   )
 
-matches <-  ifelse(advisory_number,
-     stringr::str_match(header,
-                        stringr::str_c(ptn, ptn_adv, sep = "\\s"))[,2:4],
-    stringr::str_match(header, ptn)[,2:3]
-)
+  matches <-  ifelse(advisory_number,
+       stringr::str_match(header,
+                          stringr::str_c(ptn, ptn_adv, sep = "\\s"))[,2:4],
+      stringr::str_match(header, ptn)[,2:3]
+  )
 
-# this was in the second part of ifelse
-status <- stringr::str_c(ptn, ptn_adv, sep = "\\s")
-  # String-to-title Status and Name
-  if (is.null(ncol(matches))) {
-    # working with a vector
-    matches[1:2] <- stringr::str_to_title(matches[1:2])
-  } else {
-    # Working with a matrix
-    matches[,c(1:2)] <- apply(matches[,c(1:2)], 2, stringr::str_to_title)
-  }
+  # this was in the second part of ifelse
+  status <- stringr::str_c(ptn, ptn_adv, sep = "\\s")
+    # String-to-title Status and Name
+    if (is.null(ncol(matches))) {
+      # working with a vector
+      matches[1:2] <- stringr::str_to_title(matches[1:2])
+    } else {
+      # Working with a matrix
+      matches[,c(1:2)] <- apply(matches[,c(1:2)], 2, stringr::str_to_title)
+    }
 
    matches
 
@@ -251,7 +251,7 @@ status <- stringr::str_c(ptn, ptn_adv, sep = "\\s")
 #' @description Extract StormKey from header
 #' @param header Header text of product.
 #' @seealso \code{\link{scrape_header}}
-#' @keywords internal
+#' @export
 scrape_key <- function(header) {
 
   # There are several possibilities that can preceed StormKey in the storm header.

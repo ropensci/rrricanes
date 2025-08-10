@@ -10,6 +10,7 @@ get_url_contents <- function(links) {
   if (length(links) == 0) {
     stop("No links input, please check that the data exist.")
   }
+
   download_text <- function(grouped_links) {
 
     # Create a new Async object with `grouped_links`
@@ -55,6 +56,7 @@ get_url_contents <- function(links) {
     })
 
     contents <- unsplit(contents, groups)
+
     #purrr::list_c(contents)
     contents
 }
