@@ -137,7 +137,7 @@ parse_stations <- function(x) {
 #' @details Given a direct link to a wind probability product, parse and return
 #' dataframe of values.
 #' @param contents Link to a storm's specific wind probability product.
-#' @keywords internal
+#' @export
 wndprb <- function(contents) {
 
   status <- scrape_header(
