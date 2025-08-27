@@ -14,8 +14,9 @@ extract_year_archive_link <- function(link) {
 #' trailing slash.
 #' @param protocol https or http
 #' @export
-get_nhc_link <- function(withTrailingSlash = TRUE, protocol = "https") {
-  if (withTrailingSlash)
+get_nhc_link <- function(withTrailingSlashPresent = TRUE, protocol = "https") {
+
+  if (withTrailingSlashPresent == TRUE)
     return(sprintf("%s://www.nhc.noaa.gov/", protocol))
   sprintf("%s://www.nhc.noaa.gov", protocol)
 }
@@ -24,8 +25,9 @@ get_nhc_link <- function(withTrailingSlash = TRUE, protocol = "https") {
 #' @description Return root of NHC FTP server
 #' @inheritParams get_nhc_link
 #' @keywords internal
-get_nhc_ftp_link <- function(withTrailingSlash = TRUE) {
-  if (withTrailingSlash)
+get_nhc_ftp_link <- function(withTrailingSlashPresent = TRUE) {
+
+  if (withTrailingSlashPresent == TRUE)
     return("ftp://ftp.nhc.noaa.gov/")
   "ftp://ftp.nhc.noaa.gov"
 }

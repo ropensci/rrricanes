@@ -154,4 +154,4 @@ utils::globalVariables(c(  "Date",
                         ))
 
 quads <- c("NE", "SE", "SW", "NW")
-
+forecast_periods <- c(12, 24, 36, 48, 72, 96, 120)
